@@ -13,6 +13,7 @@
     "installf": "cd frontend && yarn install",
     "installb": "cd backend && pip install -r requirements.txt",
     "lintf": "cd frontend && yarn lint",
-    "backend": "python backend/manage.py runserver 8000"
+    "backend": "python backend/manage.py runserver 8000",
+    "testf": "cd frontend && yarn testf_"
   }
 }
