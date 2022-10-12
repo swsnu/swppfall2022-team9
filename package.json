@@ -1,0 +1,18 @@
+{
+  "name": "linklink",
+  "version": "1.0.0",
+  "description": "This is a web service that helps you find people with ease",
+  "repository": "https://github.com/swsnu/swppfall2022-team9",
+  "author": "Kim Dong Hun <hunkim98@gmail.com>",
+  "license": "unlicensed",
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "build": "cd frontend && yarn build",
+    "eject": "cd frontend && yarn eject",
+    "installa": "cd frontend && yarn install && cd ../backend && pip install -r requirements.txt",
+    "installf": "cd frontend && yarn install",
+    "installb": "cd backend && pip install -r requirements.txt",
+    "lintf": "cd frontend && yarn lint",
+    "backend": "python backend/manage.py runserver 8000"
+  }
+}
