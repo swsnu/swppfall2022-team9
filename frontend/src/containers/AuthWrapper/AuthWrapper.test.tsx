@@ -23,7 +23,6 @@ const stubUser: User = {
   email: "swpp@snu.ac.kr",
   password: "iluvswpp",
   name: "Software Lover",
-  logged_in: false,
 };
 
 const renderAuthWrapper = (user: User | null) => {

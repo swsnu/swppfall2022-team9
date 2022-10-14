@@ -3,5 +3,4 @@ export type User = {
   email: string;
   password: string;
   name: string;
-  logged_in: boolean;
 };
