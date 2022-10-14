@@ -60,7 +60,7 @@ export const postSiginIn = createAsyncThunk<void, PostSignInDto>(
 export const putSignOut = createAsyncThunk<void, PutSignOutDto>(
   "users/putSignOut",
   async (user, { dispatch }) => {
-    const data: PutSignOutDto = { ...user, logged_in: false };
+    const data: PutSignOutDto = { ...user };
     await axios.put<PutSignOutResDto>(`/api/user/${user.id}`, data);
     dispatch(userActions.resetCurrentUser());
   },
