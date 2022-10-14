@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "containers/HomePage/HomePage";
 import Navbar from "components/Navbar/Navbar";
+import AuthWrapper from "containers/AuthWrapper/AuthWrapper";
 
 const App = () => {
   return (
@@ -10,7 +11,14 @@ const App = () => {
       <Navbar />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/"
+            element={
+              <AuthWrapper>
+                <HomePage />
+              </AuthWrapper>
+            }
+          />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>
