@@ -4,11 +4,7 @@ import React from "react";
 interface Props {}
 
 const HomePage: React.FC<Props> = () => {
-  return (
-    <AuthWrapper>
-      <div>HomePage</div>
-    </AuthWrapper>
-  );
+  return <div>HomePage</div>;
 };
 
 export default HomePage;

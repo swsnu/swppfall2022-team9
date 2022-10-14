@@ -28,12 +28,18 @@ server.use(jsonServer.bodyParser);
 /**
  * AUTH API
  */
-server.post<unknown, PostSignInResDto, PostSignInDto>("/login", (req, res) => {
-  const body = req.body;
-  const email = body.email;
-  const user = db.get("users").find({ email }).value();
-  res.json(user);
-});
+server.post<unknown, PostSignInResDto, PostSignInDto>(
+  "/login",
+  async (req, res) => {
+    const body = req.body;
+    const email = body.email;
+    const user = db.get("users").find({ email }).value();
+    if (!user) {
+      throw new Error("wrong user");
+    }
+    res.json(user);
+  },
+);
 
 server.post<unknown, PostSignUpResDto, PostSignUpDto>(
   "/signup",

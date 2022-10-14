@@ -4,7 +4,6 @@ import axios from "axios";
 import { User } from "models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import AuthWrapper from "./AuthWrapper";
-import { PutSignOutResDto } from "dto/users/users.res.dto";
 
 const mockNavigate = jest.fn();
 
@@ -22,6 +21,7 @@ const stubUser: User = {
   id: 1,
   email: "swpp@snu.ac.kr",
   password: "iluvswpp",
+  nickname: "swpp",
   name: "Software Lover",
 };
 
@@ -67,9 +67,7 @@ describe("<AuthWrapper/>", () => {
   it("shows logout button as navbar when there is current user", async () => {
     const spyPutSignOut = jest
       .spyOn(axios, "put")
-      .mockImplementationOnce(async () => ({
-        data: { ...stubUser, logged_in: false } as PutSignOutResDto,
-      }));
+      .mockImplementationOnce(async () => ({}));
     renderAuthWrapper(stubUser);
     const logoutButton = screen.getByRole("button", { name: /logout/i });
     fireEvent.click(logoutButton);

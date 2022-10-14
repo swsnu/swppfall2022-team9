@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { PostSignInDto } from "dto/users/users.dto";
@@ -20,14 +20,18 @@ const LoginModal: React.FC<Props> = ({ message }) => {
   });
 
   const onSubmit = useCallback(
-    (e: React.SyntheticEvent) => {
+    async (e: React.SyntheticEvent) => {
       e.preventDefault();
-      alert.open({ message: "로그인 정보가 잘못되었습니다!" });
-      dispatch(
-        postSiginIn({ email: loginInfo.email, password: loginInfo.password }),
-      );
+      try {
+        const loggedInUser = await dispatch(
+          postSiginIn({ email: loginInfo.email, password: loginInfo.password }),
+        );
+      } catch (err) {
+        alert.open({ message: "로그인 정보가 잘못되었습니다!" });
+        console.log(err);
+      }
     },
-    [alert],
+    [alert, loginInfo],
   );
   return (
     <S.Container>
@@ -63,6 +67,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
             <S.Input
               type="text"
               name="email"
+              autoComplete="on"
               onChange={e => {
                 setLoginInfo(prev => ({ ...prev, email: e.target.value }));
               }}

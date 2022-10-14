@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { PostSignInDto, PostSignUpDto } from "dto/users/users.dto";
@@ -17,29 +18,17 @@ const initialState: UserState = {
   currentUser: null,
 };
 
-export const userSlice = createSlice({
-  name: "users",
-  initialState,
-  reducers: {
-    setCurrentUser: (state, actions: PayloadAction<User>) => {
-      state.currentUser = actions.payload;
-    },
-    resetCurrentUser: state => {
-      state.currentUser = null;
-    },
-  },
-  extraReducers(builder) {},
-});
-
-// Action creators are generated for each case reducer function
-export const userActions = userSlice.actions;
-
-export const postSiginIn = createAsyncThunk<void, PostSignInDto>(
+export const postSiginIn = createAsyncThunk<PostSignInResDto, PostSignInDto>(
   "users/postSignIn",
-  async (body, { dispatch }) => {
-    const response = (await axios.post<PostSignInResDto>("/api/login", body))
-      .data;
-    dispatch(userActions.setCurrentUser(response));
+  //you can test with swpp@snu.ac.kr
+  async (body, thunkApi) => {
+    try {
+      const response = (await axios.post<PostSignInResDto>("/login", body))
+        .data;
+      return response;
+    } catch (err: any) {
+      return thunkApi.rejectWithValue(err.message);
+    }
   },
 );
 
@@ -59,5 +48,29 @@ export const putSignOut = createAsyncThunk<void>(
     dispatch(userActions.resetCurrentUser());
   },
 );
+
+export const userSlice = createSlice({
+  name: "users",
+  initialState,
+  reducers: {
+    setCurrentUser: (state, actions: PayloadAction<User>) => {
+      state.currentUser = actions.payload;
+    },
+    resetCurrentUser: state => {
+      state.currentUser = null;
+    },
+  },
+  extraReducers(builder) {
+    builder.addCase(postSiginIn.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(postSiginIn.rejected, (state, action) => {
+      throw new Error(action.error.message);
+    });
+  },
+});
+
+// Action creators are generated for each case reducer function
+export const userActions = userSlice.actions;
 
 export default userSlice.reducer;

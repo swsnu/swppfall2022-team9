@@ -4,11 +4,7 @@ import React from "react";
 interface Props {}
 
 const EvaluateQualityPage: React.FC<Props> = () => {
-  return (
-    <AuthWrapper>
-      <div>EvaluateQualityPage</div>
-    </AuthWrapper>
-  );
+  return <div>EvaluateQualityPage</div>;
 };
 
 export default EvaluateQualityPage;
