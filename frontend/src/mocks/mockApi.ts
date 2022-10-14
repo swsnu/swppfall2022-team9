@@ -35,9 +35,10 @@ server.post<unknown, PostSignInResDto, PostSignInDto>(
     const email = body.email;
     const user = db.get("users").find({ email }).value();
     if (!user) {
-      throw new Error("wrong user");
+      res.status(404).json(user);
+    } else {
+      res.status(200).json(user);
     }
-    res.json(user);
   },
 );
 
