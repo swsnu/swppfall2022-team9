@@ -29,7 +29,7 @@ server.use(jsonServer.bodyParser);
  * AUTH API
  */
 server.post<unknown, PostSignInResDto, PostSignInDto>(
-  "/login",
+  "/api/login",
   async (req, res) => {
     const body = req.body;
     const email = body.email;
@@ -43,7 +43,7 @@ server.post<unknown, PostSignInResDto, PostSignInDto>(
 );
 
 server.post<unknown, PostSignUpResDto, PostSignUpDto>(
-  "/signup",
+  "/api/signup",
   async (req, res) => {
     const users = db.get("users").value();
     await db
@@ -59,7 +59,7 @@ server.post<unknown, PostSignUpResDto, PostSignUpDto>(
  * OTHER API
  */
 
-server.use("/api", router);
+server.use(router);
 
 server.listen(8000, () => {
   console.log("JSON Server is running");

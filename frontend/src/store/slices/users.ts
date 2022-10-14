@@ -23,7 +23,7 @@ export const postSiginIn = createAsyncThunk<PostSignInResDto, PostSignInDto>(
   //you can test with swpp@snu.ac.kr
   async (body, thunkApi) => {
     try {
-      const response = (await axios.post<PostSignInResDto>("/login", body))
+      const response = (await axios.post<PostSignInResDto>("/api/login", body))
         .data;
       return response;
     } catch (err: any) {
