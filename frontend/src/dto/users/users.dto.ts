@@ -2,6 +2,9 @@ import { User } from "models/users.model";
 
 export type PostSignInDto = Pick<User, "email" | "password">;
 
-export type GetUserDto = number;
+export type PostSignUpDto = Pick<
+  User,
+  "email" | "password" | "nickname" | "name"
+>;
 
-export type PutSignOutDto = User;
+export type GetUserDto = number;
