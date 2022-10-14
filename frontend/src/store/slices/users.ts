@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { PutSignOutDto, PostSignInDto } from "dto/users/users.dto";
-import {
-  GetUserResDto,
-  PostSignInResDto,
-  PutSignOutResDto,
-} from "dto/users/users.res.dto";
+import { PostSignInDto, PostSignUpDto } from "dto/users/users.dto";
+import { PostSignInResDto } from "dto/users/users.res.dto";
 import { User } from "models/users.model";
 
 export const acceptedLoginInfo: PostSignInDto = {
@@ -40,28 +36,26 @@ export const userActions = userSlice.actions;
 
 export const postSiginIn = createAsyncThunk<void, PostSignInDto>(
   "users/postSignIn",
-  async ({ email, password }, { dispatch }) => {
-    if (
-      email === acceptedLoginInfo.email &&
-      password === acceptedLoginInfo.password
-    ) {
-      const user = (await axios.get<GetUserResDto>("/api/user/1")).data;
-      const loggedInUser = (
-        await axios.put<PostSignInResDto>("/api/user/1", {
-          ...user,
-          logged_in: true,
-        } as User)
-      ).data;
-      dispatch(userActions.setCurrentUser(loggedInUser));
-    }
+  async (body, { dispatch }) => {
+    const response = (await axios.post<PostSignInResDto>("/api/login", body))
+      .data;
+    dispatch(userActions.setCurrentUser(response));
   },
 );
 
-export const putSignOut = createAsyncThunk<void, PutSignOutDto>(
+export const postSignUp = createAsyncThunk<void, PostSignUpDto>(
+  "users/postSignUp",
+  async (body, { dispatch }) => {
+    const response = (await axios.post<PostSignInResDto>("/api/signup", body))
+      .data;
+    dispatch(userActions.setCurrentUser(response));
+  },
+);
+
+export const putSignOut = createAsyncThunk<void>(
   "users/putSignOut",
-  async (user, { dispatch }) => {
-    const data: PutSignOutDto = { ...user };
-    await axios.put<PutSignOutResDto>(`/api/user/${user.id}`, data);
+  async (_, { dispatch }) => {
+    await axios.get(`/api/logout`);
     dispatch(userActions.resetCurrentUser());
   },
 );

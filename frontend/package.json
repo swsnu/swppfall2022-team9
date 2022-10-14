@@ -35,7 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "mockApi": "cp mocks/_db.json mocks/db.json && cd mocks && node mockApi.ts",
+    "mockApi": "cp src/mocks/_db.json src/mocks/db.json && cd src/mocks && ts-node -r esm mockApi.ts",
     "testf_": "react-scripts test --coverage --watchAll=false",
     "lint": "eslint src"
   },
@@ -53,6 +53,8 @@
   },
   "devDependencies": {
     "@types/jest": "^29.1.2",
+    "@types/json-server": "^0.14.4",
+    "@types/lowdb": "^1.0.11",
     "@types/node": "^18.8.4",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
@@ -68,7 +70,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.31.10",
-    "prettier": "^2.7.1",
-    "lowdb": "^1.0.0"
+    "esm": "^3.2.25",
+    "lowdb": "^1.0.0",
+    "prettier": "^2.7.1"
   }
 }
