@@ -15,5 +15,8 @@
     "lintf": "cd frontend && yarn lint",
     "backend": "python backend/manage.py runserver 8000",
     "testf": "cd frontend && yarn testf_"
+  },
+  "devDependencies": {
+    "@types/node": "^18.8.5"
   }
 }
