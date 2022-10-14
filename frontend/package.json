@@ -35,7 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "mockApi": "cp src/mocks/_db.json src/mocks/db.json && cd src/mocks && ts-node -r esm mockApi.ts",
+    "mockApi": "cp src/mocks/api/_db.json src/mocks/api/db.json && cd src/mocks/api && ts-node -r esm mockApi.ts",
     "testf_": "react-scripts test --coverage --watchAll=false",
     "lint": "eslint src"
   },
