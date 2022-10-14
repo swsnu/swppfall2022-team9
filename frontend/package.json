@@ -10,7 +10,7 @@
     "@testing-library/user-event": "13.5.0",
     "axios": "^0.27.2",
     "enzyme": "3.11.0",
-    "json-server": "0.17.0",
+    "json-server": "^0.17.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
@@ -35,6 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "mockApi": "cp mocks/_db.json mocks/db.json && cd mocks && node mockApi.ts",
     "testf_": "react-scripts test --coverage --watchAll=false",
     "lint": "eslint src"
   },
@@ -68,6 +69,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.31.10",
     "prettier": "^2.7.1",
-    "msw": "^0.29.0"
+    "lowdb": "^1.0.0"
   }
 }

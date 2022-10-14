@@ -20,7 +20,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  ignorePatterns: ["mockServiceWorker.js", "webpack.config.ts"],
+  ignorePatterns: ["mockServiceWorker.js", "mockApi.ts"],
   plugins: ["react"],
   rules: {
     "react/function-component-definition": [
