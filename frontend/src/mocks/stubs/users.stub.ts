@@ -1,7 +1,7 @@
 import { User } from "models/users.model";
 
 //this file is for later creating test codes easily
-export const mockUsers: Array<User> = [
+export const usersStub: Array<User> = [
   {
     id: 1,
     email: "swpp@snu.ac.kr",
