@@ -4,6 +4,7 @@ import axios from "axios";
 import { User } from "models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import AuthWrapper from "./AuthWrapper";
+import { usersStub } from "mocks/stubs/users.stub";
 
 const mockNavigate = jest.fn();
 
@@ -16,14 +17,6 @@ jest.mock("react-router", () => ({
     return null;
   },
 }));
-
-const stubUser: User = {
-  id: 1,
-  email: "swpp@snu.ac.kr",
-  password: "iluvswpp",
-  nickname: "swpp",
-  name: "Software Lover",
-};
 
 const renderAuthWrapper = (user: User | null) => {
   renderWithProviders(
@@ -60,7 +53,7 @@ describe("<AuthWrapper/>", () => {
   });
 
   it("shows logout button as navbar when there is current user", async () => {
-    renderAuthWrapper(stubUser);
+    renderAuthWrapper(usersStub[0]);
     screen.getByRole("button", { name: /logout/i });
   });
 
@@ -68,7 +61,7 @@ describe("<AuthWrapper/>", () => {
     const spyPutSignOut = jest
       .spyOn(axios, "put")
       .mockImplementationOnce(async () => ({}));
-    renderAuthWrapper(stubUser);
+    renderAuthWrapper(usersStub[0]);
     const logoutButton = screen.getByRole("button", { name: /logout/i });
     fireEvent.click(logoutButton);
     //anything that has to do with react state update should be called with waitFor or act!!!
