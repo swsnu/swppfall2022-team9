@@ -1,3 +1,4 @@
+import { Coord, Coords } from "types/canvas.types";
 export class Canvas {
   private element: HTMLCanvasElement;
 
@@ -9,67 +10,68 @@ export class Canvas {
   }
 }
 
-export type Coord<T, K> = [T, K];
-export type Coords = Coord<number, number>[];
-
 const degToRad = (degrees: number) => {
   return degrees * (Math.PI / 180);
-}
-
-// const radToDeg = (rad: number) => {
-//   return rad / (Math.PI / 180);
-// }
-
+};
 
 // RETURN_TYPE: Coords[]
 // USAGE: Coords[i][0]: i-th 1-chon node's coordinate
 //        Coords[i][j]: i-th 1-chon node's j-th 2-chon node coordiate; 1<= j <= num_2_chon+1
-export const get_2_chon_coordinates = (number_1_chon: number, numbers_2_chon: number[], radius: number, max_connections = 10, margin = 22) => {
-  if (number_1_chon !== numbers_2_chon.length) {
-    throw new Error("More number of 2-chons than 1-chons.")
+// NOTE: margin cannot be less than 22 or the nodes may overlap
+export const get2ChonCoordinates = (
+  oneChonCount: number,
+  twoChonCount: number[],
+  radius: number,
+  maxConnections = 10,
+  margin = 22,
+) => {
+  if (oneChonCount !== twoChonCount.length) {
+    throw new Error("More number of 2-chons than 1-chons.");
   }
 
-  const coords_list: Coords[] = [];
+  const coordsLIst: Coords[] = [];
 
   const edge = 6 * radius;
-  const degree = 360 / number_1_chon;
+  const degree = 360 / oneChonCount;
 
   let budget = Math.min(240, degree * 2 - margin);
-  budget = Math.max(margin * (Math.floor(budget / margin)), margin);
+  budget = Math.max(margin * Math.floor(budget / margin), margin);
 
-  for (let i = 0; i < number_1_chon; i++) {
-    const coords_temp: Coords = [];
+  for (let i = 0; i < oneChonCount; i++) {
+    const coordsTemp: Coords = [];
     const angle = degree * i;
-    const x_coord = edge * Math.cos(degToRad(angle));
-    const y_coord = edge * Math.sin(degToRad(angle));
+    const xCoord = edge * Math.cos(degToRad(angle));
+    const yCoord = edge * Math.sin(degToRad(angle));
 
-    const coord_1_chon: Coord<number, number> = [x_coord, y_coord];
-    coords_temp.push(coord_1_chon);
+    const coord1Chon: Coord = [xCoord, yCoord];
+    coordsTemp.push(coord1Chon);
 
-    let max_2_chon = Math.min(Math.floor(budget / margin)+1, 10)
-    if (max_2_chon < numbers_2_chon[i]) {
-      throw new Error("Number of 2-chons exceeded the maximum capacity.")
+    const max2Chon = Math.min(Math.floor(budget / margin) + 1, maxConnections);
+    if (max2Chon < twoChonCount[i]) {
+      throw new Error("Number of 2-chons exceeded the maximum capacity.");
     }
 
-    if (numbers_2_chon[i] === 1) {
-      const x2_coord = x_coord + edge * Math.cos(degToRad(angle));
-      const y2_coord = y_coord + edge * Math.sin(degToRad(angle));
-      const coord: Coord<number, number> = [x2_coord, y2_coord];
-      coords_temp.push(coord)
+    if (twoChonCount[i] === 1) {
+      const x2Coord = xCoord + edge * Math.cos(degToRad(angle));
+      const y2Coord = yCoord + edge * Math.sin(degToRad(angle));
+      const coord: Coord = [x2Coord, y2Coord];
+      coordsTemp.push(coord);
     } else {
-      let theta = Math.min(budget / numbers_2_chon[i], 60);
+      let theta = Math.min(budget / twoChonCount[i], 60);
       theta = Math.max(theta, 22);
-      const budget_temp = theta * numbers_2_chon[i];
-      for (let j = 0; j < numbers_2_chon[i]; j++) {
-        const x2_coord = x_coord + edge * Math.cos(degToRad(angle-(budget_temp/2)+(j+0.5)*theta));
-        const y2_coord = y_coord + edge * Math.sin(degToRad(angle-(budget_temp/2)+(j+0.5)*theta));
-        const coord: Coord<number, number> = [x2_coord, y2_coord];
-        coords_temp.push(coord);
+      const budgetTemp = theta * twoChonCount[i];
+      for (let j = 0; j < twoChonCount[i]; j++) {
+        const x2Coord =
+          xCoord +
+          edge * Math.cos(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
+        const y2Coord =
+          yCoord +
+          edge * Math.sin(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
+        const coord: Coord = [x2Coord, y2Coord];
+        coordsTemp.push(coord);
       }
     }
-    coords_list.push(coords_temp);
+    coordsLIst.push(coordsTemp);
   }
-  return coords_list;
-}
-
-// console.log(get_2_chon_coordinates(5, [5,3,6,6,6], 3));
+  return coordsLIst;
+};
