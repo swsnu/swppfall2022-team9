@@ -31,12 +31,9 @@ export class Canvas {
     this.setHeight(height, devicePixelRatio);
   }
 
-  drawBackground() {}
-
   drawNodes() {}
 
   render() {
-    this.drawBackground();
     this.drawNodes();
   }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Canvas } from "./Canvas";
+import * as S from "./styles";
 
 interface Props {}
 
@@ -39,9 +40,9 @@ const Graph: React.FC<Props> = () => {
   }, []);
 
   return (
-    <div ref={divRef} style={{ flex: "1 0" }}>
+    <S.CanvasContainer ref={divRef}>
       <canvas ref={canvasRef} />
-    </div>
+    </S.CanvasContainer>
   );
 };
 
