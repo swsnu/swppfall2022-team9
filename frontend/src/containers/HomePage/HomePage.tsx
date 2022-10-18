@@ -1,9 +1,17 @@
+import FriendListSideBar from "components/FriendListSideBar/FriendListSideBar";
+import Graph from "components/Graph/Graph";
 import React from "react";
+import * as S from "./styles";
 
 interface Props {}
 
 const HomePage: React.FC<Props> = () => {
-  return <div>HomePage</div>;
+  return (
+    <S.Container>
+      <FriendListSideBar />
+      <Graph />
+    </S.Container>
+  );
 };
 
 export default HomePage;
