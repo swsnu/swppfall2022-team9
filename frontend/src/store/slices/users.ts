@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { PostSignInDto, PostSignUpDto } from "dto/users/users.dto";
 import { PostSignInResDto, PostSignUpResDto } from "dto/users/users.res.dto";
+import { usersStub } from "mocks/stubs/users.stub";
 import { User } from "models/users.model";
 
 export const acceptedLoginInfo: PostSignInDto = {
@@ -15,7 +16,9 @@ export type UserState = {
 };
 
 const initialState: UserState = {
-  currentUser: null,
+  //change this to usersStub[0] if you want to make a stub user already logged in
+  //this should change to null in production
+  currentUser: usersStub[0],
 };
 
 export const postSignIn = createAsyncThunk<PostSignInResDto, PostSignInDto>(
