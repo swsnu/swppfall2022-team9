@@ -1,5 +1,8 @@
 import { clear } from "console";
+import { User } from "models/users.model";
 import { Coord, Coords } from "types/canvas.types";
+import { UserNode } from "components/Graph/utils/node";
+import { convertCartesianToScreen } from "./utils/math";
 export class Canvas {
   private element: HTMLCanvasElement;
 
@@ -9,9 +12,16 @@ export class Canvas {
 
   private ctx: CanvasRenderingContext2D;
 
+  private currentUserNode?: UserNode;
+
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
     this.ctx = canvas.getContext("2d")!;
+  }
+
+  setCurrentUserNode(currentUser: User) {
+    // TODO: For now we set the imgUrl to empty string
+    this.currentUserNode = new UserNode("", currentUser.name);
   }
 
   setWidth(width: number, devicePixelRatio?: number) {
@@ -31,7 +41,32 @@ export class Canvas {
     this.setHeight(height, devicePixelRatio);
   }
 
-  drawNodes() {}
+  drawUserNode(coord: Coord, userNode: UserNode) {
+    this.ctx.save();
+    const screenPosition = convertCartesianToScreen(this.element, coord);
+    this.ctx.beginPath();
+    this.ctx.arc(
+      screenPosition[0],
+      screenPosition[1],
+      userNode.radius,
+      0,
+      2 * Math.PI,
+      false,
+    );
+    this.ctx.fillStyle = "white";
+    this.ctx.fill();
+    this.ctx.lineWidth = 5;
+    this.ctx.strokeStyle = "black";
+    this.ctx.stroke();
+    this.ctx.closePath();
+    this.ctx.restore();
+  }
+
+  drawNodes() {
+    if (this.currentUserNode) {
+      this.drawUserNode([0, 0], this.currentUserNode);
+    }
+  }
 
   render() {
     this.drawNodes();
