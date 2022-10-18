@@ -1,43 +1,23 @@
-import { clear } from "console";
 import { Coord, Coords } from "types/canvas.types";
-export class Canvas {
-  private element: HTMLCanvasElement;
-  private width: number;
-  private height: number
-
-  private ctx: CanvasRenderingContext2D;
-
-  constructor(canvas: HTMLCanvasElement) {
-    this.element = canvas;
-    this.ctx = canvas.getContext("2d")!;
-  }
-  
-  setWidth(width: number, devicePixelRatio?: number) {
-    this.width = width;
-    this.element.width = devicePixelRatio ? width * devicePixelRatio : width;
-    this.element.style.width = `${width}px`;
-  }
-
-  setHeight(height: number, devicePixelRatio?: number) {
-    this.height = height;
-    this.element.height = devicePixelRatio ? height * devicePixelRatio : height;
-    this.element.style.height = `${height}px`;
-  }
-
-}
 
 const degToRad = (degrees: number) => {
   return degrees * (Math.PI / 180);
 };
 
-clear() {
-  this.ctx.clearRect(0, 0, this.width, this.height);
-}
-
-// RETURN_TYPE: Coords[]
-// USAGE: Coords[i][0]: i-th 1-chon node's coordinate
-//        Coords[i][j]: i-th 1-chon node's j-th 2-chon node coordiate; 1<= j <= num_2_chon+1
-// NOTE: margin cannot be less than 22 or the nodes may overlap
+/**
+ * Description:
+ * Coords[i][0]: i-th 1-chon node's coordinate
+ * Coords[i][j]: i-th 1-chon node's j-th 2-chon node coordiate; 1<= j <= num_2_chon+1
+ *
+ * NOTE:
+ * margin cannot be less than 22 or the nodes may overlap
+ * @param oneChonCount
+ * @param twoChonCount
+ * @param radius
+ * @param maxConnections
+ * @param margin
+ * @returns Coords[]
+ */
 export const get2ChonCoordinates = (
   oneChonCount: number,
   twoChonCount: number[],
