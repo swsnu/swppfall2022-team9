@@ -18,7 +18,7 @@ const degToRad = (degrees: number) => {
  * @param margin
  * @returns Coords[]
  */
-export const get2ChonCoordinates = (
+export const getTwoChonCoordinates = (
   oneChonCount: number,
   twoChonCount: number[],
   radius: number,
@@ -74,4 +74,15 @@ export const get2ChonCoordinates = (
     coordsLIst.push(coordsTemp);
   }
   return coordsLIst;
+};
+
+export const convertCartesianToScreen = (
+  canvas: HTMLCanvasElement,
+  cartesianCoord: Coord,
+): Coord => {
+  const screenPoint = [
+    cartesianCoord[0] + canvas.width / 2,
+    cartesianCoord[1] + canvas.height / 2,
+  ] as Coord;
+  return screenPoint;
 };

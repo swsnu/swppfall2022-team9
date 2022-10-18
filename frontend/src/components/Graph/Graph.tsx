@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useAppSelector } from "store/hooks";
 import { Canvas } from "./Canvas";
 import * as S from "./styles";
 
@@ -8,6 +9,8 @@ const Graph: React.FC<Props> = () => {
   const divRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const graphCanvas = useRef<Canvas | null>(null);
+
+  const currentUser = useAppSelector(state => state.users.currentUser);
   useEffect(() => {
     if (!canvasRef.current) {
       return () => {};
@@ -20,6 +23,13 @@ const Graph: React.FC<Props> = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (currentUser && graphCanvas.current) {
+      graphCanvas.current.setCurrentUserNode(currentUser);
+      graphCanvas.current.render();
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const onResize = () => {
