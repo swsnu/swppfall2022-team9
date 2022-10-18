@@ -1,5 +1,7 @@
 .App {
-  min-height: 100vh;
+  /* min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  position: fixed;
+  flex-direction: column; */
 }

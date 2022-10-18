@@ -19,7 +19,7 @@ const Graph: React.FC<Props> = () => {
     graphCanvas.current = graphCanvasObject;
     return () => {
       if (graphCanvas.current) {
-        graphCanvas.current.clear();
+        graphCanvas.current.destroy();
       }
     };
   }, []);

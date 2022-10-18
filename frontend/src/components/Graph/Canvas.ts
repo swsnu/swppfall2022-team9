@@ -1,10 +1,30 @@
 import { clear } from "console";
 import { User } from "models/users.model";
-import { Coord, Coords } from "types/canvas.types";
+import { Coord, Coords, PanZoom } from "types/canvas.types";
 import { UserNode } from "components/Graph/utils/node";
-import { convertCartesianToScreen } from "./utils/math";
+import {
+  convertCartesianToScreen,
+  diffPoints,
+  getScreenPoint,
+} from "./utils/math";
+import { addEvent, removeEvent, touchy, TouchyEvent } from "./utils/touch";
 export class Canvas {
+  private MAX_SCALE = 5;
+
+  private MIN_SCALE = 0.6;
+
+  private ZOOM_SENSITIVITY = 300;
+
   private element: HTMLCanvasElement;
+
+  private panZoom: PanZoom = {
+    scale: 1,
+    offset: [0, 0],
+  };
+
+  private panPoint: { lastMousePos: Coord } = {
+    lastMousePos: [0, 0],
+  };
 
   private width = 0;
 
@@ -17,33 +37,118 @@ export class Canvas {
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
     this.ctx = canvas.getContext("2d")!;
+
+    this.initialize();
   }
 
-  onMouseDown() {}
+  initialize() {
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this.onMouseOut = this.onMouseOut.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
 
-  onMouseMove() {}
+    // add event listeners
+    touchy(this.element, addEvent, "mousedown", this.onMouseDown);
+    touchy(this.element, addEvent, "mouseup", this.onMouseUp);
+    touchy(this.element, addEvent, "mouseout", this.onMouseOut);
+  }
 
-  onMouseUp() {}
+  onMouseDown(evt: TouchyEvent) {
+    this.panPoint.lastMousePos = [evt.offsetX, evt.offsetY];
+    touchy(this.element, addEvent, "mousemove", this.handlePanning);
+  }
 
-  onMouseOut() {}
+  onMouseMove(evt: TouchyEvent) {}
 
-  // handlePanning = (evt: TouchyEvent) => {
-  //   const lastMousePos = this.panPoint.lastMousePos;
-  //   const point = this.getPointFromTouchyEvent(evt);
-  //   const currentMousePos: Point = { x: point.offsetX, y: point.offsetY };
-  //   this.panPoint.lastMousePos = currentMousePos;
-  //   const mouseDiff = diffPoints(lastMousePos, currentMousePos);
-  //   const offset = diffPoints(this.panZoom.offset, mouseDiff);
-  //   this.panZoom.offset = offset;
-  //   this.presenceCanvasWrapper.setPanZoom({ offset });
-  //   this.documentCanvasWrapper.setPanZoom({ offset });
-  //   this.updatePanZoomStore!({ ...this.panZoom, offset });
-  //   return;
-  // };
+  onMouseUp() {
+    touchy(this.element, removeEvent, "mousemove", this.onMouseMove);
+    touchy(this.element, removeEvent, "mousemove", this.handlePanning);
+  }
+
+  onMouseOut() {
+    touchy(this.element, removeEvent, "mousemove", this.onMouseMove);
+    touchy(this.element, removeEvent, "mousemove", this.handlePanning);
+  }
+
+  setPanZoom(param: Partial<PanZoom>) {
+    const { scale, offset } = param;
+    if (scale) {
+      this.panZoom.scale = scale;
+    }
+    if (offset) {
+      this.panZoom.offset = offset;
+    }
+
+    this.render();
+    //reset the offset
+    // this.panZoom.offset = [0, 0];
+  }
+
+  handlePanning = (evt: TouchyEvent) => {
+    const lastMousePos = this.panPoint.lastMousePos;
+    const point = evt;
+    const currentMousePos: Coord = [point.offsetX, point.offsetY];
+    this.panPoint.lastMousePos = currentMousePos;
+    const mouseDiff = diffPoints(lastMousePos, currentMousePos);
+    const offset = diffPoints(this.panZoom.offset, mouseDiff);
+    this.panZoom.offset = offset;
+    this.setPanZoom({ offset });
+    return;
+  };
+
+  // getPointFromTouch(touch: Touch) {
+  //   const r = this.element.getBoundingClientRect();
+  //   const originY = touch.clientY;
+  //   const originX = touch.clientX;
+  //   const offsetX = touch.clientX - r.left;
+  //   const offsetY = touch.clientY - r.top;
+  //   return {
+  //     x: originX - this.panZoom.offset[0],
+  //     y: originY - this.panZoom.offset[1],
+  //     offsetX: offsetX,
+  //     offsetY: offsetY,
+  //   };
+  // }
+
+  getPointFromTouchyEvent(evt: TouchyEvent) {
+    let originY;
+    let originX;
+    let offsetX;
+    let offsetY;
+    if (window.TouchEvent && evt instanceof TouchEvent) {
+      //this is for tablet or mobile
+      // let firstCanvasTouchIndex = 0;
+      // for (let i = 0; i < evt.touches.length; i++) {
+      //   const target = evt.touches.item(i)!.target;
+      //   if (target instanceof HTMLCanvasElement) {
+      //     firstCanvasTouchIndex = i;
+      //     break;
+      //   }
+      // }
+      // if (isCanvasTouchIncluded) {
+      //   return this.getPointFromTouch(evt.touches[firstCanvasTouchIndex]);
+      // } else {
+      //   return this.getPointFromTouch(evt.touches[0]);
+      // }
+    } else {
+      // this is for PC
+      originY = evt.clientY;
+      originX = evt.clientX;
+      offsetX = evt.offsetX;
+      offsetY = evt.offsetY;
+      // originY += window.scrollY;
+      // originX += window.scrollX;
+      // return {
+      //   y: originY - this.panZoom.offset.y,
+      //   x: originX - this.panZoom.offset.x,
+      //   offsetX: offsetX,
+      //   offsetY: offsetY,
+    }
+  }
 
   setCurrentUserNode(currentUser: User) {
     // TODO: For now we set the imgUrl to empty string
-    this.currentUserNode = new UserNode("", currentUser.name);
+    this.currentUserNode = new UserNode("", currentUser.name, [0, 0]);
   }
 
   setWidth(width: number, devicePixelRatio?: number) {
@@ -66,9 +171,13 @@ export class Canvas {
   // this is the drawing method of a user node(currentUser, 1-chon, 2-chon)
   // you are free to change this part
   // TODO: draw img url in the circle (clipped)
-  drawUserNode(coord: Coord, userNode: UserNode) {
+  drawUserNode(userNode: UserNode) {
     this.ctx.save();
-    const screenPosition = convertCartesianToScreen(this.element, coord);
+    const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
+    const screenPosition = convertCartesianToScreen(
+      this.element,
+      correctedPosition,
+    );
     this.ctx.beginPath();
     this.ctx.arc(
       screenPosition[0],
@@ -89,15 +198,23 @@ export class Canvas {
 
   drawNodes() {
     if (this.currentUserNode) {
-      this.drawUserNode([0, 0], this.currentUserNode);
+      this.drawUserNode(this.currentUserNode);
     }
   }
 
   render() {
+    this.clear();
     this.drawNodes();
   }
 
   clear() {
     this.ctx.clearRect(0, 0, this.width, this.height);
+  }
+
+  destroy() {
+    this.clear();
+    touchy(this.element, removeEvent, "mouseup", this.onMouseUp);
+    touchy(this.element, removeEvent, "mouseout", this.onMouseOut);
+    touchy(this.element, removeEvent, "mousedown", this.onMouseDown);
   }
 }
