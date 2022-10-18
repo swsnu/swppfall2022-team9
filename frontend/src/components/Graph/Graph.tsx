@@ -14,11 +14,32 @@ const Graph: React.FC<Props> = () => {
     const graphCanvasObject = new Canvas(canvasRef.current);
     graphCanvas.current = graphCanvasObject;
     return () => {
-      galaxyCanvas.clear();
+      if (graphCanvas.current) {
+        graphCanvas.current.clear();
+      }
     };
   }, []);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (!divRef.current || !graphCanvas.current) {
+        return;
+      }
+      const rect = divRef.current.getBoundingClientRect();
+
+      graphCanvas.current.setSize(rect.width, rect.height);
+      graphCanvas.current.render();
+    };
+
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
   return (
-    <div ref={divRef}>
+    <div ref={divRef} style={{ flex: "1 0" }}>
       <canvas ref={canvasRef} />
     </div>
   );
