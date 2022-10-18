@@ -19,6 +19,28 @@ export class Canvas {
     this.ctx = canvas.getContext("2d")!;
   }
 
+  onMouseDown() {}
+
+  onMouseMove() {}
+
+  onMouseUp() {}
+
+  onMouseOut() {}
+
+  // handlePanning = (evt: TouchyEvent) => {
+  //   const lastMousePos = this.panPoint.lastMousePos;
+  //   const point = this.getPointFromTouchyEvent(evt);
+  //   const currentMousePos: Point = { x: point.offsetX, y: point.offsetY };
+  //   this.panPoint.lastMousePos = currentMousePos;
+  //   const mouseDiff = diffPoints(lastMousePos, currentMousePos);
+  //   const offset = diffPoints(this.panZoom.offset, mouseDiff);
+  //   this.panZoom.offset = offset;
+  //   this.presenceCanvasWrapper.setPanZoom({ offset });
+  //   this.documentCanvasWrapper.setPanZoom({ offset });
+  //   this.updatePanZoomStore!({ ...this.panZoom, offset });
+  //   return;
+  // };
+
   setCurrentUserNode(currentUser: User) {
     // TODO: For now we set the imgUrl to empty string
     this.currentUserNode = new UserNode("", currentUser.name);
@@ -41,6 +63,9 @@ export class Canvas {
     this.setHeight(height, devicePixelRatio);
   }
 
+  // this is the drawing method of a user node(currentUser, 1-chon, 2-chon)
+  // you are free to change this part
+  // TODO: draw img url in the circle (clipped)
   drawUserNode(coord: Coord, userNode: UserNode) {
     this.ctx.save();
     const screenPosition = convertCartesianToScreen(this.element, coord);
