@@ -7,4 +7,5 @@ export const CanvasContainer = styled.div`
     rgba(121, 154, 237, 0.116) 100%
   );
   flex: 1 0;
+  overflow: hidden;
 `;

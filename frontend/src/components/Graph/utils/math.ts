@@ -1,4 +1,4 @@
-import { Coord, Coords } from "types/canvas.types";
+import { Coord, Coords, PanZoom } from "types/canvas.types";
 
 const degToRad = (degrees: number) => {
   return degrees * (Math.PI / 180);
@@ -86,3 +86,13 @@ export const convertCartesianToScreen = (
   ] as Coord;
   return screenPoint;
 };
+
+export function diffPoints(p1: Coord, p2: Coord): Coord {
+  return [p1[0] - p2[0], p1[1] - p2[1]];
+}
+
+export function getScreenPoint(point: Coord, panZoom: PanZoom): Coord {
+  const { offset, scale } = panZoom;
+
+  return [point[0] * scale + offset[0], point[1] * scale + offset[1]];
+}
