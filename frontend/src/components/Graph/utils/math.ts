@@ -18,7 +18,7 @@ const degToRad = (degrees: number) => {
  * @param margin
  * @returns Coords[]
  */
-export const getTwoChonCoordinates = (
+export const getOneAndTwoChonCoordinates = (
   oneChonCount: number,
   twoChonCount: number[],
   radius: number,
@@ -29,7 +29,7 @@ export const getTwoChonCoordinates = (
     throw new Error("More number of 2-chons than 1-chons.");
   }
 
-  const coordsLIst: Coords[] = [];
+  const coordsList: Coords[] = [];
 
   const edge = 6 * radius;
   const degree = 360 / oneChonCount;
@@ -71,9 +71,9 @@ export const getTwoChonCoordinates = (
         coordsTemp.push(coord);
       }
     }
-    coordsLIst.push(coordsTemp);
+    coordsList.push(coordsTemp);
   }
-  return coordsLIst;
+  return coordsList;
 };
 
 export const convertCartesianToScreen = (
