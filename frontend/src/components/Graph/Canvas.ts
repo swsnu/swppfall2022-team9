@@ -3,13 +3,15 @@ import { User } from "models/users.model";
 import { Coord, Coords, PanZoom } from "types/canvas.types";
 import { UserNode } from "components/Graph/utils/node";
 import {
+  addPoints,
   convertCartesianToScreen,
   diffPoints,
   getScreenPoint,
+  getWorldPoint,
 } from "./utils/math";
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./utils/touch";
 export class Canvas {
-  private MAX_SCALE = 5;
+  private MAX_SCALE = 2;
 
   private MIN_SCALE = 0.6;
 
@@ -51,6 +53,7 @@ export class Canvas {
     touchy(this.element, addEvent, "mousedown", this.onMouseDown);
     touchy(this.element, addEvent, "mouseup", this.onMouseUp);
     touchy(this.element, addEvent, "mouseout", this.onMouseOut);
+    this.element.addEventListener("wheel", this.handleWheel);
   }
 
   onMouseDown(evt: TouchyEvent) {
@@ -94,6 +97,54 @@ export class Canvas {
     this.panZoom.offset = offset;
     this.setPanZoom({ offset });
     return;
+  };
+
+  returnScrollOffsetFromMouseOffset = (
+    mouseOffset: Coord,
+    panZoom: PanZoom,
+    newScale: number,
+  ) => {
+    const worldPos = getWorldPoint(
+      diffPoints(mouseOffset, [
+        this.element.width / 2,
+        this.element.height / 2,
+      ]),
+      panZoom,
+    );
+    const newMousePos = getScreenPoint(worldPos, {
+      scale: newScale,
+      offset: addPoints(panZoom.offset, [
+        this.element.width / 2,
+        this.element.height / 2,
+      ]),
+    });
+    const scaleOffset = diffPoints(mouseOffset, newMousePos);
+    const offset = addPoints(panZoom.offset, scaleOffset);
+    return offset;
+  };
+
+  handleWheel = (e: WheelEvent) => {
+    e.preventDefault();
+    if (e.ctrlKey) {
+      const { deltaY } = e;
+      const zoom = 1 - deltaY / this.ZOOM_SENSITIVITY;
+      const newScale = this.panZoom.scale * zoom;
+
+      if (newScale > this.MAX_SCALE || newScale < this.MIN_SCALE) {
+        return;
+      }
+      const mouseOffset = { x: e.offsetX, y: e.offsetY };
+      const newOffset = this.returnScrollOffsetFromMouseOffset(
+        [mouseOffset.x, mouseOffset.y],
+        this.panZoom,
+        newScale,
+      );
+
+      this.setPanZoom({ scale: newScale, offset: newOffset });
+    } else {
+      const offset = diffPoints(this.panZoom.offset, [e.deltaX, e.deltaY]);
+      this.setPanZoom({ offset });
+    }
   };
 
   // getPointFromTouch(touch: Touch) {
@@ -182,14 +233,14 @@ export class Canvas {
     this.ctx.arc(
       screenPosition[0],
       screenPosition[1],
-      userNode.radius,
+      userNode.radius * this.panZoom.scale,
       0,
       2 * Math.PI,
       false,
     );
     this.ctx.fillStyle = "white";
     this.ctx.fill();
-    this.ctx.lineWidth = 5;
+    this.ctx.lineWidth = 5 * this.panZoom.scale;
     this.ctx.strokeStyle = "black";
     this.ctx.stroke();
     this.ctx.closePath();
@@ -204,6 +255,7 @@ export class Canvas {
 
   render() {
     this.clear();
+
     this.drawNodes();
   }
 
@@ -216,5 +268,6 @@ export class Canvas {
     touchy(this.element, removeEvent, "mouseup", this.onMouseUp);
     touchy(this.element, removeEvent, "mouseout", this.onMouseOut);
     touchy(this.element, removeEvent, "mousedown", this.onMouseDown);
+    this.element.removeEventListener("wheel", this.handleWheel);
   }
 }

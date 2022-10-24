@@ -91,8 +91,30 @@ export function diffPoints(p1: Coord, p2: Coord): Coord {
   return [p1[0] - p2[0], p1[1] - p2[1]];
 }
 
+export function addPoints(p1: Coord, p2: Coord): Coord {
+  return [p1[0] + p2[0], p1[1] + p2[1]];
+}
+
+/**
+ * Actual world point is converted to screen(=viewing) point
+ * @param point
+ * @param panZoom
+ * @returns
+ */
 export function getScreenPoint(point: Coord, panZoom: PanZoom): Coord {
   const { offset, scale } = panZoom;
 
   return [point[0] * scale + offset[0], point[1] * scale + offset[1]];
+}
+
+/**
+ * This is the real point in the actual world
+ * @param point
+ * @param panZoom
+ * @returns
+ */
+export function getWorldPoint(point: Coord, panZoom: PanZoom): Coord {
+  const { offset, scale } = panZoom;
+
+  return [(point[0] - offset[0]) / scale, (point[1] - offset[1]) / scale];
 }
