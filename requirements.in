@@ -1,3 +1,6 @@
 Django==4.1
 pytest
 python-decouple # for .env file
+pylint
+pylint-django
+coverage
