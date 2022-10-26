@@ -19,7 +19,7 @@ const App = () => {
               </AuthWrapper>
             }
           />
-          <Route path="/user/signup" element={<SignUpPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>
