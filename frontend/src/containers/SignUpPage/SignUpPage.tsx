@@ -1,7 +1,6 @@
 import { PostSignUpDto } from "dto/users/users.dto";
 import useAlert from "hooks/useAlert";
 import React, { useCallback, useEffect, useState } from "react";
-import { IoCloseOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { postSignUp } from "store/slices/users";
@@ -14,6 +13,7 @@ interface SignUpInfo extends PostSignUpDto {
 }
 
 enum HelperText {
+  NO_ERROR = "",
   REQUIRED = "필수 정보입니다.",
   DIFFERENT_PASSWORD = "비밀번호가 일치하지 않습니다.",
 }
@@ -31,11 +31,11 @@ const SignUpPage: React.FC<Props> = () => {
     passwordConfirm: "",
   });
   const [signUpHelper, setSignUpHelper] = useState<SignUpInfo>({
-    name: HelperText.REQUIRED,
-    email: HelperText.REQUIRED,
-    nickname: HelperText.REQUIRED,
-    password: HelperText.REQUIRED,
-    passwordConfirm: HelperText.REQUIRED,
+    name: HelperText.NO_ERROR,
+    email: HelperText.NO_ERROR,
+    nickname: HelperText.NO_ERROR,
+    password: HelperText.NO_ERROR,
+    passwordConfirm: HelperText.NO_ERROR,
   });
   const maxNameLength = 50;
   const maxEmailLength = 50;
@@ -90,8 +90,9 @@ const SignUpPage: React.FC<Props> = () => {
     const signUpInfoKeys = Object.keys(signUpInfo) as Array<keyof SignUpInfo>;
     isFormValid = true;
     signUpInfoKeys.forEach(field => {
-      if (signUpHelper[field]) {
+      if (signUpHelper[field] || !signUpInfo[field]) {
         isFormValid = false;
+        return;
       }
     });
   }, [signUpHelper]);
@@ -115,7 +116,7 @@ const SignUpPage: React.FC<Props> = () => {
                   setSignUpInfo(prev => ({ ...prev, name: e.target.value }));
                   setSignUpHelper(prev => {
                     return e.target.value
-                      ? { ...prev, name: "" }
+                      ? { ...prev, name: HelperText.NO_ERROR }
                       : { ...prev, name: HelperText.REQUIRED };
                   });
                 }}
@@ -135,7 +136,7 @@ const SignUpPage: React.FC<Props> = () => {
                   setSignUpInfo(prev => ({ ...prev, email: e.target.value }));
                   setSignUpHelper(prev => {
                     return e.target.value
-                      ? { ...prev, email: "" }
+                      ? { ...prev, email: HelperText.NO_ERROR }
                       : { ...prev, email: HelperText.REQUIRED };
                   });
                 }}
@@ -158,7 +159,7 @@ const SignUpPage: React.FC<Props> = () => {
                   }));
                   setSignUpHelper(prev => {
                     return e.target.value
-                      ? { ...prev, nickname: "" }
+                      ? { ...prev, nickname: HelperText.NO_ERROR }
                       : { ...prev, nickname: HelperText.REQUIRED };
                   });
                 }}
@@ -180,12 +181,12 @@ const SignUpPage: React.FC<Props> = () => {
                   }));
                   setSignUpHelper(prev => {
                     return e.target.value
-                      ? { ...prev, password: "" }
+                      ? { ...prev, password: HelperText.NO_ERROR }
                       : { ...prev, password: HelperText.REQUIRED };
                   });
                   setSignUpHelper(prev => {
                     return signUpInfo.passwordConfirm == e.target.value
-                      ? { ...prev, passwordConfirm: "" }
+                      ? { ...prev, passwordConfirm: HelperText.NO_ERROR }
                       : {
                           ...prev,
                           passwordConfirm: HelperText.DIFFERENT_PASSWORD,
@@ -210,7 +211,7 @@ const SignUpPage: React.FC<Props> = () => {
                   }));
                   setSignUpHelper(prev => {
                     return signUpInfo.password == e.target.value
-                      ? { ...prev, passwordConfirm: "" }
+                      ? { ...prev, passwordConfirm: HelperText.NO_ERROR }
                       : {
                           ...prev,
                           passwordConfirm: HelperText.DIFFERENT_PASSWORD,
