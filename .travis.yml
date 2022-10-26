@@ -27,4 +27,3 @@ jobs:
         - yarn install
       script:
         - yarn lint
-        - yarn test --coverage --watchAll=false
