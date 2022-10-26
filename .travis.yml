@@ -15,7 +15,7 @@ jobs:
         - cd backend
         - pip install -r requirements.txt
       script:
-        - pylint **/*.py --load-plugins pylint_django
+        - pylint --rcfile=pylintrc **/*.py
         - cd .. && sonar-scanner
 
     - language: node_js
