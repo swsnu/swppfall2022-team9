@@ -3,8 +3,9 @@ import { IoCloseOutline } from "react-icons/io5";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { PostSignInDto } from "dto/users/users.dto";
 import useAlert from "hooks/useAlert";
-import { postSiginIn } from "store/slices/users";
+import { postSignIn } from "store/slices/users";
 import * as S from "./styles";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   message: string;
@@ -13,6 +14,7 @@ interface Props {
 const LoginModal: React.FC<Props> = ({ message }) => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const currentUser = useAppSelector(state => state.users.currentUser);
   const [loginInfo, setLoginInfo] = useState<PostSignInDto>({
     email: "",
@@ -24,7 +26,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
       e.preventDefault();
       try {
         const loggedInUser = await dispatch(
-          postSiginIn({ email: loginInfo.email, password: loginInfo.password }),
+          postSignIn({ email: loginInfo.email, password: loginInfo.password }),
         );
       } catch (err) {
         alert.open({ message: "로그인 정보가 잘못되었습니다!" });
@@ -33,6 +35,11 @@ const LoginModal: React.FC<Props> = ({ message }) => {
     },
     [alert, loginInfo],
   );
+
+  const onClickSignUp = async (e: React.SyntheticEvent) => {
+    navigate("/user/signup");
+  };
+
   return (
     <S.Container>
       <S.ModalContainer
@@ -55,7 +62,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
         <S.GuideContainer>
           <S.Title>로그인</S.Title>
           <S.UserOptions>
-            <S.Register onClick={() => {}}>회원가입</S.Register>
+            <S.Register onClick={onClickSignUp}>회원가입</S.Register>
             <S.FindAccount onClick={() => {}}>
               아이디/비밀번호 찾기
             </S.FindAccount>

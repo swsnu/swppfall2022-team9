@@ -1,4 +1,3 @@
-import AuthWrapper from "containers/AuthWrapper/AuthWrapper";
 import React from "react";
 
 interface Props {}

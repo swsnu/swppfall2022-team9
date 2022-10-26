@@ -72,6 +72,7 @@
     "eslint-plugin-react": "^7.31.10",
     "esm": "^3.2.25",
     "lowdb": "^1.0.0",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1"
   }
 }

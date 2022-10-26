@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ThemeColor } from "styles/common.styles";
+import { ButtonColor } from "styles/common.styles";
 import { device } from "utils/cssMedia";
 
 export const Container = styled.div`
@@ -109,6 +109,6 @@ export const Submit = styled.button`
   margin-top: 10px;
   color: black;
   padding: 10px 50px;
-  background-color: ${ThemeColor};
+  background-color: ${ButtonColor};
   cursor: pointer;
 `;
