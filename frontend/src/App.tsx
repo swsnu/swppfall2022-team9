@@ -1,9 +1,9 @@
-import React from "react";
 import "./App.css";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "containers/HomePage/HomePage";
 import Navbar from "components/Navbar/Navbar";
 import AuthWrapper from "containers/AuthWrapper/AuthWrapper";
+import SignUpPage from "containers/SignUpPage/SignUpPage";
 
 const App = () => {
   return (
@@ -19,6 +19,7 @@ const App = () => {
               </AuthWrapper>
             }
           />
+          <Route path="/user/signup" element={<SignUpPage />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>
