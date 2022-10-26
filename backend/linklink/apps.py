@@ -1,3 +1,7 @@
+"""
+apps module for linklink app
+"""
+
 from django.apps import AppConfig
 
 
