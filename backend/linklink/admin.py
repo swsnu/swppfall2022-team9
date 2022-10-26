@@ -1,3 +1,7 @@
-from django.contrib import admin
+"""
+admin module for linklink app
+"""
+
+# from django.contrib import admin
 
 # Register your models here.

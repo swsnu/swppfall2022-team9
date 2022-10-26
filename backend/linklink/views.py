@@ -1,3 +1,7 @@
-from django.shortcuts import render
+"""
+views module for linklink app
+"""
+
+# from django.shortcuts import render
 
 # Create your views here.
