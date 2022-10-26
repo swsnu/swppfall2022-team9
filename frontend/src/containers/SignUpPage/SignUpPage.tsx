@@ -13,6 +13,11 @@ interface SignUpInfo extends PostSignUpDto {
   passwordConfirm: string;
 }
 
+enum HelperText {
+  REQUIRED = "필수 정보입니다.",
+  DIFFERENT_PASSWORD = "비밀번호가 일치하지 않습니다.",
+}
+
 const SignUpPage: React.FC<Props> = () => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
@@ -26,11 +31,11 @@ const SignUpPage: React.FC<Props> = () => {
     passwordConfirm: "",
   });
   const [signUpHelper, setSignUpHelper] = useState<SignUpInfo>({
-    name: "필수 정보입니다.",
-    email: "필수 정보입니다.",
-    nickname: "필수 정보입니다.",
-    password: "필수 정보입니다.",
-    passwordConfirm: "필수 정보입니다.",
+    name: HelperText.REQUIRED,
+    email: HelperText.REQUIRED,
+    nickname: HelperText.REQUIRED,
+    password: HelperText.REQUIRED,
+    passwordConfirm: HelperText.REQUIRED,
   });
   const maxNameLength = 50;
   const maxEmailLength = 50;
@@ -44,7 +49,7 @@ const SignUpPage: React.FC<Props> = () => {
       const signUpInfoKeys = Object.keys(signUpInfo) as Array<keyof SignUpInfo>;
       signUpInfoKeys.forEach(field => {
         if (!signUpInfo[field]) {
-          setSignUpHelper(prev => ({ ...prev, [field]: "필수 정보입니다." }));
+          setSignUpHelper(prev => ({ ...prev, [field]: HelperText.REQUIRED }));
         }
       });
 
@@ -124,7 +129,7 @@ const SignUpPage: React.FC<Props> = () => {
                   setSignUpHelper(prev => {
                     return e.target.value
                       ? { ...prev, name: "" }
-                      : { ...prev, name: "필수 정보입니다." };
+                      : { ...prev, name: HelperText.REQUIRED };
                   });
                 }}
               />
@@ -144,7 +149,7 @@ const SignUpPage: React.FC<Props> = () => {
                   setSignUpHelper(prev => {
                     return e.target.value
                       ? { ...prev, email: "" }
-                      : { ...prev, email: "필수 정보입니다." };
+                      : { ...prev, email: HelperText.REQUIRED };
                   });
                 }}
               />
@@ -167,7 +172,7 @@ const SignUpPage: React.FC<Props> = () => {
                   setSignUpHelper(prev => {
                     return e.target.value
                       ? { ...prev, nickname: "" }
-                      : { ...prev, nickname: "필수 정보입니다." };
+                      : { ...prev, nickname: HelperText.REQUIRED };
                   });
                 }}
               />
@@ -189,14 +194,14 @@ const SignUpPage: React.FC<Props> = () => {
                   setSignUpHelper(prev => {
                     return e.target.value
                       ? { ...prev, password: "" }
-                      : { ...prev, password: "필수 정보입니다." };
+                      : { ...prev, password: HelperText.REQUIRED };
                   });
                   setSignUpHelper(prev => {
                     return signUpInfo.passwordConfirm == e.target.value
                       ? { ...prev, passwordConfirm: "" }
                       : {
                           ...prev,
-                          passwordConfirm: "비밀번호가 일치하지 않습니다.",
+                          passwordConfirm: HelperText.DIFFERENT_PASSWORD,
                         };
                   });
                 }}
@@ -221,7 +226,7 @@ const SignUpPage: React.FC<Props> = () => {
                       ? { ...prev, passwordConfirm: "" }
                       : {
                           ...prev,
-                          passwordConfirm: "비밀번호가 일치하지 않습니다.",
+                          passwordConfirm: HelperText.DIFFERENT_PASSWORD,
                         };
                   });
                 }}
