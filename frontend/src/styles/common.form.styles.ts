@@ -15,18 +15,6 @@ export const Container = styled.div`
   padding: 10px;
 `;
 
-export const CloseButtonContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding-right: 10px;
-  padding-top: 10px;
-  width: 40px;
-  @media ${device.tablet} {
-    width: 50px;
-  }
-`;
-
 export const FormContainer = styled.div`
   position: relative;
   background-color: white;
