@@ -30,28 +30,29 @@ const SignUpPage: React.FC<Props> = () => {
     password: "",
     passwordConfirm: "",
   });
-  const [signUpHelper, setSignUpHelper] = useState<SignUpInfo>({
-    name: HelperText.NO_ERROR,
-    email: HelperText.NO_ERROR,
-    nickname: HelperText.NO_ERROR,
-    password: HelperText.NO_ERROR,
-    passwordConfirm: HelperText.NO_ERROR,
-  });
+  const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false);
   const maxNameLength = 50;
   const maxEmailLength = 50;
   const maxNicknameLength = 50;
   const maxPasswordLength = 20;
-  let isFormValid = false;
+
+  const checkFormValidity = (info: SignUpInfo): boolean => {
+    let isFormValid = true;
+    const infoKeys = Object.keys(info) as Array<keyof SignUpInfo>;
+    infoKeys.forEach(key => {
+      if (!info[key]) {
+        isFormValid = false;
+        return;
+      }
+    });
+    return isFormValid;
+  };
 
   const onSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault();
-      const signUpInfoKeys = Object.keys(signUpInfo) as Array<keyof SignUpInfo>;
-      signUpInfoKeys.forEach(field => {
-        if (!signUpInfo[field]) {
-          setSignUpHelper(prev => ({ ...prev, [field]: HelperText.REQUIRED }));
-        }
-      });
+      setIsSubmitClicked(true);
+      const isFormValid = checkFormValidity(signUpInfo);
 
       if (isFormValid) {
         try {
@@ -83,19 +84,8 @@ const SignUpPage: React.FC<Props> = () => {
         }
       }
     },
-    [alert, signUpInfo, signUpHelper],
+    [alert, signUpInfo],
   );
-
-  useEffect(() => {
-    const signUpInfoKeys = Object.keys(signUpInfo) as Array<keyof SignUpInfo>;
-    isFormValid = true;
-    signUpInfoKeys.forEach(field => {
-      if (signUpHelper[field] || !signUpInfo[field]) {
-        isFormValid = false;
-        return;
-      }
-    });
-  }, [signUpHelper]);
 
   return (
     <S.Container>
@@ -114,14 +104,13 @@ const SignUpPage: React.FC<Props> = () => {
                 maxLength={maxNameLength}
                 onChange={e => {
                   setSignUpInfo(prev => ({ ...prev, name: e.target.value }));
-                  setSignUpHelper(prev => {
-                    return e.target.value
-                      ? { ...prev, name: HelperText.NO_ERROR }
-                      : { ...prev, name: HelperText.REQUIRED };
-                  });
                 }}
               />
-              <S.InputHelper>{signUpHelper.name}</S.InputHelper>
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {signUpInfo.name ? HelperText.NO_ERROR : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
             </S.InputContainer>
           </S.Label>
           <S.Label>
@@ -134,14 +123,13 @@ const SignUpPage: React.FC<Props> = () => {
                 maxLength={maxEmailLength}
                 onChange={e => {
                   setSignUpInfo(prev => ({ ...prev, email: e.target.value }));
-                  setSignUpHelper(prev => {
-                    return e.target.value
-                      ? { ...prev, email: HelperText.NO_ERROR }
-                      : { ...prev, email: HelperText.REQUIRED };
-                  });
                 }}
               />
-              <S.InputHelper>{signUpHelper.email}</S.InputHelper>
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {signUpInfo.email ? HelperText.NO_ERROR : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
             </S.InputContainer>
           </S.Label>
           <S.Label>
@@ -156,14 +144,15 @@ const SignUpPage: React.FC<Props> = () => {
                     ...prev,
                     nickname: e.target.value,
                   }));
-                  setSignUpHelper(prev => {
-                    return e.target.value
-                      ? { ...prev, nickname: HelperText.NO_ERROR }
-                      : { ...prev, nickname: HelperText.REQUIRED };
-                  });
                 }}
               />
-              <S.InputHelper>{signUpHelper.nickname}</S.InputHelper>
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {signUpInfo.nickname
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
             </S.InputContainer>
           </S.Label>
           <S.Label>
@@ -178,22 +167,15 @@ const SignUpPage: React.FC<Props> = () => {
                     ...prev,
                     password: e.target.value,
                   }));
-                  setSignUpHelper(prev => {
-                    return e.target.value
-                      ? { ...prev, password: HelperText.NO_ERROR }
-                      : { ...prev, password: HelperText.REQUIRED };
-                  });
-                  setSignUpHelper(prev => {
-                    return signUpInfo.passwordConfirm == e.target.value
-                      ? { ...prev, passwordConfirm: HelperText.NO_ERROR }
-                      : {
-                          ...prev,
-                          passwordConfirm: HelperText.DIFFERENT_PASSWORD,
-                        };
-                  });
                 }}
               />
-              <S.InputHelper>{signUpHelper.password}</S.InputHelper>
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {signUpInfo.password
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
             </S.InputContainer>
           </S.Label>
           <S.Label>
@@ -208,17 +190,17 @@ const SignUpPage: React.FC<Props> = () => {
                     ...prev,
                     passwordConfirm: e.target.value,
                   }));
-                  setSignUpHelper(prev => {
-                    return signUpInfo.password == e.target.value
-                      ? { ...prev, passwordConfirm: HelperText.NO_ERROR }
-                      : {
-                          ...prev,
-                          passwordConfirm: HelperText.DIFFERENT_PASSWORD,
-                        };
-                  });
                 }}
               />
-              <S.InputHelper>{signUpHelper.passwordConfirm}</S.InputHelper>
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {signUpInfo.password == signUpInfo.passwordConfirm
+                    ? signUpInfo.passwordConfirm
+                      ? HelperText.NO_ERROR
+                      : HelperText.REQUIRED
+                    : HelperText.DIFFERENT_PASSWORD}
+                </S.InputHelper>
+              )}
             </S.InputContainer>
           </S.Label>
           <S.Submit type="submit" onSubmit={onSubmit}>
