@@ -150,7 +150,6 @@ const SignUpPage: React.FC<Props> = () => {
               <S.Input
                 type="text"
                 name="nickname"
-                autoComplete="on"
                 maxLength={maxNicknameLength}
                 onChange={e => {
                   setSignUpInfo(prev => ({
