@@ -37,7 +37,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
   );
 
   const onClickSignUp = async (e: React.SyntheticEvent) => {
-    navigate("/user/signup");
+    navigate("/signup");
   };
 
   return (
