@@ -99,19 +99,6 @@ const SignUpPage: React.FC<Props> = () => {
   return (
     <S.Container>
       <S.FormContainer>
-        <S.CloseButtonContainer>
-          <IoCloseOutline
-            style={{
-              cursor: "pointer",
-            }}
-            color="#D9D9D9"
-            size="100%"
-            onClick={e => {
-              e.stopPropagation();
-              navigate("/");
-            }}
-          />
-        </S.CloseButtonContainer>
         <S.GuideContainer>
           <S.Title>회원가입</S.Title>
         </S.GuideContainer>
