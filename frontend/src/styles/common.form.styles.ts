@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { ButtonColor } from "styles/common.styles";
-import { device } from "utils/cssMedia";
 
 export const Container = styled.div`
   background-color: rgba(242, 222, 254, 0.5);

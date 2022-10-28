@@ -52,6 +52,7 @@ export function touchy(
   type: MouseType,
   fn: (evt: TouchyEvent) => void,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let globalNavigator: any;
   // eslint-disable-next-line prefer-const
   globalNavigator = global.navigator;

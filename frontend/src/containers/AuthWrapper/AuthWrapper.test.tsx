@@ -11,6 +11,7 @@ const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({
   // 그래야 NavLink 같은 걸 쓸 수 있다.
   ...jest.requireActual("react-router"),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Navigate: (props: any) => {
     // we need to check navigate to
     mockNavigate(props.to);

@@ -1,6 +1,5 @@
-import { clear } from "console";
 import { User } from "models/users.model";
-import { Coord, Coords, PanZoom } from "types/canvas.types";
+import { Coord, PanZoom } from "types/canvas.types";
 import { UserNode } from "components/Graph/utils/node";
 import {
   addPoints,
@@ -77,7 +76,7 @@ export class Canvas {
     touchy(this.element, addEvent, "mousemove", this.handlePinchZoom);
   }
 
-  onMouseMove(evt: TouchyEvent) {}
+  onMouseMove() {}
 
   onMouseUp() {
     touchy(this.element, removeEvent, "mousemove", this.onMouseMove);

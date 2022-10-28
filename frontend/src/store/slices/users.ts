@@ -29,6 +29,7 @@ export const postSignIn = createAsyncThunk<PostSignInResDto, PostSignInDto>(
       const response = (await axios.post<PostSignInResDto>("/api/login", body))
         .data;
       return response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return thunkApi.rejectWithValue(err.message);
     }
@@ -42,6 +43,7 @@ export const postSignUp = createAsyncThunk<PostSignUpResDto, PostSignUpDto>(
       const response = (await axios.post<PostSignUpResDto>("/api/signup", body))
         .data;
       return response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return thunkApi.rejectWithValue(err.message);
     }
