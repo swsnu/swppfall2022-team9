@@ -2,6 +2,9 @@
 admin module for linklink app
 """
 
-# from django.contrib import admin
+from django.contrib import admin
+from .models import LinkLinkUser, FriendRequest, Verification
 
-# Register your models here.
+admin.site.register(LinkLinkUser)
+admin.site.register(FriendRequest)
+admin.site.register(Verification)
