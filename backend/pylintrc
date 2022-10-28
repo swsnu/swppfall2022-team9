@@ -12,8 +12,8 @@ ignore=third_party
 
 # Files or directories matching the regex patterns are skipped. The regex
 # matches against base names, not paths.
-# LINKLINK_MANUAL_FIX: ignore manage.py from pylint
-ignore-patterns=manage.py
+# LINKLINK_MANUAL_FIX: ignore manage.py & migrations from pylint
+ignore-patterns=manage.py, 0001_initial.py
 
 # Pickle collected data for later comparisons.
 persistent=no
@@ -208,7 +208,9 @@ attr-rgx=^_{0,2}[a-z][a-z0-9_]*$
 argument-rgx=^[a-z][a-z0-9_]*$
 
 # Regular expression matching correct class attribute names
-class-attribute-rgx=^(_?[A-Z][A-Z0-9_]*|__[a-z0-9_]+__|_?[a-z][a-z0-9_]*)$
+# LINKLINK_MANUAL_FIX: allow camelcase for class attribute names
+#class-attribute-rgx=^(_?[A-Z][A-Z0-9_]*|__[a-z0-9_]+__|_?[a-z][a-z0-9_]*)$
+class-attribute-rgx=^(_?[A-Z][A-Z0-9_]*|__[a-z0-9_]+__|_?[a-z][a-z0-9_]*|_?[a-z][a-zA-Z0-9]*)$
 
 # Regular expression matching correct inline iteration names
 inlinevar-rgx=^[a-z][a-z0-9_]*$
