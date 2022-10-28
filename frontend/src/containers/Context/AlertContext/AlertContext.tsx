@@ -72,6 +72,8 @@ const AlertContextProvider = ({ children }: Props): JSX.Element => {
           <S.AlertBackground>
             <S.AlertContainer>
               <IoCloseOutline
+                role="close-icon"
+                aria-label="close-icon"
                 style={{ cursor: "pointer", alignSelf: "flex-end" }}
                 color="#D9D9D9"
                 size={40}
