@@ -1,3 +1,7 @@
+"""
+views module for linklink app
+"""
+
 from django.core.mail import send_mail
 from django.conf import settings
 import json
@@ -21,11 +25,19 @@ def send_register_email(request, recipient, title, message):
     #  return redirect('redirect to a new page')
     return True
 
-
 def email_test(request):
     if request.method == "GET":
         send_register_email(request, 'hunkim98@gmail.com', '이메일 인증' ,'회원가입을 하려면 이메일 인증을 진행해주세요')
         return HttpResponse(status=201)
-
     else:
         return HttpResponseNotAllowed(["POST"])
+
+def onechon(request):
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'])    
