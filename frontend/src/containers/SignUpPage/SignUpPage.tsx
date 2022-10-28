@@ -1,8 +1,8 @@
 import { PostSignUpDto } from "dto/users/users.dto";
 import useAlert from "hooks/useAlert";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useAppDispatch } from "store/hooks";
 import { postSignUp } from "store/slices/users";
 import * as S from "../../styles/common.form.styles";
 
@@ -22,7 +22,7 @@ const SignUpPage: React.FC<Props> = () => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const currentUser = useAppSelector(state => state.users.currentUser);
+  // const currentUser = useAppSelector(state => state.users.currentUser);
   const [signUpInfo, setSignUpInfo] = useState<SignUpInfo>({
     name: "",
     email: "",

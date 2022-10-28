@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useAppDispatch } from "store/hooks";
 import { PostSignInDto } from "dto/users/users.dto";
 import useAlert from "hooks/useAlert";
 import { postSignIn } from "store/slices/users";
@@ -15,7 +15,6 @@ const LoginModal: React.FC<Props> = ({ message }) => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const currentUser = useAppSelector(state => state.users.currentUser);
   const [loginInfo, setLoginInfo] = useState<PostSignInDto>({
     email: "",
     password: "",
@@ -25,7 +24,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
     async (e: React.SyntheticEvent) => {
       e.preventDefault();
       try {
-        const loggedInUser = await dispatch(
+        await dispatch(
           postSignIn({ email: loginInfo.email, password: loginInfo.password }),
         );
       } catch (err) {
@@ -36,7 +35,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
     [alert, loginInfo],
   );
 
-  const onClickSignUp = async (e: React.SyntheticEvent) => {
+  const onClickSignUp = async () => {
     navigate("/signup");
   };
 

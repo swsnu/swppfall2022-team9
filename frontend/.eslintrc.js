@@ -35,7 +35,7 @@ module.exports = {
     "import/prefer-default-export": 0,
     "prettier/prettier": 0,
     "import/extensions": 0,
-    "no-use-before-define": "warn",
+    "no-use-before-define": "off",
     "no-param-reassign": 0,
     "import/no-extraneous-dependencies": 0, // 테스트 또는 개발환경을 구성하는 파일에서는 devDependency 사용을 허용
     "no-shadow": 0,
@@ -44,8 +44,8 @@ module.exports = {
       { extensions: [".js", ".jsx", ".ts", ".tsx"] },
     ],
     "react/prop-types": "warn",
-    "@typescript-eslint/no-empty-interface": "warn",
+    "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-empty-function": "warn",
-    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-non-null-assertion": "off",
   },
 };

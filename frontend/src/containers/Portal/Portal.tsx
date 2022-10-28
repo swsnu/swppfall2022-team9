@@ -5,6 +5,7 @@ interface Props {
   children: React.ReactNode;
 }
 
+// eslint-disable-next-line react/prop-types
 const Portal: React.FC<Props> = ({ children }) => {
   const [element, setElement] = useState<HTMLElement | null>(null);
   useEffect(() => {
