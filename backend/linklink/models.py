@@ -20,7 +20,7 @@ class LinkLinkUser(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    oneChon = models.ManyToManyField("FriendRequest")
+    oneChon = models.ManyToManyField("FriendRequest", blank=True)
     nickname = models.CharField(max_length=50)
     friendRequestToken = models.CharField(max_length=100)
     emailValidated = models.BooleanField()
