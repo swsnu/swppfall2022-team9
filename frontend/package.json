@@ -9,7 +9,6 @@
     "@testing-library/react": "13.4.0",
     "@testing-library/user-event": "13.5.0",
     "axios": "^0.27.2",
-    "enzyme": "3.11.0",
     "json-server": "^0.17.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,11 +22,13 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/index.tsx",
-      "!src/models/*",
-      "!src/dto/*",
-      "!src/test-utils/*"
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/mocks",
+      "<rootDir>/src/models",
+      "<rootDir>/src/dto",
+      "<rootDir>/src/test-utils"
     ]
   },
   "scripts": {
@@ -61,6 +62,7 @@
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
+    "canvas": "^2.10.1",
     "eslint": "^8.25.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",

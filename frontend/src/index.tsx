@@ -11,10 +11,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <AlertContextProvider>
+    <AlertContextProvider>
+      <Provider store={store}>
         <App />
-      </AlertContextProvider>
-    </Provider>
+      </Provider>
+    </AlertContextProvider>
   </React.StrictMode>,
 );

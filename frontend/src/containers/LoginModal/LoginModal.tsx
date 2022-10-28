@@ -2,10 +2,10 @@ import React, { useState, useCallback } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { useAppDispatch } from "store/hooks";
 import { PostSignInDto } from "dto/users/users.dto";
-import useAlert from "hooks/useAlert";
 import { postSignIn } from "store/slices/users";
 import * as S from "./styles";
 import { useNavigate } from "react-router-dom";
+import useAlert from "hooks/useAlert";
 
 interface Props {
   message: string;
@@ -35,7 +35,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
     [alert, loginInfo],
   );
 
-  const onClickSignUp = async () => {
+  const onClickSignUp = () => {
     navigate("/signup");
   };
 
@@ -53,18 +53,13 @@ const LoginModal: React.FC<Props> = ({ message }) => {
             }}
             color="#D9D9D9"
             size="100%"
-            onClick={e => {
-              e.stopPropagation();
-            }}
           />
         </S.CloseButtonContainer>
         <S.GuideContainer>
           <S.Title>로그인</S.Title>
           <S.UserOptions>
             <S.Register onClick={onClickSignUp}>회원가입</S.Register>
-            <S.FindAccount onClick={() => {}}>
-              아이디/비밀번호 찾기
-            </S.FindAccount>
+            <S.FindAccount>아이디/비밀번호 찾기</S.FindAccount>
           </S.UserOptions>
         </S.GuideContainer>
         <S.Form onSubmit={onSubmit}>
@@ -72,6 +67,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
             <S.LabelText>이메일(아이디)</S.LabelText>
             <S.Input
               type="text"
+              placeholder="이메일"
               name="email"
               autoComplete="on"
               onChange={e => {
@@ -85,6 +81,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
               type="password"
               name="password"
               autoComplete="on"
+              placeholder="비밀번호"
               onChange={e => {
                 setLoginInfo(prev => ({
                   ...prev,
