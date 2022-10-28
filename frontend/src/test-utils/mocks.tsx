@@ -1,5 +1,9 @@
 import { PreloadedState } from "@reduxjs/toolkit";
 import { render, RenderOptions } from "@testing-library/react";
+import {
+  AlertContext,
+  AlertContextProps,
+} from "containers/Context/AlertContext/AlertContext";
 import { PropsWithChildren } from "react";
 import { Provider } from "react-redux";
 import { AppStore, RootState } from "store";
@@ -18,10 +22,29 @@ export function renderWithProviders(
     store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {},
+  alertProviderProps?: AlertContextProps,
 ) {
   const Wrapper = ({ children }: PropsWithChildren): JSX.Element => {
     return <Provider store={store}>{children}</Provider>;
   };
   // Return an object with the store and all of RTL's query functions
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+  return {
+    store,
+    ...render(
+      <AlertContext.Provider
+        value={
+          !alertProviderProps
+            ? {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                open: data => {},
+                close: () => {},
+              }
+            : alertProviderProps
+        }
+      >
+        {ui}
+      </AlertContext.Provider>,
+      { wrapper: Wrapper, ...renderOptions },
+    ),
+  };
 }

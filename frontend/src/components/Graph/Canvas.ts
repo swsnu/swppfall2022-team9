@@ -300,7 +300,6 @@ export class Canvas {
   }
 
   destroy() {
-    this.clear();
     touchy(this.element, removeEvent, "mouseup", this.onMouseUp);
     touchy(this.element, removeEvent, "mouseout", this.onMouseOut);
     touchy(this.element, removeEvent, "mousedown", this.onMouseDown);
