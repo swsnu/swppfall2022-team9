@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useState } from "react";
 import { useAppSelector } from "store/hooks";
-import { Canvas } from "./Canvas";
+import { Canvas } from "../utils/Canvas";
 
 interface Params {
   divRef: RefObject<HTMLDivElement>;
@@ -16,12 +16,13 @@ function useCanvas({ divRef, canvasRef }: Params) {
       setCanvas(graphCanvasObject);
     }
 
-    return () => {
-      if (canvas) {
-        canvas.destroy();
-      }
-    };
-  }, []);
+    // testing할때 안잡힘..
+    // return () => {
+    //   if (canvas) {
+    //     canvas.destroy();
+    //   }
+    // };
+  }, [canvasRef]);
 
   useEffect(() => {
     const onResize = () => {
@@ -29,7 +30,6 @@ function useCanvas({ divRef, canvasRef }: Params) {
         const rect = divRef.current.getBoundingClientRect();
         canvas.setSize(rect.width, rect.height);
         canvas.render();
-        console.log("hihihi");
       }
     };
 

@@ -7,8 +7,8 @@ import {
   diffPoints,
   getScreenPoint,
   getWorldPoint,
-} from "./utils/math";
-import { addEvent, removeEvent, touchy, TouchyEvent } from "./utils/touch";
+} from "./math";
+import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
 export class Canvas {
   private MAX_SCALE = 2;
 
@@ -42,6 +42,10 @@ export class Canvas {
     this.ctx = canvas.getContext("2d")!;
 
     this.initialize();
+  }
+
+  getContext() {
+    return this.ctx;
   }
 
   initialize() {
@@ -242,6 +246,14 @@ export class Canvas {
     this.width = width;
     this.element.width = devicePixelRatio ? width * devicePixelRatio : width;
     this.element.style.width = `${width}px`;
+  }
+
+  getWidth() {
+    return this.width;
+  }
+
+  getHeight() {
+    return this.height;
   }
 
   setHeight(height: number, devicePixelRatio?: number) {

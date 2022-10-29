@@ -52,16 +52,17 @@ export function touchy(
   type: MouseType,
   fn: (evt: TouchyEvent) => void,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let globalNavigator: any;
-  // eslint-disable-next-line prefer-const
-  globalNavigator = global.navigator;
-  if (globalNavigator && globalNavigator.pointerEnabled) {
-    event(el, pointers[type], fn);
-  } else if (globalNavigator && globalNavigator.msPointerEnabled) {
-    event(el, microsoft[type], fn);
-  } else {
-    event(el, touch[type], fn);
-    event(el, type, fn);
-  }
+  event(el, touch[type], fn);
+  event(el, type, fn);
+
+  // let globalNavigator: any;
+  // globalNavigator = global.navigator;
+  // if (globalNavigator && globalNavigator.pointerEnabled) {
+  //   event(el, pointers[type], fn);
+  // } else if (globalNavigator && globalNavigator.msPointerEnabled) {
+  //   event(el, microsoft[type], fn);
+  // } else {
+  //   event(el, touch[type], fn);
+  //   event(el, type, fn);
+  // }
 }

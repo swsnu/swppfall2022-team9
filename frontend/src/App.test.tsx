@@ -4,6 +4,7 @@ import { AlertContextProvider } from "containers/Context/AlertContext/AlertConte
 import { Provider } from "react-redux";
 import App from "./App";
 import store from "./store";
+import "jest-canvas-mock";
 
 test("renders App.tsx", () => {
   render(

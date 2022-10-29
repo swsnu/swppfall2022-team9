@@ -14,9 +14,4 @@ export class UserNode {
     this.name = name;
     this.coord = coord;
   }
-
-  setCoord(newCoord: Coord) {
-    this.coord[0] = newCoord[0];
-    this.coord[1] = newCoord[1];
-  }
 }

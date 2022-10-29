@@ -74,7 +74,6 @@ describe("AlertContext", () => {
     const open1Button = screen.getByRole("button", { name: "open2" });
     fireEvent.click(open1Button);
     const closeIcon = await waitFor(() => screen.getByRole("close-icon"));
-    console.log(closeIcon);
     fireEvent.click(closeIcon);
   });
 
