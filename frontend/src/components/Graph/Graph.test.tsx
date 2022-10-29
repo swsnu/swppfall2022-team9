@@ -4,6 +4,7 @@ import { User } from "models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import Graph from "./Graph";
 import { usersStub } from "mocks/stubs/users.stub";
+import React from "react";
 
 const mockNavigate = jest.fn();
 
@@ -19,6 +20,9 @@ jest.mock("react-router", () => ({
 }));
 
 const renderGraph = () => {
+  const ref = React.createRef<HTMLDivElement>();
+  const canvasRef = React.createRef<HTMLCanvasElement>();
+
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -32,7 +36,11 @@ const renderGraph = () => {
 };
 
 describe("<Graph/>", () => {
-  it("render graph", async () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("render graph canvas", async () => {
     renderGraph();
   });
 });
