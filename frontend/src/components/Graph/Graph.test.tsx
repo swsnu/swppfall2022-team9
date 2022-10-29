@@ -19,18 +19,19 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderGraph = () => {
-  const ref = React.createRef<HTMLDivElement>();
-  const canvasRef = React.createRef<HTMLCanvasElement>();
-
-  renderWithProviders(
+const renderGraph = (user: User | null) => {
+  return renderWithProviders(
     <MemoryRouter>
       <Routes>
         <Route path="/" element={<Graph />} />
       </Routes>
     </MemoryRouter>,
     {
-      preloadedState: {},
+      preloadedState: {
+        users: {
+          currentUser: user,
+        },
+      },
     },
   );
 };
@@ -41,6 +42,11 @@ describe("<Graph/>", () => {
   });
 
   it("render graph canvas", async () => {
-    renderGraph();
+    const renderedGraph = renderGraph(usersStub[0]);
+    renderedGraph.unmount();
+  });
+
+  it("render graph canvas with no current user", async () => {
+    renderGraph(null);
   });
 });

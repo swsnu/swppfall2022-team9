@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "containers/HomePage/HomePage";
 import Navbar from "components/Navbar/Navbar";
-import AuthWrapper from "containers/AuthWrapper/AuthWrapper";
 import SignUpPage from "containers/SignUpPage/SignUpPage";
 
 const App = () => {
@@ -14,9 +13,10 @@ const App = () => {
           <Route
             path="/"
             element={
-              <AuthWrapper>
-                <HomePage />
-              </AuthWrapper>
+              // we have to wrap it with auth wrapper after implementing auth
+              // <AuthWrapper>
+              <HomePage />
+              // </AuthWrapper>
             }
           />
           <Route path="/signup" element={<SignUpPage />} />

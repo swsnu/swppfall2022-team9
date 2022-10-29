@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useAppSelector } from "store/hooks";
+import useCanvas from "./hooks/useCanvas";
 
-import useCanvas from "./hooks";
 import * as S from "./styles";
 
 interface Props {}

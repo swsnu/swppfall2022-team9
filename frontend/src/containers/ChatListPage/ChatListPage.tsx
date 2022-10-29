@@ -1,9 +1,10 @@
 import React from "react";
+import * as S from "./styles";
 
 interface Props {}
 
 const ChatListPage: React.FC<Props> = () => {
-  return <div>ChatListPage</div>;
+  return <S.Container>ChatListPage</S.Container>;
 };
 
 export default ChatListPage;
