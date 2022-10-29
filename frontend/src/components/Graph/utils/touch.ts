@@ -23,19 +23,19 @@ const touch = {
   mousemove: "touchmove",
 };
 
-const pointers = {
-  mouseup: "pointerup",
-  mouseout: "pointerup",
-  mousedown: "pointerdown",
-  mousemove: "pointermove",
-};
+// const pointers = {
+//   mouseup: "pointerup",
+//   mouseout: "pointerup",
+//   mousedown: "pointerdown",
+//   mousemove: "pointermove",
+// };
 
-const microsoft = {
-  mouseup: "MSPointerUp",
-  mouseout: "MSPointerUp",
-  mousedown: "MSPointerDown",
-  mousemove: "MSPointerMove",
-};
+// const microsoft = {
+//   mouseup: "MSPointerUp",
+//   mouseout: "MSPointerUp",
+//   mousedown: "MSPointerDown",
+//   mousemove: "MSPointerMove",
+// };
 
 type MouseType = "mouseup" | "mouseout" | "mousedown" | "mousemove";
 
