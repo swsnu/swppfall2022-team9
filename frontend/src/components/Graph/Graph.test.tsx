@@ -1,10 +1,8 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
 import { User } from "models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import Graph from "./Graph";
 import { usersStub } from "mocks/stubs/users.stub";
-import React from "react";
 
 const mockNavigate = jest.fn();
 

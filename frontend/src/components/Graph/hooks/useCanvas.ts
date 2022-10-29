@@ -1,5 +1,4 @@
 import { RefObject, useEffect, useState } from "react";
-import { useAppSelector } from "store/hooks";
 import { Canvas } from "../utils/Canvas";
 
 interface Params {

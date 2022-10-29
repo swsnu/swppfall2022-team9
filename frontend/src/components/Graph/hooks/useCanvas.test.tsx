@@ -1,37 +1,10 @@
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { User } from "models/users.model";
-import { renderWithProviders } from "test-utils/mocks";
+import { fireEvent, waitFor } from "@testing-library/react";
 import { usersStub } from "mocks/stubs/users.stub";
-import React, { useRef } from "react";
-import { Canvas } from "../utils/Canvas";
+import { useRef } from "react";
 import useCanvas from "./useCanvas";
 import { renderHook } from "@testing-library/react-hooks";
-import { unmountComponentAtNode } from "react-dom";
 
 // reference: https://kooku0.github.io/blog/%EC%99%B8%EB%B6%80-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%BD%94%EB%93%9C-%EC%A7%9C%EA%B8%B0/
-
-const renderMockCanvas = () => {
-  const divRef = React.createRef<HTMLDivElement>();
-  const canvasRef = React.createRef<HTMLCanvasElement>();
-  render(
-    <div ref={divRef}>
-      <canvas ref={canvasRef} />
-    </div>,
-  );
-};
-
-function createClientXY(x: number, y: number) {
-  return { clientX: x, clientY: y };
-}
-
-export function createStartTouchEventObject({ x = 0, y = 0 }) {
-  return { touches: [createClientXY(x, y)] };
-}
-
-export function createMoveTouchEventObject({ x = 0, y = 0 }) {
-  return { changedTouches: [createClientXY(x, y)] };
-}
 
 describe("<Graph/>", () => {
   beforeEach(() => {
@@ -114,7 +87,7 @@ describe("<Graph/>", () => {
     );
     const parentRef = divElement;
     const childRef = canvasElement;
-    const { result, unmount } = renderHook(() => {
+    const { result } = renderHook(() => {
       const containerRef = useRef<HTMLDivElement>(parentRef);
       const canvasRef = useRef<HTMLCanvasElement>(childRef);
       return useCanvas({
