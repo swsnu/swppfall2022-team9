@@ -22,13 +22,15 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/index.tsx"
     ],
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/mocks",
       "<rootDir>/src/models",
       "<rootDir>/src/dto",
-      "<rootDir>/src/test-utils"
+      "<rootDir>/src/test-utils",
+      "<rootDir>/src/types"
     ]
   },
   "scripts": {

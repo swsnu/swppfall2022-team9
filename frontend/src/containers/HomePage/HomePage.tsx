@@ -1,6 +1,6 @@
 import FriendListSideBar from "components/FriendListSideBar/FriendListSideBar";
 import Graph from "components/Graph/Graph";
-import React from "react";
+import React, { useRef } from "react";
 import * as S from "./styles";
 
 interface Props {}

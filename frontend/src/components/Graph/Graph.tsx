@@ -1,53 +1,22 @@
 import React, { useEffect, useRef } from "react";
 import { useAppSelector } from "store/hooks";
-import { Canvas } from "./Canvas";
+
+import useCanvas from "./hooks";
 import * as S from "./styles";
 
 interface Props {}
 
 const Graph: React.FC<Props> = () => {
-  const divRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const graphCanvas = useRef<Canvas | null>(null);
-
+  const divRef = useRef<HTMLDivElement>(null);
+  const canvas = useCanvas({ divRef: divRef, canvasRef: canvasRef });
   const currentUser = useAppSelector(state => state.users.currentUser);
   useEffect(() => {
-    if (!canvasRef.current) {
-      return () => {};
+    if (currentUser && canvas) {
+      canvas.setCurrentUserNode(currentUser);
+      canvas.render();
     }
-    const graphCanvasObject = new Canvas(canvasRef.current);
-    graphCanvas.current = graphCanvasObject;
-    return () => {
-      if (graphCanvas.current) {
-        graphCanvas.current.destroy();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (currentUser && graphCanvas.current) {
-      graphCanvas.current.setCurrentUserNode(currentUser);
-      graphCanvas.current.render();
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
-    const onResize = () => {
-      if (!divRef.current || !graphCanvas.current) {
-        return;
-      }
-      const rect = divRef.current.getBoundingClientRect();
-
-      graphCanvas.current.setSize(rect.width, rect.height);
-      graphCanvas.current.render();
-    };
-
-    onResize();
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
+  }, [currentUser, canvas]);
 
   return (
     <S.CanvasContainer ref={divRef}>
