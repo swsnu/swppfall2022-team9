@@ -4,7 +4,7 @@ import * as S from "./styles";
 interface Props {}
 
 const FriendListSideBar: React.FC<Props> = () => {
-  return <S.Container>FriendListSideBar</S.Container>;
+  return <S.Container>Hi there</S.Container>;
 };
 
 export default FriendListSideBar;
