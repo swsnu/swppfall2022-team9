@@ -8,6 +8,20 @@ import json
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.template.loader import render_to_string
 
+import json
+from json.decoder import JSONDecodeError
+
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseNotAllowed
+)
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+from .decorators import allowed_method_or_405, logged_in_or_401
+
 def send_register_email(request, recipient, title, message):
     subject = title
     email_from = settings.EMAIL_HOST_USER
@@ -41,3 +55,50 @@ def onechon(request):
         pass
     else:
         return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'])    
+
+@ensure_csrf_cookie
+def token(request):
+    if request.method == 'GET':
+        return HttpResponse(status=204)
+    else:
+        return HttpResponseNotAllowed(['GET'])
+
+@allowed_method_or_405(['POST'])
+def signup(request):
+    req_data = json.loads(request.body.decode())
+    username = req_data['username']
+    password = req_data['password']
+    User.objects.create_user(username=username, password=password)
+    return HttpResponse(status=201)
+
+@allowed_method_or_405(['POST'])
+def signin(request):
+    try:
+        req_data = json.loads(request.body.decode())
+        username = req_data['username']
+        password = req_data['password']
+    except (KeyError, JSONDecodeError) as e:
+        return HttpResponseBadRequest() # implicit status code = 400
+    user = authenticate(username=username, password=password)
+    if user is not None: # login successful
+        login(request, user) # log the user in, set django session
+        return HttpResponse(status=204)
+    else: # login failed: incorrect info
+        return HttpResponse(status=401)
+
+@allowed_method_or_405(['GET'])
+@logged_in_or_401
+def signout(request):
+    logout(request) # log the user out, clear django session
+    return HttpResponse(status=204)
+
+@allowed_method_or_405(['GET', 'POST', 'DELETE'])
+@logged_in_or_401
+def onechon(request):
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    
