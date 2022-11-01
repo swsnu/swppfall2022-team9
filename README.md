@@ -3,7 +3,8 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=swsnu_swppfall2022-team9&metric=alert_status)](https://sonarcloud.io/dashboard?id=swsnu_swppfall2022-team9)
 [![Coverage Status](https://coveralls.io/repos/github/swsnu/swpp2021-team9/badge.svg?branch=main)](https://coveralls.io/github/swsnu/swpp2021-team9?branch=main)
 
-## Site Address
+# Site Address
+TBD
 
 # How to run
 
@@ -14,6 +15,7 @@
 
 ## Backend
 
+- `cd backend`
 - `pip install -r requirements.txt`
 - `python manage.py runserver`
 
@@ -51,3 +53,7 @@ Used `Pytest` and `Coverage`
 Used `Pylint`
 
 - `pylint ./*/` or `yarn lintb`
+
+# Language & Framework Versions
+- python == 3.8
+- Django == 4.1
