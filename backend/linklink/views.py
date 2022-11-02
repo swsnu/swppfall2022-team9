@@ -2,26 +2,24 @@
 views module for linklink app
 """
 
-from django.core.mail import send_mail
-from django.conf import settings
-import json
-from django.http import HttpResponse, HttpResponseNotAllowed
-from django.template.loader import render_to_string
-
 import json
 from json.decoder import JSONDecodeError
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseNotAllowed
 )
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .decorators import allowed_method_or_405, logged_in_or_401
 from .models import LinkLinkUser
+
 
 def send_register_email(request, recipient, title, message):
     subject = title
@@ -35,10 +33,11 @@ def send_register_email(request, recipient, title, message):
     html_mail = render_to_string("linklink/register_email.html", context)
     send_mail(
             subject, message, email_from, recipient_list, html_message=html_mail
-        )
+    )
     # send_mail(subject, message, email_from, recipient_list)
     #  return redirect('redirect to a new page')
     return True
+
 
 def email_test(request):
     if request.method == "GET":
@@ -46,7 +45,7 @@ def email_test(request):
         return HttpResponse(status=201)
     else:
         return HttpResponseNotAllowed(["POST"])
- 
+
 
 @ensure_csrf_cookie
 def token(request):
@@ -57,6 +56,7 @@ def token(request):
         return HttpResponse(status=204)
     else:
         return HttpResponseNotAllowed(['GET'])
+
 
 @allowed_method_or_405(['POST'])
 def signup(request):
@@ -85,6 +85,7 @@ def signup(request):
     )
     return HttpResponse(status=201)
 
+
 @allowed_method_or_405(['POST'])
 def signin(request):
     try:
@@ -100,11 +101,13 @@ def signin(request):
     else: # login failed: incorrect info
         return HttpResponse(status=401)
 
+
 @allowed_method_or_405(['GET'])
 @logged_in_or_401
 def signout(request):
     logout(request) # log the user out, clear django session
     return HttpResponse(status=204)
+
 
 @allowed_method_or_405(['GET', 'POST', 'DELETE'])
 @logged_in_or_401
