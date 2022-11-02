@@ -21,6 +21,7 @@ from django.http import (
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .decorators import allowed_method_or_405, logged_in_or_401
+from .models import LinkLinkUser
 
 def send_register_email(request, recipient, title, message):
     subject = title
@@ -45,19 +46,13 @@ def email_test(request):
         return HttpResponse(status=201)
     else:
         return HttpResponseNotAllowed(["POST"])
-
-def onechon(request):
-    if request.method == 'GET':
-        pass
-    elif request.method == 'POST':
-        pass
-    elif request.method == 'DELETE':
-        pass
-    else:
-        return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'])    
+ 
 
 @ensure_csrf_cookie
 def token(request):
+    """
+    Returns csrf token
+    """
     if request.method == 'GET':
         return HttpResponse(status=204)
     else:
@@ -65,10 +60,29 @@ def token(request):
 
 @allowed_method_or_405(['POST'])
 def signup(request):
-    req_data = json.loads(request.body.decode())
-    username = req_data['username']
-    password = req_data['password']
-    User.objects.create_user(username=username, password=password)
+    """
+    When user enters username, password, nickname and requests signup,
+    1. django's User object is created
+    2. LinkLinkUser object is created, with emailValidated=False
+    """
+    try:
+        req_data = json.loads(request.body.decode())
+        username = req_data['username']
+        password = req_data['password']
+        nickname = req_data['nickname']
+    except (KeyError, JSONDecodeError) as e:
+        return HttpResponseBadRequest() # implicit status code = 400
+    # Create django's user
+    user = User.objects.create_user(
+        username=username,
+        password=password
+    )
+    # Create LinkLinkUser with emailValidated=False
+    LinkLinkUser.objects.create(
+        user=user,
+        nickname=nickname,
+        emailValidated=False
+    )
     return HttpResponse(status=201)
 
 @allowed_method_or_405(['POST'])
