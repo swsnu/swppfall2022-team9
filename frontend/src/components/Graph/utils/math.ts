@@ -1,4 +1,10 @@
-import { Coord, Coords, PanZoom } from "types/canvas.types";
+import {
+  Coord,
+  OneChonUserCoord,
+  TwoChonUserCoord,
+  Coords,
+  PanZoom,
+} from "types/canvas.types";
 
 const degToRad = (degrees: number) => {
   return degrees * (Math.PI / 180);
@@ -11,27 +17,30 @@ const degToRad = (degrees: number) => {
  *
  * NOTE:
  * margin cannot be less than 22 or the nodes may overlap
- * @param oneChonCount
- * @param twoChonCount
+ * @param oneChonList
+ * @param twoChonList
  * @param radius
  * @param maxConnections
  * @param margin
  * @param expandRatio
  * @returns Coords[]
  */
+// TODO: update params to accept User[]
 export const getOneAndTwoChonCoordinates = (
-  oneChonCount: number,
-  twoChonCount: number[],
+  oneChonList: string[],
+  twoChonList: string[][],
   radius: number,
   maxConnections = 10,
   margin = 22,
   expandRatio = 0.8,
 ) => {
-  if (oneChonCount !== twoChonCount.length) {
+  const oneChonCount = oneChonList.length;
+  const twoChonCount = twoChonList.length;
+  if (oneChonCount !== twoChonCount) {
     throw new Error("More number of 2-chons than 1-chons.");
   }
 
-  const coordsList: Coords[] = [];
+  const coordsList: OneChonUserCoord[] = [];
 
   const edge = 6 * radius;
   const degree = 360 / oneChonCount;
@@ -40,26 +49,33 @@ export const getOneAndTwoChonCoordinates = (
   budget = Math.max(margin * Math.floor(budget / margin), margin);
 
   for (let i = 0; i < oneChonCount; i++) {
-    const coordsTemp: Coords = [];
+    const curUserCoord: OneChonUserCoord = {
+      userId: oneChonList[i],
+      userCoord: { x: 0, y: 0 },
+      twoChonCoords: [],
+    };
     const angle = degree * i;
     const xCoord = edge * Math.cos(degToRad(angle));
     const yCoord = edge * Math.sin(degToRad(angle));
 
-    const coord1Chon: Coord = [xCoord, yCoord];
-    coordsTemp.push(coord1Chon);
+    const coord1Chon: Coord = { x: xCoord, y: yCoord };
+    curUserCoord.userCoord = coord1Chon;
 
     const max2Chon = Math.min(Math.floor(budget / margin) + 1, maxConnections);
-    if (max2Chon < twoChonCount[i]) {
+    if (max2Chon < twoChonList[i].length) {
       throw new Error("Number of 2-chons exceeded the maximum capacity.");
     }
 
-    if (twoChonCount[i] === 0) {
+    if (twoChonList[i].length === 0) {
       //pass
-    } else if (twoChonCount[i] === 1) {
+    } else if (twoChonList[i].length === 1) {
       const x2Coord = xCoord + edge * Math.cos(degToRad(angle));
       const y2Coord = yCoord + edge * Math.sin(degToRad(angle));
-      const coord: Coord = [x2Coord, y2Coord];
-      coordsTemp.push(coord);
+      const coord: TwoChonUserCoord = {
+        userId: twoChonList[i][0],
+        userCoord: { x: x2Coord, y: y2Coord },
+      };
+      curUserCoord.twoChonCoords.push(coord);
     } else {
       // check adjacent oneChons
       const adjacentIndices = [
@@ -69,17 +85,17 @@ export const getOneAndTwoChonCoordinates = (
 
       // check if they have at least two less than the max number of connections
       const isExpandable =
-        twoChonCount[adjacentIndices[0]] < max2Chon - 1 &&
-        twoChonCount[adjacentIndices[1]] < max2Chon - 1;
+        twoChonList[adjacentIndices[0]].length < max2Chon - 1 &&
+        twoChonList[adjacentIndices[1]].length < max2Chon - 1;
 
-      let theta = Math.min(budget / twoChonCount[i], 60);
+      let theta = Math.min(budget / twoChonList[i].length, 60);
       theta = Math.max(theta, 22);
-      let budgetTemp = theta * twoChonCount[i];
+      let budgetTemp = theta * twoChonList[i].length;
 
       // min -> expandRatio
       const spare = Math.min(
-        max2Chon - twoChonCount[adjacentIndices[0]],
-        max2Chon - twoChonCount[adjacentIndices[1]],
+        max2Chon - twoChonList[adjacentIndices[0]].length,
+        max2Chon - twoChonList[adjacentIndices[1]].length,
       );
 
       // adjust the budget appropriately
@@ -91,18 +107,21 @@ export const getOneAndTwoChonCoordinates = (
           budgetTemp += expandRatio * ((theta * spare) / 2);
         }
       }
-      for (let j = 0; j < twoChonCount[i]; j++) {
+      for (let j = 0; j < twoChonList[i].length; j++) {
         const x2Coord =
           xCoord +
           edge * Math.cos(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
         const y2Coord =
           yCoord +
           edge * Math.sin(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
-        const coord: Coord = [x2Coord, y2Coord];
-        coordsTemp.push(coord);
+        const coord: TwoChonUserCoord = {
+          userId: twoChonList[i][0],
+          userCoord: { x: x2Coord, y: y2Coord },
+        };
+        curUserCoord.twoChonCoords.push(coord);
       }
     }
-    coordsList.push(coordsTemp);
+    coordsList.push(curUserCoord);
   }
   return coordsList;
 };
@@ -111,19 +130,19 @@ export const convertCartesianToScreen = (
   canvas: HTMLCanvasElement,
   cartesianCoord: Coord,
 ): Coord => {
-  const screenPoint = [
-    cartesianCoord[0] + canvas.width / 2,
-    cartesianCoord[1] + canvas.height / 2,
-  ] as Coord;
+  const screenPoint = {
+    x: cartesianCoord.x + canvas.width / 2,
+    y: cartesianCoord.y + canvas.height / 2,
+  } as Coord;
   return screenPoint;
 };
 
 export function diffPoints(p1: Coord, p2: Coord): Coord {
-  return [p1[0] - p2[0], p1[1] - p2[1]];
+  return { x: p1.x - p2.x, y: p1.y - p2.y };
 }
 
 export function addPoints(p1: Coord, p2: Coord): Coord {
-  return [p1[0] + p2[0], p1[1] + p2[1]];
+  return { x: p1.x + p2.x, y: p1.y + p2.y };
 }
 
 /**
@@ -135,7 +154,7 @@ export function addPoints(p1: Coord, p2: Coord): Coord {
 export function getScreenPoint(point: Coord, panZoom: PanZoom): Coord {
   const { offset, scale } = panZoom;
 
-  return [point[0] * scale + offset[0], point[1] * scale + offset[1]];
+  return { x: point.x * scale + offset.x, y: point.y * scale + offset.y };
 }
 
 /**
@@ -147,5 +166,5 @@ export function getScreenPoint(point: Coord, panZoom: PanZoom): Coord {
 export function getWorldPoint(point: Coord, panZoom: PanZoom): Coord {
   const { offset, scale } = panZoom;
 
-  return [(point[0] - offset[0]) / scale, (point[1] - offset[1]) / scale];
+  return { x: (point.x - offset.x) / scale, y: (point.y - offset.y) / scale };
 }
