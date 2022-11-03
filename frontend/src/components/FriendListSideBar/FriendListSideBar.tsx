@@ -1,6 +1,6 @@
 import React from "react";
 import * as S from "./styles";
-import OneChonListItem from "./OneChonListItem/OneChonListItem";
+import OneChonListItem from "./OneChonListItem";
 
 interface Props {}
 
