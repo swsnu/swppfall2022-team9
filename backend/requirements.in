@@ -4,3 +4,4 @@ python-decouple # for .env file
 pylint
 pylint-django
 coverage
+requests
