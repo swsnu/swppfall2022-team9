@@ -7,7 +7,7 @@ const OneChonListItem: React.FC<{
   user: number;
   twoChonList: number[];
 }> = ({ user, twoChonList }) => {
-  const size = Math.floor(Math.random() * 100);
+  const size = Math.floor(Math.random() * 100) + 50;
   const [isClicked, setClicked] = useState<boolean>(false);
 
   const onToggleButtonClick = () => {
@@ -30,7 +30,9 @@ const OneChonListItem: React.FC<{
       {isClicked && (
         <div style={{ display: "flex", flexDirection: "column" }}>
           {twoChonList.map(twoChon => {
-            return <TwoChonListItem key={twoChon}></TwoChonListItem>;
+            return (
+              <TwoChonListItem key={twoChon} user={twoChon}></TwoChonListItem>
+            );
           })}
         </div>
       )}

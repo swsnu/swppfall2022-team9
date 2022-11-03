@@ -1,10 +1,22 @@
-import React from "react";
 import * as S from "./styles";
 
-interface Props {}
+const TwoChonListItem: React.FC<{
+  user: number;
+}> = ({ user }) => {
+  const size = Math.floor(Math.random() * 100) + 50;
 
-const TwoChonListItem: React.FC<Props> = () => {
-  return <S.Container>I am two chon</S.Container>;
+  return (
+    <>
+      <S.Container spacing={true}>
+        <S.Container spacing={false}>
+          <S.TwoChonNode
+            url={`http://placekitten.com/${size}/${size}`}
+          ></S.TwoChonNode>
+          <S.Username>User ID: {user}</S.Username>
+        </S.Container>
+      </S.Container>
+    </>
+  );
 };
 
 export default TwoChonListItem;

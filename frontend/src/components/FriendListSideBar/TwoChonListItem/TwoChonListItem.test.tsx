@@ -7,6 +7,6 @@ describe("<TwoChonListItem/>", () => {
   });
 
   it("renders TwoChonListItem", async () => {
-    render(<TwoChonListItem />);
+    render(<TwoChonListItem user={1} />);
   });
 });

@@ -1,7 +1,13 @@
 import styled from "styled-components";
-export const Container = styled.div`
+
+export const Container = styled.div<{ spacing: boolean }>`
+  min-width: 250px;
+  max-width: 400px;
   background-color: white;
   display: flex;
+  align-items: center;
+  padding: 0 8px;
+  justify-content: ${props => (props.spacing ? "space-between" : "flex-start")};
 `;
 
 export const TwoChonNode = styled.div<{ url: string }>`
@@ -19,11 +25,41 @@ export const TwoChonNode = styled.div<{ url: string }>`
 export const Username = styled.div`
   display: inline-block;
   width: 100px;
-  height: 100px;
+  padding: 0 5px;
   font-family: "Ubuntu", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   background-position: 50% 50%;
   background-size: cover;
-  border-radius: 50%;
+  text-align: center;
   display: flex;
+`;
+
+export const StyledButton = styled.button`
+  display: inline-flex;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  color: black;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding: 0 5px;
+  position: 
+
+  height: 2.25rem;
+  font-size: 1rem;
+
+  background: #ffffff;
+  &:hover {
+    background: #339af0;
+  }
+  &:active {
+    background: #1c7ed6;
+  }
+
+  & + & {
+    margin-left: 1rem;
+  }
 `;
