@@ -7,7 +7,7 @@ const degToRad = (degrees: number) => {
 /**
  * Description:
  * Coords[i][0]: i-th 1-chon node's coordinate
- * Coords[i][j]: i-th 1-chon node's j-th 2-chon node coordiate; 1<= j <= num_2_chon+1
+ * Coords[i][j]: i-th 1-chon node's j-th 2-chon node coordiate; 1<= j < num_2_chon+1
  *
  * NOTE:
  * margin cannot be less than 22 or the nodes may overlap
@@ -16,6 +16,7 @@ const degToRad = (degrees: number) => {
  * @param radius
  * @param maxConnections
  * @param margin
+ * @param expandRatio
  * @returns Coords[]
  */
 export const getOneAndTwoChonCoordinates = (
@@ -24,6 +25,7 @@ export const getOneAndTwoChonCoordinates = (
   radius: number,
   maxConnections = 10,
   margin = 22,
+  expandRatio = 0.8,
 ) => {
   if (oneChonCount !== twoChonCount.length) {
     throw new Error("More number of 2-chons than 1-chons.");
@@ -51,15 +53,44 @@ export const getOneAndTwoChonCoordinates = (
       throw new Error("Number of 2-chons exceeded the maximum capacity.");
     }
 
-    if (twoChonCount[i] === 1) {
+    if (twoChonCount[i] === 0) {
+      //pass
+    } else if (twoChonCount[i] === 1) {
       const x2Coord = xCoord + edge * Math.cos(degToRad(angle));
       const y2Coord = yCoord + edge * Math.sin(degToRad(angle));
       const coord: Coord = [x2Coord, y2Coord];
       coordsTemp.push(coord);
     } else {
+      // check adjacent oneChons
+      const adjacentIndices = [
+        i == 0 ? oneChonCount - 1 : i - 1,
+        i == oneChonCount - 1 ? 0 : i + 1,
+      ];
+
+      // check if they have at least two less than the max number of connections
+      const isExpandable =
+        twoChonCount[adjacentIndices[0]] < max2Chon - 1 &&
+        twoChonCount[adjacentIndices[1]] < max2Chon - 1;
+
       let theta = Math.min(budget / twoChonCount[i], 60);
       theta = Math.max(theta, 22);
-      const budgetTemp = theta * twoChonCount[i];
+      let budgetTemp = theta * twoChonCount[i];
+
+      // min -> expandRatio
+      const spare = Math.min(
+        max2Chon - twoChonCount[adjacentIndices[0]],
+        max2Chon - twoChonCount[adjacentIndices[1]],
+      );
+
+      // adjust the budget appropriately
+      if (isExpandable) {
+        const ratio = (expandRatio * ((theta * spare) / 2)) / budgetTemp;
+        const thetaTemp = theta + ratio * theta;
+        if (thetaTemp < 60) {
+          theta = thetaTemp;
+          budgetTemp += expandRatio * ((theta * spare) / 2);
+        }
+      }
       for (let j = 0; j < twoChonCount[i]; j++) {
         const x2Coord =
           xCoord +
