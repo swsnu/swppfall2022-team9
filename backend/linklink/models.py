@@ -68,7 +68,7 @@ class Verification(models.Model):
     """
     Verification model class
     """
-    user = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
+    linklinkuser = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
     token = models.UUIDField(
         default=uuid.uuid4,
         editable=False
@@ -86,7 +86,7 @@ class Verification(models.Model):
     )
 
     def __str__(self):
-        return "_".join([self.user.username, self.purpose, self.token])
+        return "_".join([self.linklinkuser.user.username, self.purpose, str(self.token)])
 
 
 #--------------------------------------------------------------------------
