@@ -2,6 +2,8 @@
 models module for linklink app
 """
 
+import uuid
+
 from django.db import models
 from django.conf import settings
 
@@ -21,12 +23,14 @@ class LinkLinkUser(models.Model):
         on_delete=models.CASCADE
     )
     oneChon = models.ManyToManyField("FriendRequest", blank=True)
-    nickname = models.CharField(max_length=50)
-    friendRequestToken = models.CharField(max_length=100)
+    friendRequestToken = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False
+    )
     emailValidated = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username}"
+        return f"{self.user.first_name + self.user.last_name}"
 
 
 class FriendRequest(models.Model):
@@ -65,9 +69,12 @@ class Verification(models.Model):
     Verification model class
     """
     user = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
-    token = models.CharField(max_length=100)
+    token = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False
+    )
     createdAt = models.DateTimeField(auto_now_add=True)
-    expiredAt = models.DateTimeField()
+    expiresAt = models.DateTimeField()
     PURPOSE = [
         ("Register", "Register"),
         ("Password", "Password"),
@@ -79,7 +86,7 @@ class Verification(models.Model):
     )
 
     def __str__(self):
-        return self.token
+        return "_".join([self.user.username, self.purpose, self.token])
 
 
 #--------------------------------------------------------------------------
