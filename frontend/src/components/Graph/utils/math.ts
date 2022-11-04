@@ -2,7 +2,6 @@ import {
   Coord,
   OneChonUserCoord,
   TwoChonUserCoord,
-  Coords,
   PanZoom,
 } from "types/canvas.types";
 
