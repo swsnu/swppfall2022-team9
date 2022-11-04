@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import * as S from "../../styles/common.form.styles";
+import * as SProfile from "./styles";
 
 interface Props {}
 
 const CreateProfilePage: React.FC<Props> = () => {
-  // const dispatch = useAppDispatch();
-  // const currentUser = useAppSelector(state => state.users.currentUser);
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(state => state.users.currentUser);
   // get current user profile
   const currentUserProfile: Profile = {
     id: 1,
@@ -40,12 +41,29 @@ const CreateProfilePage: React.FC<Props> = () => {
 
   const navigate = useNavigate();
 
+  const uploadImageHandler = () => {};
+
   return (
     <S.Container>
       <S.FormContainer>
         <S.GuideContainer>
           <S.Title>프로필</S.Title>
         </S.GuideContainer>
+        <SProfile.Container>
+          <SProfile.UserNode
+            url={currentUserProfile.imgUrl}
+          ></SProfile.UserNode>
+          <SProfile.GridContainer>
+            <SProfile.Username>
+              {"박신혜"}
+              {/* {currentUser.lastname}
+                {currentUser.firstname} */}
+              <SProfile.ImageButton onClick={uploadImageHandler}>
+                Change Image
+              </SProfile.ImageButton>
+            </SProfile.Username>
+          </SProfile.GridContainer>
+        </SProfile.Container>
       </S.FormContainer>
     </S.Container>
   );
