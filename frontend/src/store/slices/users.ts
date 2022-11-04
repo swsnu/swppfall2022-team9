@@ -4,7 +4,6 @@ import axios from "axios";
 import { PostSignInDto, PostSignUpDto } from "dto/users/users.dto";
 import { PostSignInResDto, PostSignUpResDto } from "dto/users/users.res.dto";
 import { User } from "models/users.model";
-import { RootState } from "store";
 import { OneChonInfo } from "types/chon.types";
 
 export const acceptedLoginInfo: PostSignInDto = {

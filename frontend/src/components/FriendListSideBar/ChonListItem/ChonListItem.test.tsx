@@ -6,7 +6,16 @@ describe("<OneChonListItem/>", () => {
     jest.clearAllMocks();
   });
 
-  // it("renders OneChonListItem", async () => {
-  //   render(<OneChonListItem user={1} twoChonList={[1, 2]} />);
-  // });
+  it("renders OneChonListItem", async () => {
+    render(
+      <OneChonListItem
+        userId={1}
+        firstname="test"
+        lastname="test"
+        imgUrl="testurl.com"
+        twoChonList={null}
+        isTwoChon={false}
+      />,
+    );
+  });
 });
