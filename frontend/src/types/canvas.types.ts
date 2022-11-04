@@ -10,8 +10,6 @@ export interface OneChonUserCoord extends TwoChonUserCoord {
   twoChonCoords: TwoChonUserCoord[];
 }
 
-export type Coords = OneChonUserCoord[];
-
 export type PanZoom = {
   scale: number;
   offset: Coord;
