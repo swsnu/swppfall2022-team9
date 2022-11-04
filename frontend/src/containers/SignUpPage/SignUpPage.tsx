@@ -1,4 +1,4 @@
-import { PostSignUpDto } from "dto/users/users.dto";
+import { PostSignUpDto } from "server/dto/users/users.dto";
 import useAlert from "hooks/useAlert";
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";

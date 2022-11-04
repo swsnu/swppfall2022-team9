@@ -1,0 +1,83 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "swpp@snu.ac.kr",
+      "nickname": "swpp",
+      "password": "iluvswpp",
+      "name": "Software Lover"
+    },
+    {
+      "id": 2,
+      "email": "alan@turing.com",
+      "nickname": "turing",
+      "password": "iluvswpp",
+      "name": "Alan Turing"
+    },
+    {
+      "id": 3,
+      "email": "edsger@dijkstra.com",
+      "nickname": "dijkstra",
+      "password": "iluvswpp",
+      "name": "Edsger Dijkstra"
+    }
+  ],
+  "friendRequests": [
+    {
+      "id": 1,
+      "senderId": 2,
+      "getterId": 1,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    },
+    {
+      "id": 1,
+      "senderId": 3,
+      "getterId": 1,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    },
+    {
+      "id": 1,
+      "senderId": 4,
+      "getterId": 1,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    },
+    {
+      "id": 1,
+      "senderId": 5,
+      "getterId": 1,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    },
+    {
+      "id": 1,
+      "senderId": 6,
+      "getterId": 1,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    },
+    {
+      "id": 1,
+      "senderId": 7,
+      "getterId": 1,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    },
+    {
+      "id": 1,
+      "senderId": 1,
+      "getterId": 2,
+      "status": "PENDING",
+      "createdAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)",
+      "updatedAt": "Fri Nov 04 2022 11:42:22 GMT+0900 (Korean Standard Time)"
+    }
+  ]
+}

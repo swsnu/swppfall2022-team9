@@ -3,7 +3,7 @@ import reducer, { UserState } from "./users";
 import { ThunkMiddleware } from "redux-thunk";
 import { postSignUp, postSignIn, putSignOut } from "./users";
 import axios from "axios";
-import { usersStub } from "mocks/stubs/users.stub";
+import { usersStub } from "server/stubs/users.stub";
 
 describe("users reducer", () => {
   let store: EnhancedStore<
