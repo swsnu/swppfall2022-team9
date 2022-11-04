@@ -22,9 +22,8 @@ const degToRad = (degrees: number) => {
  * @param maxConnections
  * @param margin
  * @param expandRatio
- * @returns Coords[]
+ * @returns Coord[]
  */
-// TODO: update params to accept User[]
 export const getOneAndTwoChonCoordinates = (
   oneChonCount: number,
   twoChonCount: number[],
@@ -118,6 +117,29 @@ export const getOneAndTwoChonCoordinates = (
     coordsList.push(curUserCoord);
   }
   return coordsList;
+};
+/**
+ * Description:
+ * Returns two Coords which should be connected by an edge
+ * @param coordA
+ * @param coordB
+ * @param radius
+ * @returns Coord[]
+ */
+export const getEdgeCoords = (coordA: Coord, coordB: Coord, radius: number) => {
+  const delX = coordB.x - coordA.x;
+  const delY = coordB.y - coordA.y;
+  const theta = Math.atan(delY / delX);
+
+  const edgeA = {
+    x: coordA.x + radius * Math.cos(theta),
+    y: coordA.y + radius * Math.sin(theta),
+  };
+  const edgeB = {
+    x: coordB.x - radius * Math.cos(theta),
+    y: coordB.y - radius * Math.sin(theta),
+  };
+  return [edgeA, edgeB];
 };
 
 export const convertCartesianToScreen = (
