@@ -1,10 +1,10 @@
 import { User } from "models/users.model";
 
-export type PostSignInDto = Pick<User, "email" | "password">;
+export type PostSignInDto = Pick<User, "username" | "password">;
 
 export type PostSignUpDto = Pick<
   User,
-  "email" | "password" | "nickname" | "name"
+  "email" | "password" | "username" | "firstname" | "lastname"
 >;
 
 export type GetUserDto = number;

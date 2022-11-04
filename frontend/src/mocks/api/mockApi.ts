@@ -32,8 +32,8 @@ server.post<unknown, PostSignInResDto, PostSignInDto>(
   "/api/login",
   async (req, res) => {
     const body = req.body;
-    const email = body.email;
-    const user = db.get("users").find({ email }).value();
+    const username = body.username;
+    const user = db.get("users").find({ username }).value();
     if (!user) {
       res.status(404).json(user);
     } else {

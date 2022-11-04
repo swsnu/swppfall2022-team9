@@ -2,15 +2,16 @@ import styled from "styled-components";
 
 export const Container = styled.div<{ spacing: boolean }>`
   min-width: 250px;
-  max-width: 400px;
   background-color: white;
   display: flex;
   align-items: center;
   padding: 0 8px;
+  margin-top: 3px;
+  margin-bottom: 3px;
   justify-content: ${props => (props.spacing ? "space-between" : "flex-start")};
 `;
 
-export const TwoChonNode = styled.div<{ url: string }>`
+export const OneChonNode = styled.div<{ url: string }>`
   display: inline-block;
   width: 34px;
   height: 34px;
@@ -34,7 +35,7 @@ export const Username = styled.div`
   display: flex;
 `;
 
-export const StyledButton = styled.button`
+export const ViewProfileButton = styled.button`
   display: inline-flex;
   outline: none;
   border: none;
@@ -45,8 +46,34 @@ export const StyledButton = styled.button`
   cursor: pointer;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding: 0 5px;
-  position: 
+
+  height: 2.25rem;
+  font-size: 1rem;
+
+  background: #ffffff;
+  &:hover {
+    background: #339af0;
+  }
+  &:active {
+    background: #1c7ed6;
+  }
+
+  & + & {
+    margin-left: 1rem;
+  }
+`;
+
+export const ExpandTwoChonButton = styled.button`
+  display: inline-flex;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  color: black;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: 1rem;
 
   height: 2.25rem;
   font-size: 1rem;
