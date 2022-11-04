@@ -14,9 +14,10 @@ export const Container = styled.div`
 export const LogoContainer = styled.div`
   display: flex;
   padding: 2px 0;
+  cursor: pointer;
 `;
 
-export const NavButtons = styled.button`
+export const NavButtons = styled.div`
   color: black;
   background: none;
   border: none;
@@ -66,12 +67,15 @@ export const FriendRequestElement = styled.div`
   justify-content: space-between;
 `;
 
-export const FriendRequestProfileImgContainer = styled.div`
+export const FriendRequestProfileImgContainer = styled.div<{ imgUrl: string }>`
   min-width: 30px;
   min-height: 30px;
   border-radius: 50%;
   border: 2px solid black;
   margin-right: 8px;
+  background-image: url(${props => props.imgUrl});
+  background-position: 50%;
+  background-size: cover;
 `;
 export const FriendRequestProfileImg = styled.img``;
 

@@ -7,8 +7,8 @@ import SignUpPage from "containers/SignUpPage/SignUpPage";
 const App = () => {
   return (
     <div className="App">
-      <Navbar />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route
             path="/"
