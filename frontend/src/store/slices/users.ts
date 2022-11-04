@@ -13,7 +13,7 @@ export const acceptedLoginInfo: PostSignInDto = {
 
 export type UserState = {
   currentUser: User | null;
-  chonList: OneChonInfo[] | null;
+  chonList: OneChonInfo[];
 };
 
 const initialState: UserState = {

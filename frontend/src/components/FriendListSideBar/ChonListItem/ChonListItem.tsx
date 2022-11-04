@@ -23,7 +23,6 @@ const ChonListItem: React.FC<{
   const onNodeClick = () => {
     navigate(`/profile/${userId}`);
   };
-
   return (
     <>
       <S.Container indent={isTwoChon}>

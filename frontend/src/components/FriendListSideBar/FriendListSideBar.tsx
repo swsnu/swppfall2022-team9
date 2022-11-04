@@ -19,11 +19,11 @@ const FriendListSideBar: React.FC<Props> = () => {
 
   // const curUserId = userState.currentUser!.id;
   // curUserID getChonLIst()
-  const oneChonList = userState.chonList!;
+  const oneChonList = userState.chonList;
 
   return (
     <S.Container>
-      <S.Header>{"Friends"}</S.Header>
+      <S.Header>친구 목록</S.Header>
       {oneChonList.map(user => (
         <ChonListItem
           key={user.id}

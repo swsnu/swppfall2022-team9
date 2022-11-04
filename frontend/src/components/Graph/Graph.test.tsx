@@ -18,7 +18,7 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderGraph = (user: User | null, chonList: OneChonInfo[] | null) => {
+const renderGraph = (user: User | null, chonList: OneChonInfo[]) => {
   return renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -42,11 +42,11 @@ describe("<Graph/>", () => {
   });
 
   it("render graph canvas", async () => {
-    const renderedGraph = renderGraph(usersStub[0], null);
+    const renderedGraph = renderGraph(usersStub[0], []);
     renderedGraph.unmount();
   });
 
   it("render graph canvas with no current user", async () => {
-    renderGraph(null, null);
+    renderGraph(null, []);
   });
 });

@@ -7,4 +7,6 @@ export type PostSignInResDto = User;
 
 export type PostSignUpResDto = User;
 
-export type GetChonListResDto = OneChonInfo[];
+export interface GetChonListResDto {
+  oneChonInfo: OneChonInfo[];
+}

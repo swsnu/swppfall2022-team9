@@ -19,10 +19,7 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderAuthWrapper = (
-  user: User | null,
-  chonList: OneChonInfo[] | null,
-) => {
+const renderAuthWrapper = (user: User | null, chonList: OneChonInfo[]) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -53,12 +50,12 @@ describe("<AuthWrapper/>", () => {
   });
 
   it("navigates to login page when there is no current user", async () => {
-    renderAuthWrapper(null, null);
+    renderAuthWrapper(null, []);
     screen.getByText(LoginModalMessage.NOT_AUTHENTICATED);
   });
 
   it("shows logout button as navbar when there is current user", async () => {
-    renderAuthWrapper(usersStub[0], null);
+    renderAuthWrapper(usersStub[0], []);
     screen.getByText("fake-content");
   });
 });
