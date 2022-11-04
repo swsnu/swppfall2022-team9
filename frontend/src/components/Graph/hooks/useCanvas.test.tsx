@@ -1,5 +1,5 @@
 import { fireEvent, waitFor } from "@testing-library/react";
-import { usersStub } from "mocks/stubs/users.stub";
+import { usersStub } from "server/stubs/users.stub";
 import { useRef } from "react";
 import useCanvas from "./useCanvas";
 import { renderHook } from "@testing-library/react-hooks";

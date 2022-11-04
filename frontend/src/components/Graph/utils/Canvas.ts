@@ -1,4 +1,4 @@
-import { User } from "models/users.model";
+import { User } from "server/models/users.model";
 import { Coord, PanZoom } from "types/canvas.types";
 import { UserNode } from "components/Graph/utils/node";
 import {

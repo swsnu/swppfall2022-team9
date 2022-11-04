@@ -1,6 +1,6 @@
 import FriendListSideBar from "components/FriendListSideBar/FriendListSideBar";
 import Graph from "components/Graph/Graph";
-import { usersStub } from "mocks/stubs/users.stub";
+import { usersStub } from "server/stubs/users.stub";
 import React, { useEffect } from "react";
 import { useAppDispatch } from "store/hooks";
 import { userActions } from "store/slices/users";

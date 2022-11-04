@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { PostSignInDto, PostSignUpDto } from "dto/users/users.dto";
-import { PostSignInResDto, PostSignUpResDto } from "dto/users/users.res.dto";
-import { User } from "models/users.model";
+import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
+import {
+  PostSignInResDto,
+  PostSignUpResDto,
+} from "server/dto/users/users.res.dto";
+import { User } from "server/models/users.model";
 import { OneChonInfo } from "types/chon.types";
 
 export const acceptedLoginInfo: PostSignInDto = {

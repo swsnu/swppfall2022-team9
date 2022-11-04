@@ -1,4 +1,4 @@
-import { User } from "models/users.model";
+import { User } from "../../models/users.model";
 
 export type PostSignInDto = Pick<User, "username" | "password">;
 

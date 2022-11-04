@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es5",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    // "allowSyntheticDefaultImports": true
+    // "moduleResolution": "node",
+    "outDir": "build"
+  }
+}

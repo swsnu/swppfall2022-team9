@@ -1,9 +1,11 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { User } from "models/users.model";
+import { User } from "server/models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import Graph from "./Graph";
-import { usersStub } from "mocks/stubs/users.stub";
+
 import { OneChonInfo } from "types/chon.types";
+
+import { usersStub } from "server/stubs/users.stub";
 
 const mockNavigate = jest.fn();
 

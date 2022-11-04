@@ -11,7 +11,7 @@
     "@testing-library/user-event": "^14.4.3",
     "axios": "^0.27.2",
     "jest-canvas-mock": "^2.4.0",
-    "json-server": "^0.17.0",
+    "json-server": "^0.17.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
@@ -41,7 +41,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "mockApi": "cp src/mocks/api/_db.json src/mocks/api/db.json && cd src/mocks/api && ts-node -r esm mockApi.ts",
+    "mockApi": "cp src/server/mock/_db.json src/server/mock/db.json && ts-node -r esm src/server/mock/index.ts",
     "testf_": "react-scripts test --coverage --watchAll=false",
     "lint": "eslint src"
   },

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { useAppDispatch } from "store/hooks";
-import { PostSignInDto } from "dto/users/users.dto";
+import { PostSignInDto } from "server/dto/users/users.dto";
 import { postSignIn } from "store/slices/users";
 import * as S from "./styles";
 import { useNavigate } from "react-router-dom";
