@@ -73,17 +73,18 @@ export default function applyFriendRequestApi(
     { friendRequestId: number },
     PutFriendRequestResDto,
     PutFriendRequestDto
-  >("/api/friendRequest/:friendRequestId", async (req, res) => {
+  >("/api/friendRequest/:friendRequestId/", async (req, res) => {
     const friendRequest = db
       .get("friendRequests")
-      .find({ id: req.params.friendRequestId })
+      .find({ id: Number(req.params.friendRequestId) })
       .value();
+    console.log(friendRequest);
     if (!friendRequest) {
       return res.status(404);
     }
     const updatedFriendRequest = (await db
       .get("friendRequests")
-      .find({ id: req.params.friendRequestId })
+      .find({ id: friendRequest.id })
       .assign({ ...req.body })
       .write()) as FriendRequest;
     return res.status(200).json({ friendRequest: updatedFriendRequest });
