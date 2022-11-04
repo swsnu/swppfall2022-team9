@@ -4,7 +4,12 @@ import logo from "assets/img/logo.png";
 import { IoPersonOutline, IoChatboxEllipsesOutline } from "react-icons/io5";
 import { VscBell, VscSearch } from "react-icons/vsc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getFriendRequests } from "store/slices/friendRequests";
+import {
+  getFriendRequests,
+  putFriendRequest,
+} from "store/slices/friendRequests";
+import { useNavigate } from "react-router-dom";
+import { FriendRequestStatus } from "server/models/friendRequests.model";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
@@ -16,13 +21,44 @@ const Navbar: React.FC<Props> = () => {
   );
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+
   const onClickBell = () => {
     setIsFriendRequestBarOpen(prev => !prev);
   };
 
-  const onAcceptFriendRequest = () => {};
+  const onAcceptFriendRequest = (friendRequestId: number) => {
+    dispatch(
+      putFriendRequest({
+        id: friendRequestId,
+        status: FriendRequestStatus.ACCEPTED,
+      }),
+    );
+  };
 
-  const onDeclineFriendRequest = () => {};
+  const onRejectFriendRequest = (friendRequestId: number) => {
+    dispatch(
+      putFriendRequest({
+        id: friendRequestId,
+        status: FriendRequestStatus.REJECTED,
+      }),
+    );
+  };
+  const onClickLogo = () => {
+    navigate("/");
+  };
+
+  const onClickAccount = () => {
+    navigate("/account");
+  };
+
+  const onClickChat = () => {
+    navigate("/chat");
+  };
+
+  const onClickSearch = () => {
+    console.log("search");
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -42,14 +78,18 @@ const Navbar: React.FC<Props> = () => {
   }, []);
   return (
     <S.Container>
-      <S.LogoContainer>
+      <S.LogoContainer onClick={onClickLogo}>
         <img src={logo} alt="logo" />
       </S.LogoContainer>
       <S.NavButtonsContainer>
         <S.NavButtons>
-          <IoPersonOutline size={"100%"} style={{ cursor: "pointer" }} />
+          <IoPersonOutline
+            size={"100%"}
+            style={{ cursor: "pointer" }}
+            onClick={onClickAccount}
+          />
         </S.NavButtons>
-        <S.NavButtons onClick={onClickBell} ref={wrapperRef}>
+        <S.NavButtons ref={wrapperRef} onClick={onClickBell}>
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
           {isFriendRequestBarOpen && (
             <S.NotificationListPopupContainer
@@ -60,18 +100,25 @@ const Navbar: React.FC<Props> = () => {
               <S.NotificationTitle>알림</S.NotificationTitle>
               <S.NotificationContents>
                 {friendRequests.map(request => {
-                  console.log(request);
                   return (
                     <S.FriendRequestElement key={request.id}>
-                      <S.FriendRequestProfileImgContainer>
-                        <S.FriendRequestProfileImg src={request.senderImgUrl} />
-                      </S.FriendRequestProfileImgContainer>
+                      <S.FriendRequestProfileImgContainer
+                        imgUrl={request.senderImgUrl}
+                      ></S.FriendRequestProfileImgContainer>
                       <S.FriendRequestMessage>
                         {request.senderName}가 친구를 맺고 싶어합니다!
                       </S.FriendRequestMessage>
                       <S.ActionButtons>
-                        <S.Accept>수락</S.Accept>
-                        <S.Decline>거절</S.Decline>
+                        <S.Accept
+                          onClick={() => onAcceptFriendRequest(request.id)}
+                        >
+                          수락
+                        </S.Accept>
+                        <S.Decline
+                          onClick={() => onRejectFriendRequest(request.id)}
+                        >
+                          거절
+                        </S.Decline>
                       </S.ActionButtons>
                     </S.FriendRequestElement>
                   );
@@ -82,12 +129,17 @@ const Navbar: React.FC<Props> = () => {
         </S.NavButtons>
         <S.NavButtons>
           <IoChatboxEllipsesOutline
+            onClick={onClickChat}
             size={"100%"}
             style={{ cursor: "pointer" }}
           />
         </S.NavButtons>
         <S.NavButtons>
-          <VscSearch size={"100%"} style={{ cursor: "pointer" }} />
+          <VscSearch
+            size={"100%"}
+            style={{ cursor: "pointer" }}
+            onClick={onClickSearch}
+          />
         </S.NavButtons>
       </S.NavButtonsContainer>
     </S.Container>
