@@ -4,6 +4,7 @@ import { User } from "models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import AuthWrapper, { LoginModalMessage } from "./AuthWrapper";
 import { usersStub } from "mocks/stubs/users.stub";
+import { OneChonInfo } from "types/chon.types";
 
 const mockNavigate = jest.fn();
 
@@ -18,7 +19,10 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderAuthWrapper = (user: User | null) => {
+const renderAuthWrapper = (
+  user: User | null,
+  chonList: OneChonInfo[] | null,
+) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -36,6 +40,7 @@ const renderAuthWrapper = (user: User | null) => {
       preloadedState: {
         users: {
           currentUser: user,
+          chonList: chonList,
         },
       },
     },
@@ -48,12 +53,12 @@ describe("<AuthWrapper/>", () => {
   });
 
   it("navigates to login page when there is no current user", async () => {
-    renderAuthWrapper(null);
+    renderAuthWrapper(null, null);
     screen.getByText(LoginModalMessage.NOT_AUTHENTICATED);
   });
 
   it("shows logout button as navbar when there is current user", async () => {
-    renderAuthWrapper(usersStub[0]);
+    renderAuthWrapper(usersStub[0], null);
     screen.getByText("fake-content");
   });
 });

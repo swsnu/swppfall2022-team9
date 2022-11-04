@@ -8,3 +8,5 @@ export type PostSignUpDto = Pick<
 >;
 
 export type GetUserDto = number;
+
+export type GetChonListDto = number;

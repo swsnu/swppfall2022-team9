@@ -1,9 +1,7 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { selectUser } from "store/slices/users";
 import * as S from "./styles";
 import ChonListItem from "./ChonListItem/ChonListItem";
-import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "store/hooks";
 
 interface Props {}
 
@@ -12,7 +10,7 @@ const FriendListSideBar: React.FC<Props> = () => {
   // const oneChonList = [0, 1, 2, 3];
   // const twoChonList = [[5, 6, 7, 8], [9], [10, 11], [12, 13]];
 
-  const userState = useSelector(selectUser);
+  const userState = useAppSelector(state => state.users);
   // const navigate = useNavigate();
 
   // if (userState.currentUser === null) {
@@ -25,6 +23,7 @@ const FriendListSideBar: React.FC<Props> = () => {
 
   return (
     <S.Container>
+      <S.Header>{"Friends"}</S.Header>
       {oneChonList.map(user => (
         <ChonListItem
           key={user.id}
@@ -33,6 +32,7 @@ const FriendListSideBar: React.FC<Props> = () => {
           lastname={user.lastname}
           imgUrl={user.imgUrl}
           twoChonList={user.chons}
+          isTwoChon={false}
         ></ChonListItem>
       ))}
     </S.Container>

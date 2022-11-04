@@ -24,9 +24,10 @@ const SignUpPage: React.FC<Props> = () => {
   const navigate = useNavigate();
   // const currentUser = useAppSelector(state => state.users.currentUser);
   const [signUpInfo, setSignUpInfo] = useState<SignUpInfo>({
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
-    nickname: "",
+    username: "",
     password: "",
     passwordConfirm: "",
   });
@@ -58,9 +59,10 @@ const SignUpPage: React.FC<Props> = () => {
         try {
           const result = await dispatch(
             postSignUp({
-              name: signUpInfo.name,
+              firstname: signUpInfo.firstname,
+              lastname: signUpInfo.lastname,
               email: signUpInfo.email,
-              nickname: signUpInfo.nickname,
+              username: signUpInfo.username,
               password: signUpInfo.password,
             }),
           );
@@ -95,20 +97,49 @@ const SignUpPage: React.FC<Props> = () => {
         </S.GuideContainer>
         <S.Form onSubmit={onSubmit}>
           <S.Label>
-            <S.LabelText>이름</S.LabelText>
+            <S.LabelText>성</S.LabelText>
             <S.InputContainer>
               <S.Input
                 type="text"
-                name="name"
+                name="lastname"
                 autoComplete="on"
                 maxLength={maxNameLength}
                 onChange={e => {
-                  setSignUpInfo(prev => ({ ...prev, name: e.target.value }));
+                  setSignUpInfo(prev => ({
+                    ...prev,
+                    lastname: e.target.value,
+                  }));
                 }}
               />
               {isSubmitClicked && (
                 <S.InputHelper>
-                  {signUpInfo.name ? HelperText.NO_ERROR : HelperText.REQUIRED}
+                  {signUpInfo.lastname
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
+            </S.InputContainer>
+          </S.Label>
+          <S.Label>
+            <S.LabelText>이름</S.LabelText>
+            <S.InputContainer>
+              <S.Input
+                type="text"
+                name="firstname"
+                autoComplete="on"
+                maxLength={maxNameLength}
+                onChange={e => {
+                  setSignUpInfo(prev => ({
+                    ...prev,
+                    firstname: e.target.value,
+                  }));
+                }}
+              />
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {signUpInfo.firstname
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
                 </S.InputHelper>
               )}
             </S.InputContainer>
@@ -133,22 +164,22 @@ const SignUpPage: React.FC<Props> = () => {
             </S.InputContainer>
           </S.Label>
           <S.Label>
-            <S.LabelText>닉네임</S.LabelText>
+            <S.LabelText>아이디</S.LabelText>
             <S.InputContainer>
               <S.Input
                 type="text"
-                name="nickname"
+                name="username"
                 maxLength={maxNicknameLength}
                 onChange={e => {
                   setSignUpInfo(prev => ({
                     ...prev,
-                    nickname: e.target.value,
+                    username: e.target.value,
                   }));
                 }}
               />
               {isSubmitClicked && (
                 <S.InputHelper>
-                  {signUpInfo.nickname
+                  {signUpInfo.username
                     ? HelperText.NO_ERROR
                     : HelperText.REQUIRED}
                 </S.InputHelper>

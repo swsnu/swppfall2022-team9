@@ -239,7 +239,11 @@ export class Canvas {
 
   setCurrentUserNode(currentUser: User) {
     // TODO: For now we set the imgUrl to empty string
-    this.currentUserNode = new UserNode("", currentUser.name, [0, 0]);
+    this.currentUserNode = new UserNode(
+      "",
+      currentUser.lastname + currentUser.firstname,
+      [0, 0],
+    );
   }
 
   setWidth(width: number, devicePixelRatio?: number) {

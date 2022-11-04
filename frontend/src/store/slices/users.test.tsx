@@ -26,7 +26,7 @@ describe("users reducer", () => {
     axios.get = jest.fn().mockResolvedValue({ data: usersStub[0] });
     await store.dispatch(
       postSignIn({
-        email: usersStub[0].email,
+        username: usersStub[0].username,
         password: usersStub[0].password,
       }),
     );
@@ -44,8 +44,9 @@ describe("users reducer", () => {
       postSignUp({
         email: usersStub[0].email,
         password: usersStub[0].password,
-        nickname: usersStub[0].nickname,
-        name: usersStub[0].name,
+        username: usersStub[0].username,
+        firstname: usersStub[0].firstname,
+        lastname: usersStub[0].lastname,
       }),
     );
   });

@@ -87,11 +87,12 @@ export const putSignOut = createAsyncThunk<void>(
   },
 );
 
-export const getOneChonList = createAsyncThunk<User[]>(
-  "users/getOneChonList",
-  async () => {
-    const response = (await axios.get("/api/user/onechon")).data;
-    return response;
+export const getChonList = createAsyncThunk<void>(
+  "users/getChonList",
+  async (_, { dispatch }) => {
+    const response = (await axios.get<Array<OneChonInfo>>(`/api/user/onechon`))
+      .data;
+    dispatch(userActions.setChonList(response));
   },
 );
 
@@ -105,6 +106,9 @@ export const userSlice = createSlice({
     resetCurrentUser: state => {
       state.currentUser = null;
     },
+    setChonList: (state, actions: PayloadAction<Array<OneChonInfo>>) => {
+      state.chonList = actions.payload;
+    },
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   extraReducers(builder) {},
@@ -112,6 +116,5 @@ export const userSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const userActions = userSlice.actions;
-export const selectUser = (state: RootState) => state.users;
 
 export default userSlice.reducer;

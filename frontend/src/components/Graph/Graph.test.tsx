@@ -3,6 +3,7 @@ import { User } from "models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import Graph from "./Graph";
 import { usersStub } from "mocks/stubs/users.stub";
+import { OneChonInfo } from "types/chon.types";
 
 const mockNavigate = jest.fn();
 
@@ -17,7 +18,7 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderGraph = (user: User | null) => {
+const renderGraph = (user: User | null, chonList: OneChonInfo[] | null) => {
   return renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -28,6 +29,7 @@ const renderGraph = (user: User | null) => {
       preloadedState: {
         users: {
           currentUser: user,
+          chonList: chonList,
         },
       },
     },
@@ -40,11 +42,11 @@ describe("<Graph/>", () => {
   });
 
   it("render graph canvas", async () => {
-    const renderedGraph = renderGraph(usersStub[0]);
+    const renderedGraph = renderGraph(usersStub[0], null);
     renderedGraph.unmount();
   });
 
   it("render graph canvas with no current user", async () => {
-    renderGraph(null);
+    renderGraph(null, null);
   });
 });

@@ -10,10 +10,10 @@ const ChonListItem: React.FC<{
   lastname: string;
   imgUrl: string;
   twoChonList: TwoChonInfo[] | null;
-}> = ({ userId, firstname, lastname, imgUrl, twoChonList }) => {
+  isTwoChon: boolean;
+}> = ({ userId, firstname, lastname, imgUrl, twoChonList, isTwoChon }) => {
   // const size = Math.floor(Math.random() * 100) + 50;
   const [isClicked, setClicked] = useState<boolean>(false);
-  const [isNodeClicked, setNodeCliked] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const onToggleButtonClick = () => {
@@ -21,32 +21,24 @@ const ChonListItem: React.FC<{
   };
 
   const onNodeClick = () => {
-    setNodeCliked(!isNodeClicked);
-  };
-
-  const onViewProfileClicked = () => {
     navigate(`/profile/${userId}`);
   };
 
   return (
     <>
-      <S.Container spacing={true}>
-        <S.Container spacing={false}>
-          <S.OneChonNode url={imgUrl} onClick={onNodeClick}>
-            {isNodeClicked && (
-              <S.ViewProfileButton onClick={onViewProfileClicked}>
-                View Profile
-              </S.ViewProfileButton>
-            )}
-          </S.OneChonNode>
+      <S.Container spacing={true} indent={isTwoChon}>
+        <S.Container spacing={false} indent={false} onClick={onNodeClick}>
+          <S.OneChonNode url={imgUrl}></S.OneChonNode>
           <S.Username>
             {lastname}
             {firstname}
           </S.Username>
         </S.Container>
-        <S.ExpandTwoChonButton onClick={onToggleButtonClick}>
-          {isClicked ? <IoChevronDown /> : <IoChevronUp />}
-        </S.ExpandTwoChonButton>
+        {!isTwoChon && (
+          <S.ExpandTwoChonButton onClick={onToggleButtonClick}>
+            {isClicked ? <IoChevronDown /> : <IoChevronUp />}
+          </S.ExpandTwoChonButton>
+        )}
       </S.Container>
       {isClicked && !!twoChonList && (
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -59,6 +51,7 @@ const ChonListItem: React.FC<{
                 lastname={twoChon.lastname}
                 imgUrl={twoChon.imgUrl}
                 twoChonList={null}
+                isTwoChon={true}
               ></ChonListItem>
             );
           })}

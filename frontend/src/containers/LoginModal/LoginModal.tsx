@@ -16,7 +16,7 @@ const LoginModal: React.FC<Props> = ({ message }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState<PostSignInDto>({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -25,7 +25,10 @@ const LoginModal: React.FC<Props> = ({ message }) => {
       e.preventDefault();
       try {
         await dispatch(
-          postSignIn({ email: loginInfo.email, password: loginInfo.password }),
+          postSignIn({
+            username: loginInfo.username,
+            password: loginInfo.password,
+          }),
         );
       } catch (err) {
         alert.open({ message: "로그인 정보가 잘못되었습니다!" });
