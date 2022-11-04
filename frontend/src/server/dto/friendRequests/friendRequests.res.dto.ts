@@ -1,7 +1,9 @@
 import { FriendRequest } from "../../models/friendRequests.model";
 
 export interface GetFriendRequestsResDto {
-  friendRequests: FriendRequest[];
+  friendRequests: Array<
+    FriendRequest & { senderImgUrl: string; senderName: string }
+  >;
 }
 
 export type GetFriendRequestElement = FriendRequest & {

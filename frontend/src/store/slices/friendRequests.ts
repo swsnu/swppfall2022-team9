@@ -13,7 +13,9 @@ import { FriendRequest } from "server/models/friendRequests.model";
 
 export type FriendRequestState = {
   friendRequestToken: string | null;
-  friendRequests: FriendRequest[];
+  friendRequests: Array<
+    FriendRequest & { senderImgUrl: string; senderName: string }
+  >;
 };
 
 const initialState: FriendRequestState = {
@@ -88,3 +90,7 @@ export const friendRequestsSlice = createSlice({
     });
   },
 });
+
+export const friendRequestActions = friendRequestsSlice.actions;
+
+export default friendRequestsSlice.reducer;
