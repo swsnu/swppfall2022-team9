@@ -13,7 +13,7 @@ export const friendRequestsStub: Array<FriendRequest> = [
     updatedAt: new Date(),
   },
   {
-    id: 1,
+    id: 2,
     senderId: 3,
     getterId: 1,
     status: FriendRequestStatus.PENDING,
@@ -21,7 +21,7 @@ export const friendRequestsStub: Array<FriendRequest> = [
     updatedAt: new Date(),
   },
   {
-    id: 1,
+    id: 3,
     senderId: 4,
     getterId: 1,
     status: FriendRequestStatus.PENDING,
@@ -29,7 +29,7 @@ export const friendRequestsStub: Array<FriendRequest> = [
     updatedAt: new Date(),
   },
   {
-    id: 1,
+    id: 4,
     senderId: 5,
     getterId: 1,
     status: FriendRequestStatus.PENDING,
@@ -37,7 +37,7 @@ export const friendRequestsStub: Array<FriendRequest> = [
     updatedAt: new Date(),
   },
   {
-    id: 1,
+    id: 5,
     senderId: 6,
     getterId: 1,
     status: FriendRequestStatus.PENDING,
@@ -45,7 +45,7 @@ export const friendRequestsStub: Array<FriendRequest> = [
     updatedAt: new Date(),
   },
   {
-    id: 1,
+    id: 6,
     senderId: 7,
     getterId: 1,
     status: FriendRequestStatus.PENDING,
@@ -53,7 +53,7 @@ export const friendRequestsStub: Array<FriendRequest> = [
     updatedAt: new Date(),
   },
   {
-    id: 1,
+    id: 7,
     senderId: 1,
     getterId: 2,
     status: FriendRequestStatus.PENDING,

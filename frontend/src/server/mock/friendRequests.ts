@@ -29,7 +29,6 @@ export default function applyFriendRequestApi(
   server.get<unknown, GetFriendRequestsResDto>(
     "/api/friendRequest/",
     async (req, res) => {
-      console.log("being called");
       const friendRequests = friendRequestsStub.filter(
         friendRequest =>
           friendRequest.getterId === 1 &&

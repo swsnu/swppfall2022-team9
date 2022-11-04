@@ -15,10 +15,10 @@ export interface Schema {
 }
 
 const server = jsonServer.create();
-const router = jsonServer.router("db.json");
+const router = jsonServer.router("src/server/mock/db.json");
 const middlewares = jsonServer.defaults();
 
-const adapter = new FileSync<Schema>("db.json");
+const adapter = new FileSync<Schema>("src/server/mock/db.json");
 const db = low(adapter);
 
 server.use(middlewares);
