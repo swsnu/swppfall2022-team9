@@ -57,6 +57,7 @@ const Navbar: React.FC<Props> = () => {
     navigate("/chat");
   };
 
+  // TODO: search click should render a search bar in the canvas!!
   const onClickSearch = () => {
     console.log("search");
   };
@@ -79,18 +80,23 @@ const Navbar: React.FC<Props> = () => {
   }, []);
   return (
     <S.Container>
-      <S.LogoContainer onClick={onClickLogo}>
+      <S.LogoContainer onClick={onClickLogo} role="logo">
         <img src={logo} alt="logo" />
       </S.LogoContainer>
       <S.NavButtonsContainer>
         <S.NavButtons>
           <IoPersonOutline
+            role="account"
             size={"100%"}
             style={{ cursor: "pointer" }}
             onClick={onClickAccount}
           />
         </S.NavButtons>
-        <S.NavButtons ref={wrapperRef} onClick={onClickBell}>
+        <S.NavButtons
+          ref={wrapperRef}
+          onClick={onClickBell}
+          role="notification"
+        >
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
           {friendRequests.length > 0 && <S.NavbarButtonRedMark />}
           {isFriendRequestBarOpen && (
@@ -131,6 +137,7 @@ const Navbar: React.FC<Props> = () => {
         </S.NavButtons>
         <S.NavButtons>
           <IoChatboxEllipsesOutline
+            role="chats"
             onClick={onClickChat}
             size={"100%"}
             style={{ cursor: "pointer" }}
@@ -138,6 +145,7 @@ const Navbar: React.FC<Props> = () => {
         </S.NavButtons>
         <S.NavButtons>
           <VscSearch
+            role="search"
             size={"100%"}
             style={{ cursor: "pointer" }}
             onClick={onClickSearch}
