@@ -1,5 +1,20 @@
 import { render } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { renderWithProviders } from "test-utils/mocks";
 import Navbar from "./Navbar";
+
+const renderNavbar = () => {
+  renderWithProviders(
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={<Navbar />} />
+      </Routes>
+    </MemoryRouter>,
+    {
+      preloadedState: {},
+    },
+  );
+};
 
 describe("<Navbar/>", () => {
   beforeEach(() => {
@@ -7,6 +22,6 @@ describe("<Navbar/>", () => {
   });
 
   it("renders Navbar", async () => {
-    render(<Navbar />);
+    renderNavbar();
   });
 });
