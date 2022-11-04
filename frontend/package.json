@@ -28,9 +28,7 @@
       "!src/index.tsx"
     ],
     "coveragePathIgnorePatterns": [
-      "<rootDir>/src/mocks",
-      "<rootDir>/src/models",
-      "<rootDir>/src/dto",
+      "<rootDir>/src/server",
       "<rootDir>/src/test-utils",
       "<rootDir>/src/types"
     ],
