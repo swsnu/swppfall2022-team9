@@ -129,15 +129,17 @@ export const getOneAndTwoChonCoordinates = (
 export const getEdgeCoords = (coordA: Coord, coordB: Coord, radius: number) => {
   const delX = coordB.x - coordA.x;
   const delY = coordB.y - coordA.y;
-  const theta = Math.atan(delY / delX);
-
+  let theta = Math.atan(delY / delX);
+  if (delX < 0) {
+    theta += Math.PI;
+  }
   const edgeA = {
     x: coordA.x + radius * Math.cos(theta),
     y: coordA.y + radius * Math.sin(theta),
   };
   const edgeB = {
-    x: coordB.x - radius * Math.cos(theta),
-    y: coordB.y - radius * Math.sin(theta),
+    x: coordB.x + radius * Math.cos(theta + Math.PI),
+    y: coordB.y + radius * Math.sin(theta + Math.PI),
   };
   return [edgeA, edgeB];
 };
