@@ -30,7 +30,7 @@ export const getFriendRequests = createAsyncThunk<GetFriendRequestsResDto>(
   "friendRequests/getFriendRequests",
   async () => {
     const response = await axios.get<GetFriendRequestsResDto>(
-      "/api/friendRequest",
+      "/api/friendRequest/",
     );
     return response.data;
   },
@@ -44,7 +44,7 @@ export const postFriendRequest = createAsyncThunk<void, PostFriendRequestDto>(
   "friendRequests/postFriendRequest",
   async ({ senderId, getterId }) => {
     const data: PostFriendRequestDto = { senderId, getterId };
-    await axios.post<PostFriendRequestResDto>("/api/friendRequest", data);
+    await axios.post<PostFriendRequestResDto>("/api/friendRequest/", data);
   },
 );
 
@@ -57,9 +57,10 @@ export const putFriendRequest = createAsyncThunk<
 >("friendRequests/putFriendRequest", async ({ id, status }) => {
   const data: PutFriendRequestDto = { status };
   const response = await axios.put<PutFriendRequestResDto>(
-    `/api/friendRequest/${id}`,
+    `/api/friendRequest/${id}/`,
     data,
   );
+  console.log(response);
   return response.data;
 });
 
