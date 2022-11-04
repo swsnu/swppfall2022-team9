@@ -17,8 +17,8 @@ const degToRad = (degrees: number) => {
  *
  * NOTE:
  * margin cannot be less than 22 or the nodes may overlap
- * @param oneChonList
- * @param twoChonList
+ * @param oneChonCount
+ * @param twoChonCount
  * @param radius
  * @param maxConnections
  * @param margin
@@ -27,16 +27,14 @@ const degToRad = (degrees: number) => {
  */
 // TODO: update params to accept User[]
 export const getOneAndTwoChonCoordinates = (
-  oneChonList: string[],
-  twoChonList: string[][],
+  oneChonCount: number,
+  twoChonCount: number[],
   radius: number,
   maxConnections = 10,
   margin = 22,
   expandRatio = 0.8,
 ) => {
-  const oneChonCount = oneChonList.length;
-  const twoChonCount = twoChonList.length;
-  if (oneChonCount !== twoChonCount) {
+  if (oneChonCount !== twoChonCount.length) {
     throw new Error("More number of 2-chons than 1-chons.");
   }
 
@@ -50,7 +48,6 @@ export const getOneAndTwoChonCoordinates = (
 
   for (let i = 0; i < oneChonCount; i++) {
     const curUserCoord: OneChonUserCoord = {
-      userId: oneChonList[i],
       userCoord: { x: 0, y: 0 },
       twoChonCoords: [],
     };
@@ -62,17 +59,16 @@ export const getOneAndTwoChonCoordinates = (
     curUserCoord.userCoord = coord1Chon;
 
     const max2Chon = Math.min(Math.floor(budget / margin) + 1, maxConnections);
-    if (max2Chon < twoChonList[i].length) {
+    if (max2Chon < twoChonCount[i]) {
       throw new Error("Number of 2-chons exceeded the maximum capacity.");
     }
 
-    if (twoChonList[i].length === 0) {
+    if (twoChonCount[i] === 0) {
       //pass
-    } else if (twoChonList[i].length === 1) {
+    } else if (twoChonCount[i] === 1) {
       const x2Coord = xCoord + edge * Math.cos(degToRad(angle));
       const y2Coord = yCoord + edge * Math.sin(degToRad(angle));
       const coord: TwoChonUserCoord = {
-        userId: twoChonList[i][0],
         userCoord: { x: x2Coord, y: y2Coord },
       };
       curUserCoord.twoChonCoords.push(coord);
@@ -85,17 +81,17 @@ export const getOneAndTwoChonCoordinates = (
 
       // check if they have at least two less than the max number of connections
       const isExpandable =
-        twoChonList[adjacentIndices[0]].length < max2Chon - 1 &&
-        twoChonList[adjacentIndices[1]].length < max2Chon - 1;
+        twoChonCount[adjacentIndices[0]] < max2Chon - 1 &&
+        twoChonCount[adjacentIndices[1]] < max2Chon - 1;
 
-      let theta = Math.min(budget / twoChonList[i].length, 60);
+      let theta = Math.min(budget / twoChonCount[i], 60);
       theta = Math.max(theta, 22);
-      let budgetTemp = theta * twoChonList[i].length;
+      let budgetTemp = theta * twoChonCount[i];
 
       // min -> expandRatio
       const spare = Math.min(
-        max2Chon - twoChonList[adjacentIndices[0]].length,
-        max2Chon - twoChonList[adjacentIndices[1]].length,
+        max2Chon - twoChonCount[adjacentIndices[0]],
+        max2Chon - twoChonCount[adjacentIndices[1]],
       );
 
       // adjust the budget appropriately
@@ -107,7 +103,7 @@ export const getOneAndTwoChonCoordinates = (
           budgetTemp += expandRatio * ((theta * spare) / 2);
         }
       }
-      for (let j = 0; j < twoChonList[i].length; j++) {
+      for (let j = 0; j < twoChonCount[i]; j++) {
         const x2Coord =
           xCoord +
           edge * Math.cos(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
@@ -115,7 +111,6 @@ export const getOneAndTwoChonCoordinates = (
           yCoord +
           edge * Math.sin(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
         const coord: TwoChonUserCoord = {
-          userId: twoChonList[i][0],
           userCoord: { x: x2Coord, y: y2Coord },
         };
         curUserCoord.twoChonCoords.push(coord);

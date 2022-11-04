@@ -1,15 +1,15 @@
-export type Coord = { x: number; y: number };
+export interface Coord {
+  x: number;
+  y: number;
+}
 
-export type OneChonUserCoord = {
-  userId: string;
+export interface TwoChonUserCoord {
   userCoord: Coord;
+}
+export interface OneChonUserCoord extends TwoChonUserCoord {
   twoChonCoords: TwoChonUserCoord[];
-};
+}
 
-export type TwoChonUserCoord = {
-  userId: string;
-  userCoord: Coord;
-};
 export type Coords = OneChonUserCoord[];
 
 export type PanZoom = {
