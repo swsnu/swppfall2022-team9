@@ -29,11 +29,14 @@ export default function applyFriendRequestApi(
   server.get<unknown, GetFriendRequestsResDto>(
     "/api/friendRequest/",
     async (req, res) => {
-      const friendRequests = friendRequestsStub.filter(
-        friendRequest =>
-          friendRequest.getterId === 1 &&
-          friendRequest.status === FriendRequestStatus.PENDING,
-      );
+      const friendRequests = db
+        .get("friendRequests")
+        .value()
+        .filter(
+          friendRequest =>
+            friendRequest.getterId === 1 &&
+            friendRequest.status === FriendRequestStatus.PENDING,
+        );
       const response: Array<GetFriendRequestElement> = friendRequests.map(
         friendRequest => {
           const sender = usersStub.find(
