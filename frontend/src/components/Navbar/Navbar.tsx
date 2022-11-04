@@ -10,22 +10,25 @@ import {
 } from "store/slices/friendRequests";
 import { useNavigate } from "react-router-dom";
 import { FriendRequestStatus } from "server/models/friendRequests.model";
+import useHandleClickOutside from "hooks/useHandleClickOutside";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wrapperRef = useRef<any>(null);
-  const [isFriendRequestBarOpen, setIsFriendRequestBarOpen] =
-    useState<boolean>(false);
+
   const friendRequests = useAppSelector(
     state => state.friendRequests.friendRequests,
   );
+  const [isClickedOutsideOfNotification, setIsClickedOutsideOfNotification] =
+    useState<boolean>(true);
+
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
   const onClickBell = () => {
-    setIsFriendRequestBarOpen(prev => !prev);
+    setIsClickedOutsideOfNotification(prev => !prev);
   };
 
   const onAcceptFriendRequest = (friendRequestId: number) => {
@@ -62,18 +65,10 @@ const Navbar: React.FC<Props> = () => {
     console.log("search");
   };
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        setIsFriendRequestBarOpen(false);
-      }
-    }
-
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [wrapperRef]);
+  useHandleClickOutside({
+    wrapperRef,
+    setIsClickedOutside: setIsClickedOutsideOfNotification,
+  });
 
   useEffect(() => {
     dispatch(getFriendRequests());
@@ -99,7 +94,7 @@ const Navbar: React.FC<Props> = () => {
         >
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
           {friendRequests.length > 0 && <S.NavbarButtonRedMark />}
-          {isFriendRequestBarOpen && (
+          {!isClickedOutsideOfNotification && (
             <S.NotificationListPopupContainer
               onClick={e => {
                 e.stopPropagation();
