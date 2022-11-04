@@ -156,3 +156,5 @@ dmypy.json
 
 
 __snapshots__
+
+mocks/*.js
