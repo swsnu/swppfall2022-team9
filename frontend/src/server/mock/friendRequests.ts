@@ -42,7 +42,7 @@ export default function applyFriendRequestApi(
           );
           return {
             ...friendRequest,
-            senderName: sender ? sender.name : "",
+            senderName: sender ? sender.lastname + sender.firstname : "",
             senderImgUrl: "",
           };
         },
