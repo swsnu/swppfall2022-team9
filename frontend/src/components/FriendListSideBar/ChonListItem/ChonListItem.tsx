@@ -26,14 +26,14 @@ const ChonListItem: React.FC<{
 
   return (
     <>
-      <S.Container spacing={true} indent={isTwoChon}>
-        <S.Container spacing={false} indent={false} onClick={onNodeClick}>
+      <S.Container indent={isTwoChon}>
+        <S.UserRowContainer onClick={onNodeClick}>
           <S.OneChonNode url={imgUrl}></S.OneChonNode>
           <S.Username>
             {lastname}
             {firstname}
           </S.Username>
-        </S.Container>
+        </S.UserRowContainer>
         {!isTwoChon && (
           <S.ExpandTwoChonButton onClick={onToggleButtonClick}>
             {isClicked ? <IoChevronDown /> : <IoChevronUp />}

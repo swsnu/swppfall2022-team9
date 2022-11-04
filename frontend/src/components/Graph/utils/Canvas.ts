@@ -22,11 +22,11 @@ export class Canvas {
 
   private panZoom: PanZoom = {
     scale: 1,
-    offset: [0, 0],
+    offset: { x: 0, y: 0 },
   };
 
   private panPoint: { lastMousePos: Coord } = {
-    lastMousePos: [0, 0],
+    lastMousePos: { x: 0, y: 0 },
   };
 
   private width = 0;
@@ -64,7 +64,7 @@ export class Canvas {
   onMouseDown(evt: TouchyEvent) {
     evt.preventDefault();
     const point = this.getPointFromTouchyEvent(evt);
-    this.panPoint.lastMousePos = [point.offsetX, point.offsetY];
+    this.panPoint.lastMousePos = { x: point.offsetX, y: point.offsetY };
     if (window.TouchEvent && evt instanceof TouchEvent) {
       const touchCount = evt.touches.length;
       if (touchCount >= 2) {
@@ -117,7 +117,7 @@ export class Canvas {
     }
     const point = this.getPointFromTouchyEvent(evt);
 
-    const currentMousePos: Coord = [point.offsetX, point.offsetY];
+    const currentMousePos: Coord = { x: point.offsetX, y: point.offsetY };
     this.panPoint.lastMousePos = currentMousePos;
     const mouseDiff = diffPoints(lastMousePos, currentMousePos);
     const offset = diffPoints(this.panZoom.offset, mouseDiff);
@@ -132,18 +132,18 @@ export class Canvas {
     newScale: number,
   ) => {
     const worldPos = getWorldPoint(
-      diffPoints(mouseOffset, [
-        this.element.width / 2,
-        this.element.height / 2,
-      ]),
+      diffPoints(mouseOffset, {
+        x: this.element.width / 2,
+        y: this.element.height / 2,
+      }),
       panZoom,
     );
     const newMousePos = getScreenPoint(worldPos, {
       scale: newScale,
-      offset: addPoints(panZoom.offset, [
-        this.element.width / 2,
-        this.element.height / 2,
-      ]),
+      offset: addPoints(panZoom.offset, {
+        x: this.element.width / 2,
+        y: this.element.height / 2,
+      }),
     });
     const scaleOffset = diffPoints(mouseOffset, newMousePos);
     const offset = addPoints(panZoom.offset, scaleOffset);
@@ -162,14 +162,17 @@ export class Canvas {
       }
       const mouseOffset = { x: e.offsetX, y: e.offsetY };
       const newOffset = this.returnScrollOffsetFromMouseOffset(
-        [mouseOffset.x, mouseOffset.y],
+        { x: mouseOffset.x, y: mouseOffset.y },
         this.panZoom,
         newScale,
       );
 
       this.setPanZoom({ scale: newScale, offset: newOffset });
     } else {
-      const offset = diffPoints(this.panZoom.offset, [e.deltaX, e.deltaY]);
+      const offset = diffPoints(this.panZoom.offset, {
+        x: e.deltaX,
+        y: e.deltaY,
+      });
       this.setPanZoom({ offset });
     }
   };
@@ -187,10 +190,10 @@ export class Canvas {
         Math.abs(firstTouch.clientY - secondTouch.clientY);
       const firstTouchPoint = this.getPointFromTouch(firstTouch);
       const secondTouchPoint = this.getPointFromTouch(secondTouch);
-      const touchCenterPos = [
-        (firstTouchPoint.offsetX + secondTouchPoint.offsetX) / 2,
-        (firstTouchPoint.offsetY + secondTouchPoint.offsetY) / 2,
-      ] as Coord;
+      const touchCenterPos = {
+        x: (firstTouchPoint.offsetX + secondTouchPoint.offsetX) / 2,
+        y: (firstTouchPoint.offsetY + secondTouchPoint.offsetY) / 2,
+      } as Coord;
 
       const deltaX = this.pinchZoomPrevDiff - pinchZoomCurrentDiff;
       const zoom = 1 - (deltaX * 2) / this.ZOOM_SENSITIVITY;
@@ -242,7 +245,7 @@ export class Canvas {
     this.currentUserNode = new UserNode(
       "",
       currentUser.lastname + currentUser.firstname,
-      [0, 0],
+      { x: 0, y: 0 },
     );
   }
 
@@ -283,8 +286,8 @@ export class Canvas {
     );
     this.ctx.beginPath();
     this.ctx.arc(
-      screenPosition[0],
-      screenPosition[1],
+      screenPosition.x,
+      screenPosition.y,
       userNode.radius * this.panZoom.scale,
       0,
       2 * Math.PI,

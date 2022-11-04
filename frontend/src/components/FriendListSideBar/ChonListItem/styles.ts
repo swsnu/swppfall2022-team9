@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { themeBgColor } from "../common.styles";
 
-export const Container = styled.div<{ spacing: boolean; indent: boolean }>`
+export const Container = styled.div<{ indent: boolean }>`
   min-width: 250px;
   background-color: ${themeBgColor};
   display: flex;
@@ -10,7 +10,20 @@ export const Container = styled.div<{ spacing: boolean; indent: boolean }>`
   padding-top: 5px;
   padding-bottom: 3px;
   padding-right: 5px;
-  justify-content: ${props => (props.spacing ? "space-between" : "flex-start")};
+  justify-content: "space-between";
+`;
+
+export const UserRowContainer = styled.div`
+  min-width: 250px;
+  background-color: ${themeBgColor};
+  display: flex;
+  align-items: center;
+  padding-left: "10px";
+  padding-top: 5px;
+  padding-bottom: 3px;
+  padding-right: 5px;
+  padding-left: 10px;
+  justify-content: "flex-start";
 `;
 
 export const OneChonNode = styled.div<{ url: string }>`
