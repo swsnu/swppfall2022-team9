@@ -13,6 +13,7 @@ import { FriendRequestStatus } from "server/models/friendRequests.model";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wrapperRef = useRef<any>(null);
   const [isFriendRequestBarOpen, setIsFriendRequestBarOpen] =
     useState<boolean>(false);
@@ -91,6 +92,7 @@ const Navbar: React.FC<Props> = () => {
         </S.NavButtons>
         <S.NavButtons ref={wrapperRef} onClick={onClickBell}>
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
+          {friendRequests.length > 0 && <S.NavbarButtonRedMark />}
           {isFriendRequestBarOpen && (
             <S.NotificationListPopupContainer
               onClick={e => {

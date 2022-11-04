@@ -106,3 +106,13 @@ export const Accept = styled(FriendRequestActionButton)`
 export const Decline = styled(FriendRequestActionButton)`
   opacity: 0.5;
 `;
+
+export const NavbarButtonRedMark = styled.div`
+  position: absolute;
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 0;
+  right: 5px;
+`;
