@@ -29,7 +29,7 @@ HOMEPAGE_URL = settings.HOMEPAGE_URL
 EMAIL_HOST_USER = settings.EMAIL_HOST_USER
 
 
-def send_register_email(request, recipient, title, message):
+def send_register_email(recipient, title, message):
     context = {
         "subject": title,
         "message": message,
@@ -61,7 +61,6 @@ def send_email(request):
         return HttpResponseBadRequest(e) # implicit status code = 400
     if mode == "register":
         send_register_email(
-            request,
             recipient=recipient,
             title="이메일 인증",
             message="회원가입을 하려면 이메일 인증을 진행해주세요"
@@ -111,9 +110,10 @@ def signup(request):
         emailValidated=False
     )
     # Send register email to username
+    # pylint: disable=invalid-name
     S = requests.Session()
     S.get(os.path.join(HOMEPAGE_URL, "api/token/"))
-    token = S.cookies["csrftoken"]
+    csrftoken = S.cookies["csrftoken"]
     send_email_dict = {
         "mode": "register",
         "recipient": username
@@ -121,7 +121,7 @@ def signup(request):
     S.post(
         os.path.join(HOMEPAGE_URL, "api/auth/send_email/"),
         json.dumps(send_email_dict),
-        headers={"X-CSRFToken": token}
+        headers={"X-CSRFToken": csrftoken}
     )
     return HttpResponse(status=201)
 

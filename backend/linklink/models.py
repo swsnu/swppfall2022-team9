@@ -86,7 +86,13 @@ class Verification(models.Model):
     )
 
     def __str__(self):
-        return "_".join([self.linklinkuser.user.username, self.purpose, str(self.token)])
+        return "_".join(
+            [
+                self.linklinkuser.user.username,
+                self.purpose,
+                str(self.token)
+            ]
+        )
 
 
 #--------------------------------------------------------------------------
