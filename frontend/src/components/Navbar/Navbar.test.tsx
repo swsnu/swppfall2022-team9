@@ -81,8 +81,8 @@ describe("<Navbar/>", () => {
         status: FriendRequestStatus.PENDING,
         senderImgUrl: "test",
         senderName: "test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       },
     ]);
     const notificationButton = screen.getByRole("notification");
