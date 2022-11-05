@@ -26,11 +26,11 @@ class LinkLinkUser(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    imgUrl = models.CharField(max_length=200, default="https://catimage.com")
+    imgUrl = models.CharField(max_length=400, default="https://catimage.com")
     emailValidated = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.first_name + self.user.last_name}"
+        return f"{self.user.last_name + self.user.first_name}"
 
 
 class FriendRequest(models.Model):
