@@ -128,3 +128,40 @@ class LinkLinkTestCase(TestCase):
             json.loads(response.content.decode()),
             expected_json
         )
+
+
+#--------------------------------------------------------------------------
+#   405 Checking Tests
+#--------------------------------------------------------------------------
+    def test_405_onechon(self):
+        client = Client(enforce_csrf_checks=True)
+        target_url = "/api/user/onechon/"
+        # Get csrf token from cookie
+        csrftoken = client.get('/api/token/').cookies['csrftoken'].value
+        # PUT
+        response = client.put(
+            target_url,
+            {},
+            content_type='application/json',
+            HTTP_X_CSRFTOKEN=csrftoken
+        )
+        self.assertEqual(response.status_code, 405)  # Method not allowed
+        # Other Random Request Method
+        client.patch(
+            target_url,
+            {},
+            content_type='application/json',
+            HTTP_X_CSRFTOKEN=csrftoken
+        )
+        self.assertEqual(response.status_code, 405)  # Method not allowed
+
+
+#--------------------------------------------------------------------------
+#   401 Checking Tests
+#--------------------------------------------------------------------------
+    def test_401_onechon(self):
+        client = Client(enforce_csrf_checks=True)
+        target_url = "/api/user/onechon/"
+        # GET
+        response = client.get(target_url)
+        self.assertEqual(response.status_code, 401)  # Unauthorized
