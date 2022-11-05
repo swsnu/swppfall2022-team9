@@ -13,14 +13,16 @@ from django.core.mail import send_mail
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
-    HttpResponseNotAllowed
+    HttpResponseNotAllowed,
+    JsonResponse
 )
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import ensure_csrf_cookie
 import requests
 
 from .decorators import allowed_method_or_405, logged_in_or_401
-from .models import LinkLinkUser
+from .models import LinkLinkUser, FriendRequest
 
 
 HOMEPAGE_URL = settings.HOMEPAGE_URL
@@ -87,7 +89,7 @@ def token(request):
 @allowed_method_or_405(["POST"])
 def signup(request):
     """
-    When user enters username, password, nickname and requests signup,
+    When user enters username, password and requests signup,
     1. django's User object is created
     2. LinkLinkUser object is created, with emailValidated=False
     3. Send register email to username
@@ -96,7 +98,6 @@ def signup(request):
         req_data = json.loads(request.body.decode())
         username = req_data["username"]
         password = req_data["password"]
-        nickname = req_data["nickname"]
     except (KeyError, JSONDecodeError) as e:
         return HttpResponseBadRequest(e) # implicit status code = 400
     # Create django"s user
@@ -107,7 +108,6 @@ def signup(request):
     # Create LinkLinkUser with emailValidated=False
     LinkLinkUser.objects.create(
         user=user,
-        nickname=nickname,
         emailValidated=False
     )
     # Send register email to username
@@ -149,11 +149,80 @@ def signout(request):
     return HttpResponse(status=204)
 
 
+def get_onechon_linklinkuser_list(
+    queryset,
+    linklinkuser,
+    exclude_linklinkuser=None):
+    """
+    Helper function to get all onechon of given linklinkuser
+
+    Args:
+    queryset: queryset of FriendRequest
+    linklinkuser: LinkLinkUser for search
+    exclude_linklinkuser: LinkLinkUser to exclude from final result
+    Return:
+    List[LinkLinkUser]
+    """
+    accepted_friend_requests = queryset.filter(
+        Q(senderId=linklinkuser) | Q(getterId=linklinkuser)
+    )
+    onechon_list = []
+    for accepted_friend_request in accepted_friend_requests:
+        onechon_list.append(accepted_friend_request.senderId)
+        onechon_list.append(accepted_friend_request.getterId)
+    # remove duplicates
+    onechon_list = set(onechon_list)
+    onechon_list.remove(linklinkuser)
+    # exclude exclude_linklinkuser
+    if not exclude_linklinkuser is None:
+        onechon_list.remove(exclude_linklinkuser)
+    return list(onechon_list)
+
+
 @allowed_method_or_405(["GET", "POST", "DELETE"])
 @logged_in_or_401
 def onechon(request):
     if request.method == "GET":
-        pass
+        # Get all Accepted FriendRequest
+        all_accepted_friend_requests = FriendRequest.objects.filter(
+            status="Accepted"
+        )
+        # Get onechon of current user
+        onechon_list = get_onechon_linklinkuser_list(
+            all_accepted_friend_requests,
+            request.user.linklinkuser
+        )
+        response_dict = {"onechon": []} # Nested dict
+        for onechon_linklinkuser in onechon_list:
+            # Construct onechon_dict
+            onechon_dict = {}
+            onechon_dict["id"] = onechon_linklinkuser.user.id
+            onechon_dict["firstname"] = onechon_linklinkuser.user.first_name
+            onechon_dict["lastname"] = onechon_linklinkuser.user.last_name
+            onechon_dict["imgUrl"] = onechon_linklinkuser.imgUrl
+            onechon_dict["chons"] = []
+            twochon_list = get_onechon_linklinkuser_list(
+                all_accepted_friend_requests,
+                onechon_linklinkuser,
+                exclude_linklinkuser=request.user.linklinkuser
+            )
+            for twochon_linklinkuser in twochon_list:
+                # for linklinkuser who is both onechon AND twochon,
+                # count the user as onechon!
+                if not twochon_linklinkuser in onechon_list:
+                    # Construct twochon_dict
+                    twochon_dict = {}
+                    twochon_dict["id"] = twochon_linklinkuser.user.id
+                    twochon_dict["firstname"] = \
+                        twochon_linklinkuser.user.first_name
+                    twochon_dict["lastname"] = \
+                        twochon_linklinkuser.user.last_name
+                    twochon_dict["imgUrl"] = twochon_linklinkuser.imgUrl
+                    # Append constructed twochon_dict
+                    onechon_dict["chons"].append(twochon_dict)
+            # Append constructed onechon_dict
+            response_dict["onechon"].append(onechon_dict)
+        return JsonResponse(response_dict) # implicit status code = 200
     elif request.method == "POST":
         pass
     elif request.method == "DELETE":
