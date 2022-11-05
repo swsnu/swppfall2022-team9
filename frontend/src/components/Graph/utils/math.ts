@@ -68,7 +68,7 @@ export const getOneAndTwoChonCoordinates = (
       const x2Coord = xCoord + edge * Math.cos(degToRad(angle));
       const y2Coord = yCoord + edge * Math.sin(degToRad(angle));
       const coord: TwoChonUserCoord = {
-        userCoord: { x: x2Coord, y: y2Coord },
+        userCoord: { x: Math.floor(x2Coord), y: Math.floor(y2Coord) },
       };
       curUserCoord.twoChonCoords.push(coord);
     } else {
@@ -110,7 +110,7 @@ export const getOneAndTwoChonCoordinates = (
           yCoord +
           edge * Math.sin(degToRad(angle - budgetTemp / 2 + (j + 0.5) * theta));
         const coord: TwoChonUserCoord = {
-          userCoord: { x: x2Coord, y: y2Coord },
+          userCoord: { x: Math.floor(x2Coord), y: Math.floor(y2Coord) },
         };
         curUserCoord.twoChonCoords.push(coord);
       }
@@ -123,10 +123,11 @@ export const getOneAndTwoChonCoordinates = (
 export const convertCartesianToScreen = (
   canvas: HTMLCanvasElement,
   cartesianCoord: Coord,
+  dpr: number,
 ): Coord => {
   const screenPoint = {
-    x: cartesianCoord.x + canvas.width / 2,
-    y: cartesianCoord.y + canvas.height / 2,
+    x: Math.floor(cartesianCoord.x + canvas.width / dpr / 2),
+    y: Math.floor(cartesianCoord.y + canvas.height / dpr / 2),
   } as Coord;
   return screenPoint;
 };
@@ -148,7 +149,10 @@ export function addPoints(p1: Coord, p2: Coord): Coord {
 export function getScreenPoint(point: Coord, panZoom: PanZoom): Coord {
   const { offset, scale } = panZoom;
 
-  return { x: point.x * scale + offset.x, y: point.y * scale + offset.y };
+  return {
+    x: Math.floor(point.x * scale + offset.x),
+    y: Math.floor(point.y * scale + offset.y),
+  };
 }
 
 /**
@@ -162,3 +166,21 @@ export function getWorldPoint(point: Coord, panZoom: PanZoom): Coord {
 
   return { x: (point.x - offset.x) / scale, y: (point.y - offset.y) / scale };
 }
+
+export const getEdgeCoords = (coordA: Coord, coordB: Coord, radius: number) => {
+  const delX = coordB.x - coordA.x;
+  const delY = coordB.y - coordA.y;
+  let theta = Math.atan(delY / delX);
+  if (delX < 0) {
+    theta += Math.PI;
+  }
+  const edgeA = {
+    x: Math.floor(coordA.x + radius * Math.cos(theta)),
+    y: Math.floor(coordA.y + radius * Math.sin(theta)),
+  };
+  const edgeB = {
+    x: Math.floor(coordB.x + radius * Math.cos(theta + Math.PI)),
+    y: Math.floor(coordB.y + radius * Math.sin(theta + Math.PI)),
+  };
+  return [edgeA, edgeB];
+};

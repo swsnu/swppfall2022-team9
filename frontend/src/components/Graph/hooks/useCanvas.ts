@@ -26,8 +26,10 @@ function useCanvas({ divRef, canvasRef }: Params) {
   useEffect(() => {
     const onResize = () => {
       if (divRef.current && canvas) {
+        const dpr = window.devicePixelRatio;
         const rect = divRef.current.getBoundingClientRect();
-        canvas.setSize(rect.width, rect.height);
+        canvas.setSize(rect.width, rect.height, dpr);
+        canvas.scale(dpr, dpr);
         canvas.render();
       }
     };
