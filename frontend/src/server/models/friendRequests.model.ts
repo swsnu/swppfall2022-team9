@@ -11,6 +11,6 @@ export type FriendRequest = {
   senderId: number;
   getterId: number;
   status: FriendRequestStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };

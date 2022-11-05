@@ -60,7 +60,6 @@ export const putFriendRequest = createAsyncThunk<
     `/api/friendRequest/${id}/`,
     data,
   );
-  console.log(response);
   return response.data;
 });
 
