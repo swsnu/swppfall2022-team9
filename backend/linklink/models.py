@@ -22,11 +22,11 @@ class LinkLinkUser(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    oneChon = models.ManyToManyField("FriendRequest", blank=True)
     friendRequestToken = models.UUIDField(
         default=uuid.uuid4,
         editable=False
     )
+    imageUrl = models.CharField(max_length=200, default="https://catimage.com")
     emailValidated = models.BooleanField(default=False)
 
     def __str__(self):
@@ -130,7 +130,6 @@ class Profile(models.Model):
     user = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
     skillTags = models.ManyToManyField(SkillTag)
     qualityTags = models.ManyToManyField(QualityTag)
-    imageUrl = models.CharField(max_length=200)
     introduction = models.TextField()
     website = models.CharField(max_length=100, blank=True)
     GENDERS = [
