@@ -137,12 +137,12 @@ class LinkLinkTestCase(TestCase):
         client = Client(enforce_csrf_checks=True)
         target_url = "/api/user/onechon/"
         # Get csrf token from cookie
-        csrftoken = client.get('/api/token/').cookies['csrftoken'].value
+        csrftoken = client.get("/api/token/").cookies["csrftoken"].value
         # PUT
         response = client.put(
             target_url,
             {},
-            content_type='application/json',
+            content_type="application/json",
             HTTP_X_CSRFTOKEN=csrftoken
         )
         self.assertEqual(response.status_code, 405)  # Method not allowed
@@ -150,7 +150,7 @@ class LinkLinkTestCase(TestCase):
         client.patch(
             target_url,
             {},
-            content_type='application/json',
+            content_type="application/json",
             HTTP_X_CSRFTOKEN=csrftoken
         )
         self.assertEqual(response.status_code, 405)  # Method not allowed
