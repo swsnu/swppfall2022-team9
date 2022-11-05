@@ -174,7 +174,7 @@ def get_onechon_linklinkuser_list(
     onechon_list = set(onechon_list)
     onechon_list.remove(linklinkuser)
     # exclude exclude_linklinkuser
-    if not exclude_linklinkuser is None:
+    if exclude_linklinkuser is not None:
         onechon_list.remove(exclude_linklinkuser)
     return list(onechon_list)
 
@@ -209,7 +209,7 @@ def onechon(request):
             for twochon_linklinkuser in twochon_list:
                 # for linklinkuser who is both onechon AND twochon,
                 # count the user as onechon!
-                if not twochon_linklinkuser in onechon_list:
+                if twochon_linklinkuser not in onechon_list:
                     # Construct twochon_dict
                     twochon_dict = {}
                     twochon_dict["id"] = twochon_linklinkuser.user.id
