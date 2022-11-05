@@ -5,7 +5,6 @@ import {
   PostFriendRequestResDto,
   PutFriendRequestResDto,
 } from "../dto/friendRequests/friendRequests.res.dto";
-import { friendRequestsStub } from "../stubs/friendRequests.stub";
 import {
   FriendRequest,
   FriendRequestStatus,
@@ -62,8 +61,8 @@ export default function applyFriendRequestApi(
         ...req.body,
         id: friendRequests.length,
         status: FriendRequestStatus.PENDING,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       db.get("friendRequests").push(newFriendRequest).write();
 
