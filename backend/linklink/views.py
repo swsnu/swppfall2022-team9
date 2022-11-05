@@ -182,7 +182,7 @@ def get_onechon_linklinkuser_list(
 @allowed_method_or_405(["GET", "POST", "DELETE"])
 @logged_in_or_401
 def onechon(request):
-    if request.method == "GET":
+    if request.method == "GET": # pragma: no branch
         # Get all Accepted FriendRequest
         all_accepted_friend_requests = FriendRequest.objects.filter(
             status="Accepted"
@@ -223,8 +223,8 @@ def onechon(request):
             # Append constructed onechon_dict
             response_dict["onechon"].append(onechon_dict)
         return JsonResponse(response_dict) # implicit status code = 200
-    elif request.method == "POST":
-        pass
-    elif request.method == "DELETE":
-        pass
+    # elif request.method == "POST":
+    #     pass
+    # elif request.method == "DELETE":
+    #     pass
     
