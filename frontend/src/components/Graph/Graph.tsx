@@ -11,12 +11,16 @@ const Graph: React.FC<Props> = () => {
   const divRef = useRef<HTMLDivElement>(null);
   const canvas = useCanvas({ divRef: divRef, canvasRef: canvasRef });
   const currentUser = useAppSelector(state => state.users.currentUser);
+  const chonList = useAppSelector(state => state.users.chonList);
   useEffect(() => {
     if (currentUser && canvas) {
       canvas.setCurrentUserNode(currentUser);
+      if (chonList) {
+        canvas.setOneChonNodes(chonList);
+      }
       canvas.render();
     }
-  }, [currentUser, canvas]);
+  }, [currentUser, chonList, canvas]);
 
   return (
     <S.CanvasContainer ref={divRef}>
