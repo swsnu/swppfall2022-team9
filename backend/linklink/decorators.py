@@ -23,8 +23,8 @@ def allowed_method_or_405(allowed_methods):
         def wrapper(request, *args, **kwargs):
             if request.method in allowed_methods:
                 val = func(request, *args, **kwargs)
-            else:
-                val = HttpResponseNotAllowed(allowed_methods) # not allowed method
+            else: # not allowed method
+                val = HttpResponseNotAllowed(allowed_methods)
             return val
         return wrapper
     return allowed_method_decorator
