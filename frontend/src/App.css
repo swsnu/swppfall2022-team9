@@ -7,7 +7,6 @@
 }
 
 * {
-  user-select: none;
   -webkit-user-select: none !important;
   user-select: none !important;
   -webkit-user-callout: none !important;
