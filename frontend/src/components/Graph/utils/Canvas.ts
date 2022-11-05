@@ -1,14 +1,17 @@
 import { User } from "server/models/users.model";
 import { Coord, PanZoom } from "types/canvas.types";
-import { UserNode } from "components/Graph/utils/node";
+import { OneChonNode, UserNode } from "components/Graph/utils/node";
 import {
   addPoints,
   convertCartesianToScreen,
   diffPoints,
+  getEdgeCoords,
+  getOneAndTwoChonCoordinates,
   getScreenPoint,
   getWorldPoint,
 } from "./math";
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
+import { OneChonInfo } from "types/chon.types";
 export class Canvas {
   private MAX_SCALE = 2;
 
@@ -33,9 +36,13 @@ export class Canvas {
 
   private height = 0;
 
+  private dpr = 1;
+
   private ctx: CanvasRenderingContext2D;
 
   private currentUserNode?: UserNode;
+
+  private chonNodes?: OneChonNode[];
 
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
@@ -131,18 +138,22 @@ export class Canvas {
     panZoom: PanZoom,
     newScale: number,
   ) => {
+    const diffPointsOfMouseOffset = diffPoints(mouseOffset, {
+      x: this.element.width / this.dpr / 2,
+      y: this.element.height / this.dpr / 2,
+    });
     const worldPos = getWorldPoint(
-      diffPoints(mouseOffset, {
-        x: this.element.width / 2,
-        y: this.element.height / 2,
-      }),
-      panZoom,
+      {
+        x: diffPointsOfMouseOffset.x,
+        y: diffPointsOfMouseOffset.y,
+      },
+      this.panZoom,
     );
     const newMousePos = getScreenPoint(worldPos, {
       scale: newScale,
       offset: addPoints(panZoom.offset, {
-        x: this.element.width / 2,
-        y: this.element.height / 2,
+        x: this.element.width / this.dpr / 2,
+        y: this.element.height / this.dpr / 2,
       }),
     });
     const scaleOffset = diffPoints(mouseOffset, newMousePos);
@@ -241,18 +252,50 @@ export class Canvas {
   }
 
   setCurrentUserNode(currentUser: User) {
-    // TODO: For now we set the imgUrl to empty string
     this.currentUserNode = new UserNode(
-      "",
+      "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c499ea3069fedffaf4335d4b2ce62a4672325d33aa82e1ead5d1737b75cebfb13139",
       currentUser.lastname + currentUser.firstname,
       { x: 0, y: 0 },
     );
+    this.currentUserNode.imgElement.onload = () => {
+      this.render();
+    };
   }
 
-  setWidth(width: number, devicePixelRatio?: number) {
-    this.width = width;
-    this.element.width = devicePixelRatio ? width * devicePixelRatio : width;
-    this.element.style.width = `${width}px`;
+  setOneChonNodes(chonList: OneChonInfo[]) {
+    const oneChonCount = chonList.length;
+    const twoChonCount = chonList.map(oneChon => oneChon.chons.length);
+    const radius = 30;
+    const coords = getOneAndTwoChonCoordinates(
+      oneChonCount,
+      twoChonCount,
+      radius,
+    );
+
+    this.chonNodes = chonList.map((oneChon, oneChonIdx) => {
+      const twoChonNodes = oneChon.chons.map((twoChon, twoChonIdx) => {
+        const twoChonNode = new UserNode(
+          twoChon.imgUrl,
+          twoChon.lastname + twoChon.firstname,
+          coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
+        );
+        twoChonNode.imgElement.onload = () => {
+          this.render();
+        };
+        return twoChonNode;
+      });
+
+      const oneChonNode = new OneChonNode(
+        oneChon.imgUrl,
+        oneChon.lastname + oneChon.firstname,
+        coords[oneChonIdx].userCoord,
+        twoChonNodes,
+      );
+      oneChonNode.imgElement.onload = () => {
+        this.render();
+      };
+      return oneChonNode;
+    });
   }
 
   getWidth() {
@@ -261,6 +304,12 @@ export class Canvas {
 
   getHeight() {
     return this.height;
+  }
+
+  setWidth(width: number, devicePixelRatio?: number) {
+    this.width = width;
+    this.element.width = devicePixelRatio ? width * devicePixelRatio : width;
+    this.element.style.width = `${width}px`;
   }
 
   setHeight(height: number, devicePixelRatio?: number) {
@@ -272,46 +321,104 @@ export class Canvas {
   setSize(width: number, height: number, devicePixelRatio?: number) {
     this.setWidth(width, devicePixelRatio);
     this.setHeight(height, devicePixelRatio);
+    this.dpr = devicePixelRatio ? devicePixelRatio : this.dpr;
   }
 
-  // this is the drawing method of a user node(currentUser, 1-chon, 2-chon)
-  // you are free to change this part
-  // TODO: draw img url in the circle (clipped)
+  scale(x: number, y: number) {
+    this.ctx.scale(x, y);
+  }
+
+  drawGraph() {
+    if (this.currentUserNode) {
+      this.drawUserNode(this.currentUserNode);
+      this.chonNodes?.forEach(oneChonNode => {
+        const [edgeFromCurrentUser, edgeToOneChon] = getEdgeCoords(
+          this.currentUserNode!.coord,
+          oneChonNode.coord,
+          oneChonNode.radius,
+        );
+        this.drawUserNode(oneChonNode);
+        this.drawEdge(edgeFromCurrentUser, edgeToOneChon, 1); // Edge from current user to 1-chon
+        oneChonNode.twoChonNodes?.forEach(twoChonNode => {
+          const [edgeFromOneChon, edgeToTwoChon] = getEdgeCoords(
+            oneChonNode.coord,
+            twoChonNode.coord,
+            oneChonNode.radius,
+          );
+          this.drawUserNode(twoChonNode);
+          this.drawEdge(edgeFromOneChon, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+        });
+      });
+    }
+  }
+
   drawUserNode(userNode: UserNode) {
-    this.ctx.save();
+    const ctx = this.ctx;
+    const scaledRadius = userNode.radius * this.panZoom.scale;
     const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
     const screenPosition = convertCartesianToScreen(
       this.element,
       correctedPosition,
+      this.dpr,
     );
-    this.ctx.beginPath();
-    this.ctx.arc(
-      screenPosition.x,
-      screenPosition.y,
-      userNode.radius * this.panZoom.scale,
-      0,
-      2 * Math.PI,
-      false,
+    const centerX = screenPosition.x;
+    const centerY = screenPosition.y;
+
+    // User node clipped in circle
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.closePath();
+    ctx.drawImage(
+      userNode.imgElement,
+      centerX - scaledRadius,
+      centerY - scaledRadius,
+      scaledRadius * 2,
+      scaledRadius * 2,
     );
-    this.ctx.fillStyle = "white";
-    this.ctx.fill();
-    this.ctx.lineWidth = 5 * this.panZoom.scale;
-    this.ctx.strokeStyle = "black";
-    this.ctx.stroke();
-    this.ctx.closePath();
-    this.ctx.restore();
+
+    // Round border
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, scaledRadius * 0.95, 0, Math.PI * 2);
+    ctx.fill("evenodd");
+    ctx.closePath();
+    ctx.restore();
   }
 
-  drawNodes() {
-    if (this.currentUserNode) {
-      this.drawUserNode(this.currentUserNode);
+  drawEdge(edgeA: Coord, edgeB: Coord, chon: number) {
+    const ctx = this.ctx;
+    const correctedEdgeA = getScreenPoint(edgeA, this.panZoom);
+    const screenEdgeA = convertCartesianToScreen(
+      this.element,
+      correctedEdgeA,
+      this.dpr,
+    );
+    const correctedEdgeB = getScreenPoint(edgeB, this.panZoom);
+    const screenEdgeB = convertCartesianToScreen(
+      this.element,
+      correctedEdgeB,
+      this.dpr,
+    );
+
+    ctx.save();
+    ctx.lineWidth = 2;
+    if (chon == 2) {
+      // Dashline from 1-chons to 2-chons
+      ctx.setLineDash([4, 2]);
     }
+    ctx.beginPath();
+    ctx.moveTo(screenEdgeA.x, screenEdgeA.y);
+    ctx.lineTo(screenEdgeB.x, screenEdgeB.y);
+    ctx.stroke();
+    ctx.closePath();
+    ctx.restore();
   }
 
   render() {
     this.clear();
-
-    this.drawNodes();
+    this.drawGraph();
   }
 
   clear() {
