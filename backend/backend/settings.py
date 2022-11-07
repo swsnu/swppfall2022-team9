@@ -137,3 +137,6 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 # Homepage Base Url
 HOMEPAGE_URL = "http://127.0.0.1:8000/"
+
+# Email Verification Expire Days
+EMAIL_EXPIRE_DAYS = 1
