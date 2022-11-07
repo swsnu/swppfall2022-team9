@@ -1,9 +1,8 @@
-import { themeBgColor } from "components/FriendListSideBar/common.styles";
 import styled from "styled-components";
-import { ThemeColor } from "styles/common.styles";
+import { CommonGreyColor, ThemeColor } from "styles/common.styles";
 
 export const Container = styled.div`
-  background-color: ${themeBgColor};
+  background-color: ${CommonGreyColor};
   flex: 1 0;
   height: 100%;
   min-height: 100vh;
