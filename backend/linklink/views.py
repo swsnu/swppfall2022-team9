@@ -108,7 +108,8 @@ def get_onechon_linklinkuser_list(
         onechon_list.append(accepted_friend_request.getterId)
     # remove duplicates
     onechon_list = set(onechon_list)
-    onechon_list.remove(linklinkuser)
+    if onechon_list:
+        onechon_list.remove(linklinkuser)
     # exclude exclude_linklinkuser
     if exclude_linklinkuser is not None:
         onechon_list.remove(exclude_linklinkuser)
