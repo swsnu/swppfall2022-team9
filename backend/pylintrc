@@ -21,6 +21,7 @@ ignore-patterns=manage.py,
                 0005_remove_linklinkuser_onechon_remove_profile_imageurl_and_more.py,
                 0006_rename_imageurl_linklinkuser_imgurl.py,
                 0007_alter_linklinkuser_imgurl.py,
+                0008_alter_verification_linklinkuser.py,
 
 # Pickle collected data for later comparisons.
 persistent=no

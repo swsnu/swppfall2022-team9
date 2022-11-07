@@ -68,7 +68,7 @@ class Verification(models.Model):
     """
     Verification model class
     """
-    linklinkuser = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
+    linklinkuser = models.ForeignKey(LinkLinkUser, on_delete=models.CASCADE)
     token = models.UUIDField(
         default=uuid.uuid4,
         editable=False
