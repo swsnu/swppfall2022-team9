@@ -1,7 +1,7 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "test-utils/mocks";
-import LoginModal from "./LoginModal";
+import LoginModal, { LoginModalMessage } from "./LoginModal";
 import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import SignUpPage from "containers/SignUpPage/SignUpPage";
 
@@ -28,6 +28,8 @@ const renderLoginModal = (alertProviderProps?: AlertContextProps) => {
       <Routes>
         <Route path="/" element={<LoginModal />} />
         <Route path="/signup" element={<SignUpPage />} />
+        {/* TODO: the below should be changed to find account page */}
+        <Route path="/account/find" element={<SignUpPage />} />
       </Routes>
     </MemoryRouter>,
     {
@@ -41,6 +43,8 @@ describe("<LoginModal/>", () => {
   let alertProviderProps: AlertContextProps;
   beforeEach(() => {
     jest.clearAllMocks();
+    // DESC: I have left this here so that
+    // other developers can see how to mock a simple alert context
     alertProviderProps = {
       open: jest.fn(),
       close: jest.fn(),
@@ -54,24 +58,38 @@ describe("<LoginModal/>", () => {
     expect(mockNavigate).toHaveBeenCalled();
   });
 
-  it("click login error", async () => {
+  it("click find account", async () => {
     renderLoginModal(alertProviderProps);
-    mockDispatch.mockReturnValue(Promise.reject(new Error("error")));
-    const emailInput = screen.getByPlaceholderText("이메일");
-    const passwordInput = screen.getByPlaceholderText("비밀번호");
-    fireEvent.change(emailInput, { target: { value: "swpp@snu.ac.kr" } });
+    const findAccountButton = screen.getByRole("button", {
+      name: /비밀번호 찾기/i,
+    });
+    fireEvent.click(findAccountButton);
+    expect(mockNavigate).toHaveBeenCalled();
+  });
+
+  it("click login error", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => Promise.reject({}),
+    });
+    renderLoginModal(alertProviderProps);
+    const usernameInput = screen.getByRole("username");
+    const passwordInput = screen.getByRole("password");
+    fireEvent.change(usernameInput, { target: { value: "swpp@snu.ac.kr" } });
     fireEvent.change(passwordInput, { target: { value: "iluvswpp" } });
     const loginButton = screen.getByRole("button", { name: /로그인하기/i });
     fireEvent.click(loginButton);
     //we do wait for since we have used usecallback
-    waitFor(() => expect(alertProviderProps.open).toHaveBeenCalled());
+    waitFor(() => screen.getByText(LoginModalMessage.LOGIN_FAIL));
   });
 
   it("click login success", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => Promise.resolve({}),
+    });
     renderLoginModal(alertProviderProps);
-    const emailInput = screen.getByPlaceholderText("이메일");
-    const passwordInput = screen.getByPlaceholderText("비밀번호");
-    fireEvent.change(emailInput, { target: { value: "swpp@snu.ac.kr" } });
+    const usernameInput = screen.getByRole("username");
+    const passwordInput = screen.getByRole("password");
+    fireEvent.change(usernameInput, { target: { value: "swpp@snu.ac.kr" } });
     fireEvent.change(passwordInput, { target: { value: "iluvswpp" } });
     const loginButton = screen.getByRole("button", { name: /로그인하기/i });
     fireEvent.click(loginButton);
