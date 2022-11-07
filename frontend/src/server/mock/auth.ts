@@ -1,6 +1,10 @@
 // IMPORTANT: everything related to dto, models, stubs should be relative imports
 import { PostSignInDto, PostSignUpDto } from "../dto/users/users.dto";
-import { PostSignInResDto, PostSignUpResDto } from "../dto/users/users.res.dto";
+import {
+  GetVerifyRegisterTokenResDto,
+  PostSignInResDto,
+  PostSignUpResDto,
+} from "../dto/users/users.res.dto";
 // IMPORTANT: everything related to dto, models, stubs should be relative imports
 
 import { Application } from "express";
@@ -36,6 +40,14 @@ export default function applyAuthApi(
         .write();
       const registeredUser = db.get("users").find({ id: users.length }).value();
       res.json(registeredUser);
+    },
+  );
+
+  server.get<unknown, GetVerifyRegisterTokenResDto>(
+    "/api/auth/verify/:token/",
+    async (req, res) => {
+      // success response is empty json
+      res.json({});
     },
   );
 }
