@@ -147,11 +147,11 @@ class LinkLinkTestCase(TestCase):
         new_user = User.objects.get(id=user_count+1)
         new_linklinkuser = LinkLinkUser.objects.get(id=linklinkuser_count+1)
         new_verification = Verification.objects.get(id=verification_count+1)
-        self.assertNotEquals(new_user.username, "")
+        self.assertNotEqual(new_user.username, "")
         # Check valid email form regex
         self.assertRegex(
             new_user.email,
-            "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+            r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
         )
         # Check new user emailValidated=False
         self.assertFalse(new_linklinkuser.emailValidated)
@@ -228,7 +228,7 @@ class LinkLinkTestCase(TestCase):
         # Check response
         self.assertEqual(response.status_code, 401)
         error_message_dict = {
-            "message": ("Account john exists, but is not validated. " 
+            "message": ("Account john exists, but is not validated. "
                 "A validation email has been "
                 "resent to notiona@snu.ac.kr.")
             }
@@ -242,7 +242,7 @@ class LinkLinkTestCase(TestCase):
             mail.outbox[0].subject,
             "이메일 인증"
         )
-    
+
 
     def test_signin_token_expired(self):
         target_url = "/api/auth/signin/"
@@ -266,7 +266,7 @@ class LinkLinkTestCase(TestCase):
         # Check response
         self.assertEqual(response.status_code, 401)
         error_message_dict = {
-            "message": ("Account john exists, but is not validated. " 
+            "message": ("Account john exists, but is not validated. "
                 "A validation email has been "
                 "resent to notiona@snu.ac.kr.")
             }
@@ -458,7 +458,7 @@ class LinkLinkTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 400)
-    
+
 
     def test_400_signin(self):
         target_url = "/api/auth/signin/"

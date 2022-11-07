@@ -254,7 +254,7 @@ def verify(request, token):
             return JsonResponse(
                 status=401, # Unauthorized
                 data={"message":"Token Expired"}
-            ) 
+            )
         else:
             verification_found.linklinkuser.emailValidated = True
             verification_found.linklinkuser.save()
