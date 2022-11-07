@@ -51,7 +51,7 @@ describe("<AuthWrapper/>", () => {
 
   it("navigates to login page when there is no current user", async () => {
     renderAuthWrapper(null, []);
-    screen.getByText(LoginModalMessage.NOT_AUTHENTICATED);
+    screen.getByText("로그인하기");
   });
 
   it("shows logout button as navbar when there is current user", async () => {

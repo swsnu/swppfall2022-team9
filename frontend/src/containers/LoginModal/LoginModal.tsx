@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useAlert from "hooks/useAlert";
 import WelcomeMessage from "assets/img/welcome-message.png";
 
-enum LoginModalMessage {
+export enum LoginModalMessage {
   NULL = "",
   SESSION_EXPIRED = "세션이 만료되었습니다. 다시 로그인해주세요.",
   LOGIN_FAIL = "아이디 또는 비밀번호가 올바르지 않습니다.",
@@ -72,6 +72,7 @@ const LoginModal: React.FC = () => {
               type="text"
               placeholder="아이디"
               name="username"
+              role="username"
               autoComplete="on"
               onChange={e => {
                 setLoginInfo(prev => ({ ...prev, username: e.target.value }));
@@ -83,6 +84,7 @@ const LoginModal: React.FC = () => {
             <S.Input
               type="password"
               name="password"
+              role="password"
               autoComplete="on"
               placeholder="비밀번호"
               onChange={e => {
@@ -93,7 +95,7 @@ const LoginModal: React.FC = () => {
               }}
             />
           </S.Label>
-          {loginMessage && <S.Message>{loginMessage}</S.Message>}
+          <S.Message>{loginMessage}</S.Message>
           <S.Submit type="submit" onSubmit={onSubmit}>
             로그인하기
           </S.Submit>
