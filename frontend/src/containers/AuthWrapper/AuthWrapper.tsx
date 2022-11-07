@@ -18,7 +18,7 @@ const AuthWrapper: React.FC<Props> = ({ children }) => {
     <>
       {!currentUser && (
         <Portal>
-          <LoginModal message={LoginModalMessage.NOT_AUTHENTICATED} />
+          <LoginModal />
         </Portal>
       )}
       {children}
