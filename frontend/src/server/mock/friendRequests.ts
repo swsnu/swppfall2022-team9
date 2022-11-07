@@ -80,7 +80,6 @@ export default function applyFriendRequestApi(
       .get("friendRequests")
       .find({ id: Number(req.params.friendRequestId) })
       .value();
-    console.log(friendRequest);
     if (!friendRequest) {
       return res.status(404);
     }

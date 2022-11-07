@@ -32,7 +32,6 @@ const LoginModal: React.FC<Props> = ({ message }) => {
         );
       } catch (err) {
         alert.open({ message: "로그인 정보가 잘못되었습니다!" });
-        console.log(err);
       }
     },
     [alert, loginInfo],
