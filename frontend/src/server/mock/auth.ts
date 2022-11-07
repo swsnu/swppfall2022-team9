@@ -13,7 +13,7 @@ export default function applyAuthApi(
   db: low.LowdbSync<Schema>,
 ) {
   server.post<unknown, PostSignInResDto, PostSignInDto>(
-    "/api/login/",
+    "/api/auth/signin/",
     async (req, res) => {
       const body = req.body;
       const username = body.username;
@@ -27,7 +27,7 @@ export default function applyAuthApi(
   );
 
   server.post<unknown, PostSignUpResDto, PostSignUpDto>(
-    "/api/signup/",
+    "/api/auth/signup/",
     async (req, res) => {
       const users = db.get("users").value();
       await db
