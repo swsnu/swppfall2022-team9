@@ -4,7 +4,7 @@ import { useAppDispatch } from "store/hooks";
 import { verifyRegisterToken } from "store/slices/users";
 import * as S from "./styles";
 
-enum VerifyRegisterTokenMessage {
+export enum VerifyRegisterTokenMessage {
   LOADING = "잠시만 기다려주세요...",
   SUCCESS = "이메일 인증에 성공했습니다.",
   FAIL = "인증 코드가 올바르지 않거나 만료되었습니다. 로그인해서 인증 코드를 다시 받으세요.",
@@ -20,7 +20,7 @@ const VerifyRegisterPage = () => {
     VerifyRegisterTokenMessage.LOADING,
   );
 
-  const goToLogin = useCallback(() => {
+  const goToHomePage = useCallback(() => {
     navigate("/");
   }, []);
 
@@ -40,10 +40,10 @@ const VerifyRegisterPage = () => {
   return (
     <S.Container>
       <S.ContentContainer>
-        <S.Message>{verifyStatus}</S.Message>
+        <S.Message role="message">{verifyStatus}</S.Message>
         {verifyStatus !== VerifyRegisterTokenMessage.LOADING && (
           <S.ButtonsContainer>
-            <S.Button onClick={goToLogin}>로그인 페이지로 이동</S.Button>
+            <S.Button onClick={goToHomePage}>홈페이지로 이동</S.Button>
           </S.ButtonsContainer>
         )}
       </S.ContentContainer>
