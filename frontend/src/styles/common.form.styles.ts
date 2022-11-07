@@ -3,11 +3,9 @@ import { ButtonColor } from "styles/common.styles";
 
 export const Container = styled.div`
   background-color: rgba(242, 222, 254, 0.5);
-  position: fixed;
   height: 100%;
   width: 100%;
-  top: 0;
-  left: 0;
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,7 +13,6 @@ export const Container = styled.div`
 `;
 
 export const FormContainer = styled.div`
-  position: relative;
   background-color: white;
   width: 100%;
   max-width: 800px;
@@ -106,7 +103,7 @@ export const Submit = styled.button`
   border: none;
   font-weight: bold;
   font-size: 1em;
-  margin-top: 8vh;
+  margin-top: 2vh;
   color: black;
   padding: 10px 50px;
   background-color: ${ButtonColor};

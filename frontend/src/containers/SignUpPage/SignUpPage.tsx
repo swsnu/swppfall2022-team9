@@ -12,7 +12,7 @@ interface SignUpInfo extends PostSignUpDto {
   passwordConfirm: string;
 }
 
-enum HelperText {
+export enum HelperText {
   NO_ERROR = "",
   REQUIRED = "필수 정보입니다.",
   DIFFERENT_PASSWORD = "비밀번호가 일치하지 않습니다.",
@@ -38,6 +38,8 @@ const SignUpPage: React.FC<Props> = () => {
   const maxPasswordLength = 20;
 
   const checkFormValidity = (info: SignUpInfo): boolean => {
+    if (info.password != info.passwordConfirm) return false;
+
     let isFormValid = true;
     const infoKeys = Object.keys(info) as Array<keyof SignUpInfo>;
     infoKeys.forEach(key => {
@@ -56,33 +58,30 @@ const SignUpPage: React.FC<Props> = () => {
       const isFormValid = checkFormValidity(signUpInfo);
 
       if (isFormValid) {
-        try {
-          const result = await dispatch(
-            postSignUp({
-              firstname: signUpInfo.firstname,
-              lastname: signUpInfo.lastname,
-              email: signUpInfo.email,
-              username: signUpInfo.username,
-              password: signUpInfo.password,
-            }),
-          );
-          if (result.type === `${postSignUp.typePrefix}/fulfilled`) {
-            alert.open({
-              message: `${signUpInfo.email}로 인증 메일을 발송하였습니다.`,
-              buttons: [
-                {
-                  label: "확인",
-                  onClick: () => {
-                    alert.close();
-                    navigate("/");
-                  },
+        const result = await dispatch(
+          postSignUp({
+            firstname: signUpInfo.firstname,
+            lastname: signUpInfo.lastname,
+            email: signUpInfo.email,
+            username: signUpInfo.username,
+            password: signUpInfo.password,
+          }),
+        );
+        if (result.type === `${postSignUp.typePrefix}/fulfilled`) {
+          alert.open({
+            message: `${signUpInfo.email}로 인증 메일을 발송하였습니다.`,
+            buttons: [
+              {
+                label: "확인",
+                onClick: () => {
+                  alert.close();
+                  navigate("/");
                 },
-              ],
-            });
-          }
-        } catch (err) {
+              },
+            ],
+          });
+        } else {
           alert.open({ message: "서버 오류: 회원가입에 실패했습니다!" });
-          console.log(err);
         }
       }
     },
