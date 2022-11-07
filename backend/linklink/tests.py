@@ -2,13 +2,17 @@
 test module for linklink app
 """
 
+from datetime import datetime, timedelta
 import json
 import os
 
-from django.test import TestCase, Client
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core import mail
+from django.test import TestCase, Client
+from django.utils import timezone
 
-from .models import LinkLinkUser, FriendRequest
+from .models import LinkLinkUser, FriendRequest, Verification
 
 
 class LinkLinkTestCase(TestCase):
@@ -52,33 +56,289 @@ class LinkLinkTestCase(TestCase):
             first_name="Chris",
             last_name="Rock"
         )
-        LinkLinkUser.objects.create(
+        john_linklinkuser = LinkLinkUser.objects.create(
             user=john,
+            emailValidated=False,
             imgUrl = "https://catimage.com"
         )
-        LinkLinkUser.objects.create(
+        james_linklinkuser = LinkLinkUser.objects.create(
             user=james,
+            emailValidated=False,
             imgUrl = "https://catimage.com"
         )
-        LinkLinkUser.objects.create(
+        emily_linklinkuser = LinkLinkUser.objects.create(
             user=emily,
+            emailValidated=False,
             imgUrl = "https://catimage.com"
         )
-        LinkLinkUser.objects.create(
+        will_linklinkuser = LinkLinkUser.objects.create(
             user=will,
+            emailValidated=False,
             imgUrl = "https://catimage.com"
         )
-        LinkLinkUser.objects.create(
+        chris_linklinkuser = LinkLinkUser.objects.create(
             user=chris,
+            emailValidated=False,
             imgUrl = "https://catimage.com"
+        )
+        expire_time = \
+            datetime.now() + timedelta(days=settings.EMAIL_EXPIRE_DAYS)
+        expire_time= expire_time.astimezone(timezone.get_default_timezone())
+        Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
+        )
+        Verification.objects.create(
+            linklinkuser=james_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
+        )
+        Verification.objects.create(
+            linklinkuser=emily_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
+        )
+        Verification.objects.create(
+            linklinkuser=will_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
+        )
+        Verification.objects.create(
+            linklinkuser=chris_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
+        )
+        # Initialize frequently used member variables
+        self.client = Client(enforce_csrf_checks=True)
+        self.csrftoken = \
+            self.client.get("/api/csrf_token/").cookies["csrftoken"].value
+
+#--------------------------------------------------------------------------
+#   Auth Related Tests
+#--------------------------------------------------------------------------
+    def test_signup_success(self):
+        target_url = "/api/auth/signup/"
+        # Save initial object count
+        user_count = User.objects.count()
+        linklinkuser_count = LinkLinkUser.objects.count()
+        verification_count = Verification.objects.count()
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "jim",
+                "password": "jimpassword",
+                "email": "notiona@snu.ac.kr",
+                "firstname": "jim",
+                "lastname": "carry"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 201)
+        # Check Create User, LinkLinkUser, Verification
+        self.assertTrue(User.objects.filter(id=user_count+1
+            ).exists())
+        self.assertTrue(LinkLinkUser.objects.filter(id=linklinkuser_count+1
+            ).exists())
+        self.assertTrue(Verification.objects.filter(id=verification_count+1
+            ).exists())
+        new_user = User.objects.get(id=user_count+1)
+        new_linklinkuser = LinkLinkUser.objects.get(id=linklinkuser_count+1)
+        new_verification = Verification.objects.get(id=verification_count+1)
+        self.assertNotEquals(new_user.username, "")
+        # Check valid email form regex
+        self.assertRegex(
+            new_user.email,
+            "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+        )
+        # Check new user emailValidated=False
+        self.assertFalse(new_linklinkuser.emailValidated)
+        self.assertEqual(new_verification.purpose, "Register")
+        # Check expiresAt be in the future
+        self.assertLess(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            new_verification.expiresAt
+        )
+        # Check email sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "이메일 인증"
         )
 
+
+    def test_signin_success(self):
+        target_url = "/api/auth/signin/"
+        # Set emailValidated = True
+        johnlinklinkuser = LinkLinkUser.objects.get(id=1)
+        johnlinklinkuser.emailValidated = True
+        johnlinklinkuser.save()
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+                "password": "johnpassword",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 204)
+
+
+    def test_signin_incorrect_info(self):
+        target_url = "/api/auth/signin/"
+        # Set emailValidated = True
+        johnlinklinkuser = LinkLinkUser.objects.get(id=1)
+        johnlinklinkuser.emailValidated = True
+        johnlinklinkuser.save()
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+                "password": "johnpasswordwrong", # wrong password
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 401)
+        error_message_dict = {"message": "incorrect username or password."}
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_signin_havent_checked_email(self):
+        target_url = "/api/auth/signin/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+                "password": "johnpassword",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 401)
+        error_message_dict = {
+            "message": ("Account john exists, but is not validated. " 
+                "A validation email has been "
+                "resent to notiona@snu.ac.kr.")
+            }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # Check email sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "이메일 인증"
+        )
+    
+
+    def test_signin_token_expired(self):
+        target_url = "/api/auth/signin/"
+        # Deliberately expire Verification.expiresAt
+        john_verification = Verification.objects.get(id=1)
+        past_time = \
+            datetime.now() - timedelta(days=1)
+        past_time= past_time.astimezone(timezone.get_default_timezone())
+        john_verification.expiresAt = past_time
+        john_verification.save()
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+                "password": "johnpassword",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 401)
+        error_message_dict = {
+            "message": ("Account john exists, but is not validated. " 
+                "A validation email has been "
+                "resent to notiona@snu.ac.kr.")
+            }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # Check email sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "이메일 인증"
+        )
+        # Check verification.expiresAt is updated into the future
+        john_verification = Verification.objects.get(id=1)
+        self.assertLess(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            john_verification.expiresAt
+        )
+
+
+    def test_signout_success(self):
+        target_url = "/api/auth/signout/"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 204)
+
+
+    def test_verify_success(self):
+        john_verification = Verification.objects.get(id=1)
+        john_token = str(john_verification.token)
+        target_url = f"/api/auth/verify/{john_token}/"
+        # GET
+        response = self.client.get(target_url)
+        # Check response
+        self.assertEqual(response.status_code, 200)
+        success_message_dict = {"message":"Successfully verified"}
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            success_message_dict
+        )
+        # Check emailValidated=True
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        self.assertTrue(john_linklinkuser.emailValidated)
+
+
+    def test_verify_expired(self):
+        # Deliberately expire Verification.expiresAt
+        john_verification = Verification.objects.get(id=1)
+        past_time = \
+            datetime.now() - timedelta(days=1)
+        past_time= past_time.astimezone(timezone.get_default_timezone())
+        john_verification.expiresAt = past_time
+        john_verification.save()
+        john_token = str(john_verification.token)
+        target_url = f"/api/auth/verify/{john_token}/"
+        # GET
+        response = self.client.get(target_url)
+        # Check response
+        self.assertEqual(response.status_code, 401)
+        error_message_dict = {"message":"Token Expired"}
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
 
 #--------------------------------------------------------------------------
 #   /api/user/onechon Tests
 #--------------------------------------------------------------------------
     def test_success_onechon_general(self):
-        client = Client(enforce_csrf_checks=True)
         target_url = "/api/user/onechon/"
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
@@ -112,9 +372,9 @@ class LinkLinkTestCase(TestCase):
             status="Accepted",
         )
         # Login John
-        response = client.login(username="john", password="johnpassword")
+        response = self.client.login(username="john", password="johnpassword")
         # GET
-        response = client.get(target_url)
+        response = self.client.get(target_url)
         self.assertEqual(response.status_code, 200) # Successful GET
         linklink_path = os.path.dirname(os.path.realpath(__file__))
         answer_json_path = os.path.join(
@@ -129,39 +389,88 @@ class LinkLinkTestCase(TestCase):
             expected_json
         )
 
-
 #--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------
     def test_405_onechon(self):
-        client = Client(enforce_csrf_checks=True)
         target_url = "/api/user/onechon/"
-        # Get csrf token from cookie
-        csrftoken = client.get("/api/token/").cookies["csrftoken"].value
         # PUT
-        response = client.put(
+        response = self.client.put(
             target_url,
             {},
             content_type="application/json",
-            HTTP_X_CSRFTOKEN=csrftoken
+            HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 405)  # Method not allowed
         # Other Random Request Method
-        client.patch(
+        self.client.patch(
             target_url,
             {},
             content_type="application/json",
-            HTTP_X_CSRFTOKEN=csrftoken
+            HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 405)  # Method not allowed
 
+
+    def test_csrf_token(self):
+        client = Client()
+        target_url = "/api/csrf_token/"
+        # POST
+        response = client.post(target_url, {})
+        # PUTT
+        response = client.put(target_url, {})
+        # DELETE
+        response = client.delete(target_url)
+        self.assertEqual(response.status_code, 405)  # Method not allowed
 
 #--------------------------------------------------------------------------
 #   401 Checking Tests
 #--------------------------------------------------------------------------
+    def test_401_signout(self):
+        target_url = "/api/auth/signout/"
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 401)  # Unauthorized
+
+
     def test_401_onechon(self):
-        client = Client(enforce_csrf_checks=True)
         target_url = "/api/user/onechon/"
         # GET
-        response = client.get(target_url)
+        response = self.client.get(target_url)
         self.assertEqual(response.status_code, 401)  # Unauthorized
+
+#--------------------------------------------------------------------------
+#   400 Checking Tests
+#--------------------------------------------------------------------------
+    def test_400_signup(self):
+        target_url = "/api/auth/signup/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "jim",
+                "password": "jimpassword",
+                #"email": "notiona@snu.ac.kr", # no email
+                "firstname": "jim",
+                "lastname": "carry"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+    
+
+    def test_400_signin(self):
+        target_url = "/api/auth/signin/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+                #"password": "johnpassword", # no password
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+    

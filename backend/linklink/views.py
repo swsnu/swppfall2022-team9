@@ -108,7 +108,7 @@ def get_onechon_linklinkuser_list(
         onechon_list.append(accepted_friend_request.getterId)
     # remove duplicates
     onechon_list = set(onechon_list)
-    if onechon_list:
+    if onechon_list: # pragma: no branch
         onechon_list.remove(linklinkuser)
     # exclude exclude_linklinkuser
     if exclude_linklinkuser is not None:
@@ -162,10 +162,13 @@ def signup(request):
         emailValidated=False
     )
     # Create Verification object
+    expire_time = datetime.now() + timedelta(days=EMAIL_EXPIRE_DAYS)
+    kst_tz = timezone.get_default_timezone()
+    expire_time= expire_time.astimezone(kst_tz)
     verification = Verification.objects.create(
         linklinkuser=linklinkuser,
         purpose="Register",
-        expiresAt=datetime.now() + timedelta(days=EMAIL_EXPIRE_DAYS)
+        expiresAt=expire_time
     )
     # Send register email to user.email
     send_register_email(
@@ -204,8 +207,11 @@ def signin(request):
             )
             if is_expired(verification_found.expiresAt):
                 # Update expiration if it has expired
-                verification_found.expiresAt = \
+                kst_tz = timezone.get_default_timezone()
+                new_expire_time = \
                     datetime.now() + timedelta(days=EMAIL_EXPIRE_DAYS)
+                new_expire_time = new_expire_time.astimezone(kst_tz)
+                verification_found.expiresAt = new_expire_time
                 verification_found.save()
             # Resend register email
             send_register_email(user.email, str(verification_found.token))
@@ -243,15 +249,18 @@ def verify(request, token):
     # Find Verification object with token=token
     verification_found = get_object_or_404(Verification, token=token)
     # Register: check token expire, set user's emailValidated as True
-    if verification_found.purpose == "Register":
+    if verification_found.purpose == "Register": # pragma: no branch
         if is_expired(verification_found.expiresAt):
-            return HttpResponse(status=401) # Unauthorized
+            return JsonResponse(
+                status=401, # Unauthorized
+                data={"message":"Token Expired"}
+            ) 
         else:
             verification_found.linklinkuser.emailValidated = True
             verification_found.linklinkuser.save()
-    elif verification_found.purpose == "Password":
-        pass
-    return JsonResponse({"message":"Successfully verified."})
+    # elif verification_found.purpose == "Password":
+    #     pass
+    return JsonResponse({"message":"Successfully verified"})
 
 
 #--------------------------------------------------------------------------
