@@ -1,20 +1,29 @@
 import React, { useState, useCallback } from "react";
-import { IoCloseOutline } from "react-icons/io5";
 import { useAppDispatch } from "store/hooks";
 import { PostSignInDto } from "server/dto/users/users.dto";
 import { postSignIn } from "store/slices/users";
 import * as S from "./styles";
 import { useNavigate } from "react-router-dom";
 import useAlert from "hooks/useAlert";
+import WelcomeMessage from "assets/img/welcome-message.png";
 
 interface Props {
   message: string;
+}
+
+enum LoginModalMessage {
+  NULL = "",
+  SESSION_EXPIRED = "세션이 만료되었습니다. 다시 로그인해주세요.",
+  LOGIN_FAIL = "아이디 또는 비밀번호가 올바르지 않습니다.",
 }
 
 const LoginModal: React.FC<Props> = ({ message }) => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [loginMessage, setLoginMessage] = useState<LoginModalMessage>(
+    LoginModalMessage.NULL,
+  );
   const [loginInfo, setLoginInfo] = useState<PostSignInDto>({
     username: "",
     password: "",
@@ -23,16 +32,17 @@ const LoginModal: React.FC<Props> = ({ message }) => {
   const onSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault();
-      try {
-        await dispatch(
-          postSignIn({
-            username: loginInfo.username,
-            password: loginInfo.password,
-          }),
-        );
-      } catch (err) {
-        alert.open({ message: "로그인 정보가 잘못되었습니다!" });
-      }
+      dispatch(
+        postSignIn({
+          username: loginInfo.username,
+          password: loginInfo.password,
+        }),
+      )
+        .unwrap()
+        .then(() => {})
+        .catch(() => {
+          setLoginMessage(LoginModalMessage.LOGIN_FAIL);
+        });
     },
     [alert, loginInfo],
   );
@@ -48,32 +58,23 @@ const LoginModal: React.FC<Props> = ({ message }) => {
           e.stopPropagation();
         }}
       >
-        <S.CloseButtonContainer>
-          <IoCloseOutline
-            style={{
-              cursor: "pointer",
-            }}
-            color="#D9D9D9"
-            size="100%"
-          />
-        </S.CloseButtonContainer>
-        <S.GuideContainer>
-          <S.Title>로그인</S.Title>
-          <S.UserOptions>
-            <S.Register onClick={onClickSignUp}>회원가입</S.Register>
-            <S.FindAccount>아이디/비밀번호 찾기</S.FindAccount>
-          </S.UserOptions>
-        </S.GuideContainer>
+        <S.WelcomeContainer>
+          <img src={WelcomeMessage} alt={"welcome"} style={{ width: "100%" }} />
+          <S.DescriptionContainer>
+            친구들의 친구들을 알게 되는 인간관계 지도 서비스
+          </S.DescriptionContainer>
+        </S.WelcomeContainer>
+
         <S.Form onSubmit={onSubmit}>
           <S.Label>
-            <S.LabelText>이메일(아이디)</S.LabelText>
+            <S.LabelText>아이디</S.LabelText>
             <S.Input
               type="text"
-              placeholder="이메일"
-              name="email"
+              placeholder="아이디"
+              name="username"
               autoComplete="on"
               onChange={e => {
-                setLoginInfo(prev => ({ ...prev, email: e.target.value }));
+                setLoginInfo(prev => ({ ...prev, username: e.target.value }));
               }}
             />
           </S.Label>
@@ -92,11 +93,15 @@ const LoginModal: React.FC<Props> = ({ message }) => {
               }}
             />
           </S.Label>
-          <S.Message>{message}</S.Message>
+          {loginMessage && <S.Message>{loginMessage}</S.Message>}
           <S.Submit type="submit" onSubmit={onSubmit}>
             로그인하기
           </S.Submit>
         </S.Form>
+        <S.GuideContainer>
+          <S.Register onClick={onClickSignUp}>회원가입</S.Register>
+          <S.FindAccount>아이디/비밀번호 찾기</S.FindAccount>
+        </S.GuideContainer>
       </S.ModalContainer>
     </S.Container>
   );
