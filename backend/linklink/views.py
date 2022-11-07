@@ -210,10 +210,8 @@ def signin(request):
             # Resend register email
             send_register_email(user.email, str(verification_found.token))
             resent_email_message = (
-                f"Your account {username} exists, but is not validated. "
-                "The verification token has expired or you have not validated. "
-                f"A validation email has been resent to {user.email}. "
-                f"Please check the spam box if it has not arrived."
+                f"Account {username} exists, but is not validated. "
+                f"A validation email has been resent to {user.email}."
             )
             return JsonResponse(
                 status=401,
