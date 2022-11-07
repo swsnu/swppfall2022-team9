@@ -18,9 +18,10 @@ from django.http import (
     JsonResponse
 )
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
-import requests
 
 from .decorators import allowed_method_or_405, logged_in_or_401
 from .models import LinkLinkUser, FriendRequest, Verification
@@ -28,6 +29,17 @@ from .models import LinkLinkUser, FriendRequest, Verification
 
 HOMEPAGE_URL = settings.HOMEPAGE_URL
 EMAIL_HOST_USER = settings.EMAIL_HOST_USER
+
+
+@ensure_csrf_cookie
+def csrf_token(request):
+    """
+    Returns csrf token
+    """
+    if request.method == "GET":
+        return HttpResponse(status=204)
+    else:
+        return HttpResponseNotAllowed(["GET"])
 
 
 def send_register_email(recipient, title, message, token):
@@ -55,17 +67,6 @@ def send_register_email(recipient, title, message, token):
         recipient_list=[recipient],
         html_message=html_mail
     )
-
-
-@ensure_csrf_cookie
-def token(request):
-    """
-    Returns csrf token
-    """
-    if request.method == "GET":
-        return HttpResponse(status=204)
-    else:
-        return HttpResponseNotAllowed(["GET"])
 
 
 @allowed_method_or_405(["POST"])
@@ -136,6 +137,33 @@ def signin(request):
 def signout(request):
     logout(request) # log the user out, clear django session
     return HttpResponse(status=204)
+
+
+@allowed_method_or_405(["GET"])
+# pylint: disable=unused-argument
+def verify(request, token):
+    """
+    When user clicks link from email,
+    1. Find Verification object with token=token
+    2-1. If Register: check token expire, set user's emailValidated as True
+    2-2. Elif Password: TODO
+    """
+    # Find Verification object with token=token
+    token_found = get_object_or_404(Verification, token=token)
+    # Register: check token expire, set user's emailValidated as True
+    if token_found.purpose == "Register":
+        kst_tz = timezone.get_default_timezone()
+        # Align timezone to KST(Korea Standard Time) for fair comparison
+        token_expire_time= token_found.expiresAt.astimezone(kst_tz)
+        time_now = datetime.now().astimezone(kst_tz)
+        if time_now < token_expire_time:
+            token_found.linklinkuser.emailValidated = True
+            token_found.linklinkuser.save()
+        else: # Expired
+            return HttpResponse(status=401) # Unauthorized
+    elif token_found.purpose == "Password":
+        pass
+    return JsonResponse({"message":"Successfully verified."})
 
 
 def get_onechon_linklinkuser_list(
