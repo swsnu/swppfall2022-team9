@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "containers/HomePage/HomePage";
 import Navbar from "components/Navbar/Navbar";
 import SignUpPage from "containers/SignUpPage/SignUpPage";
+import VerifyRegisterPage from "containers/VerifyRegisterPage/VerifyRegisterPage";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
             }
           />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/verify/:token" element={<VerifyRegisterPage />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </BrowserRouter>

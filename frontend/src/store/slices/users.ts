@@ -138,15 +138,16 @@ export const postSignIn = createAsyncThunk<void, PostSignInDto>(
   "users/postSignIn",
   //you can test with swpp@snu.ac.kr
   async body => {
-    await axios.post<PostSignInResDto>("/api/login", body);
+    await axios.post<PostSignInResDto>("/api/auth/signin/", body);
   },
 );
 
 export const postSignUp = createAsyncThunk<PostSignUpResDto, PostSignUpDto>(
   "users/postSignUp",
   async body => {
-    const response = (await axios.post<PostSignUpResDto>("/api/signup", body))
-      .data;
+    const response = (
+      await axios.post<PostSignUpResDto>("/api/auth/signup/", body)
+    ).data;
     return response;
   },
 );
@@ -154,15 +155,22 @@ export const postSignUp = createAsyncThunk<PostSignUpResDto, PostSignUpDto>(
 export const putSignOut = createAsyncThunk<void>(
   "users/putSignOut",
   async (_, { dispatch }) => {
-    await axios.get(`/api/logout`);
+    await axios.get(`/api/auth/signout/`);
     dispatch(userActions.resetCurrentUser());
+  },
+);
+
+export const verifyRegisterToken = createAsyncThunk<void, string>(
+  "users/verifyRegisterToken",
+  async token => {
+    await axios.get(`/api/auth/verify/${token}/`);
   },
 );
 
 export const getChonList = createAsyncThunk<void>(
   "users/getChonList",
   async (_, { dispatch }) => {
-    const response = (await axios.get<Array<OneChonInfo>>(`/api/user/onechon`))
+    const response = (await axios.get<Array<OneChonInfo>>(`/api/user/onechon/`))
       .data;
     dispatch(userActions.setChonList(response));
   },
