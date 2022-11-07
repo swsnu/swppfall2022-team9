@@ -2,6 +2,7 @@
 views module for linklink app
 """
 
+from datetime import datetime, timedelta
 import json
 from json.decoder import JSONDecodeError
 import os
@@ -22,18 +23,29 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 import requests
 
 from .decorators import allowed_method_or_405, logged_in_or_401
-from .models import LinkLinkUser, FriendRequest
+from .models import LinkLinkUser, FriendRequest, Verification
 
 
 HOMEPAGE_URL = settings.HOMEPAGE_URL
 EMAIL_HOST_USER = settings.EMAIL_HOST_USER
 
 
-def send_register_email(recipient, title, message):
+def send_register_email(recipient, title, message, token):
+    """
+    Helper function to send register email to recipient
+
+    Args:
+    recipient: str, email address
+    title: str, title
+    message: str, message
+    token: str, register verification token
+    Return:
+    None
+    """
     context = {
         "subject": title,
         "message": message,
-        "button_link": HOMEPAGE_URL,
+        "button_link": os.path.join(HOMEPAGE_URL, "verify", token),
     }
     html_mail = render_to_string("linklink/register_email.html", context)
     send_mail(
@@ -43,35 +55,6 @@ def send_register_email(recipient, title, message):
         recipient_list=[recipient],
         html_message=html_mail
     )
-    #  return redirect("redirect to a new page")
-
-
-@allowed_method_or_405(["POST"])
-def send_email(request):
-    """
-    Send email to user depending on mode
-    Case1: Register Verify Email
-    Case2: Password Reset Email
-    """
-    try:
-        req_data = json.loads(request.body.decode())
-        mode = req_data["mode"]
-        recipient = req_data["recipient"]
-    except (KeyError, JSONDecodeError) as e:
-        return HttpResponseBadRequest(e) # implicit status code = 400
-    if mode == "register":
-        send_register_email(
-            recipient=recipient,
-            title="이메일 인증",
-            message="회원가입을 하려면 이메일 인증을 진행해주세요"
-        )
-    elif mode == "password-reset":
-        pass
-    else:
-        expected_mode = ["register", "password-reset"]
-        raise ValueError(f"Invalid mode. Expected: {expected_mode},\
-            Received: {mode}")
-    return HttpResponse(status=201)
 
 
 @ensure_csrf_cookie
@@ -89,39 +72,45 @@ def token(request):
 def signup(request):
     """
     When user enters username, password and requests signup,
-    1. django's User object is created
-    2. LinkLinkUser object is created, with emailValidated=False
-    3. Send register email to username
+    1. Create django User object
+    2. Create LinkLinkUser object with emailValidated=False
+    3. Create Verification object
+    4. Send register email to user.email
     """
     try:
         req_data = json.loads(request.body.decode())
         username = req_data["username"]
         password = req_data["password"]
+        email = req_data["email"]
+        firstname = req_data["firstname"]
+        lastname = req_data["lastname"]
     except (KeyError, JSONDecodeError) as e:
         return HttpResponseBadRequest(e) # implicit status code = 400
-    # Create django"s user
+    # Create django User object
     user = User.objects.create_user(
         username=username,
-        password=password
+        password=password,
+        email=email,
+        first_name=firstname,
+        last_name=lastname
     )
-    # Create LinkLinkUser with emailValidated=False
-    LinkLinkUser.objects.create(
+    # Create LinkLinkUser object with emailValidated=False
+    linklinkuser = LinkLinkUser.objects.create(
         user=user,
         emailValidated=False
     )
-    # Send register email to username
-    # pylint: disable=invalid-name
-    S = requests.Session()
-    S.get(os.path.join(HOMEPAGE_URL, "api/token/"))
-    csrftoken = S.cookies["csrftoken"]
-    send_email_dict = {
-        "mode": "register",
-        "recipient": username
-    }
-    S.post(
-        os.path.join(HOMEPAGE_URL, "api/auth/send_email/"),
-        json.dumps(send_email_dict),
-        headers={"X-CSRFToken": csrftoken}
+    # Create Verification object
+    verification = Verification.objects.create(
+        linklinkuser=linklinkuser,
+        purpose="Register",
+        expiresAt=datetime.now() + timedelta(days=3)
+    )
+    # Send register email to user.email
+    send_register_email(
+        recipient=user.email,
+        title="이메일 인증",
+        message="회원가입을 하려면 이메일 인증을 진행해주세요",
+        token=str(verification.token)
     )
     return HttpResponse(status=201)
 
