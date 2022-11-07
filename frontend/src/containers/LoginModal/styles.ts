@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ButtonColor } from "styles/common.styles";
+import { ButtonColor, ThemeColor } from "styles/common.styles";
 import { device } from "utils/cssMedia";
 
 export const Container = styled.div`
@@ -12,51 +12,52 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-`;
-
-export const CloseButtonContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding-right: 10px;
-  padding-top: 10px;
-  width: 40px;
-  @media ${device.tablet} {
-    width: 50px;
-  }
+  /* padding: 10px; */
 `;
 
 export const ModalContainer = styled.div`
   position: relative;
   background-color: white;
   width: 100%;
-  max-width: 800px;
+  max-width: 650px;
   padding: 40px 5%;
+  margin: 0 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
 `;
 
-export const Title = styled.div`
+export const WelcomeContainer = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const DescriptionContainer = styled.div`
+  margin-top: 25px;
+  text-align: center;
+  word-break: keep-all;
   font-weight: bold;
-  font-size: 1.3em;
+  opacity: 0.5;
+  font-size: 15px;
 `;
 
 export const GuideContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-`;
+  /* width: 100%; */
+  margin: 0 auto;
+  margin-top: 15px;
 
-export const UserOptions = styled.div`
-  display: flex;
-  opacity: 0.5;
+  padding-bottom: 5px;
+  margin-bottom: -5px;
 `;
 
 export const Register = styled.button`
   color: black;
   background: none;
+  font-size: 12px;
   border: none;
   cursor: pointer;
 `;
@@ -64,13 +65,19 @@ export const Register = styled.button`
 export const FindAccount = styled.button`
   color: black;
   background: none;
+  font-size: 12px;
   border: none;
   cursor: pointer;
 `;
 
 export const Form = styled.form`
   display: flex;
+
   flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 20px;
 `;
 
 export const Label = styled.label`
@@ -81,7 +88,8 @@ export const Label = styled.label`
 `;
 
 export const LabelText = styled.div`
-  width: 150px;
+  width: 100px;
+  font-size: 14px;
 `;
 
 export const Input = styled.input`
@@ -91,13 +99,17 @@ export const Input = styled.input`
   border-radius: 0px;
   padding: 0;
   border-bottom: 1px solid #bababa;
+
+  :focus {
+    outline: none;
+  }
 `;
 
 export const Message = styled.div`
   align-self: center;
   padding: 10px 0;
   opacity: 0.5;
-  font-size: 0.9em;
+  font-size: 14px;
 `;
 
 export const Submit = styled.button`
@@ -109,6 +121,7 @@ export const Submit = styled.button`
   margin-top: 10px;
   color: black;
   padding: 10px 50px;
-  background-color: ${ButtonColor};
+  background-color: #fee1ff;
+  border-radius: 15px;
   cursor: pointer;
 `;

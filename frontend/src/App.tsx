@@ -4,6 +4,7 @@ import HomePage from "containers/HomePage/HomePage";
 import Navbar from "components/Navbar/Navbar";
 import SignUpPage from "containers/SignUpPage/SignUpPage";
 import VerifyRegisterPage from "containers/VerifyRegisterPage/VerifyRegisterPage";
+import AuthWrapper from "containers/AuthWrapper/AuthWrapper";
 
 const App = () => {
   return (
@@ -22,7 +23,14 @@ const App = () => {
           />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/verify/:token" element={<VerifyRegisterPage />} />
-          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route
+            path="*"
+            element={
+              <AuthWrapper>
+                <h1>Not Found</h1>
+              </AuthWrapper>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
