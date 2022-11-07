@@ -7,17 +7,13 @@ import { useNavigate } from "react-router-dom";
 import useAlert from "hooks/useAlert";
 import WelcomeMessage from "assets/img/welcome-message.png";
 
-interface Props {
-  message: string;
-}
-
 enum LoginModalMessage {
   NULL = "",
   SESSION_EXPIRED = "세션이 만료되었습니다. 다시 로그인해주세요.",
   LOGIN_FAIL = "아이디 또는 비밀번호가 올바르지 않습니다.",
 }
 
-const LoginModal: React.FC<Props> = ({ message }) => {
+const LoginModal: React.FC = () => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -49,6 +45,10 @@ const LoginModal: React.FC<Props> = ({ message }) => {
 
   const onClickSignUp = () => {
     navigate("/signup");
+  };
+
+  const onClickFindAccount = () => {
+    navigate("/account/find");
   };
 
   return (
@@ -100,7 +100,9 @@ const LoginModal: React.FC<Props> = ({ message }) => {
         </S.Form>
         <S.GuideContainer>
           <S.Register onClick={onClickSignUp}>회원가입</S.Register>
-          <S.FindAccount>아이디/비밀번호 찾기</S.FindAccount>
+          <S.FindAccount onClick={onClickFindAccount}>
+            아이디/비밀번호 찾기
+          </S.FindAccount>
         </S.GuideContainer>
       </S.ModalContainer>
     </S.Container>

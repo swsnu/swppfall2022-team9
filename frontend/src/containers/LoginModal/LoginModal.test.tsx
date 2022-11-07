@@ -26,7 +26,7 @@ const renderLoginModal = (alertProviderProps?: AlertContextProps) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
-        <Route path="/" element={<LoginModal message="message" />} />
+        <Route path="/" element={<LoginModal />} />
         <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </MemoryRouter>,
