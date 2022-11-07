@@ -42,7 +42,6 @@ describe("friend request reducer", () => {
       friendRequestToken: null,
       friendRequests: [],
     });
-    console.log(store.getState());
   });
 
   it("tests get friend requests", async () => {
@@ -58,7 +57,6 @@ describe("friend request reducer", () => {
       },
     });
     await store.dispatch(getFriendRequests());
-    console.log(store.getState());
   });
 
   it("tests post friend request", async () => {
@@ -70,7 +68,6 @@ describe("friend request reducer", () => {
     axios.put = jest
       .fn()
       .mockResolvedValue({ data: { friendRequest: friendRequestsStub[0] } });
-    console.log(store.getState().friendRequests, "wwww");
     await store.dispatch(
       putFriendRequest({ id: 1, status: FriendRequestStatus.ACCEPTED }),
     );

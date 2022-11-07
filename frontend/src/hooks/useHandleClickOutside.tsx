@@ -7,10 +7,8 @@ interface Params {
 }
 
 function useHandleClickOutside({ wrapperRef, setIsClickedOutside }: Params) {
-  console.log("renderd!");
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      console.log("help!");
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsClickedOutside(true);
       }
