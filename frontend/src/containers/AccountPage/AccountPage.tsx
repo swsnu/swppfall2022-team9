@@ -8,8 +8,8 @@ const AccountPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // TODO: change birthdate
-  const onClickChangeBirthdate = () => {};
+  // TODO: change birthDate
+  const onClickChangeBirthDate = () => {};
 
   const onClickChangePassword = () => {
     navigate("/account/password");
@@ -55,7 +55,7 @@ const AccountPage = () => {
             <FormStyles.LabelText>생년월일</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input />
-              <FormStyles.InputModifyButton onClick={onClickChangeBirthdate}>
+              <FormStyles.InputModifyButton onClick={onClickChangeBirthDate}>
                 수정
               </FormStyles.InputModifyButton>
             </FormStyles.InputContainer>
@@ -68,31 +68,20 @@ const AccountPage = () => {
               </FormStyles.FormInnerButton>
             </FormStyles.InputContainer>
           </FormStyles.Label>
-          <FormStyles.FormInnerButton
-            backgroundColor="#D9D9D9"
-            style={{
-              marginTop: 20,
-              width: "100%",
-              maxWidth: 340,
-              fontWeight: "bold",
-            }}
-            onClick={onClickLogout}
-          >
+          <FormStyles.Submit backgroundColor="#D9D9D9" onClick={onClickLogout}>
             로그아웃
-          </FormStyles.FormInnerButton>
-          <FormStyles.FormInnerButton
+          </FormStyles.Submit>
+          <FormStyles.Submit
             backgroundColor="transparent"
             style={{
-              marginTop: 25,
               fontSize: 12,
               opacity: 0.6,
               fontWeight: "lighter",
-              width: "70%",
             }}
             onClick={onClickDeleteAccount}
           >
             계정삭제
-          </FormStyles.FormInnerButton>
+          </FormStyles.Submit>
         </FormStyles.Form>
       </FormStyles.FormContainer>
     </FormStyles.Container>

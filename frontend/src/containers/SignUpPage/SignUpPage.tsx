@@ -91,9 +91,9 @@ const SignUpPage: React.FC<Props> = () => {
   return (
     <S.Container>
       <S.FormContainer>
-        <S.GuideContainer>
-          <S.Title>회원가입</S.Title>
-        </S.GuideContainer>
+        <S.Header>
+          <S.HeaderText>회원가입</S.HeaderText>
+        </S.Header>
         <S.Form onSubmit={onSubmit}>
           <S.Label>
             <S.LabelText>성</S.LabelText>

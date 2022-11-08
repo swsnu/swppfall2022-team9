@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { ButtonColor, ThemeColor } from "styles/common.styles";
-import { device } from "utils/cssMedia";
 
 export const Container = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
@@ -47,6 +45,7 @@ export const DescriptionContainer = styled.div`
 export const GuideContainer = styled.div`
   display: flex;
   /* width: 100%; */
+  opacity: 0.5;
   margin: 0 auto;
   margin-top: 15px;
 
