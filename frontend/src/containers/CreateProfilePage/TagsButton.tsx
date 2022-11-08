@@ -1,5 +1,6 @@
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
+import { IoAdd } from "react-icons/io5";
 interface Props {
   tagName: string;
 }
@@ -8,11 +9,11 @@ interface Props {
 const TagsButton: React.FC<Props> = ({ tagName }) => {
   return (
     <SProfile.ContentDiv>
-      <SProfile.DefaultContainer>
+      <SProfile.TagsContainer>
         {tagName}:
         <SProfile.TagsForm />
-        <SProfile.AddTagsButton />
-      </SProfile.DefaultContainer>
+        <SProfile.AddTagsButton>{<IoAdd />}</SProfile.AddTagsButton>
+      </SProfile.TagsContainer>
     </SProfile.ContentDiv>
   );
 };

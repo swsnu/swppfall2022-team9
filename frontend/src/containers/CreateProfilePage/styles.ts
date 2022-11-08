@@ -3,10 +3,11 @@ import styled from "styled-components";
 const themeButtonColor = "#fee1ff";
 const textFontSize = "15px";
 
+export const ContentDiv = styled.div``;
+
 export const DefaultContainer = styled.div`
   padding-top: 7px;
   padding-bottom: 7px;
-  display: flex;
 `;
 
 export const Container = styled.div`
@@ -16,6 +17,16 @@ export const Container = styled.div`
   align-items: center;
   padding: 5 5 5 5;
   justify-content: "flex-start";
+`;
+
+export const TagsContainer = styled.div`
+  min-width: 250px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: "flex-start";
+  padding-top: 5px;
+  padding-bottom: 5px;
 `;
 
 export const FormContainer = styled.div`
@@ -43,6 +54,12 @@ export const ProfileButtonContainer = styled.div`
   align-items: center;
   padding-top: 15px;
   width: 100%;
+`;
+
+export const TagsButtonContainer = styled.div`
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 `;
 
 export const UserNode = styled.div<{ url: string }>`
@@ -82,9 +99,8 @@ export const Button = styled.button`
   }
   font-size: ${textFontSize};
   border-radius: 15px;
+  cursor: pointer;
 `;
-
-export const ContentDiv = styled.div``;
 
 export const TagsForm = styled.input`
   width: 15%;
@@ -101,13 +117,23 @@ export const WebsiteForm = styled.input`
 `;
 
 export const AddTagsButton = styled.button`
+  cursor: pointer;
+
+  display: inline-flex;
   align-items: center;
-  text-align: center;
-  width: 20px;
-  height: 20px;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
-  padding-top: 10px;
   margin-left: 10px;
   background-color: #d9d9d9;
+  &:hover {
+    background: #d9d9d9;
+    filter: brightness(85%);
+  }
+  &:active {
+    background: #d9d9d9;
+    filter: brightness(70%);
+  }
   border: none;
 `;
