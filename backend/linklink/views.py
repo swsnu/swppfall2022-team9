@@ -269,7 +269,7 @@ def verify(request, token):
 
 @allowed_method_or_405(["GET", "POST", "DELETE"])
 @logged_in_or_401
-def onechon(request):
+def friend(request):
     if request.method == "GET": # pragma: no branch
         # Get all Accepted FriendRequest
         all_accepted_friend_requests = FriendRequest.objects.filter(
