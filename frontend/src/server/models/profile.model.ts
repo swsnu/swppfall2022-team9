@@ -9,3 +9,8 @@ export interface Profile {
   website: string;
   introduction: string;
 }
+
+export type ProfileKey = keyof Pick<
+  Profile,
+  "qualityTags" | "majorTags" | "degreeTags" | "skillTags" | "languageTags"
+>;

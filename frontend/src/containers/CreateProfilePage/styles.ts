@@ -154,14 +154,30 @@ export const AddTagsButton = styled.button`
   border: none;
 `;
 
-export const SkillTagsContainer = styled.div`
+export const SkillTagsDiv = styled.div`
+  padding-top: 5px;
+`;
+
+export const SkillTagsButton = styled.button`
   background-color: #d9d9d9;
+  &:hover {
+    background: #d9d9d9;
+    filter: brightness(85%);
+  }
+  &:active {
+    background: #d9d9d9;
+    filter: brightness(70%);
+  }
   display: flex;
   flex-wrap: wrap;
   height: 25px;
   border-radius: 10px;
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 5px;
   margin-left: 7px;
   margin-top: 5px;
+  border: none;
+  text-align: center;
+  align-items: center;
 `;
