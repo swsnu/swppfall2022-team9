@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ButtonColor } from "styles/common.styles";
+import { ButtonColor, ThemeColor } from "styles/common.styles";
 
 export const Container = styled.div`
   background: linear-gradient(
@@ -13,15 +13,25 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding-top: 150px;
+`;
+
+export const Header = styled.div`
+  border-bottom: 1px solid black;
+  padding-bottom: 15px;
+`;
+
+export const HeaderText = styled.div`
+  font-size: 25px;
+  font-weight: bold;
 `;
 
 export const FormContainer = styled.div`
   background-color: white;
+  padding: 40px 40px 0 40px;
   width: 100%;
-  max-width: 800px;
-  height: 70vh;
-  padding: 40px 5%;
+  max-width: 500px;
+  min-height: 100vh;
   overflow: auto;
 `;
 
@@ -52,29 +62,53 @@ export const UserOption = styled.button`
 `;
 
 export const Form = styled.form`
+  padding-top: 40px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 export const Label = styled.label`
   width: 100%;
   display: flex;
-  padding: 25px 0;
+  margin-bottom: 40px;
   align-items: center;
 `;
 
 export const LabelText = styled.span`
   width: 130px;
   text-align: left;
-  padding-left: 0.7rem;
+  font-size: 14px;
 `;
 
 export const InputContainer = styled.div`
   width: 100%;
   border: none;
-  height: 30px;
+  min-height: 30px;
   padding: 0;
-  margin: 0 20px;
+  display: flex;
+`;
+
+export const InputModifyButton = styled.button`
+  background: none;
+  cursor: pointer;
+  background-color: ${ThemeColor};
+  min-width: 80px;
+  border: none;
+  margin-left: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+`;
+
+export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
+  background: none;
+  cursor: pointer;
+  background-color: ${props => props.backgroundColor || ThemeColor};
+  border: none;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 0;
+  font-weight: bold;
 `;
 
 export const Input = styled.input`
@@ -83,8 +117,11 @@ export const Input = styled.input`
   height: 30px;
   padding: 0;
   border-bottom: 1px solid #bababa;
-  font-size: 1.2rem;
+  font-size: 15px;
   padding-left: 5px;
+  :focus {
+    outline: none;
+  }
 `;
 
 export const InputHelper = styled.div`
