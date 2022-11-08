@@ -336,10 +336,10 @@ class LinkLinkTestCase(TestCase):
         )
 
 #--------------------------------------------------------------------------
-#   /api/user/onechon Tests
+#   /api/user/friend Tests
 #--------------------------------------------------------------------------
-    def test_success_onechon_general(self):
-        target_url = "/api/user/onechon/"
+    def test_success_friend_general(self):
+        target_url = "/api/user/friend/"
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
         james_linklinkuser = LinkLinkUser.objects.get(pk=2)
@@ -380,7 +380,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             linklink_path,
             "test_answers",
-            "test_success_onechon_general.json"
+            "test_success_friend_general.json"
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -392,8 +392,8 @@ class LinkLinkTestCase(TestCase):
 #--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------
-    def test_405_onechon(self):
-        target_url = "/api/user/onechon/"
+    def test_405_friend(self):
+        target_url = "/api/user/friend/"
         # PUT
         response = self.client.put(
             target_url,
@@ -433,8 +433,8 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 401)  # Unauthorized
 
 
-    def test_401_onechon(self):
-        target_url = "/api/user/onechon/"
+    def test_401_friend(self):
+        target_url = "/api/user/friend/"
         # GET
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 401)  # Unauthorized
