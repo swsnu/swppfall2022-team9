@@ -41,29 +41,55 @@ const CreateProfilePage: React.FC<Props> = () => {
   const navigate = useNavigate();
 
   const uploadImageHandler = () => {};
+  const createProfileHandler = () => {};
 
   return (
     <S.Container>
-      <S.FormContainer>
+      <SProfile.FormContainer>
         <S.GuideContainer>
           <S.Title>프로필</S.Title>
         </S.GuideContainer>
         <SProfile.Container>
-          <SProfile.UserNode
-            url={currentUserProfile.imgUrl}
-          ></SProfile.UserNode>
-          <SProfile.ButtonContainer>
-            <SProfile.ImageButton onClick={uploadImageHandler}>
-              Change Image
-            </SProfile.ImageButton>
-          </SProfile.ButtonContainer>
-        </SProfile.Container>
-        <SProfile.Username>
-          {"박신혜"}
-          {/* {currentUser.lastname}
+          <SProfile.DefaultContainer>
+            <SProfile.UserNode
+              url={currentUserProfile.imgUrl}
+            ></SProfile.UserNode>
+            <SProfile.Username>
+              {"박신혜"}
+              {/* {currentUser.lastname}
                 {currentUser.firstname} */}
-        </SProfile.Username>
-      </S.FormContainer>
+            </SProfile.Username>
+          </SProfile.DefaultContainer>
+          <SProfile.ImageButtonContainer>
+            <SProfile.Button onClick={uploadImageHandler}>
+              이미지 업로드
+            </SProfile.Button>
+          </SProfile.ImageButtonContainer>
+        </SProfile.Container>
+        <SProfile.ContentDiv>
+          <SProfile.DefaultContainer>
+            Major: Computer Science
+          </SProfile.DefaultContainer>
+        </SProfile.ContentDiv>
+        <SProfile.ContentDiv>
+          <SProfile.DefaultContainer>Tags: Beautiful</SProfile.DefaultContainer>
+        </SProfile.ContentDiv>
+        <SProfile.ContentDiv>
+          <SProfile.DefaultContainer>
+            Website:
+            <SProfile.WebsiteForm />
+          </SProfile.DefaultContainer>
+        </SProfile.ContentDiv>
+        <SProfile.ContentDiv>
+          <SProfile.DefaultContainer>Introduction</SProfile.DefaultContainer>
+          <SProfile.IntroForm></SProfile.IntroForm>
+        </SProfile.ContentDiv>
+        <SProfile.ProfileButtonContainer>
+          <SProfile.Button onClick={createProfileHandler}>
+            프로필 생성
+          </SProfile.Button>
+        </SProfile.ProfileButtonContainer>
+      </SProfile.FormContainer>
     </S.Container>
   );
 };
