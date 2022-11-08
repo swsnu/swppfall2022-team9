@@ -61,7 +61,7 @@ const AddTagsButton: React.FC<Props> = ({
                 setInput(text.target.value.trim());
               }}
             />
-            {isInvalidTag && <S.InputHelper>{"잘못된 태그"}</S.InputHelper>}
+            {/* {isInvalidTag && <SProfile.InputHelper>{"잘못된 태그"}</SProfile.InputHelper>} */}
             <SProfile.AddTagsButton onClick={onAddTagsButtonClick}>
               {<IoAdd />}
             </SProfile.AddTagsButton>

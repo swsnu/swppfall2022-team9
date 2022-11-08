@@ -158,6 +158,13 @@ export const SkillTagsDiv = styled.div`
   padding-top: 5px;
 `;
 
+// export const InputHelper = styled.div`
+//   text-align: left;
+//   padding: 2px;
+//   font-size: 5px;
+//   color: red;
+// `;
+
 export const SkillTagsButton = styled.button`
   background-color: #d9d9d9;
   &:hover {
