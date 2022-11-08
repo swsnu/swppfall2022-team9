@@ -85,6 +85,10 @@ export const Button = styled.button`
 
 export const ContentDiv = styled.div``;
 
+export const TagsForm = styled.input`
+  width: 15%;
+`;
+
 export const IntroForm = styled.textarea`
   width: 100%;
   height: 100px;

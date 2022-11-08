@@ -11,16 +11,17 @@ const CreateProfilePage: React.FC<Props> = () => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(state => state.users.currentUser);
   // get current user profile
+  // dummy
   const currentUserProfile: Profile = {
-    id: 1,
-    imgUrl:
-      "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
+    id: 0,
+    // id: currentUser!.id
+    imgUrl: "",
     qualityTags: [],
     majorTags: [],
     degreeTags: [],
     skillTags: [],
-    website: "https://iam.beautiful.com",
-    introduction: "Korea No. 1 Actress",
+    website: "",
+    introduction: "",
   };
   // set useState
   const [createProfileInfo, setCreateProfileInfo] =
@@ -28,20 +29,73 @@ const CreateProfilePage: React.FC<Props> = () => {
   const maxNumberTags = 6;
   const maxIntroLength = 300;
 
-  const urlValdiation = (url: string): boolean => {
-    const regex = new RegExp(
-      "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?",
-    );
-    return regex.test(url);
-  };
-
   // enforce certain areas as mandatory
   // save upon click
 
   const navigate = useNavigate();
 
   const uploadImageHandler = () => {};
-  const createProfileHandler = () => {};
+
+  const urlValdiation = (url: string): boolean => {
+    const regex = new RegExp(
+      "^((https?|ftp|smtp)://)?(www.)?[a-z0-9]+.[a-z]+(/[a-zA-Z0-9#]+/?)*?.[a-z]+$",
+    );
+    return regex.test(url);
+  };
+
+  enum HelperText {
+    NO_ERROR = "",
+    REQUIRED = "필수 정보입니다.",
+    INVALID_URL = "올바르지 않은 주소입니다.",
+    TOO_MANY_TAGS = "최대 태그 수를 초과하였습니다.",
+  }
+  const [validImgUrl, setValidImageUrl] = useState<boolean>(true);
+  const [validWebUrl, setValidWebUrl] = useState<boolean>(true);
+  const [validIntro, setValidIntro] = useState<boolean>(true);
+  const [validQualityTags, setValidQualityTags] = useState<boolean>(true);
+  const [validMajorTags, setValidMajorTags] = useState<boolean>(true);
+  const [validDegreeTags, setValidDegreeTags] = useState<boolean>(true);
+  const [validSkillTags, setValidSkillTags] = useState<boolean>(true);
+
+  const createProfileHandler = () => {
+    // read the inputs and validate;
+    // if valid, update
+
+    // allow empty urls
+    setValidImageUrl(
+      createProfileInfo.imgUrl ? urlValdiation(createProfileInfo.imgUrl) : true,
+    );
+    setValidWebUrl(
+      createProfileInfo.website
+        ? urlValdiation(createProfileInfo.website)
+        : true,
+    );
+    setValidIntro(!!createProfileInfo.introduction);
+    setValidQualityTags(
+      createProfileInfo.qualityTags.length > 0 &&
+        createProfileInfo.qualityTags.length < maxNumberTags,
+    );
+    setValidMajorTags(
+      createProfileInfo.majorTags.length > 0 &&
+        createProfileInfo.majorTags.length < maxNumberTags,
+    );
+    setValidDegreeTags(createProfileInfo.degreeTags.length === 1);
+    setValidSkillTags(
+      createProfileInfo.skillTags.length > 0 &&
+        createProfileInfo.skillTags.length < maxNumberTags,
+    );
+    if (
+      validImgUrl &&
+      validDegreeTags &&
+      validIntro &&
+      validMajorTags &&
+      validQualityTags &&
+      validSkillTags &&
+      validWebUrl
+    ) {
+      // update
+    }
+  };
 
   return (
     <S.Container>
@@ -68,21 +122,42 @@ const CreateProfilePage: React.FC<Props> = () => {
         </SProfile.Container>
         <SProfile.ContentDiv>
           <SProfile.DefaultContainer>
-            Major: Computer Science
+            Major: <SProfile.TagsForm type="text" />
           </SProfile.DefaultContainer>
         </SProfile.ContentDiv>
         <SProfile.ContentDiv>
-          <SProfile.DefaultContainer>Tags: Beautiful</SProfile.DefaultContainer>
+          <SProfile.DefaultContainer>
+            Tags: <SProfile.TagsForm />
+          </SProfile.DefaultContainer>
         </SProfile.ContentDiv>
         <SProfile.ContentDiv>
           <SProfile.DefaultContainer>
             Website:
-            <SProfile.WebsiteForm />
+            <SProfile.WebsiteForm
+              onChange={input => {
+                setCreateProfileInfo(prev => ({
+                  ...prev,
+                  website: input.target.value.trim(),
+                }));
+              }}
+            />
+            {!validWebUrl && (
+              <S.InputHelper>{HelperText.INVALID_URL}</S.InputHelper>
+            )}
           </SProfile.DefaultContainer>
         </SProfile.ContentDiv>
         <SProfile.ContentDiv>
           <SProfile.DefaultContainer>Introduction</SProfile.DefaultContainer>
-          <SProfile.IntroForm></SProfile.IntroForm>
+          <SProfile.IntroForm
+            maxLength={maxIntroLength}
+            onChange={input => {
+              setCreateProfileInfo(prev => ({
+                ...prev,
+                introduction: input.target.value.trim(),
+              }));
+            }}
+          ></SProfile.IntroForm>
+          {!validIntro && <S.InputHelper>{HelperText.REQUIRED}</S.InputHelper>}
         </SProfile.ContentDiv>
         <SProfile.ProfileButtonContainer>
           <SProfile.Button onClick={createProfileHandler}>
