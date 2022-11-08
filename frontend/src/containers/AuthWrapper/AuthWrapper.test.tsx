@@ -2,7 +2,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { screen } from "@testing-library/react";
 import { User } from "server/models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
-import AuthWrapper, { LoginModalMessage } from "./AuthWrapper";
+import AuthWrapper from "./AuthWrapper";
 import { usersStub } from "server/stubs/users.stub";
 import { OneChonInfo } from "types/chon.types";
 
