@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ButtonColor, ThemeColor } from "styles/common.styles";
+import { ThemeColor } from "styles/common.styles";
 
 export const Container = styled.div`
   background: linear-gradient(
@@ -33,32 +33,6 @@ export const FormContainer = styled.div`
   max-width: 500px;
   min-height: 100vh;
   overflow: auto;
-`;
-
-export const Title = styled.div`
-  font-weight: bold;
-  font-size: 1.5em;
-`;
-
-export const GuideContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-`;
-
-export const UserOptionContainer = styled.div`
-  display: flex;
-  opacity: 0.5;
-`;
-
-export const UserOption = styled.button`
-  color: black;
-  background: none;
-  border: none;
-  cursor: pointer;
 `;
 
 export const Form = styled.form`
@@ -97,6 +71,7 @@ export const InputModifyButton = styled.button`
   border: none;
   margin-left: 5px;
   border-radius: 5px;
+  color: black;
 `;
 
 export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
@@ -107,6 +82,7 @@ export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
   width: 100%;
   border-radius: 10px;
   padding: 10px 0;
+  color: black;
 `;
 
 export const Input = styled.input`
@@ -129,22 +105,17 @@ export const InputHelper = styled.div`
   color: red;
 `;
 
-export const Message = styled.div`
-  align-self: center;
-  padding: 10px 0;
-  opacity: 0.5;
-  font-size: 0.9em;
-`;
-
-export const Submit = styled.button`
-  align-self: center;
+export const Submit = styled.button<{ backgroundColor?: string }>`
   background: none;
   border: none;
   font-weight: bold;
-  font-size: 1em;
-  margin-top: 2vh;
+  margin-top: 25px;
+  font-size: 13px;
+  width: 100%;
+  max-width: 340px;
   color: black;
-  padding: 10px 50px;
-  background-color: ${ButtonColor};
+  padding: 10px 0;
+  border-radius: 10px;
+  background-color: ${props => props.backgroundColor || ThemeColor};
   cursor: pointer;
 `;
