@@ -2,7 +2,11 @@ import styled from "styled-components";
 import { ButtonColor } from "styles/common.styles";
 
 export const Container = styled.div`
-  background-color: rgba(242, 222, 254, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(252, 100, 255, 0.2) 0%,
+    rgba(121, 154, 237, 0.116) 100%
+  );
   height: 100%;
   width: 100%;
   position: fixed;
