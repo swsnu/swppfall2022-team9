@@ -1,5 +1,4 @@
-import { GetProfileDto } from "dto/profile/profile.dto";
-import { Profile } from "models/profile.model";
+import { Profile } from "server/models/profile.model";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -53,17 +52,17 @@ const CreateProfilePage: React.FC<Props> = () => {
           <SProfile.UserNode
             url={currentUserProfile.imgUrl}
           ></SProfile.UserNode>
-          <SProfile.GridContainer>
-            <SProfile.Username>
-              {"박신혜"}
-              {/* {currentUser.lastname}
-                {currentUser.firstname} */}
-              <SProfile.ImageButton onClick={uploadImageHandler}>
-                Change Image
-              </SProfile.ImageButton>
-            </SProfile.Username>
-          </SProfile.GridContainer>
+          <SProfile.ButtonContainer>
+            <SProfile.ImageButton onClick={uploadImageHandler}>
+              Change Image
+            </SProfile.ImageButton>
+          </SProfile.ButtonContainer>
         </SProfile.Container>
+        <SProfile.Username>
+          {"박신혜"}
+          {/* {currentUser.lastname}
+                {currentUser.firstname} */}
+        </SProfile.Username>
       </S.FormContainer>
     </S.Container>
   );

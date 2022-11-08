@@ -8,11 +8,12 @@ export const Container = styled.div`
   padding: 5 5 5 5;
   justify-content: "flex-start";
 `;
-
-export const GridContainer = styled(Container)`
-  display: grid;
-  grid-template: 1fr/1fr;
-  place-items: center;
+export const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5 5 5 5;
+  justify-content: "flex-start";
 `;
 
 export const UserNode = styled.div<{ url: string }>`
@@ -29,20 +30,22 @@ export const UserNode = styled.div<{ url: string }>`
 
 export const Username = styled.div`
   display: inline-block;
-  width: 100px;
+  width: 100%;
   padding: 0 5px 0 5px;
   text-align: center;
   background-size: cover;
   display: flex;
-  z-index: 1;
 `;
 
 export const ImageButton = styled.button`
   display: inline-flex;
   outline: none;
   border: none;
+  width: 160px;
+  height: 40px;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
-  z-index: 2;
+  background-color: #fee1ff;
+  font-size: 15px;
+  border-radius: 15px;
 `;
