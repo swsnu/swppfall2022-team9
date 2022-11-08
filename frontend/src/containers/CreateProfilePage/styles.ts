@@ -201,10 +201,20 @@ export const BackDrop = styled.div`
   background: rgba(0, 0, 0, 0.75);
 `;
 export const SearchDiv = styled.div`
+  background: white;
+  border-radius: 10px;
   position: fixed;
+  left: 25%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   top: 30vh;
-  left: 10%;
-  width: 80%;
+  width: 50%;
+  height: 50%;
   z-index: 100;
   overflow: hidden;
 `;
+
+export const SearchInput = styled.input`
+  width: 100%;
+`;
+
+export const SearchResult = styled.div``;

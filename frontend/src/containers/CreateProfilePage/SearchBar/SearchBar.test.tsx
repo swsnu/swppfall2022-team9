@@ -7,6 +7,12 @@ describe("<SearchBar/>", () => {
   });
 
   it("renders profile page", async () => {
-    render(<SearchBar />);
+    render(
+      <SearchBar
+        propsName=""
+        setShowSearchBar={() => {}}
+        setInput={() => {}}
+      />,
+    );
   });
 });

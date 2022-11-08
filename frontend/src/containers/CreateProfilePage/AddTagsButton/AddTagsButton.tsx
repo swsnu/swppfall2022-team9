@@ -10,7 +10,6 @@ interface Props {
   tagsList: string[];
   setProfile: React.Dispatch<React.SetStateAction<Profile>>;
   propsName: string;
-  allowedTags: string[];
 }
 
 const AddTagsButton: React.FC<Props> = ({
@@ -18,7 +17,6 @@ const AddTagsButton: React.FC<Props> = ({
   tagsList,
   setProfile,
   propsName,
-  allowedTags,
 }) => {
   const [input, setInput] = useState<string>("");
   const [isShowSearchBar, setShowSearchBar] = useState<boolean>(false);
@@ -53,7 +51,14 @@ const AddTagsButton: React.FC<Props> = ({
 
   return (
     <SProfile.Div>
-      {isShowSearchBar && <BackDrop removeBackDrop={removeSearchBar} />}
+      {isShowSearchBar && (
+        <BackDrop
+          removeBackDrop={removeSearchBar}
+          propsName={propsName}
+          setShowSearchBar={setShowSearchBar}
+          setInput={setInput}
+        />
+      )}
       <SProfile.ContentDiv>
         <SProfile.TagsContainer>
           <SProfile.LabelDiv>{tagName}:</SProfile.LabelDiv>
@@ -70,13 +75,7 @@ const AddTagsButton: React.FC<Props> = ({
             })}
             <SProfile.ContentDiv>
               <SProfile.DefaultContainer>
-                <SProfile.TagsForm
-                  value={input}
-                  onClick={showSearchBar}
-                  onChange={text => {
-                    setInput(text.target.value.trim());
-                  }}
-                />
+                <SProfile.TagsForm value={input} onClick={showSearchBar} />
                 {isInvalidTag && (
                   <SProfile.InputHelper>{"잘못된 태그"}</SProfile.InputHelper>
                 )}

@@ -1,6 +1,5 @@
 import { Profile } from "server/models/profile.model";
 import React, { useState } from "react";
-import * as TAGS from "./temp_tags";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
 import AddTagsButton from "./AddTagsButton/AddTagsButton";
@@ -120,7 +119,6 @@ const CreateProfilePage: React.FC<Props> = () => {
           tagsList={createProfileInfo.majorTags}
           setProfile={setCreateProfileInfo}
           propsName="majorTags"
-          allowedTags={TAGS.MAJOR_TAGS}
         ></AddTagsButton>
         {!validMajorTags && (
           <S.InputHelper>
@@ -132,7 +130,6 @@ const CreateProfilePage: React.FC<Props> = () => {
           tagsList={createProfileInfo.degreeTags}
           setProfile={setCreateProfileInfo}
           propsName="degreeTags"
-          allowedTags={TAGS.DEGREE_TAGS}
         ></AddTagsButton>
         {!validDegreeTags && (
           <S.InputHelper>{HelperText.TAGS_ERROR + `: == 1`}</S.InputHelper>
@@ -142,7 +139,6 @@ const CreateProfilePage: React.FC<Props> = () => {
           tagsList={createProfileInfo.qualityTags}
           setProfile={setCreateProfileInfo}
           propsName="qualityTags"
-          allowedTags={TAGS.QUALITY_TAGS}
         ></AddTagsButton>
         {!validQualityTags && (
           <S.InputHelper>
@@ -154,7 +150,6 @@ const CreateProfilePage: React.FC<Props> = () => {
           tagsList={createProfileInfo.skillTags}
           setProfile={setCreateProfileInfo}
           propsName="skillTags"
-          allowedTags={TAGS.SKILL_TAGS}
         ></AddTagsButton>
         {!validSkillTags && (
           <S.InputHelper>
@@ -166,7 +161,6 @@ const CreateProfilePage: React.FC<Props> = () => {
           tagsList={createProfileInfo.languageTags}
           setProfile={setCreateProfileInfo}
           propsName="languageTags"
-          allowedTags={TAGS.LANGUAGE_TAGS}
         ></AddTagsButton>
         {!validLanguageTags && (
           <S.InputHelper>
