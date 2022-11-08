@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { PostCreateProfileDto } from "server/dto/profile/profile.dto";
 import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
 import {
   GetChonListResDto,
@@ -22,6 +23,7 @@ export type UserState = {
 
 const initialState: UserState = {
   currentUser: null,
+<<<<<<< HEAD
   chonList: [
     {
       id: 1,
@@ -133,6 +135,9 @@ const initialState: UserState = {
       ],
     },
   ],
+=======
+  chonList: [],
+>>>>>>> FriendList: add mock
 };
 
 export const postSignIn = createAsyncThunk<void, PostSignInDto>(
@@ -177,6 +182,13 @@ export const getChonList = createAsyncThunk<void>(
   },
 );
 
+export const postCreateProfile = createAsyncThunk<void, PostCreateProfileDto>(
+  "users/postCreateProfile",
+  async body => {
+    await axios.post<PostCreateProfileDto>("/api/profile", body);
+  },
+);
+
 export const userSlice = createSlice({
   name: "users",
   initialState,
@@ -197,3 +209,5 @@ export const userSlice = createSlice({
 export const userActions = userSlice.actions;
 
 export default userSlice.reducer;
+
+// TODO post profile

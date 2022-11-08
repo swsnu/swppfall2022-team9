@@ -8,10 +8,12 @@ import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import applyAuthApi from "./auth";
 import applyFriendRequestApi from "./friendRequests";
+import { Profile } from "../models/profile.model";
 
 export interface Schema {
   users: Array<User>;
   friendRequests: Array<FriendRequest>;
+  profiles: Array<Profile>;
 }
 
 const server = jsonServer.create();

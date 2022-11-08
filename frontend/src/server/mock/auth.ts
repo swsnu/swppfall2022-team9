@@ -23,7 +23,7 @@ export default function applyAuthApi(
       const username = body.username;
       const user = db.get("users").find({ username }).value();
       if (!user) {
-        res.status(404).json(user);
+        res.status(404).json(null);
       } else {
         res.status(200).json(user);
       }
@@ -39,7 +39,7 @@ export default function applyAuthApi(
         .push({ ...req.body, id: users.length })
         .write();
       const registeredUser = db.get("users").find({ id: users.length }).value();
-      res.json(registeredUser);
+      return res.json(registeredUser);
     },
   );
 
