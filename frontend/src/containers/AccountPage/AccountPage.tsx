@@ -7,13 +7,18 @@ import * as FormStyles from "styles/common.form.styles";
 const AccountPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  // TODO: change birthdate
   const onClickChangeBirthdate = () => {};
+
   const onClickChangePassword = () => {
     navigate("/account/password");
   };
   const onClickLogout = () => {
     dispatch(putSignOut());
   };
+
+  // TODO: delete account
   const onClickDeleteAccount = () => {};
 
   return (
@@ -69,6 +74,7 @@ const AccountPage = () => {
               marginTop: 20,
               width: "100%",
               maxWidth: 340,
+              fontWeight: "bold",
             }}
             onClick={onClickLogout}
           >

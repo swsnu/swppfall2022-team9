@@ -97,7 +97,6 @@ export const InputModifyButton = styled.button`
   border: none;
   margin-left: 5px;
   border-radius: 5px;
-  font-weight: bold;
 `;
 
 export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
@@ -108,7 +107,6 @@ export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
   width: 100%;
   border-radius: 10px;
   padding: 10px 0;
-  font-weight: bold;
 `;
 
 export const Input = styled.input`
