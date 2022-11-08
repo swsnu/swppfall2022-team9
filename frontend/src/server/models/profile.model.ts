@@ -5,6 +5,7 @@ export type Profile = {
   majorTags: string[];
   degreeTags: string[];
   skillTags: string[];
+  languageTags: string[];
   website: string;
   introduction: string;
 };
