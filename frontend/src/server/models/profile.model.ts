@@ -1,4 +1,4 @@
-export type Profile = {
+export interface Profile {
   id: number;
   imgUrl: string;
   qualityTags: string[];
@@ -8,4 +8,4 @@ export type Profile = {
   languageTags: string[];
   website: string;
   introduction: string;
-};
+}

@@ -11,7 +11,7 @@ interface Props {}
 
 const CreateProfilePage: React.FC<Props> = () => {
   // const dispatch = useAppDispatch();
-  const currentUser = useAppSelector(state => state.users.currentUser);
+  // const currentUser = useAppSelector(state => state.users.currentUser);
   // get current user profile
   // dummy
   const currentUserProfile: Profile = {
@@ -115,7 +115,7 @@ const CreateProfilePage: React.FC<Props> = () => {
         <SProfile.Container>
           <SProfile.DefaultContainer>
             <SProfile.UserNode
-              url={currentUserProfile.imgUrl}
+              url={createProfileInfo.imgUrl}
             ></SProfile.UserNode>
             <SProfile.Username>
               {"박신혜"}
@@ -131,11 +131,38 @@ const CreateProfilePage: React.FC<Props> = () => {
         </SProfile.Container>
         <AddTagsButton
           tagName="Major"
-          tagsList={currentUserProfile.majorTags}
+          tagsList={createProfileInfo.majorTags}
+          profile={createProfileInfo}
+          setProfile={setCreateProfileInfo}
+          propsName="majorTags"
         ></AddTagsButton>
         <AddTagsButton
-          tagName="Tags"
-          tagsList={currentUserProfile.skillTags}
+          tagName="Degree"
+          tagsList={createProfileInfo.skillTags}
+          profile={createProfileInfo}
+          setProfile={setCreateProfileInfo}
+          propsName="degreeTags"
+        ></AddTagsButton>
+        <AddTagsButton
+          tagName="Qualities"
+          tagsList={createProfileInfo.skillTags}
+          profile={createProfileInfo}
+          setProfile={setCreateProfileInfo}
+          propsName="qualityTags"
+        ></AddTagsButton>
+        <AddTagsButton
+          tagName="Skills"
+          tagsList={createProfileInfo.skillTags}
+          profile={createProfileInfo}
+          setProfile={setCreateProfileInfo}
+          propsName="skillTags"
+        ></AddTagsButton>
+        <AddTagsButton
+          tagName="Languages"
+          tagsList={createProfileInfo.skillTags}
+          profile={createProfileInfo}
+          setProfile={setCreateProfileInfo}
+          propsName="languageTags"
         ></AddTagsButton>
         <SProfile.ContentDiv>
           <SProfile.ContentDiv>
