@@ -132,35 +132,30 @@ const CreateProfilePage: React.FC<Props> = () => {
         <AddTagsButton
           tagName="Major"
           tagsList={createProfileInfo.majorTags}
-          profile={createProfileInfo}
           setProfile={setCreateProfileInfo}
           propsName="majorTags"
         ></AddTagsButton>
         <AddTagsButton
           tagName="Degree"
-          tagsList={createProfileInfo.skillTags}
-          profile={createProfileInfo}
+          tagsList={createProfileInfo.degreeTags}
           setProfile={setCreateProfileInfo}
           propsName="degreeTags"
         ></AddTagsButton>
         <AddTagsButton
           tagName="Qualities"
-          tagsList={createProfileInfo.skillTags}
-          profile={createProfileInfo}
+          tagsList={createProfileInfo.qualityTags}
           setProfile={setCreateProfileInfo}
           propsName="qualityTags"
         ></AddTagsButton>
         <AddTagsButton
           tagName="Skills"
           tagsList={createProfileInfo.skillTags}
-          profile={createProfileInfo}
           setProfile={setCreateProfileInfo}
           propsName="skillTags"
         ></AddTagsButton>
         <AddTagsButton
           tagName="Languages"
-          tagsList={createProfileInfo.skillTags}
-          profile={createProfileInfo}
+          tagsList={createProfileInfo.languageTags}
           setProfile={setCreateProfileInfo}
           propsName="languageTags"
         ></AddTagsButton>
