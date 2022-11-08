@@ -6,8 +6,9 @@ const textFontSize = "15px";
 export const Div = styled.div``;
 
 export const LabelDiv = styled.div`
-  min-width: 60px;
-  max-width: 60px;
+  min-width: 80px;
+  max-width: 80px;
+  padding-top: 10px;
 `;
 
 export const ContentDiv = styled.div`
@@ -128,6 +129,7 @@ export const IntroForm = styled.textarea`
 
 export const WebsiteForm = styled.input`
   margin-left: 10px;
+  margin-top: 5px;
 `;
 
 export const AddTagsButton = styled.button`
