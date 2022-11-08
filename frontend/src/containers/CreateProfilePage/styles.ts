@@ -8,6 +8,8 @@ export const Div = styled.div``;
 export const LabelDiv = styled.div`
   min-width: 80px;
   max-width: 80px;
+  height: 100%;
+  vertical-align: top;
   padding-top: 10px;
 `;
 
@@ -158,12 +160,13 @@ export const SkillTagsDiv = styled.div`
   padding-top: 5px;
 `;
 
-// export const InputHelper = styled.div`
-//   text-align: left;
-//   padding: 2px;
-//   font-size: 5px;
-//   color: red;
-// `;
+export const InputHelper = styled.div`
+  text-align: center;
+  padding: 2px;
+  font-size: 10px;
+  margin-left: 10px;
+  color: red;
+`;
 
 export const SkillTagsButton = styled.button`
   background-color: #d9d9d9;

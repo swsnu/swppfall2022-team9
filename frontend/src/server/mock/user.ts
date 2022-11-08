@@ -26,7 +26,7 @@ export default function applyAuthApi(
     async (req, res) => {
       const friendList = db.get("chonList").value();
       if (!friendList) {
-        res.status(404).json(null);
+        res.status(404).json(friendList);
       } else {
         res.status(200).json(friendList);
       }

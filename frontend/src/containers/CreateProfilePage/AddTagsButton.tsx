@@ -3,7 +3,7 @@ import * as SProfile from "./styles";
 import { IoAdd } from "react-icons/io5";
 import { Profile, ProfileKey } from "server/models/profile.model";
 import TagsButton from "./TagsButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 interface Props {
   tagName: string;
   tagsList: string[];
@@ -23,20 +23,19 @@ const AddTagsButton: React.FC<Props> = ({
   const onAddTagsButtonClick = () => {
     if (input.length > 0) {
       setProfile(prevProfile => {
+        const tempProfile = { ...prevProfile };
         if (!prevProfile[propsName as ProfileKey].includes(input)) {
+          tempProfile[propsName as ProfileKey].push(input);
           setInvalidTag(false);
-          return {
-            ...prevProfile,
-            propsName: prevProfile[propsName as ProfileKey].push(input),
-          };
         } else {
           setInvalidTag(true);
-          return prevProfile;
         }
+        return tempProfile;
       });
+    } else {
+      setInvalidTag(true);
+      setInput("");
     }
-    setInvalidTag(true);
-    setInput("");
   };
 
   return (
@@ -55,16 +54,22 @@ const AddTagsButton: React.FC<Props> = ({
             );
           })}
           <SProfile.ContentDiv>
-            <SProfile.TagsForm
-              value={input}
-              onChange={text => {
-                setInput(text.target.value.trim());
-              }}
-            />
-            {/* {isInvalidTag && <SProfile.InputHelper>{"잘못된 태그"}</SProfile.InputHelper>} */}
-            <SProfile.AddTagsButton onClick={onAddTagsButtonClick}>
-              {<IoAdd />}
-            </SProfile.AddTagsButton>
+            <SProfile.DefaultContainer>
+              <SProfile.TagsForm
+                value={input}
+                onChange={text => {
+                  setInput(text.target.value.trim());
+                }}
+              />
+              {isInvalidTag && (
+                <SProfile.InputHelper>{"잘못된 태그"}</SProfile.InputHelper>
+              )}
+            </SProfile.DefaultContainer>
+            <SProfile.DefaultContainer>
+              <SProfile.AddTagsButton onClick={onAddTagsButtonClick}>
+                {<IoAdd />}
+              </SProfile.AddTagsButton>
+            </SProfile.DefaultContainer>
           </SProfile.ContentDiv>
         </SProfile.WrapDiv>
       </SProfile.TagsContainer>
