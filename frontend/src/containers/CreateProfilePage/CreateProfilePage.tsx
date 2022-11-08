@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import * as TAGS from "./temp_tags";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
-import TagsButton from "./TagsButton";
+import AddTagsButton from "./AddTagsButton";
 
 interface Props {}
 
@@ -19,7 +19,7 @@ const CreateProfilePage: React.FC<Props> = () => {
     // id: currentUser!.id
     imgUrl: "",
     qualityTags: ["Beautiful"],
-    majorTags: ["Computer Science"],
+    majorTags: ["Computer"],
     degreeTags: ["Ph.D"],
     skillTags: ["Beautiful"],
     languageTags: ["Korean"],
@@ -129,11 +129,17 @@ const CreateProfilePage: React.FC<Props> = () => {
             </SProfile.Button>
           </SProfile.ImageButtonContainer>
         </SProfile.Container>
-        <TagsButton tagName="Major"></TagsButton>
-        <TagsButton tagName="Tags"></TagsButton>
+        <AddTagsButton
+          tagName="Major"
+          tagsList={currentUserProfile.majorTags}
+        ></AddTagsButton>
+        <AddTagsButton
+          tagName="Tags"
+          tagsList={currentUserProfile.skillTags}
+        ></AddTagsButton>
         <SProfile.ContentDiv>
-          <SProfile.DefaultContainer>
-            Website:
+          <SProfile.ContentDiv>
+            <SProfile.LabelDiv>Website:</SProfile.LabelDiv>
             <SProfile.WebsiteForm
               onChange={input => {
                 setCreateProfileInfo(prev => ({
@@ -145,9 +151,9 @@ const CreateProfilePage: React.FC<Props> = () => {
             {!validWebUrl && (
               <S.InputHelper>{HelperText.INVALID_URL}</S.InputHelper>
             )}
-          </SProfile.DefaultContainer>
+          </SProfile.ContentDiv>
         </SProfile.ContentDiv>
-        <SProfile.ContentDiv>
+        <SProfile.Div>
           <SProfile.DefaultContainer>Introduction</SProfile.DefaultContainer>
           <SProfile.IntroForm
             maxLength={maxIntroLength}
@@ -159,7 +165,7 @@ const CreateProfilePage: React.FC<Props> = () => {
             }}
           ></SProfile.IntroForm>
           {!validIntro && <S.InputHelper>{HelperText.REQUIRED}</S.InputHelper>}
-        </SProfile.ContentDiv>
+        </SProfile.Div>
         <SProfile.ProfileButtonContainer>
           <SProfile.Button onClick={createProfileHandler}>
             프로필 생성

@@ -3,7 +3,20 @@ import styled from "styled-components";
 const themeButtonColor = "#fee1ff";
 const textFontSize = "15px";
 
-export const ContentDiv = styled.div``;
+export const Div = styled.div``;
+
+export const LabelDiv = styled.div`
+  min-width: 60px;
+  max-width: 60px;
+`;
+
+export const ContentDiv = styled.div`
+  display: flex;
+`;
+export const WrapDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
 
 export const DefaultContainer = styled.div`
   padding-top: 7px;
@@ -103,8 +116,9 @@ export const Button = styled.button`
 `;
 
 export const TagsForm = styled.input`
-  width: 15%;
+  width: 50px;
   margin-left: 10px;
+  margin-top: 7px;
 `;
 
 export const IntroForm = styled.textarea`
@@ -118,7 +132,6 @@ export const WebsiteForm = styled.input`
 
 export const AddTagsButton = styled.button`
   cursor: pointer;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -126,6 +139,7 @@ export const AddTagsButton = styled.button`
   height: 25px;
   border-radius: 50%;
   margin-left: 10px;
+  margin-top: 7px;
   background-color: #d9d9d9;
   &:hover {
     background: #d9d9d9;
@@ -136,4 +150,16 @@ export const AddTagsButton = styled.button`
     filter: brightness(70%);
   }
   border: none;
+`;
+
+export const SkillTagsContainer = styled.div`
+  background-color: #d9d9d9;
+  display: flex;
+  flex-wrap: wrap;
+  height: 25px;
+  border-radius: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 7px;
+  margin-top: 5px;
 `;
