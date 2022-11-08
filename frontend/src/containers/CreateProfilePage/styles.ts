@@ -211,6 +211,7 @@ export const SearchDiv = styled.div`
   height: 50%;
   z-index: 100;
   overflow: hidden;
+  overflow-y: scroll;
 `;
 
 export const SearchInput = styled.input`

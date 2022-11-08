@@ -2,8 +2,7 @@ import * as SProfile from "../styles";
 import { IoAdd } from "react-icons/io5";
 import { Profile, ProfileKey } from "server/models/profile.model";
 import TagsButton from "../TagsButton/TagsButton";
-import { useEffect, useState } from "react";
-import SearchBar from "../SearchBar/SearchBar";
+import { useState } from "react";
 import BackDrop from "../BackDrop/BackDrop";
 interface Props {
   tagName: string;
