@@ -7,6 +7,13 @@ describe("<BackDrop/>", () => {
   });
 
   it("renders profile page", async () => {
-    render(<BackDrop removeBackDrop={() => {}} />);
+    render(
+      <BackDrop
+        removeBackDrop={() => {}}
+        propsName=""
+        setShowSearchBar={() => {}}
+        setInput={() => {}}
+      />,
+    );
   });
 });
