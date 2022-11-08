@@ -1,4 +1,4 @@
-import * as SProfile from "./styles";
+import * as SProfile from "../styles";
 import { Profile, ProfileKey } from "server/models/profile.model";
 interface Props {
   tagName: string;

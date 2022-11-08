@@ -1,11 +1,9 @@
 import { Profile } from "server/models/profile.model";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "store/hooks";
 import * as TAGS from "./temp_tags";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
-import AddTagsButton from "./AddTagsButton";
+import AddTagsButton from "./AddTagsButton/AddTagsButton";
 
 interface Props {}
 
@@ -32,10 +30,7 @@ const CreateProfilePage: React.FC<Props> = () => {
   const maxNumberTags = 6;
   const maxIntroLength = 300;
 
-  // enforce certain areas as mandatory
-  // save upon click
-
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const uploadImageHandler = () => {};
 
@@ -50,7 +45,8 @@ const CreateProfilePage: React.FC<Props> = () => {
     NO_ERROR = "",
     REQUIRED = "필수 정보입니다.",
     INVALID_URL = "올바르지 않은 주소입니다.",
-    TOO_MANY_TAGS = "최대 태그 수를 초과하였습니다.",
+    TAGS_ERROR = "최대 태그 수를 초과하였습니다",
+    SUBMIT_ERROR = "모든 칸에 적어도 하나의 태그가 필요합니다.",
   }
   const [validImgUrl, setValidImageUrl] = useState<boolean>(true);
   const [validWebUrl, setValidWebUrl] = useState<boolean>(true);
@@ -62,10 +58,6 @@ const CreateProfilePage: React.FC<Props> = () => {
   const [validLanguageTags, setValidLanguageTags] = useState<boolean>(true);
 
   const createProfileHandler = () => {
-    // read the inputs and validate;
-    // if valid, update
-
-    // allow empty urls
     setValidImageUrl(
       createProfileInfo.imgUrl ? urlValdiation(createProfileInfo.imgUrl) : true,
     );
@@ -75,23 +67,11 @@ const CreateProfilePage: React.FC<Props> = () => {
         : true,
     );
     setValidIntro(!!createProfileInfo.introduction);
-    setValidQualityTags(
-      createProfileInfo.qualityTags.length > 0 &&
-        createProfileInfo.qualityTags.length < maxNumberTags,
-    );
-    setValidMajorTags(
-      createProfileInfo.majorTags.length > 0 &&
-        createProfileInfo.majorTags.length < maxNumberTags,
-    );
+    setValidQualityTags(createProfileInfo.qualityTags.length < maxNumberTags);
+    setValidMajorTags(createProfileInfo.majorTags.length < maxNumberTags);
     setValidDegreeTags(createProfileInfo.degreeTags.length === 1);
-    setValidSkillTags(
-      createProfileInfo.skillTags.length > 0 &&
-        createProfileInfo.skillTags.length < maxNumberTags,
-    );
-    setValidLanguageTags(
-      createProfileInfo.languageTags.length > 0 &&
-        createProfileInfo.languageTags.length < maxNumberTags,
-    );
+    setValidSkillTags(createProfileInfo.skillTags.length < maxNumberTags);
+    setValidLanguageTags(createProfileInfo.languageTags.length < maxNumberTags);
     if (
       validImgUrl &&
       validDegreeTags &&
@@ -105,6 +85,12 @@ const CreateProfilePage: React.FC<Props> = () => {
       // update
     }
   };
+  const isInvalid =
+    createProfileInfo.languageTags.length == 0 ||
+    createProfileInfo.skillTags.length == 0 ||
+    createProfileInfo.majorTags.length == 0 ||
+    createProfileInfo.degreeTags.length == 0 ||
+    createProfileInfo.qualityTags.length == 0;
 
   return (
     <S.Container>
@@ -134,31 +120,59 @@ const CreateProfilePage: React.FC<Props> = () => {
           tagsList={createProfileInfo.majorTags}
           setProfile={setCreateProfileInfo}
           propsName="majorTags"
+          allowedTags={TAGS.MAJOR_TAGS}
         ></AddTagsButton>
+        {!validMajorTags && (
+          <S.InputHelper>
+            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
+          </S.InputHelper>
+        )}
         <AddTagsButton
           tagName="Degree"
           tagsList={createProfileInfo.degreeTags}
           setProfile={setCreateProfileInfo}
           propsName="degreeTags"
+          allowedTags={TAGS.DEGREE_TAGS}
         ></AddTagsButton>
+        {!validDegreeTags && (
+          <S.InputHelper>{HelperText.TAGS_ERROR + `: == 1`}</S.InputHelper>
+        )}
         <AddTagsButton
           tagName="Qualities"
           tagsList={createProfileInfo.qualityTags}
           setProfile={setCreateProfileInfo}
           propsName="qualityTags"
+          allowedTags={TAGS.QUALITY_TAGS}
         ></AddTagsButton>
+        {!validQualityTags && (
+          <S.InputHelper>
+            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
+          </S.InputHelper>
+        )}
         <AddTagsButton
           tagName="Skills"
           tagsList={createProfileInfo.skillTags}
           setProfile={setCreateProfileInfo}
           propsName="skillTags"
+          allowedTags={TAGS.SKILL_TAGS}
         ></AddTagsButton>
+        {!validSkillTags && (
+          <S.InputHelper>
+            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
+          </S.InputHelper>
+        )}
         <AddTagsButton
           tagName="Languages"
           tagsList={createProfileInfo.languageTags}
           setProfile={setCreateProfileInfo}
           propsName="languageTags"
+          allowedTags={TAGS.LANGUAGE_TAGS}
         ></AddTagsButton>
+        {!validLanguageTags && (
+          <S.InputHelper>
+            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
+          </S.InputHelper>
+        )}
         <SProfile.ContentDiv>
           <SProfile.ContentDiv>
             <SProfile.LabelDiv>Website:</SProfile.LabelDiv>
@@ -189,10 +203,11 @@ const CreateProfilePage: React.FC<Props> = () => {
           {!validIntro && <S.InputHelper>{HelperText.REQUIRED}</S.InputHelper>}
         </SProfile.Div>
         <SProfile.ProfileButtonContainer>
-          <SProfile.Button onClick={createProfileHandler}>
+          <SProfile.Button disabled={isInvalid} onClick={createProfileHandler}>
             프로필 생성
           </SProfile.Button>
         </SProfile.ProfileButtonContainer>
+        {isInvalid && <S.InputHelper>{HelperText.SUBMIT_ERROR}</S.InputHelper>}
       </SProfile.FormContainer>
     </S.Container>
   );
