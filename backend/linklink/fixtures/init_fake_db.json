@@ -1,0 +1,628 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$PEMJIA7EuWfArBF9X67hE6$JX689enrDtCFY9SKuo/ctHssWGrRuzOb/8ssMxcrmTc=",
+            "last_login": "2022-11-03T05:50:16.548Z",
+            "is_superuser": true,
+            "username": "linklinkadmin",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-11-03T05:50:03.769Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$j83nu5fgwmhwVrUmuna2eI$WrcmTJo9jIxcnD+azokGuCGeqw8XlY/NLFNIT/JHK/M=",
+            "last_login": "2022-11-05T07:02:45.504Z",
+            "is_superuser": false,
+            "username": "wotmd",
+            "first_name": "재승",
+            "last_name": "박",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-03T05:54:03Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$BY8sKnzPjgcc2HxUbbO0hh$cfOTzKVOksd2cQX16lE5EHxleqEOaNWptBxG3AFMJ30=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "tlsrP",
+            "first_name": "신혜",
+            "last_name": "박",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-03T05:57:09Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$implX97TmXKsMwkxxzSYN7$3CsmEWVB0nuFYdlxv8cU8dC+6JFpzKd1+jp6OULGSw4=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "guswls",
+            "first_name": "현진",
+            "last_name": "서",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-03T06:03:24Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$CVjYx2ICE9mIPV77QhEaW4$W4r3wl27pjFwUThe/oPE8Amn4JhV66Q+bn6XOtQiV0g=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "alsdk",
+            "first_name": "민아",
+            "last_name": "신",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-05T06:38:52Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 6,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$BLAVLpiyCQWv4dgfHt5RTo$LiFZ4d9EdHS+0cv3mZJFffGaRMbP6xE+XbR4YZgoTEE=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "dbwls",
+            "first_name": "유진",
+            "last_name": "안",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-05T06:41:20Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 7,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$OXlJJuLhLv5TOyj6sQTlTM$49f4pzbwJjPWhftIVH63VVYeipjvEIQfRw9Ub0a4LIY=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "dnjsdud",
+            "first_name": "원영",
+            "last_name": "장",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 8,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$UPs7t57EFnoRcHQ3yw84CJ$3ErxMKHC5HC9Arc0cBHrfysyCAKfKz8pyr24m+wuaC8=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "alswn",
+            "first_name": "민주",
+            "last_name": "김",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 9,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$Nru5LaR2YWhQvbCNbPRW3O$tfYzcA35x0zUx1/y+qgUDbgzYI61jHjdv4/JogilZ5Q=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "alswjd",
+            "first_name": "민정",
+            "last_name": "이",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 10,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$342PwEkjsYr6BX7mdwnLOF$mZGAoeo1hEkcRRn1ZfTwUuQfwHWYCiOmcRKr2S4qsTA=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "thgml",
+            "first_name": "소희",
+            "last_name": "한",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 11,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$Xj4uKboYUUDQ1M2wzeB4aK$BAJKrjzuQgcc0TiePXe/jncEJboh6GSaiWNhPStXXMo=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "qudgjs",
+            "first_name": "병헌",
+            "last_name": "이",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 12,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$JdjQzfeBRgCELvLQomM07q$edaXzbuP34jDQhvLd4OlnYA8MWVheA90OPyLmtHXAdI=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "wotjr",
+            "first_name": "재석",
+            "last_name": "유",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 13,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$vz9OebXMeSRhlOJEIgFYsX$24S6IWL2qY+CdV5GonOBKzbnoO5Ss/mvxPFsekMoLRM=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "audtn",
+            "first_name": "명수",
+            "last_name": "박",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 14,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$ve63lQhOPhh2XJ6W0ZoDle$9UJ2/JOnCPfeK+tuCWf0fidVd53kE10Oy+y1mX4RAEI=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "gudehs",
+            "first_name": "형돈",
+            "last_name": "정",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 15,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$uHO5ggrAEqnj91sdeuaZR0$FBfP1381sz79r+vO2W/vG5Zoby4gqzNNj7NBQ7pMwEo=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "gowls",
+            "first_name": "해진",
+            "last_name": "유",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 16,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$DXzc09h7aumuU5Tjx4Xghz$Fzu9fABJEwLVHKN2/mRjn6e2snN5wKaww4zVKFBQY9A=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "tmddnjs",
+            "first_name": "승원",
+            "last_name": "차",
+            "email": "notiona@snu.ac.kr",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "friendRequestToken": "e23b34ab-5983-47f5-9b6f-ec86486bea91",
+            "imgUrl": "https://en.wiktionary.org/wiki/cat#/media/File:Cat03.jpg",
+            "emailValidated": true
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 2,
+        "fields": {
+            "user": 3,
+            "friendRequestToken": "42ee8c31-3248-475c-8d3d-0e7aa3ebd559",
+            "imgUrl": "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 3,
+        "fields": {
+            "user": 4,
+            "friendRequestToken": "bc1b0c18-fc88-44bd-b543-1887465462b8",
+            "imgUrl": "https://mblogthumb-phinf.pstatic.net/MjAxNzAzMjFfMTEy/MDAxNDkwMTA2MTM3MzMy.oUSVW9DfguOg7VE2aGWPyNNPuJ88kSOf2G4_8l00hRAg.rtQLGbftrweAtW2gpEJ9vG5HR4qYfDkh2athLbpZdwog.JPEG.badpark/1680x1050-1.jpg?type=w800",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 4,
+        "fields": {
+            "user": 5,
+            "friendRequestToken": "16a4971a-5cb9-46b8-813a-62304161e180",
+            "imgUrl": "https://search.pstatic.net/common?type=b&size=216&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202110%2F20211028162722613.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 5,
+        "fields": {
+            "user": 6,
+            "friendRequestToken": "d8d1b737-c28a-4b7e-ba3a-a04c3e3bb215",
+            "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrg6_A9laCoJj6foa4xvUVoxd7SwCS7uKttg&usqp=CAU",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 6,
+        "fields": {
+            "user": 7,
+            "friendRequestToken": "3c14c6a2-6f80-4dd8-9495-83eddccf66f3",
+            "imgUrl": "https://w.namu.la/s/6eb1c248bfe3e65e379895405895de473e87d8c68c8185b564be5d4f305aa3f5674de1fb2559d07988a48105185fd4481dc9f9d948282123cc8f05b563f0f210efcede139ce8f5635c8f7f9cb0e443e8fb366415c47fab637aa8b33dec9a53e833eab501c8d94531edce4e3e6cca090a",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 7,
+        "fields": {
+            "user": 8,
+            "friendRequestToken": "75a477fb-bee7-48b1-915d-0fc1dc4bfd29",
+            "imgUrl": "https://i.pinimg.com/736x/4f/55/4f/4f554fd63632cf7704740c548a3dba98.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 8,
+        "fields": {
+            "user": 9,
+            "friendRequestToken": "2794749b-6012-4a1a-863c-4e89aa5cc0b3",
+            "imgUrl": "https://w.namu.la/s/146a3cab6b30fe866f15358611221d2a4de60eec333a51dbd89b4cf4363feadefdd37b2ae1c3061ea9a924f36e1733cfec44f6e086007b1fa61ce1b026de3959ad231492cbe9b37e9c7e6bc3dd2be99c1a864e0d44e3353b40e3b25a2c7659a35ed805e81886ad6f4fec6ae27ae2c3e7",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 9,
+        "fields": {
+            "user": 10,
+            "friendRequestToken": "dfc2ed36-04ce-4ec3-891b-05f8454e4e98",
+            "imgUrl": "https://www.smlounge.co.kr/upload/woman/article/202112/thumb/49686-473794-sampleM.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 10,
+        "fields": {
+            "user": 11,
+            "friendRequestToken": "cce922b0-0ff6-436f-94aa-1d9cf266f89a",
+            "imgUrl": "https://blog.kakaocdn.net/dn/pvThZ/btrHnyoN53Z/CfPa8zGUCBEp0V4Mo4uCj1/img.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 11,
+        "fields": {
+            "user": 12,
+            "friendRequestToken": "1a968859-8873-4df9-9332-dafb93531b76",
+            "imgUrl": "https://newsimg-hams.hankookilbo.com/2022/11/05/b34e2afc-ed88-4f66-ac04-1ce0f963f487.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 12,
+        "fields": {
+            "user": 13,
+            "friendRequestToken": "37bc587e-cb63-4173-8dfb-93e52fe00958",
+            "imgUrl": "https://post-phinf.pstatic.net/MjAxOTA2MTlfMjYy/MDAxNTYwOTI1NzY3MDgw.fbjdjSHG0aV1sWTIBf5i3Tt4X-eX56UYjUZYZTKQ_Ywg.R_NKSI6rYZPJ-X2izK44fup8P8dSXH3trSALCtmlNmMg.JPEG/image_1887121981560925741830.jpg?type=w1200",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 13,
+        "fields": {
+            "user": 14,
+            "friendRequestToken": "fcbc6909-22e1-45c0-ae44-f7f125fe66fa",
+            "imgUrl": "https://image.kmib.co.kr/online_image/2020/1220/611811110015341674_1.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 14,
+        "fields": {
+            "user": 15,
+            "friendRequestToken": "fa641491-9875-406c-870e-cdaa39ed205b",
+            "imgUrl": "https://thumb.mt.co.kr/06/2020/02/2020022110594033358_1.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 15,
+        "fields": {
+            "user": 16,
+            "friendRequestToken": "35f8557c-3334-484b-a9ce-72fc4ad5227e",
+            "imgUrl": "http://img.segye.com/content/image/2016/09/09/20160909513537.jpg",
+            "emailValidated": false
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 1,
+        "fields": {
+            "senderId": 1,
+            "getterId": 2,
+            "status": "Accepted",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 2,
+        "fields": {
+            "senderId": 5,
+            "getterId": 1,
+            "status": "Accepted",
+            "createdAt": "2022-11-03T06:04:22.493Z",
+            "updatedAt": "2022-11-03T07:46:42.691Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 3,
+        "fields": {
+            "senderId": 1,
+            "getterId": 8,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T06:47:23.853Z",
+            "updatedAt": "2022-11-05T06:47:23.853Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 4,
+        "fields": {
+            "senderId": 11,
+            "getterId": 1,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:38:12.929Z",
+            "updatedAt": "2022-11-05T12:38:12.929Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 5,
+        "fields": {
+            "senderId": 1,
+            "getterId": 14,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:16.226Z",
+            "updatedAt": "2022-11-05T12:44:16.226Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 6,
+        "fields": {
+            "senderId": 2,
+            "getterId": 3,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 7,
+        "fields": {
+            "senderId": 2,
+            "getterId": 4,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 8,
+        "fields": {
+            "senderId": 6,
+            "getterId": 5,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 9,
+        "fields": {
+            "senderId": 7,
+            "getterId": 5,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 10,
+        "fields": {
+            "senderId": 8,
+            "getterId": 9,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 11,
+        "fields": {
+            "senderId": 8,
+            "getterId": 10,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 12,
+        "fields": {
+            "senderId": 12,
+            "getterId": 11,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 13,
+        "fields": {
+            "senderId": 13,
+            "getterId": 11,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 14,
+        "fields": {
+            "senderId": 14,
+            "getterId": 15,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.verification",
+        "pk": 1,
+        "fields": {
+            "linklinkuser": 1,
+            "token": "96a88d67-4bf7-4d47-ae79-073bd34a6606",
+            "createdAt": "2022-11-03T05:54:34.324Z",
+            "expiresAt": "2022-11-03T05:54:31Z",
+            "purpose": "Register"
+        }
+    },
+    {
+        "model": "linklink.verification",
+        "pk": 2,
+        "fields": {
+            "linklinkuser": 2,
+            "token": "47a86d60-f27a-4af7-90c1-5c5975218cc9",
+            "createdAt": "2022-11-03T05:57:55.172Z",
+            "expiresAt": "2022-11-03T05:38:53Z",
+            "purpose": "Register"
+        }
+    },
+    {
+        "model": "linklink.verification",
+        "pk": 3,
+        "fields": {
+            "linklinkuser": 3,
+            "token": "a12fab77-67b4-4720-8180-fc6a0d56d5f8",
+            "createdAt": "2022-11-03T06:04:02.320Z",
+            "expiresAt": "2022-11-03T06:04:00Z",
+            "purpose": "Register"
+        }
+    }
+]
+    

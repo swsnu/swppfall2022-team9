@@ -24,7 +24,8 @@ class LinkLinkUser(models.Model):
     )
     friendRequestToken = models.UUIDField(
         default=uuid.uuid4,
-        editable=False
+        editable=False,
+        unique=True
     )
     imgUrl = models.CharField(max_length=400, default="https://catimage.com")
     emailValidated = models.BooleanField(default=False)
@@ -71,7 +72,8 @@ class Verification(models.Model):
     linklinkuser = models.ForeignKey(LinkLinkUser, on_delete=models.CASCADE)
     token = models.UUIDField(
         default=uuid.uuid4,
-        editable=False
+        editable=False,
+        unique=True
     )
     createdAt = models.DateTimeField(auto_now_add=True)
     expiresAt = models.DateTimeField()

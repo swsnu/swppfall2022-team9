@@ -22,6 +22,7 @@ ignore-patterns=manage.py,
                 0006_rename_imageurl_linklinkuser_imgurl.py,
                 0007_alter_linklinkuser_imgurl.py,
                 0008_alter_verification_linklinkuser.py,
+                0009_alter_linklinkuser_friendrequesttoken_and_more.py,
 
 # Pickle collected data for later comparisons.
 persistent=no
