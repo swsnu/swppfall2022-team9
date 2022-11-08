@@ -1,4 +1,4 @@
-import { Profile } from "models/profile.model";
+import { Profile } from "server/models/profile.model";
 
 export type GetProfileDto = Profile;
 
