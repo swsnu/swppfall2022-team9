@@ -23,7 +23,7 @@ export default function applyAuthApi(
       const username = body.username;
       const user = db.get("users").find({ username }).value();
       if (!user) {
-        res.status(404).json(null);
+        res.status(404).json(user);
       } else {
         res.status(200).json(user);
       }

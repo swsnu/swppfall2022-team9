@@ -6,16 +6,14 @@ interface Props {
   propsName: string;
 }
 
-// eslint-disable-next-line react/prop-types
 const TagsButton: React.FC<Props> = ({ tagName, setProfile, propsName }) => {
   const onClickTagsContainer = () => {
     setProfile(prevProfile => {
-      return {
-        ...prevProfile,
-        propsName: prevProfile[propsName as ProfileKey].filter(
-          item => item !== tagName,
-        ),
-      };
+      const tempProfile = { ...prevProfile };
+      tempProfile[propsName as ProfileKey] = tempProfile[
+        propsName as ProfileKey
+      ].filter(item => item !== tagName);
+      return tempProfile;
     });
   };
   return (
