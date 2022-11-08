@@ -8,7 +8,7 @@ export type PostSignInResDto = User;
 export type PostSignUpResDto = User;
 
 export interface GetChonListResDto {
-  oneChonInfo: OneChonInfo[];
+  onechon: OneChonInfo[];
 }
 
 export interface GetVerifyRegisterTokenResDto {}

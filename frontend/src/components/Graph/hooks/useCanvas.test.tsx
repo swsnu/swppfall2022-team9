@@ -6,7 +6,7 @@ import { renderHook } from "@testing-library/react-hooks";
 
 // reference: https://kooku0.github.io/blog/%EC%99%B8%EB%B6%80-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%BD%94%EB%93%9C-%EC%A7%9C%EA%B8%B0/
 
-describe("<Graph/>", () => {
+describe("useCanvas hook", () => {
   beforeEach(() => {
     // const mockCanvasElement = document.createElement("canvas");
     // const fakeCanvas = new Canvas(mockCanvasElement);
@@ -139,30 +139,5 @@ describe("<Graph/>", () => {
     fireEvent.wheel(canvasElement, { deltaY: -10 });
 
     result.current?.destroy();
-  });
-
-  it("tests drawing nodes", async () => {
-    const divElement = document.createElement("div");
-    const canvasElement = divElement.appendChild(
-      document.createElement("canvas"),
-    );
-    const parentRef = divElement;
-    const childRef = canvasElement;
-    const { result } = renderHook(() => {
-      const containerRef = useRef<HTMLDivElement>(parentRef);
-      const canvasRef = useRef<HTMLCanvasElement>(childRef);
-      return useCanvas({
-        divRef: containerRef,
-        canvasRef: canvasRef,
-      });
-    });
-    result.current?.setSize(500, 500);
-    waitFor(() => expect(result.current?.getWidth()).toBe(500));
-
-    result.current?.setCurrentUserNode(usersStub[0]);
-    result.current?.render();
-    const ctx = result.current?.getContext();
-    const events = ctx?.__getEvents();
-    expect(events).toMatchSnapshot();
   });
 });

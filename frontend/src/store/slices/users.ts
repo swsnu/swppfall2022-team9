@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
 import {
+  GetChonListResDto,
   PostSignInResDto,
   PostSignUpResDto,
 } from "server/dto/users/users.res.dto";
@@ -170,9 +171,9 @@ export const verifyRegisterToken = createAsyncThunk<void, string>(
 export const getChonList = createAsyncThunk<void>(
   "users/getChonList",
   async (_, { dispatch }) => {
-    const response = (await axios.get<Array<OneChonInfo>>(`/api/user/onechon/`))
+    const response = (await axios.get<GetChonListResDto>(`/api/user/onechon/`))
       .data;
-    dispatch(userActions.setChonList(response));
+    dispatch(userActions.setChonList(response.onechon));
   },
 );
 
@@ -190,8 +191,6 @@ export const userSlice = createSlice({
       state.chonList = actions.payload;
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  extraReducers(builder) {},
 });
 
 // Action creators are generated for each case reducer function
