@@ -6,6 +6,7 @@ const textFontSize = "15px";
 export const DefaultContainer = styled.div`
   padding-top: 7px;
   padding-bottom: 7px;
+  display: flex;
 `;
 
 export const Container = styled.div`
@@ -87,6 +88,7 @@ export const ContentDiv = styled.div``;
 
 export const TagsForm = styled.input`
   width: 15%;
+  margin-left: 10px;
 `;
 
 export const IntroForm = styled.textarea`
@@ -95,6 +97,17 @@ export const IntroForm = styled.textarea`
 `;
 
 export const WebsiteForm = styled.input`
-  /* padding-left: 10px; */
   margin-left: 10px;
+`;
+
+export const AddTagsButton = styled.button`
+  align-items: center;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  padding-top: 10px;
+  margin-left: 10px;
+  background-color: #d9d9d9;
+  border: none;
 `;

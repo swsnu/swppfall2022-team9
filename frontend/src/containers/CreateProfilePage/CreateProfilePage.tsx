@@ -2,13 +2,15 @@ import { Profile } from "server/models/profile.model";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import * as TAGS from "./temp_tags";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
+import TagsButton from "./TagsButton";
 
 interface Props {}
 
 const CreateProfilePage: React.FC<Props> = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const currentUser = useAppSelector(state => state.users.currentUser);
   // get current user profile
   // dummy
@@ -16,10 +18,11 @@ const CreateProfilePage: React.FC<Props> = () => {
     id: 0,
     // id: currentUser!.id
     imgUrl: "",
-    qualityTags: [],
-    majorTags: [],
-    degreeTags: [],
-    skillTags: [],
+    qualityTags: ["Beautiful"],
+    majorTags: ["Computer Science"],
+    degreeTags: ["Ph.D"],
+    skillTags: ["Beautiful"],
+    languageTags: ["Korean"],
     website: "",
     introduction: "",
   };
@@ -56,6 +59,7 @@ const CreateProfilePage: React.FC<Props> = () => {
   const [validMajorTags, setValidMajorTags] = useState<boolean>(true);
   const [validDegreeTags, setValidDegreeTags] = useState<boolean>(true);
   const [validSkillTags, setValidSkillTags] = useState<boolean>(true);
+  const [validLanguageTags, setValidLanguageTags] = useState<boolean>(true);
 
   const createProfileHandler = () => {
     // read the inputs and validate;
@@ -84,6 +88,10 @@ const CreateProfilePage: React.FC<Props> = () => {
       createProfileInfo.skillTags.length > 0 &&
         createProfileInfo.skillTags.length < maxNumberTags,
     );
+    setValidLanguageTags(
+      createProfileInfo.languageTags.length > 0 &&
+        createProfileInfo.languageTags.length < maxNumberTags,
+    );
     if (
       validImgUrl &&
       validDegreeTags &&
@@ -91,7 +99,8 @@ const CreateProfilePage: React.FC<Props> = () => {
       validMajorTags &&
       validQualityTags &&
       validSkillTags &&
-      validWebUrl
+      validWebUrl &&
+      validLanguageTags
     ) {
       // update
     }
@@ -120,16 +129,8 @@ const CreateProfilePage: React.FC<Props> = () => {
             </SProfile.Button>
           </SProfile.ImageButtonContainer>
         </SProfile.Container>
-        <SProfile.ContentDiv>
-          <SProfile.DefaultContainer>
-            Major: <SProfile.TagsForm type="text" />
-          </SProfile.DefaultContainer>
-        </SProfile.ContentDiv>
-        <SProfile.ContentDiv>
-          <SProfile.DefaultContainer>
-            Tags: <SProfile.TagsForm />
-          </SProfile.DefaultContainer>
-        </SProfile.ContentDiv>
+        <TagsButton tagName="Major"></TagsButton>
+        <TagsButton tagName="Tags"></TagsButton>
         <SProfile.ContentDiv>
           <SProfile.DefaultContainer>
             Website:
