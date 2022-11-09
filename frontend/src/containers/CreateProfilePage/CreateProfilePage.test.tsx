@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import CreateProfilePage from "./CreateProfilePage";
 
 describe("<CreateProfilePage/>", () => {
@@ -8,5 +8,19 @@ describe("<CreateProfilePage/>", () => {
 
   it("renders profile page", async () => {
     render(<CreateProfilePage />);
+  });
+
+  it("clicks create profile", async () => {
+    render(<CreateProfilePage />);
+    const button = screen.getByText("프로필 생성");
+    fireEvent.click(button);
+  });
+
+  it("tests urlValidation", async () => {
+    render(<CreateProfilePage />);
+    const input = screen.getAllByRole("textbox")[5];
+    fireEvent.change(input, { target: { value: "iluvswpp@snu.ac.kr" } });
+    const button = screen.getByText("프로필 생성");
+    fireEvent.click(button);
   });
 });
