@@ -22,9 +22,11 @@ const ChangePasswordPage: React.FC = () => {
   useEffect(() => {
     // TODO check if the token is verified!
     if (token) {
-      dispatch(verifyRegisterToken(token)).then(() => {
-        setIsTokenVerified(true);
-      });
+      dispatch(verifyRegisterToken(token))
+        .unwrap()
+        .then(() => {
+          setIsTokenVerified(true);
+        });
     }
   }, [token]);
 
@@ -37,12 +39,13 @@ const ChangePasswordPage: React.FC = () => {
     if (passwordInfo.password !== passwordInfo.passwordCheck) {
       alert.open({ message: "입력한 비밀번호가 서로 다릅니다!" });
     }
-    dispatch(postPassword({ password: passwordInfo.password }))
-      .unwrap()
-      .then(() => {})
-      .catch(err => {
-        console.log(err);
-      });
+    dispatch(postPassword({ password: passwordInfo.password }));
+    // TODO change password dispatch implementation
+    //   .unwrap()
+    //   .then(() => {})
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   };
 
   const goToForgotAccount = () => {
@@ -70,6 +73,7 @@ const ChangePasswordPage: React.FC = () => {
             <FormStyles.LabelText>새로운 비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
+                role="passwordInput"
                 placeholder="새로운 비밀번호"
                 value={passwordInfo.password}
                 onChange={e => {
@@ -85,6 +89,7 @@ const ChangePasswordPage: React.FC = () => {
             <FormStyles.LabelText>비밀번호 확인</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
+                role="passwordCheckInput"
                 placeholder="비밀번호 확인"
                 value={passwordInfo.passwordCheck}
                 onChange={e => {
@@ -96,8 +101,9 @@ const ChangePasswordPage: React.FC = () => {
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>
-          <FormStyles.FormInnerButton
+          <FormStyles.Submit
             type="submit"
+            role="submit"
             onClick={onSubmit}
             style={{
               marginTop: 20,
@@ -107,7 +113,7 @@ const ChangePasswordPage: React.FC = () => {
             }}
           >
             비밀반호 변경
-          </FormStyles.FormInnerButton>
+          </FormStyles.Submit>
         </FormStyles.Form>
       </FormStyles.FormContainer>
     </FormStyles.Container>
