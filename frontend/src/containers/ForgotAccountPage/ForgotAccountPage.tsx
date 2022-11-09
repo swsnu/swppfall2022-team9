@@ -1,3 +1,4 @@
+import useAlert from "hooks/useAlert";
 import React, { useState } from "react";
 import * as FormStyles from "styles/common.form.styles";
 
@@ -13,9 +14,22 @@ const ForgotAccountPage: React.FC = () => {
   const [forgotAccountType, setForgotAccountType] = useState<ForgotAccountType>(
     ForgotAccountType.USERNAME,
   );
+
+  const alert = useAlert();
+
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     //TODO: implement forgot account logic (use redux account reducer)
+    switch (forgotAccountType) {
+      case ForgotAccountType.USERNAME:
+        //TODO implement this with dispatch
+        setUsernameResult("hunkim98");
+        break;
+      case ForgotAccountType.PASSWORD:
+        //TODO implement this with dispatch
+        alert.open({ message: "인증 이메일이 보내졌습니다." });
+        break;
+    }
   };
 
   const inputValue = (type: ForgotAccountType) => {
