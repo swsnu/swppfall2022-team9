@@ -1,9 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import * as FormStyles from "styles/common.form.styles";
 
+enum ForgotAccountType {
+  USERNAME = "USERNAME",
+  PASSWORD = "PASSWORD",
+}
 const ForgotAccountPage: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [usernameResult, setUsernameResult] = useState<string>("");
+  const [forgotAccountType, setForgotAccountType] = useState<ForgotAccountType>(
+    ForgotAccountType.USERNAME,
+  );
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+  };
+
+  const inputValue = (type: ForgotAccountType) => {
+    switch (type) {
+      case ForgotAccountType.USERNAME:
+        return email;
+      case ForgotAccountType.PASSWORD:
+        return username;
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (forgotAccountType === ForgotAccountType.USERNAME) {
+      setEmail(event.target.value);
+    } else if (forgotAccountType === ForgotAccountType.PASSWORD) {
+      setUsername(event.target.value);
+    }
+  };
+
+  const submitButtonText = (type: ForgotAccountType) => {
+    switch (type) {
+      case ForgotAccountType.USERNAME:
+        return "아이디 찾기";
+      case ForgotAccountType.PASSWORD:
+        return "인증 이메일 보내기";
+    }
+  };
+
+  const inputLabelText = (type: ForgotAccountType) => {
+    switch (type) {
+      case ForgotAccountType.USERNAME:
+        return "이메일 입력";
+      case ForgotAccountType.PASSWORD:
+        return "아이디 입력";
+    }
   };
   return (
     <FormStyles.Container>
@@ -15,17 +60,42 @@ const ForgotAccountPage: React.FC = () => {
           <FormStyles.Label>
             <FormStyles.OptionsContainer>
               <FormStyles.Option>
-                <FormStyles.OptionCheckBox />
+                <FormStyles.OptionCheckBox
+                  checked={forgotAccountType === ForgotAccountType.USERNAME}
+                  onChange={e => {
+                    if (e.target.checked) {
+                      setForgotAccountType(ForgotAccountType.USERNAME);
+                      setUsername("");
+                      setUsernameResult("");
+                    }
+                  }}
+                />
                 <FormStyles.OptionText>아이디 찾기</FormStyles.OptionText>
               </FormStyles.Option>
               <FormStyles.Option>
-                <FormStyles.OptionCheckBox />
+                <FormStyles.OptionCheckBox
+                  checked={forgotAccountType === ForgotAccountType.PASSWORD}
+                  onChange={e => {
+                    if (e.target.checked) {
+                      setForgotAccountType(ForgotAccountType.PASSWORD);
+                      setUsernameResult("");
+                    }
+                  }}
+                />
                 <FormStyles.OptionText>비밀번호 찾기</FormStyles.OptionText>
               </FormStyles.Option>
             </FormStyles.OptionsContainer>
           </FormStyles.Label>
           <FormStyles.Label>
-            <FormStyles.InputContainer></FormStyles.InputContainer>
+            <FormStyles.LabelText>
+              {inputLabelText(forgotAccountType)}
+            </FormStyles.LabelText>
+            <FormStyles.InputContainer>
+              <FormStyles.Input
+                value={inputValue(forgotAccountType)}
+                onChange={handleInputChange}
+              />
+            </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.FormInnerButton
             type="submit"
@@ -37,8 +107,11 @@ const ForgotAccountPage: React.FC = () => {
               fontWeight: "bold",
             }}
           >
-            비밀반호 변경
+            {submitButtonText(forgotAccountType)}
           </FormStyles.FormInnerButton>
+          {usernameResult && (
+            <FormStyles.ExtraContainer>{`당신의 아이디는 ${usernameResult}입니다`}</FormStyles.ExtraContainer>
+          )}
         </FormStyles.Form>
       </FormStyles.FormContainer>
     </FormStyles.Container>

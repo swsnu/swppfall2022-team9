@@ -48,7 +48,7 @@ const LoginModal: React.FC = () => {
   };
 
   const onClickFindAccount = () => {
-    navigate("/account/find");
+    navigate("/account/forgot");
   };
 
   return (
