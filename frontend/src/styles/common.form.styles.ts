@@ -121,13 +121,18 @@ export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
   color: black;
 `;
 
+export const ExtraContainer = styled.div`
+  padding: 30px 0;
+  opacity: 0.5;
+`;
+
 export const Input = styled.input`
   width: 100%;
   border: none;
   height: 30px;
   padding: 0;
   border-bottom: 1px solid #bababa;
-  font-size: 15px;
+  font-size: 13px;
   padding-left: 5px;
   :focus {
     outline: none;

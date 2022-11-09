@@ -1,7 +1,7 @@
-export interface PostPassword {
+export interface PostPasswordDto {
   password: string;
 }
 
-export interface PostPasswordUnauthenticated extends PostPassword {
+export interface PostPasswordUnauthenticatedDto extends PostPasswordDto {
   token: string;
 }
