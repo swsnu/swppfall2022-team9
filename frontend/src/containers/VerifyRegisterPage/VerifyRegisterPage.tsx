@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import SingleMessagePage from "components/SingleMessagePage/SingleMessagePage";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
 import { verifyRegisterToken } from "store/slices/users";
-import * as S from "./styles";
 
 export enum VerifyRegisterTokenMessage {
   LOADING = "잠시만 기다려주세요...",
@@ -38,16 +38,12 @@ const VerifyRegisterPage = () => {
   }, [token]);
 
   return (
-    <S.Container>
-      <S.ContentContainer>
-        <S.Message role="message">{verifyStatus}</S.Message>
-        {verifyStatus !== VerifyRegisterTokenMessage.LOADING && (
-          <S.ButtonsContainer>
-            <S.Button onClick={goToHomePage}>홈페이지로 이동</S.Button>
-          </S.ButtonsContainer>
-        )}
-      </S.ContentContainer>
-    </S.Container>
+    <SingleMessagePage
+      message={verifyStatus}
+      isButtonVisible={verifyStatus !== VerifyRegisterTokenMessage.LOADING}
+      onClickButton={goToHomePage}
+      buttonText="홈페이지로 이동"
+    />
   );
 };
 
