@@ -175,8 +175,17 @@ def signup(request):
         recipient=user.email,
         token=str(verification.token)
     )
-    return HttpResponse(status=201)
-
+    response_dict = {
+        "id": user.id,
+        "email": user.email,
+        "username": user.username,
+        "firstname": user.first_name,
+        "lastname": user.last_name,
+    }
+    return JsonResponse(
+        status=201,
+        data=response_dict
+    )
 
 @allowed_method_or_405(["POST"])
 def signin(request):
