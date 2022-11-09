@@ -1,5 +1,51 @@
+import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import CreateProfilePage from "./CreateProfilePage";
+import { Profile } from "server/models/profile.model";
+import { renderWithProviders } from "test-utils/mocks";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+
+const mockNavigate = jest.fn();
+
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
+  useNavigate: () => mockNavigate,
+}));
+
+const renderCreateProfilePage = (currentUser: boolean) => {
+  renderWithProviders(
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={<CreateProfilePage />} />
+      </Routes>
+    </MemoryRouter>,
+    {
+      preloadedState: {
+        users: {
+          currentUser: currentUser
+            ? {
+                id: 1,
+                email: "email@email.com",
+                password: "123",
+                username: "jubby",
+                firstname: "iluv",
+                lastname: "swpp",
+              }
+            : null,
+          chonList: [
+            {
+              id: 1,
+              firstname: "swpp",
+              lastname: "snu",
+              imgUrl: "spl.snu.ac.kr",
+              chons: [],
+            },
+          ],
+        },
+      },
+    },
+  );
+};
 
 describe("<CreateProfilePage/>", () => {
   beforeEach(() => {
@@ -7,30 +53,41 @@ describe("<CreateProfilePage/>", () => {
   });
 
   it("renders profile page", async () => {
-    render(<CreateProfilePage />);
+    renderCreateProfilePage(true);
+  });
+
+  it("renders profile page without current user", async () => {
+    renderCreateProfilePage(false);
+    expect(mockNavigate).toHaveBeenCalled();
   });
 
   it("clicks create profile", async () => {
-    render(<CreateProfilePage />);
+    renderCreateProfilePage(true);
+    const button = screen.getByText("프로필 생성");
+    fireEvent.click(button);
+  });
+
+  it("tests input validation", async () => {
+    renderCreateProfilePage(true);
+    const majorInput = screen.getAllByRole("textbox")[0];
+    fireEvent.change(majorInput, { target: { value: "Psychology" } });
+    const degreeInput = screen.getAllByRole("textbox")[1];
+    fireEvent.change(degreeInput, { target: { value: "BA" } });
+    const qualityInput = screen.getAllByRole("textbox")[2];
+    fireEvent.change(qualityInput, { target: { value: "Sincere" } });
+    const skillInput = screen.getAllByRole("textbox")[3];
+    fireEvent.change(skillInput, { target: { value: "Frontend" } });
+    const langInput = screen.getAllByRole("textbox")[4];
+    fireEvent.change(langInput, { target: { value: "English" } });
     screen.debug();
-    const button = screen.getByText("프로필 생성");
-    fireEvent.click(button);
-  });
 
-  it("tests urlValidation", async () => {
-    render(<CreateProfilePage />);
-    const input = screen.getAllByRole("textbox")[5];
-    fireEvent.change(input, { target: { value: "iluvswpp@snu.ac.kr" } });
-    const button = screen.getByText("프로필 생성");
-    fireEvent.click(button);
-  });
-
-  it("tests intro input", async () => {
-    render(<CreateProfilePage />);
-    const input = screen.getAllByRole("textbox")[6];
-    fireEvent.change(input, {
+    const webInput = screen.getAllByRole("textbox")[5];
+    fireEvent.change(webInput, { target: { value: "iluvswpp@snu.ac.kr" } });
+    const introInput = screen.getAllByRole("textbox")[6];
+    fireEvent.change(introInput, {
       target: { value: "iluvswpp iluvswpp iluvswpp iluvswpp" },
     });
+
     const button = screen.getByText("프로필 생성");
     fireEvent.click(button);
   });

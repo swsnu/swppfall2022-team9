@@ -74,7 +74,11 @@ const AddTagsButton: React.FC<Props> = ({
             })}
             <SProfile.ContentDiv>
               <SProfile.DefaultContainer>
-                <SProfile.TagsForm value={input} onClick={showSearchBar} />
+                <SProfile.TagsForm
+                  name="addTags"
+                  value={input}
+                  onClick={showSearchBar}
+                />
                 {isInvalidTag && (
                   <SProfile.InputHelper>{"잘못된 태그"}</SProfile.InputHelper>
                 )}

@@ -33,6 +33,7 @@ const renderFriendListSideBar = () => {
               firstname: "swpp",
               lastname: "snu",
               imgUrl: "spl.snu.ac.kr",
+              chons: [],
             },
           ],
         },
