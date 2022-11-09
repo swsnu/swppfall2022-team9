@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import * as S from "./styles";
 import { IoChevronUp, IoChevronDown } from "react-icons/io5";
-import { TwoChonInfo } from "types/chon.types";
 import { useNavigate } from "react-router-dom";
+import { TwoChonInfo } from "types/friend.types";
 
 const ChonListItem: React.FC<{
   userId: number;

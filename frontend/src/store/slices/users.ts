@@ -4,12 +4,12 @@ import axios from "axios";
 import { PostCreateProfileDto } from "server/dto/profile/profile.dto";
 import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
 import {
-  GetChonListResDto,
+  GetFriendListResDto,
   PostSignInResDto,
   PostSignUpResDto,
 } from "server/dto/users/users.res.dto";
 import { User } from "server/models/users.model";
-import { OneChonInfo } from "types/chon.types";
+import { OneChonInfo } from "types/friend.types";
 
 export const acceptedLoginInfo: PostSignInDto = {
   username: "swppsnu",
@@ -18,25 +18,28 @@ export const acceptedLoginInfo: PostSignInDto = {
 
 export type UserState = {
   currentUser: User | null;
-  chonList: OneChonInfo[];
+  friendList: OneChonInfo[];
 };
 
 const initialState: UserState = {
   currentUser: null,
-  chonList: [],
+  friendList: [],
 };
 
 export const postSignIn = createAsyncThunk<void, PostSignInDto>(
   "users/postSignIn",
   //you can test with swpp@snu.ac.kr
-  async body => {
-    await axios.post<PostSignInResDto>("/api/auth/signin/", body);
+  async (body, { dispatch }) => {
+    const response = (
+      await axios.post<PostSignInResDto>("/api/auth/signin/", body)
+    ).data;
+    dispatch(userActions.setCurrentUser(response));
   },
 );
 
 export const postSignUp = createAsyncThunk<PostSignUpResDto, PostSignUpDto>(
   "users/postSignUp",
-  async body => {
+  async (body, { dispatch }) => {
     const response = (
       await axios.post<PostSignUpResDto>("/api/auth/signup/", body)
     ).data;
@@ -59,12 +62,12 @@ export const verifyRegisterToken = createAsyncThunk<void, string>(
   },
 );
 
-export const getChonList = createAsyncThunk<void>(
-  "users/getChonList",
+export const getFriendList = createAsyncThunk<void>(
+  "users/getFriendList",
   async (_, { dispatch }) => {
-    const response = (await axios.get<GetChonListResDto>(`/api/user/onechon/`))
+    const response = (await axios.get<GetFriendListResDto>(`/api/user/friend/`))
       .data;
-    dispatch(userActions.setChonList(response.onechon));
+    dispatch(userActions.setFriendList(response.friendList));
   },
 );
 
@@ -85,8 +88,11 @@ export const userSlice = createSlice({
     resetCurrentUser: state => {
       state.currentUser = null;
     },
-    setChonList: (state, actions: PayloadAction<Array<OneChonInfo>>) => {
-      state.chonList = actions.payload;
+    setFriendList: (state, actions: PayloadAction<Array<OneChonInfo>>) => {
+      state.friendList = actions.payload;
+    },
+    resetFriendList: state => {
+      state.friendList = [];
     },
   },
 });

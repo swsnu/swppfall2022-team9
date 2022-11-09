@@ -5,7 +5,7 @@
 //   PostSignUpDto,
 // } from "../dto/users/users.dto";
 import {
-  GetChonListResDto,
+  GetFriendListResDto,
   // PostSignInResDto,
   // PostSignUpResDto,
 } from "../dto/users/users.res.dto";
@@ -21,7 +21,7 @@ export default function applyAuthApi(
   server: Application,
   db: low.LowdbSync<Schema>,
 ) {
-  server.get<unknown, GetChonListResDto, unknown>(
+  server.get<unknown, GetFriendListResDto, unknown>(
     "/api/user/onechon/",
     async (req, res) => {
       const friendList = db.get("chonList").value();

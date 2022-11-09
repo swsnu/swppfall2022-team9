@@ -6,7 +6,3 @@ export type PostSignUpDto = Pick<
   User,
   "email" | "password" | "username" | "firstname" | "lastname"
 >;
-
-export type GetUserDto = number;
-
-export type GetChonListDto = number;

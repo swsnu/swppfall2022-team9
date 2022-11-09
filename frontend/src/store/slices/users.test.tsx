@@ -1,5 +1,9 @@
 import { AnyAction, configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import reducer, { getChonList, UserState, verifyRegisterToken } from "./users";
+import reducer, {
+  getFriendList,
+  UserState,
+  verifyRegisterToken,
+} from "./users";
 import { ThunkMiddleware } from "redux-thunk";
 import { postSignUp, postSignIn, putSignOut } from "./users";
 import axios from "axios";
@@ -91,7 +95,7 @@ describe("users reducer", () => {
         ],
       },
     });
-    await store.dispatch(getChonList());
-    expect(store.getState().users.chonList.length).toEqual(1);
+    await store.dispatch(getFriendList());
+    expect(store.getState().users.friendList.length).toEqual(1);
   });
 });

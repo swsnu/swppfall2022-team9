@@ -3,7 +3,7 @@ import { User } from "server/models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import Graph from "./Graph";
 
-import { OneChonInfo } from "types/chon.types";
+import { OneChonInfo } from "types/friend.types";
 
 import { usersStub } from "server/stubs/users.stub";
 
@@ -20,7 +20,7 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderGraph = (user: User | null, chonList: OneChonInfo[]) => {
+const renderGraph = (user: User | null, friendList: OneChonInfo[]) => {
   return renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -31,7 +31,7 @@ const renderGraph = (user: User | null, chonList: OneChonInfo[]) => {
       preloadedState: {
         users: {
           currentUser: user,
-          chonList: chonList,
+          friendList: friendList,
         },
       },
     },
