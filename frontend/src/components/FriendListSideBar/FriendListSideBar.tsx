@@ -6,10 +6,13 @@ import { useAppSelector } from "store/hooks";
 interface Props {}
 
 const FriendListSideBar: React.FC<Props> = () => {
+<<<<<<< HEAD
   // to be replaced with current context of oneChons and twoChons
   // const friendList = [0, 1, 2, 3];
   // const twoChonList = [[5, 6, 7, 8], [9], [10, 11], [12, 13]];
 
+=======
+>>>>>>> test: temp commit
   const userState = useAppSelector(state => state.users);
   // const navigate = useNavigate();
 
