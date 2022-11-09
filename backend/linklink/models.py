@@ -135,27 +135,17 @@ class Profile(models.Model):
     """
     Profile model class
     """
-    user = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
+    linklinkuser = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
     skillTags = models.ManyToManyField(SkillTag)
     qualityTags = models.ManyToManyField(QualityTag)
     introduction = models.TextField()
     website = models.CharField(max_length=100, blank=True)
-    GENDERS = [
-        ("M", "Male"),
-        ("F", "Female"),
-        ("X", "None")
-    ]
-    gender = models.CharField(
-        max_length=1,
-        choices=GENDERS,
-        default="None"
-    )
-    birthDate = models.DateField()
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.username}'s profile"
+        user = self.linklinkuser.user
+        return f"{user.last_name + user.first_name}'s profile"
 
 
 class Education(models.Model):
@@ -172,6 +162,22 @@ class Education(models.Model):
 
     def __str__(self):
         return f"{self.school}-{self.major}"
+
+
+class JobExperience(models.Model):
+    """
+    JobExperience model class
+    """
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    company = models.CharField(max_length=50)
+    position = models.CharField(max_length=50)
+    dateStart = models.DateField()
+    dateEnd = models.DateField()
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.company}-{self.position}"
 
 
 #--------------------------------------------------------------------------
