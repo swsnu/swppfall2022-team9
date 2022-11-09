@@ -15,7 +15,7 @@ const BackDrop: React.FC<Props> = ({
 }) => {
   return (
     <SProfile.Div>
-      <SProfile.BackDrop onClick={removeBackDrop} />
+      <SProfile.BackDrop role="backdrop" onClick={removeBackDrop} />
       <SearchBar
         propsName={propsName}
         setShowSearchBar={setShowSearchBar}
