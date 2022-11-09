@@ -9,6 +9,7 @@ import ForgotAccountPage from "containers/ForgotAccountPage/ForgotAccountPage";
 import AccountPage from "containers/AccountPage/AccountPage";
 import axios from "axios";
 import ChangePasswordPage from "containers/ChangePasswordPage/ChangePasswordPage";
+import AuthenticatedChangePasswordPage from "containers/AuthenticatedChangePasswordPage/AuthenticatedChangePasswordPage";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -32,8 +33,14 @@ const App = () => {
           <Route path="/account">
             <Route index={true} element={<AccountPage />} />
             <Route path="forgot" element={<ForgotAccountPage />} />
-            <Route path="password" element={<ChangePasswordPage />} />
-            <Route path="password/:token" element={<ChangePasswordPage />} />
+            <Route
+              path="password"
+              element={<AuthenticatedChangePasswordPage />}
+            />
+            <Route
+              path="password/:token"
+              element={<AuthenticatedChangePasswordPage />}
+            />
           </Route>
           <Route path="/verify/:token" element={<VerifyRegisterPage />} />
           <Route

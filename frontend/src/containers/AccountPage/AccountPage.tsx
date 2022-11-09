@@ -63,7 +63,10 @@ const AccountPage = () => {
           <FormStyles.Label>
             <FormStyles.LabelText>비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.FormInnerButton onClick={onClickChangePassword}>
+              <FormStyles.FormInnerButton
+                style={{ fontWeight: "bold" }}
+                onClick={onClickChangePassword}
+              >
                 비밀번호 변경하기
               </FormStyles.FormInnerButton>
             </FormStyles.InputContainer>

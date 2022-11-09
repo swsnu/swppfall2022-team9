@@ -1,21 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import * as FormStyles from "styles/common.form.styles";
 
-const ChangePasswordPage: React.FC = () => {
-  const { token } = useParams();
-  const [isTokenVerified, setIsTokenVerified] = useState<boolean>(true);
-  useEffect(() => {
-    // TODO check if the token is verified!
-  }, [token]);
+const AuthenticatedChangePasswordPage: React.FC = () => {
   const onSubmit = (e: React.SyntheticEvent) => {
-    // TODO change password dispatch implementation
     e.preventDefault();
   };
-
-  if (!isTokenVerified) {
-    return <div></div>;
-  }
   return (
     <FormStyles.Container>
       <FormStyles.FormContainer>
@@ -23,6 +12,12 @@ const ChangePasswordPage: React.FC = () => {
           <FormStyles.HeaderText>비밀번호 변경</FormStyles.HeaderText>
         </FormStyles.Header>
         <FormStyles.Form onSubmit={onSubmit}>
+          <FormStyles.Label>
+            <FormStyles.LabelText>현재 비밀번호</FormStyles.LabelText>
+            <FormStyles.InputContainer>
+              <FormStyles.Input />
+            </FormStyles.InputContainer>
+          </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.LabelText>새로운 비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>
@@ -53,4 +48,4 @@ const ChangePasswordPage: React.FC = () => {
   );
 };
 
-export default ChangePasswordPage;
+export default AuthenticatedChangePasswordPage;
