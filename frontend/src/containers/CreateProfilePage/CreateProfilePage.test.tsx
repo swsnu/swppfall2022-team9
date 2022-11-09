@@ -12,6 +12,7 @@ describe("<CreateProfilePage/>", () => {
 
   it("clicks create profile", async () => {
     render(<CreateProfilePage />);
+    screen.debug();
     const button = screen.getByText("프로필 생성");
     fireEvent.click(button);
   });
@@ -20,6 +21,16 @@ describe("<CreateProfilePage/>", () => {
     render(<CreateProfilePage />);
     const input = screen.getAllByRole("textbox")[5];
     fireEvent.change(input, { target: { value: "iluvswpp@snu.ac.kr" } });
+    const button = screen.getByText("프로필 생성");
+    fireEvent.click(button);
+  });
+
+  it("tests intro input", async () => {
+    render(<CreateProfilePage />);
+    const input = screen.getAllByRole("textbox")[6];
+    fireEvent.change(input, {
+      target: { value: "iluvswpp iluvswpp iluvswpp iluvswpp" },
+    });
     const button = screen.getByText("프로필 생성");
     fireEvent.click(button);
   });

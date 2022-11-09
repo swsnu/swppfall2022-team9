@@ -14,7 +14,7 @@ const CreateProfilePage: React.FC<Props> = () => {
   const currentUserProfile: Profile = {
     id: 0,
     // id: currentUser!.id
-    imgUrl: "",
+    imgUrl: "https://naver.com",
     qualityTags: ["Beautiful"],
     majorTags: ["Computer"],
     degreeTags: ["Ph.D"],
