@@ -8,12 +8,14 @@ enum ForgotAccountType {
 const ForgotAccountPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [usernameResult, setUsernameResult] = useState<string>("");
+  // TODO: remove "test" from useState
+  const [usernameResult, setUsernameResult] = useState<string>("test");
   const [forgotAccountType, setForgotAccountType] = useState<ForgotAccountType>(
     ForgotAccountType.USERNAME,
   );
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    //TODO: implement forgot account logic (use redux account reducer)
   };
 
   const inputValue = (type: ForgotAccountType) => {
@@ -28,7 +30,7 @@ const ForgotAccountPage: React.FC = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (forgotAccountType === ForgotAccountType.USERNAME) {
       setEmail(event.target.value);
-    } else if (forgotAccountType === ForgotAccountType.PASSWORD) {
+    } else {
       setUsername(event.target.value);
     }
   };
@@ -36,7 +38,7 @@ const ForgotAccountPage: React.FC = () => {
   const submitButtonText = (type: ForgotAccountType) => {
     switch (type) {
       case ForgotAccountType.USERNAME:
-        return "아이디 찾기";
+        return "아이디 조회";
       case ForgotAccountType.PASSWORD:
         return "인증 이메일 보내기";
     }
@@ -61,25 +63,23 @@ const ForgotAccountPage: React.FC = () => {
             <FormStyles.OptionsContainer>
               <FormStyles.Option>
                 <FormStyles.OptionCheckBox
+                  role="findIdCheck"
                   checked={forgotAccountType === ForgotAccountType.USERNAME}
-                  onChange={e => {
-                    if (e.target.checked) {
-                      setForgotAccountType(ForgotAccountType.USERNAME);
-                      setUsername("");
-                      setUsernameResult("");
-                    }
+                  onChange={() => {
+                    setForgotAccountType(ForgotAccountType.USERNAME);
+                    setUsername("");
+                    setUsernameResult("");
                   }}
                 />
                 <FormStyles.OptionText>아이디 찾기</FormStyles.OptionText>
               </FormStyles.Option>
               <FormStyles.Option>
                 <FormStyles.OptionCheckBox
+                  role="findPasswordCheck"
                   checked={forgotAccountType === ForgotAccountType.PASSWORD}
-                  onChange={e => {
-                    if (e.target.checked) {
-                      setForgotAccountType(ForgotAccountType.PASSWORD);
-                      setUsernameResult("");
-                    }
+                  onChange={() => {
+                    setForgotAccountType(ForgotAccountType.PASSWORD);
+                    setUsernameResult("");
                   }}
                 />
                 <FormStyles.OptionText>비밀번호 찾기</FormStyles.OptionText>
@@ -92,12 +92,13 @@ const ForgotAccountPage: React.FC = () => {
             </FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
+                role="forgotAccountInput"
                 value={inputValue(forgotAccountType)}
                 onChange={handleInputChange}
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>
-          <FormStyles.FormInnerButton
+          <FormStyles.Submit
             type="submit"
             onClick={onSubmit}
             style={{
@@ -108,7 +109,7 @@ const ForgotAccountPage: React.FC = () => {
             }}
           >
             {submitButtonText(forgotAccountType)}
-          </FormStyles.FormInnerButton>
+          </FormStyles.Submit>
           {usernameResult && (
             <FormStyles.ExtraContainer>{`당신의 아이디는 ${usernameResult}입니다`}</FormStyles.ExtraContainer>
           )}
