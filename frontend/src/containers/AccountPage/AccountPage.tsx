@@ -1,3 +1,4 @@
+import useAlert from "hooks/useAlert";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
@@ -18,6 +19,7 @@ const AccountPage: React.FC = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const alert = useAlert();
 
   // TODO: connect with redux (fill in the blank inputs)
 
@@ -29,7 +31,25 @@ const AccountPage: React.FC = () => {
   };
 
   // TODO: delete account
-  const onClickDeleteAccount = () => {};
+  const onClickDeleteAccount = () => {
+    alert.open({
+      message: "계정 삭제를 진행할까요?",
+      buttons: [
+        {
+          label: "네",
+          onClick: () => {
+            //TODO dispatch
+          },
+        },
+        {
+          label: "아니오",
+          onClick: () => {
+            alert.close();
+          },
+        },
+      ],
+    });
+  };
 
   return (
     <FormStyles.Container>
