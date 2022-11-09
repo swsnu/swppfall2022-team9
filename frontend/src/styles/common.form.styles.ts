@@ -160,3 +160,17 @@ export const Submit = styled.button<{ backgroundColor?: string }>`
   background-color: ${props => props.backgroundColor || ThemeColor};
   cursor: pointer;
 `;
+
+export const Title = styled.div`
+  font-weight: bold;
+  font-size: 1.5em;
+`;
+
+export const GuideContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+`;
