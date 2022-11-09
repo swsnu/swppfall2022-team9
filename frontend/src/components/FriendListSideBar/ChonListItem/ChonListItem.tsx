@@ -26,7 +26,7 @@ const ChonListItem: React.FC<{
   return (
     <>
       <S.Container indent={isTwoChon}>
-        <S.UserRowContainer onClick={onNodeClick}>
+        <S.UserRowContainer role="NodeClick" onClick={onNodeClick}>
           <S.OneChonNode url={imgUrl}></S.OneChonNode>
           <S.Username>
             {lastname}
