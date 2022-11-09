@@ -39,9 +39,7 @@ describe("<VerifyRegisterPage/>", () => {
     );
 
     await waitFor(() => screen.findByText(VerifyRegisterTokenMessage.SUCCESS));
-    const goToHomepageButton = screen.getByRole("button", {
-      name: /홈페이지로 이동/i,
-    });
+    const goToHomepageButton = screen.getByRole("simpleMessageButton");
     fireEvent.click(goToHomepageButton);
     expect(mockNavigate).toHaveBeenCalled();
   });

@@ -20,7 +20,9 @@ const SingleMessagePage: React.FC<Props> = ({
         <S.Message role="message">{message}</S.Message>
         {isButtonVisible && (
           <S.ButtonsContainer>
-            <S.Button onClick={onClickButton}>{buttonText}</S.Button>
+            <S.Button role="simpleMessageButton" onClick={onClickButton}>
+              {buttonText}
+            </S.Button>
           </S.ButtonsContainer>
         )}
       </S.ContentContainer>
