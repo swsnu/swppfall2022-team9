@@ -19,14 +19,19 @@ const ChangePasswordPage: React.FC = () => {
 
   const alert = useAlert();
 
+  // TODO check if the token is verified!
+  const verifyPasswordToken = async (tokenToVerify: string) => {
+    try {
+      await dispatch(verifyRegisterToken(tokenToVerify)).unwrap();
+      setIsTokenVerified(true);
+    } catch (err) {
+      setIsTokenVerified(false);
+    }
+  };
   useEffect(() => {
     // TODO check if the token is verified!
     if (token) {
-      dispatch(verifyRegisterToken(token))
-        .unwrap()
-        .then(() => {
-          setIsTokenVerified(true);
-        });
+      verifyPasswordToken(token);
     }
   }, [token]);
 
@@ -39,13 +44,8 @@ const ChangePasswordPage: React.FC = () => {
     if (passwordInfo.password !== passwordInfo.passwordCheck) {
       alert.open({ message: "입력한 비밀번호가 서로 다릅니다!" });
     }
+    // TODO change password dispatch implementation catch error!
     dispatch(postPassword({ password: passwordInfo.password }));
-    // TODO change password dispatch implementation
-    //   .unwrap()
-    //   .then(() => {})
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
   };
 
   const goToForgotAccount = () => {
