@@ -13,22 +13,19 @@ const ForgotAccountPage: React.FC = () => {
         </FormStyles.Header>
         <FormStyles.Form onSubmit={onSubmit}>
           <FormStyles.Label>
-            <FormStyles.LabelText>현재 비밀번호</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input />
-            </FormStyles.InputContainer>
+            <FormStyles.OptionsContainer>
+              <FormStyles.Option>
+                <FormStyles.OptionCheckBox />
+                <FormStyles.OptionText>아이디 찾기</FormStyles.OptionText>
+              </FormStyles.Option>
+              <FormStyles.Option>
+                <FormStyles.OptionCheckBox />
+                <FormStyles.OptionText>비밀번호 찾기</FormStyles.OptionText>
+              </FormStyles.Option>
+            </FormStyles.OptionsContainer>
           </FormStyles.Label>
           <FormStyles.Label>
-            <FormStyles.LabelText>새로운 비밀번호</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input />
-            </FormStyles.InputContainer>
-          </FormStyles.Label>
-          <FormStyles.Label>
-            <FormStyles.LabelText>비밀번호 확인</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input />
-            </FormStyles.InputContainer>
+            <FormStyles.InputContainer></FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.FormInnerButton
             type="submit"

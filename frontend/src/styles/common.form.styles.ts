@@ -55,6 +55,37 @@ export const LabelText = styled.span`
   font-size: 14px;
 `;
 
+export const OptionsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex: 1 0;
+`;
+
+export const Option = styled.div`
+  display: flex;
+  flex: 1 0;
+`;
+
+export const OptionText = styled.div`
+  padding: 0 5px;
+`;
+
+export const OptionCheckBox = styled.input.attrs({ type: "checkbox" })`
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid black;
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  &:checked {
+    background: black 50% 50% no-repeat;
+  }
+  &:after {
+    content: "✔︎";
+  }
+`;
+
 export const InputContainer = styled.div`
   width: 100%;
   border: none;
