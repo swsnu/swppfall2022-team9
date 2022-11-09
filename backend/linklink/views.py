@@ -198,7 +198,17 @@ def signin(request):
         # If emailValidated, login
         if user.linklinkuser.emailValidated:
             login(request, user)
-            return HttpResponse(status=204)
+            response_dict = {
+                "id": user.id,
+                "email": user.email,
+                "username": user.username,
+                "firstname": user.first_name,
+                "lastname": user.last_name,
+            }
+            return JsonResponse(
+                status=200,
+                data=response_dict
+            )
         # Else, find token and resend register email
         else:
             # Find Verification object
