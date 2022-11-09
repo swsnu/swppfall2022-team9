@@ -3,34 +3,34 @@ import React, { useState } from "react";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
 import AddTagsButton from "./AddTagsButton/AddTagsButton";
+import { useAppSelector } from "../../store/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface Props {}
 
 const CreateProfilePage: React.FC<Props> = () => {
-  // const dispatch = useAppDispatch();
-  // const currentUser = useAppSelector(state => state.users.currentUser);
-  // get current user profile
-  // dummy
+  const currentUser = useAppSelector(state => state.users.currentUser);
+  const navigate = useNavigate();
+  if (!currentUser) {
+    navigate("/");
+  }
+
   const currentUserProfile: Profile = {
-    id: 0,
-    // id: currentUser!.id
-    imgUrl: "https://naver.com",
-    qualityTags: ["Beautiful"],
-    majorTags: ["Computer"],
-    degreeTags: ["Ph.D"],
-    skillTags: ["Beautiful"],
-    languageTags: ["Korean"],
+    id: currentUser!.id,
+    imgUrl: "",
+    qualityTags: [],
+    majorTags: [],
+    degreeTags: [],
+    skillTags: [],
+    languageTags: [],
     website: "",
     introduction: "",
   };
-  // set useState
+
   const [createProfileInfo, setCreateProfileInfo] =
     useState<Profile>(currentUserProfile);
   const maxNumberTags = 6;
   const maxIntroLength = 300;
-
-  // const navigate = useNavigate();
-
   const uploadImageHandler = () => {};
 
   const urlValdiation = (url: string): boolean => {
@@ -82,6 +82,9 @@ const CreateProfilePage: React.FC<Props> = () => {
       validLanguageTags
     ) {
       // update
+      setCreateProfileInfo(createProfileInfo);
+    } else {
+      // do nothing
     }
   };
   const isInvalid =
@@ -103,9 +106,8 @@ const CreateProfilePage: React.FC<Props> = () => {
               url={createProfileInfo.imgUrl}
             ></SProfile.UserNode>
             <SProfile.Username>
-              {"박신혜"}
-              {/* {currentUser.lastname}
-                {currentUser.firstname} */}
+              {currentUser!.lastname}
+              {currentUser!.firstname}
             </SProfile.Username>
           </SProfile.DefaultContainer>
           <SProfile.ImageButtonContainer>
