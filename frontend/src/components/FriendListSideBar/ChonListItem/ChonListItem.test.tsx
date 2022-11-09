@@ -22,7 +22,9 @@ const renderChonListItem = () => {
               firstname="test"
               lastname="test"
               imgUrl="testurl.com"
-              twoChonList={[1, 2, 3]}
+              twoChonList={[
+                { id: 1, firstname: "hi", lastname: "hi", imgUrl: "naver.com" },
+              ]}
               isTwoChon={false}
             />
           }
