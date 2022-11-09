@@ -33,6 +33,7 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
             <FormStyles.LabelText>현재 비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
+                role="currentPasswordInput"
                 placeholder="현재 비밀번호"
                 value={passwordInfo.currentPassword}
                 onChange={e => {
@@ -48,6 +49,7 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
             <FormStyles.LabelText>새로운 비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
+                role="passwordInput"
                 placeholder="새로운 비밀번호"
                 value={passwordInfo.password}
                 onChange={e => {
@@ -63,7 +65,8 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
             <FormStyles.LabelText>비밀번호 확인</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
-                placeholder="새로운 비밀번호"
+                role="passwordCheckInput"
+                placeholder="비밀번호 확인"
                 value={passwordInfo.passwordCheck}
                 onChange={e => {
                   setPasswordInfo(prev => ({
@@ -75,6 +78,7 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.FormInnerButton
+            role="submit"
             type="submit"
             onClick={onSubmit}
             style={{
