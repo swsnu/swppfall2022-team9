@@ -42,7 +42,7 @@
             "password": "pbkdf2_sha256$390000$BY8sKnzPjgcc2HxUbbO0hh$cfOTzKVOksd2cQX16lE5EHxleqEOaNWptBxG3AFMJ30=",
             "last_login": null,
             "is_superuser": false,
-            "username": "tlsrP",
+            "username": "tlsgP",
             "first_name": "신혜",
             "last_name": "박",
             "email": "notiona@snu.ac.kr",
@@ -293,7 +293,7 @@
         "fields": {
             "user": 2,
             "friendRequestToken": "e23b34ab-5983-47f5-9b6f-ec86486bea91",
-            "imgUrl": "https://en.wiktionary.org/wiki/cat#/media/File:Cat03.jpg",
+            "imgUrl": "http://www.math.snu.ac.kr/~ernestryu/courses/photos/jspark.jpg",
             "emailValidated": true
         }
     },

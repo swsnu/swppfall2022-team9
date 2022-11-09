@@ -290,7 +290,7 @@ def friend(request):
             all_accepted_friend_requests,
             request.user.linklinkuser
         )
-        response_dict = {"onechon": []} # Nested dict
+        response_dict = {"friendList": []} # Nested dict
         for onechon_linklinkuser in onechon_list:
             # Construct onechon_dict
             onechon_dict = {}
@@ -319,7 +319,7 @@ def friend(request):
                     # Append constructed twochon_dict
                     onechon_dict["chons"].append(twochon_dict)
             # Append constructed onechon_dict
-            response_dict["onechon"].append(onechon_dict)
+            response_dict["friendList"].append(onechon_dict)
         return JsonResponse(response_dict) # implicit status code = 200
     # elif request.method == "POST":
     #     pass
