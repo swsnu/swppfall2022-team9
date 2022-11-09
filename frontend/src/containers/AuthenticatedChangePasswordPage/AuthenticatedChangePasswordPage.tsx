@@ -16,7 +16,9 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
     ) {
       return;
     }
+
     // TODO: Check if current password matches the real password
+
     e.preventDefault();
   };
 
