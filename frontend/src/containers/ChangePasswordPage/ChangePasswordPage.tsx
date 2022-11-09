@@ -1,10 +1,12 @@
+import SingleMessagePage from "components/SingleMessagePage/SingleMessagePage";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as FormStyles from "styles/common.form.styles";
 
 const ChangePasswordPage: React.FC = () => {
   const { token } = useParams();
-  const [isTokenVerified, setIsTokenVerified] = useState<boolean>(true);
+  const [isTokenVerified, setIsTokenVerified] = useState<boolean>(false);
+  const navigate = useNavigate();
   useEffect(() => {
     // TODO check if the token is verified!
   }, [token]);
@@ -13,8 +15,19 @@ const ChangePasswordPage: React.FC = () => {
     e.preventDefault();
   };
 
+  const goToForgotAccount = () => {
+    navigate("/account/forgot");
+  };
+
   if (!isTokenVerified) {
-    return <div></div>;
+    return (
+      <SingleMessagePage
+        message="비밀번호 변경 유효시간이 만료되었습니다. 다시 비밀번호 찾기를 진행해주세요"
+        isButtonVisible={true}
+        buttonText="아이디/비밀번호 찾기 페이지로 이동"
+        onClickButton={goToForgotAccount}
+      />
+    );
   }
   return (
     <FormStyles.Container>
