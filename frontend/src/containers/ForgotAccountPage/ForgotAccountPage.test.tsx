@@ -1,13 +1,33 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { renderWithProviders } from "test-utils/mocks";
 import ForgotAccountPage from "./ForgotAccountPage";
+import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
+
+const renderForgotAccountPage = (alertProviderProps?: AlertContextProps) => {
+  renderWithProviders(
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={<ForgotAccountPage />} />
+      </Routes>
+    </MemoryRouter>,
+    { preloadedState: {} },
+    alertProviderProps,
+  );
+};
 
 describe("<ForgotAccountPage/>", () => {
+  let alertProviderProps: AlertContextProps;
   beforeEach(() => {
     jest.clearAllMocks();
+    alertProviderProps = {
+      open: jest.fn(),
+      close: jest.fn(),
+    };
   });
 
   it("checks id check", async () => {
-    render(<ForgotAccountPage />);
+    renderForgotAccountPage(alertProviderProps);
     // await waitFor(() => screen.getByText("아이디 찾기"));
     const idCheckInput = screen.getByRole("findIdCheck");
     fireEvent.click(idCheckInput);
@@ -32,7 +52,7 @@ describe("<ForgotAccountPage/>", () => {
   });
 
   it("checks password check", async () => {
-    render(<ForgotAccountPage />);
+    renderForgotAccountPage(alertProviderProps);
     const passwordCheckInput = screen.getByRole("findPasswordCheck");
     fireEvent.click(passwordCheckInput);
     const submitButton = await waitFor(() =>
