@@ -5,6 +5,10 @@ import Navbar from "components/Navbar/Navbar";
 import SignUpPage from "containers/SignUpPage/SignUpPage";
 import VerifyRegisterPage from "containers/VerifyRegisterPage/VerifyRegisterPage";
 import AuthWrapper from "containers/AuthWrapper/AuthWrapper";
+import axios from "axios";
+
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 const App = () => {
   return (
