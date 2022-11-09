@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
 import { putSignOut } from "store/slices/users";
 import * as FormStyles from "styles/common.form.styles";
 
-const AccountPage = () => {
+const AccountPage: React.FC = () => {
+  const [accountInfo, setAccountInfo] = useState<{
+    firstname: string;
+    lastname: string;
+    email: string;
+    birthdate: string;
+  }>({
+    firstname: "",
+    lastname: "",
+    email: "",
+    birthdate: new Date().toISOString().slice(0, 10),
+  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // TODO: change birthDate
-  const onClickChangeBirthDate = () => {};
+  // TODO: connect with redux (fill in the blank inputs)
 
   const onClickChangePassword = () => {
     navigate("/account/password");
@@ -36,34 +46,55 @@ const AccountPage = () => {
           <FormStyles.Label>
             <FormStyles.LabelText>성</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input disabled={true} />
+              <FormStyles.Input
+                role="lastname"
+                disabled={true}
+                value={accountInfo.lastname}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.LabelText>이름</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input disabled={true} />
+              <FormStyles.Input
+                role="firstname"
+                disabled={true}
+                value={accountInfo.firstname}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.LabelText>이메일</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input disabled={true} />
+              <FormStyles.Input
+                role="email"
+                disabled={true}
+                value={accountInfo.lastname}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.LabelText>생년월일</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input />
-              <FormStyles.InputModifyButton onClick={onClickChangeBirthDate}>
-                수정
-              </FormStyles.InputModifyButton>
+              <FormStyles.Input
+                role="birthdate"
+                type="date"
+                value={accountInfo.birthdate}
+                onChange={e => {
+                  console.log(e.target.value);
+                  setAccountInfo(prev => ({
+                    ...prev,
+                    birthdate: e.target.value,
+                  }));
+                }}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.LabelText>비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.FormInnerButton
+                role="changePassword"
                 style={{ fontWeight: "bold" }}
                 onClick={onClickChangePassword}
               >
