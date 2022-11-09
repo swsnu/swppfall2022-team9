@@ -7,7 +7,9 @@ import {
 import { PostPasswordResDto } from "server/dto/account/account.res.dto";
 
 // we do not need anything for account slice
-const initialState = undefined;
+
+export interface AccountState {}
+const initialState: AccountState = {};
 
 export const postPasswordUnauthenticated = createAsyncThunk<
   PostPasswordResDto,
@@ -36,10 +38,14 @@ export const postPassword = createAsyncThunk<
   return response;
 });
 
-// TODO: Implement other slices
+// TODO: Implement other apis for account slice
 
 export const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {},
 });
+
+export const accountActions = accountSlice.actions;
+
+export default accountSlice.reducer;
