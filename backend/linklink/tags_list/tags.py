@@ -132,28 +132,6 @@ QUALITY_TAGS = [
 #--------------------------------------------------------------------------
 
 SKILL_TAGS = [
-    # majors
-    "Computer Engineering",
-    "Visual Design",
-    "Economics",
-    "Business Administration",
-    "Psychology",
-    "Social Studies",
-    "Mathematics",
-    "Statistics",
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "Earch Sciences",
-    "Law",
-    "Medicine",
-    "Pharmacy",
-    # degrees
-    "undergraduate",
-    "graduate",
-    "BA",
-    "MA",
-    "PhD"
     # CS related skills
     "Frontend",
     "Backend",
@@ -162,14 +140,6 @@ SKILL_TAGS = [
     "Machine Learning",
     "DevOps",
     "MLOps",
-    # languages
-    "English",
-    "Korean",
-    "Japanese",
-    "Chinese",
-    "Spanish",
-    "French",
-    "Italian",
     # fields
     "Financial Engineering",
     "Consulting",
