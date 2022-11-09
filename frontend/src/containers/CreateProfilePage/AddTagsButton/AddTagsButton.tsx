@@ -75,8 +75,7 @@ const AddTagsButton: React.FC<Props> = ({
             <SProfile.ContentDiv>
               <SProfile.DefaultContainer>
                 <SProfile.TagsForm
-                  name="addTags"
-                  value={input}
+                  placeholder={input}
                   onClick={showSearchBar}
                 />
                 {isInvalidTag && (

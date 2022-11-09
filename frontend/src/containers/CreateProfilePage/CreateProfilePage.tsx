@@ -16,7 +16,7 @@ const CreateProfilePage: React.FC<Props> = () => {
   }
 
   const currentUserProfile: Profile = {
-    id: currentUser!.id,
+    id: currentUser?.id ? currentUser.id : -1,
     imgUrl: "",
     qualityTags: [],
     majorTags: [],
@@ -106,8 +106,8 @@ const CreateProfilePage: React.FC<Props> = () => {
               url={createProfileInfo.imgUrl}
             ></SProfile.UserNode>
             <SProfile.Username>
-              {currentUser!.lastname}
-              {currentUser!.firstname}
+              {currentUser?.lastname ? currentUser.lastname : ""}
+              {currentUser?.firstname ? currentUser.firstname : ""}
             </SProfile.Username>
           </SProfile.DefaultContainer>
           <SProfile.ImageButtonContainer>

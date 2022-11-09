@@ -69,24 +69,38 @@ describe("<CreateProfilePage/>", () => {
 
   it("tests input validation", async () => {
     renderCreateProfilePage(true);
-    const majorInput = screen.getAllByRole("textbox")[0];
-    fireEvent.change(majorInput, { target: { value: "Psychology" } });
-    const degreeInput = screen.getAllByRole("textbox")[1];
-    fireEvent.change(degreeInput, { target: { value: "BA" } });
-    const qualityInput = screen.getAllByRole("textbox")[2];
-    fireEvent.change(qualityInput, { target: { value: "Sincere" } });
-    const skillInput = screen.getAllByRole("textbox")[3];
-    fireEvent.change(skillInput, { target: { value: "Frontend" } });
-    const langInput = screen.getAllByRole("textbox")[4];
-    fireEvent.change(langInput, { target: { value: "English" } });
-    screen.debug();
+    // const stubValidProfile: Profile = {
+    //   id: 1,
+    //   imgUrl: "https://naver.com",
+    //   qualityTags: ["Sincere"],
+    //   majorTags: ["Psychology"],
+    //   degreeTags: ["BA"],
+    //   skillTags: ["Frontend"],
+    //   languageTags: ["English"],
+    //   website: "https://naver.com",
+    //   introduction: "hello",
+    // };
+    // React.useState = jest.fn().mockReturnValueOnce([stubValidProfile, {}]);
+    const majorInput = screen.getByText("Major");
+    console.log(majorInput);
+    // fireEvent.change(majorInput, { target: { value: "Psychology" } });
+    // console.log(majorInput);
+    // const degreeInput = screen.getAllByRole("textbox")[1];
+    // fireEvent.change(degreeInput, { target: { value: "BA" } });
+    // const qualityInput = screen.getAllByRole("textbox")[2];
+    // fireEvent.change(qualityInput, { target: { value: "Sincere" } });
+    // const skillInput = screen.getAllByRole("textbox")[3];
+    // fireEvent.change(skillInput, { target: { value: "Frontend" } });
+    // const langInput = screen.getAllByRole("textbox")[4];
+    // fireEvent.change(langInput, { target: { value: "English" } });
+    // screen.debug();
 
-    const webInput = screen.getAllByRole("textbox")[5];
-    fireEvent.change(webInput, { target: { value: "iluvswpp@snu.ac.kr" } });
-    const introInput = screen.getAllByRole("textbox")[6];
-    fireEvent.change(introInput, {
-      target: { value: "iluvswpp iluvswpp iluvswpp iluvswpp" },
-    });
+    // const webInput = screen.getAllByRole("textbox")[5];
+    // fireEvent.change(webInput, { target: { value: "iluvswpp@snu.ac.kr" } });
+    // const introInput = screen.getAllByRole("textbox")[6];
+    // fireEvent.change(introInput, {
+    //   target: { value: "iluvswpp iluvswpp iluvswpp iluvswpp" },
+    // });
 
     const button = screen.getByText("프로필 생성");
     fireEvent.click(button);
