@@ -1,19 +1,22 @@
+import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
+export const FormContainerMarginTop = 150;
+
 export const Container = styled.div`
+  width: 100%;
+  min-height: calc(100vh - ${NavbarHeight}px - ${NavbarVerticalPadding * 2}px);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  position: relative;
   background: linear-gradient(
     180deg,
     rgba(252, 100, 255, 0.2) 0%,
     rgba(121, 154, 237, 0.116) 100%
   );
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 150px;
 `;
 
 export const Header = styled.div`
@@ -26,13 +29,17 @@ export const HeaderText = styled.div`
   font-weight: bold;
 `;
 
+export const FormInnerPadding = 40;
+
 export const FormContainer = styled.div`
+  margin-top: ${FormContainerMarginTop}px;
   background-color: white;
-  padding: 40px 40px 0 40px;
+  padding: ${FormInnerPadding}px;
   width: 100%;
   max-width: 500px;
-  min-height: 100vh;
-  overflow: auto;
+  /* position: absolute; */
+  overflow: scroll;
+  flex: 1 0;
 `;
 
 export const Form = styled.form`
