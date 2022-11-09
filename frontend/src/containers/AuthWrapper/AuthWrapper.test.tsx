@@ -4,7 +4,7 @@ import { User } from "server/models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
 import AuthWrapper from "./AuthWrapper";
 import { usersStub } from "server/stubs/users.stub";
-import { OneChonInfo } from "types/chon.types";
+import { OneChonInfo } from "types/friend.types";
 
 const mockNavigate = jest.fn();
 
@@ -19,7 +19,7 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderAuthWrapper = (user: User | null, chonList: OneChonInfo[]) => {
+const renderAuthWrapper = (user: User | null, friendList: OneChonInfo[]) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -37,7 +37,7 @@ const renderAuthWrapper = (user: User | null, chonList: OneChonInfo[]) => {
       preloadedState: {
         users: {
           currentUser: user,
-          chonList: chonList,
+          friendList: friendList,
         },
       },
     },

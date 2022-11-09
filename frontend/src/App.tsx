@@ -23,10 +23,9 @@ const App = () => {
           <Route
             path="/"
             element={
-              // we have to wrap it with auth wrapper after implementing auth
-              // <AuthWrapper>
-              <HomePage />
-              // </AuthWrapper>
+              <AuthWrapper>
+                <HomePage />
+              </AuthWrapper>
             }
           />
           <Route path="/signup" element={<SignUpPage />} />

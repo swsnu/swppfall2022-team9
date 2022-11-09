@@ -11,7 +11,7 @@ import {
   getWorldPoint,
 } from "./math";
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
-import { OneChonInfo } from "types/chon.types";
+import { OneChonInfo } from "types/friend.types";
 export class Canvas {
   private MAX_SCALE = 2;
 
@@ -253,7 +253,7 @@ export class Canvas {
 
   setCurrentUserNode(currentUser: User) {
     this.currentUserNode = new UserNode(
-      "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c499ea3069fedffaf4335d4b2ce62a4672325d33aa82e1ead5d1737b75cebfb13139",
+      "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw",
       currentUser.lastname + currentUser.firstname,
       { x: 0, y: 0 },
     );
