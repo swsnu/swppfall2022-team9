@@ -10,7 +10,6 @@ import AccountPage from "containers/AccountPage/AccountPage";
 import axios from "axios";
 import ChangePasswordPage from "containers/ChangePasswordPage/ChangePasswordPage";
 import AuthenticatedChangePasswordPage from "containers/AuthenticatedChangePasswordPage/AuthenticatedChangePasswordPage";
-import ChangePasswordPage from "containers/ChangePasswordPage/ChangePasswordPage";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
