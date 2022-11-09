@@ -1,12 +1,38 @@
-import { render } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import AuthenticatedChangePasswordPage from "./AuthenticatedChangePasswordPage";
+
+const mockDispatch = jest.fn();
+
+//useDispatch mocking
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  //useDispatch만 우리가 mocking
+  useDispatch: () => mockDispatch,
+}));
+
+const mockNavigate = jest.fn();
+
+jest.mock("react-router", () => ({
+  // 그래야 NavLink 같은 걸 쓸 수 있다.
+  ...jest.requireActual("react-router"),
+  useNavigate: () => mockNavigate,
+}));
 
 describe("<AuthenticatedChangePasswordPage/>", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders AuthenticatedChangePasswordPage", async () => {
+  it("renders AuthenticatedChangePasswordPage change password", async () => {
     render(<AuthenticatedChangePasswordPage />);
+    const submitButton = screen.getByRole("submit");
+    fireEvent.click(submitButton);
+    const currentPasswordInput = screen.getByRole("currentPasswordInput");
+    fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+    const passwordInput = screen.getByRole("passwordInput");
+    fireEvent.change(passwordInput, { target: { value: "test" } });
+    const passwordCheckInput = screen.getByRole("passwordCheckInput");
+    fireEvent.change(passwordCheckInput, { target: { value: "test" } });
+    fireEvent.click(submitButton);
   });
 });
