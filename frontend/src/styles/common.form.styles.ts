@@ -3,15 +3,16 @@ import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
 export const FormContainerMarginTop = 150;
-
+export const FormInnerPadding = 40;
 export const Container = styled.div`
-  width: 100%;
+  /* width: 100%; */
   min-height: calc(100vh - ${NavbarHeight}px - ${NavbarVerticalPadding * 2}px);
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding-left: ${FormInnerPadding}px;
+  padding-right: ${FormInnerPadding}px;
 
-  position: relative;
   background: linear-gradient(
     180deg,
     rgba(252, 100, 255, 0.2) 0%,
@@ -29,16 +30,13 @@ export const HeaderText = styled.div`
   font-weight: bold;
 `;
 
-export const FormInnerPadding = 40;
-
 export const FormContainer = styled.div`
   margin-top: ${FormContainerMarginTop}px;
   background-color: white;
-  padding: ${FormInnerPadding}px;
   width: 100%;
   max-width: 500px;
+  padding: ${FormInnerPadding}px;
   /* position: absolute; */
-  overflow: scroll;
   flex: 1 0;
 `;
 
