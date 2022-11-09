@@ -34,7 +34,7 @@ export const getOneAndTwoChonCoordinates = (
   expandRatio = 0.8,
 ) => {
   if (oneChonCount !== twoChonCount.length) {
-    throw new Error("More number of 2-chons than 1-chons.");
+    throw new Error("Number of 2-chons does match number of 1-chons.");
   }
 
   const coordsList: OneChonUserCoord[] = [];
@@ -101,7 +101,10 @@ export const getOneAndTwoChonCoordinates = (
           theta = thetaTemp;
           budgetTemp += expandRatio * ((theta * spare) / 2);
         }
+      } else {
+        // do nothing
       }
+
       for (let j = 0; j < twoChonCount[i]; j++) {
         const x2Coord =
           xCoord +
