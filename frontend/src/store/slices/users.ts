@@ -55,7 +55,7 @@ export const getSignOut = createAsyncThunk<void>(
 export const verifyRegisterToken = createAsyncThunk<void, string>(
   "users/verifyRegisterToken",
   async token => {
-    await axios.get(`/api/auth/verify/${token}/`);
+    await axios.post(`/api/auth/verify/${token}/`);
   },
 );
 

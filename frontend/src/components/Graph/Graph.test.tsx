@@ -1,6 +1,8 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { User } from "server/models/users.model";
 import { renderWithProviders } from "test-utils/mocks";
+import { screen, fireEvent, render } from "@testing-library/react";
+
 import Graph from "./Graph";
 
 import { OneChonInfo } from "types/friend.types";
@@ -56,4 +58,9 @@ describe("<Graph/>", () => {
     const renderedGraph = renderGraph(usersStub[0], friendListStub2);
     renderedGraph.unmount();
   });
+
+  // it("tests img element render", async () => {
+  //   const renderedGraph = renderGraph(usersStub[0], friendListStub2);
+  //   renderedGraph.unmount();
+  // });
 });
