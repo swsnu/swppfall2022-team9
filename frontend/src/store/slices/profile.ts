@@ -56,7 +56,7 @@ export const editMyProfile = createAsyncThunk<
 export const editFriendProfile = createAsyncThunk<
   EditProfileResDto,
   EditProfileDto & { id: number }
->("profile/editMyProfile", async ({ id, body }) => {
+>("profile/editFriendProfile", async ({ id, body }) => {
   const data: EditProfileDto = { body };
   const response = await axios.put<EditProfileResDto>(
     `/api/profile/${id}`,

@@ -1,72 +1,54 @@
 import * as SProfile from "../styles";
 import { IoAdd } from "react-icons/io5";
-import { Profile, ProfileKey } from "server/models/profile.model";
+import { Profile, SkillTagKey, SkillTag } from "server/models/profile.model";
 import TagsButton from "../TagsButton/TagsButton";
 import { useState } from "react";
 import BackDrop from "../BackDrop/BackDrop";
 interface Props {
-  tagName: string;
-  tagsList: string[];
-  setProfile: React.Dispatch<React.SetStateAction<Profile>>;
-  propsName: string;
+  skillTags: SkillTag[];
 }
 
-const AddTagsButton: React.FC<Props> = ({
-  tagName,
-  tagsList,
-  setProfile,
-  propsName,
-}) => {
+const AddTagsButton: React.FC<Props> = skillTags => {
   const [input, setInput] = useState<string>("");
-  const [isShowSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [isInvalidTag, setInvalidTag] = useState<boolean>(false);
+
+  // const [isShowSearchBar, setShowSearchBar] = useState<boolean>(false);
+  // const showSearchBar = () => {
+  //   setShowSearchBar(true);
+  // };
+
+  // const removeSearchBar = () => {
+  //   setShowSearchBar(false);
+  // };
 
   const onAddTagsButtonClick = () => {
     if (input.length > 0) {
-      setProfile(prevProfile => {
-        const tempProfile = { ...prevProfile };
-        if (!prevProfile[propsName as ProfileKey].includes(input)) {
-          tempProfile[propsName as ProfileKey].push(input);
-          setInvalidTag(false);
-          setInput("");
-        } else {
-          setInvalidTag(true);
-        }
-        return tempProfile;
-      });
+      // already in skill tags
     } else {
       setInvalidTag(true);
       setInput("");
     }
   };
 
-  const showSearchBar = () => {
-    setShowSearchBar(true);
-  };
-
-  const removeSearchBar = () => {
-    setShowSearchBar(false);
-  };
-
   return (
     <SProfile.Div>
-      {isShowSearchBar && (
+      {/* {isShowSearchBar && (
         <BackDrop
           removeBackDrop={removeSearchBar}
           propsName={propsName}
           setShowSearchBar={setShowSearchBar}
           setInput={setInput}
         />
-      )}
+      )} */}
       <SProfile.ContentDiv>
         <SProfile.TagsContainer>
-          <SProfile.LabelDiv>{tagName}:</SProfile.LabelDiv>
+          <SProfile.LabelDiv>Skill Tgas :</SProfile.LabelDiv>
           <SProfile.WrapDiv>
             {tagsList.map(tag => {
               return (
                 <TagsButton
-                  key={tag}
-                  tagName={tag}
+                  key={tag.name}
+                  tagName={tag.name}
                   setProfile={setProfile}
                   propsName={propsName}
                 />

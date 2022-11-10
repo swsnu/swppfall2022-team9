@@ -21,15 +21,12 @@ describe("<TagsButton/>", () => {
     const setState = jest.fn();
     const useStateSpy = jest.spyOn(React, "useState");
     const init: Profile = {
-      id: 1,
       imgUrl: "url",
-      qualityTags: ["Computer"],
-      majorTags: ["Computer"],
-      degreeTags: ["Computer"],
-      skillTags: ["Computer"],
-      languageTags: ["Computer"],
+      skillTags: [],
       website: "web",
       introduction: "hi my name is slim shady",
+      jobExperience: [],
+      education: [],
     };
     useStateSpy.mockImplementation(() => {
       return [init, setState];
