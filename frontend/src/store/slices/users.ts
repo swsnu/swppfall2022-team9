@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { PostCreateProfileDto } from "server/dto/profile/profile.dto";
 import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
 import {
   GetFriendListResDto,
@@ -44,8 +43,8 @@ export const postSignUp = createAsyncThunk<void, PostSignUpDto>(
   },
 );
 
-export const putSignOut = createAsyncThunk<void>(
-  "users/putSignOut",
+export const getSignOut = createAsyncThunk<void>(
+  "users/getSignOut",
   async (_, { dispatch }) => {
     await axios.get(`/api/auth/signout/`);
     dispatch(userActions.resetCurrentUser());
@@ -68,12 +67,10 @@ export const getFriendList = createAsyncThunk<void>(
   },
 );
 
-export const postCreateProfile = createAsyncThunk<void, PostCreateProfileDto>(
-  "users/postCreateProfile",
-  async body => {
-    await axios.post<PostCreateProfileDto>("/api/profile", body);
-  },
-);
+// export const resetFriendList = createAsyncThunk<void, void>(
+//   "users/resetFriendList",
+//   async () => {},
+// );
 
 export const userSlice = createSlice({
   name: "users",
@@ -88,9 +85,9 @@ export const userSlice = createSlice({
     setFriendList: (state, actions: PayloadAction<Array<OneChonInfo>>) => {
       state.friendList = actions.payload;
     },
-    resetFriendList: state => {
-      state.friendList = [];
-    },
+    // resetFriendList: state => {
+    //   state.friendList = [];
+    // },
   },
 });
 

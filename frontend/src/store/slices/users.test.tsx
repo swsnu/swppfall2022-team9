@@ -5,9 +5,16 @@ import reducer, {
   verifyRegisterToken,
 } from "./users";
 import { ThunkMiddleware } from "redux-thunk";
-import { postSignUp, postSignIn, putSignOut } from "./users";
+import { postSignUp, postSignIn, getSignOut } from "./users";
 import axios from "axios";
 import { usersStub } from "server/stubs/users.stub";
+
+const mockDispatch = jest.fn();
+
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
+  useDispatch: () => mockDispatch,
+}));
 
 describe("users reducer", () => {
   let store: EnhancedStore<
@@ -22,8 +29,6 @@ describe("users reducer", () => {
     jest.clearAllMocks();
   });
 
-  // WARNING!! THIS TEST IS SKIPPED FOR NOW!
-  // MUST REMOVE '.skip' TO RUN THIS TEST
   it("should handle initial state", async () => {
     expect(reducer(undefined, { type: "unknown" })).toEqual({
       currentUser: null,
@@ -32,23 +37,26 @@ describe("users reducer", () => {
   });
 
   it("tests postSignin", async () => {
-    axios.get = jest.fn().mockResolvedValue({ data: usersStub[0] });
+    axios.post = jest.fn().mockResolvedValueOnce({ data: usersStub[0] });
     await store.dispatch(
       postSignIn({
         username: usersStub[0].username,
         password: usersStub[0].password,
       }),
     );
+    expect(store.getState().users.currentUser?.username).toEqual(
+      usersStub[0].username,
+    );
   });
 
-  it("tests putSignOut", async () => {
-    axios.put = jest.fn().mockResolvedValue({ data: null });
-    await store.dispatch(putSignOut());
+  it("tests getSignOut", async () => {
+    axios.get = jest.fn().mockResolvedValueOnce({ data: null });
+    await store.dispatch(getSignOut());
     expect(store.getState().users.currentUser).toEqual(null);
   });
 
   it("tests postSignUp", async () => {
-    axios.post = jest.fn().mockResolvedValue({ data: usersStub[0] });
+    axios.post = jest.fn().mockResolvedValueOnce({ data: usersStub[0] });
     await store.dispatch(
       postSignUp({
         email: usersStub[0].email,
@@ -61,12 +69,12 @@ describe("users reducer", () => {
   });
 
   it("tests verify register token", async () => {
-    axios.get = jest.fn().mockResolvedValue({});
+    axios.get = jest.fn().mockResolvedValueOnce({});
     await store.dispatch(verifyRegisterToken("token"));
   });
 
   it("tests get chon list", async () => {
-    axios.get = jest.fn().mockResolvedValue({
+    axios.get = jest.fn().mockResolvedValueOnce({
       data: {
         onechon: [
           {
@@ -75,27 +83,12 @@ describe("users reducer", () => {
             lastname: "박",
             imgUrl:
               "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
-            chons: [
-              {
-                id: 2,
-                firstname: "지",
-                lastname: "예",
-                imgUrl:
-                  "https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/01/03/XlaLfTVZ5iIM637768407379571191.jpg",
-              },
-              {
-                id: 3,
-                firstname: "민아",
-                lastname: "신",
-                imgUrl:
-                  "https://search.pstatic.net/common?type=b&size=216&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202110%2F20211028162722613.jpg",
-              },
-            ],
+            chons: [],
           },
         ],
       },
     });
     await store.dispatch(getFriendList());
-    expect(store.getState().users.friendList.length).toEqual(1);
+    expect(axios.get).toHaveBeenCalled();
   });
 });

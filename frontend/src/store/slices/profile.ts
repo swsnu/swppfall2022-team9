@@ -11,11 +11,11 @@ import {
 } from "server/dto/profile/profile.res.dto";
 import { Profile } from "server/models/profile.model";
 
-export type CurrentProfile = {
+export type ProfileState = {
   currentProfile: Profile | null;
 };
 
-const initialState: CurrentProfile = {
+const initialState: ProfileState = {
   currentProfile: null,
 };
 

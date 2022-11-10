@@ -2,7 +2,7 @@ import useAlert from "hooks/useAlert";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
-import { putSignOut } from "store/slices/users";
+import { getSignOut } from "store/slices/users";
 import * as FormStyles from "styles/common.form.styles";
 
 const AccountPage: React.FC = () => {
@@ -27,7 +27,7 @@ const AccountPage: React.FC = () => {
     navigate("/account/password");
   };
   const onClickLogout = () => {
-    dispatch(putSignOut());
+    dispatch(getSignOut());
   };
 
   // TODO: delete account
