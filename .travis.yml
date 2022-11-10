@@ -24,10 +24,10 @@ jobs:
       script:
         - yarn lint
         - yarn test --coverage --watchAll=false
-        - coveralls-lcov -v -n coverage/lcov.info > coverage.json
+        - coveralls-lcov -v coverage/lcov.info
         - cd ../backend
         - pylint --rcfile=pylintrc **/*.py
         - coverage run --source='.' manage.py test
         - coverage xml
+        - coveralls
         - cd .. && sonar-scanner
-        - cd backend && coveralls --merge=../frontend/coverage.json
