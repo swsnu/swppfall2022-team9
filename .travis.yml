@@ -27,7 +27,7 @@ jobs:
         - coveralls-lcov -v coverage/lcov.info
         - cd ../backend
         - pylint --rcfile=pylintrc **/*.py
-        - coverage run --source='.' manage.py test
+        - coverage run —branch —source='./linklink' manage.py test
         - coverage xml
         - coveralls
         - cd .. && sonar-scanner
