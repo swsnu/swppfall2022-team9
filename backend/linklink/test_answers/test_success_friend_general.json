@@ -1,16 +1,18 @@
 {
-    "onechon": [
+    "friendList": [
         {
             "id": 2,
             "firstname": "James",
             "lastname": "Gunn",
             "imgUrl": "https://catimage.com",
+            "isTwoChon": false,
             "chons": [
                 {
                     "id": 3,
                     "firstname": "Emily",
                     "lastname": "Blunt",
-                    "imgUrl": "https://catimage.com"
+                    "imgUrl": "https://catimage.com",
+                    "isTwoChon": true
                 }
             ]
         },
@@ -19,6 +21,7 @@
             "firstname": "Will",
             "lastname": "Smith",
             "imgUrl": "https://catimage.com",
+            "isTwoChon": false,
             "chons": []
         },
         {
@@ -26,6 +29,7 @@
             "firstname": "Chris",
             "lastname": "Rock",
             "imgUrl": "https://catimage.com",
+            "isTwoChon": false,
             "chons": []
         }
     ]
