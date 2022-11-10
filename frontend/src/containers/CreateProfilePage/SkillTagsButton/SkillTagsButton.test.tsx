@@ -1,29 +1,29 @@
 import { screen, fireEvent, render } from "@testing-library/react";
-import AddTagsButton from "./AddTagsButton";
+import SkillTagsButton from "./SkillTagsButton";
 
-describe("<TagsButton/>", () => {
+describe("<SkillTagsButton/>", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders Tags", async () => {
+  it("renders SkillTags", async () => {
     render(
-      <AddTagsButton
-        tagName="Test"
-        tagsList={[]}
-        setProfile={() => {}}
-        propsName="skillTags"
+      <SkillTagsButton
+      // tagName="Test"
+      // tagsList={[]}
+      // setProfile={() => {}}
+      // propsName="skillTags"
       />,
     );
   });
 
   it("clicks add tags button", async () => {
     render(
-      <AddTagsButton
-        tagName="Test"
-        tagsList={[]}
-        setProfile={() => {}}
-        propsName="skillTags"
+      <SkillTagsButton
+      // tagName="Test"
+      // tagsList={[]}
+      // setProfile={() => {}}
+      // propsName="skillTags"
       />,
     );
     const button = screen.getByRole("button");
@@ -32,11 +32,11 @@ describe("<TagsButton/>", () => {
 
   it("clicks show search bar button and remove search bar", async () => {
     render(
-      <AddTagsButton
-        tagName="Test"
-        tagsList={[]}
-        setProfile={() => {}}
-        propsName="skillTags"
+      <SkillTagsButton
+      // tagName="Test"
+      // tagsList={[]}
+      // setProfile={() => {}}
+      // propsName="skillTags"
       />,
     );
     const input = screen.getByRole("textbox");
@@ -47,11 +47,11 @@ describe("<TagsButton/>", () => {
 
   it("clicks show search bar button and tests set input", async () => {
     render(
-      <AddTagsButton
-        tagName="Test"
-        tagsList={[]}
-        setProfile={() => {}}
-        propsName="skillTags"
+      <SkillTagsButton
+      // tagName="Test"
+      // tagsList={[]}
+      // setProfile={() => {}}
+      // propsName="skillTags"
       />,
     );
     const input = screen.getByRole("textbox");

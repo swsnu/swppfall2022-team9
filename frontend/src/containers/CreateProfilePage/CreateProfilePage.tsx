@@ -2,97 +2,78 @@ import { Profile } from "server/models/profile.model";
 import React, { useState } from "react";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
-import AddTagsButton from "./AddTagsButton/AddTagsButton";
+import SkillTagsButton from "./SkillTagsButton/SkillTagsButton";
+import ExperienceTagsButton from "./ExperienceTagsButton/ExperienceTagsButton";
+import EducationTagsButton from "./EducationTagsButton/EducationTagsButton";
 import { useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
+import { postCreateProfile } from "store/slices/profile";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "store";
 
 interface Props {}
 
+const MAX_URL_LEN = 50;
+
 const CreateProfilePage: React.FC<Props> = () => {
   const currentUser = useAppSelector(state => state.users.currentUser);
-  const navigate = useNavigate();
-  if (!currentUser) {
-    navigate("/");
-  }
-
-  const currentUserProfile: Profile = {
-    id: currentUser?.id ? currentUser.id : -1,
-    imgUrl: "",
-    qualityTags: [],
-    majorTags: [],
-    degreeTags: [],
-    skillTags: [],
-    languageTags: [],
-    website: "",
+  // const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  // if (!currentUser) {
+  //   navigate("/");
+  // }
+  const newProfile: Profile = {
     introduction: "",
+    skillTags: [],
+    education: [],
+    jobExperience: [],
+    website: "",
+    imgUrl: "",
   };
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [website, setWebsite] = useState<string>("");
+  const [introduction, setIntroduction] = useState<string>("");
 
-  const [createProfileInfo, setCreateProfileInfo] =
-    useState<Profile>(currentUserProfile);
   const maxNumberTags = 6;
   const maxIntroLength = 300;
   const uploadImageHandler = () => {};
 
   const urlValdiation = (url: string): boolean => {
     const regex = new RegExp(
-      "^((https?|ftp|smtp)://)?(www.)?[a-z0-9]+.[a-z]+(/[a-zA-Z0-9#]+/?)*?.[a-z]+$",
+      `^((https?|ftp|smtp)://)?(www.)?.{${MAX_URL_LEN}}[a-z0-9]+.[a-z]+(/[a-zA-Z0-9#]+/?)*?.[a-z]+$`,
     );
     return regex.test(url);
   };
 
   enum HelperText {
-    NO_ERROR = "",
     REQUIRED = "필수 정보입니다.",
-    INVALID_URL = "올바르지 않은 주소입니다.",
+    INVALID_URL = "올바르지 않은 URL입니다.",
     TAGS_ERROR = "최대 태그 수를 초과하였습니다",
-    SUBMIT_ERROR = "모든 칸에 적어도 하나의 태그가 필요합니다.",
+    SUBMIT_ERROR = "적어도 하나의 스킬 태그가 필요합니다.",
   }
+
+  const [validIntro, setValidIntro] = useState<boolean>(true);
+  const [validSkillTags, setValidSkillTags] = useState<boolean>(true);
   const [validImgUrl, setValidImageUrl] = useState<boolean>(true);
   const [validWebUrl, setValidWebUrl] = useState<boolean>(true);
-  const [validIntro, setValidIntro] = useState<boolean>(true);
-  const [validQualityTags, setValidQualityTags] = useState<boolean>(true);
-  const [validMajorTags, setValidMajorTags] = useState<boolean>(true);
-  const [validDegreeTags, setValidDegreeTags] = useState<boolean>(true);
-  const [validSkillTags, setValidSkillTags] = useState<boolean>(true);
-  const [validLanguageTags, setValidLanguageTags] = useState<boolean>(true);
 
-  const createProfileHandler = () => {
+  const createProfileHandler = async () => {
     setValidImageUrl(
-      createProfileInfo.imgUrl ? urlValdiation(createProfileInfo.imgUrl) : true,
+      newProfile.imgUrl ? urlValdiation(newProfile.imgUrl) : true,
     );
     setValidWebUrl(
-      createProfileInfo.website
-        ? urlValdiation(createProfileInfo.website)
-        : true,
+      newProfile.website ? urlValdiation(newProfile.website) : true,
     );
-    setValidIntro(!!createProfileInfo.introduction);
-    setValidQualityTags(createProfileInfo.qualityTags.length < maxNumberTags);
-    setValidMajorTags(createProfileInfo.majorTags.length < maxNumberTags);
-    setValidDegreeTags(createProfileInfo.degreeTags.length === 1);
-    setValidSkillTags(createProfileInfo.skillTags.length < maxNumberTags);
-    setValidLanguageTags(createProfileInfo.languageTags.length < maxNumberTags);
-    if (
-      validImgUrl &&
-      validDegreeTags &&
-      validIntro &&
-      validMajorTags &&
-      validQualityTags &&
-      validSkillTags &&
-      validWebUrl &&
-      validLanguageTags
-    ) {
+    setValidIntro(!!newProfile.introduction);
+    setValidSkillTags(newProfile.skillTags.length < maxNumberTags);
+    if (validImgUrl && validIntro && validSkillTags && validWebUrl) {
       // update
-      setCreateProfileInfo(createProfileInfo);
+      dispatch(postCreateProfile(newProfile));
     } else {
-      // do nothing
+      // do nothing; forbidden
     }
   };
-  const isInvalid =
-    createProfileInfo.languageTags.length == 0 ||
-    createProfileInfo.skillTags.length == 0 ||
-    createProfileInfo.majorTags.length == 0 ||
-    createProfileInfo.degreeTags.length == 0 ||
-    createProfileInfo.qualityTags.length == 0;
+  const isInvalid = newProfile.skillTags.length == 0;
 
   return (
     <S.Container>
@@ -102,9 +83,7 @@ const CreateProfilePage: React.FC<Props> = () => {
         </S.GuideContainer>
         <SProfile.Container>
           <SProfile.DefaultContainer>
-            <SProfile.UserNode
-              url={createProfileInfo.imgUrl}
-            ></SProfile.UserNode>
+            <SProfile.UserNode url={newProfile.imgUrl}></SProfile.UserNode>
             <SProfile.Username>
               {currentUser?.lastname ? currentUser.lastname : ""}
               {currentUser?.firstname ? currentUser.firstname : ""}
@@ -116,68 +95,20 @@ const CreateProfilePage: React.FC<Props> = () => {
             </SProfile.Button>
           </SProfile.ImageButtonContainer>
         </SProfile.Container>
-        <AddTagsButton
-          tagName="Major"
-          tagsList={createProfileInfo.majorTags}
-          setProfile={setCreateProfileInfo}
-          propsName="majorTags"
-        ></AddTagsButton>
-        {!validMajorTags && (
-          <S.InputHelper>
-            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
-          </S.InputHelper>
-        )}
-        <AddTagsButton
-          tagName="Degree"
-          tagsList={createProfileInfo.degreeTags}
-          setProfile={setCreateProfileInfo}
-          propsName="degreeTags"
-        ></AddTagsButton>
-        {!validDegreeTags && (
-          <S.InputHelper>{HelperText.TAGS_ERROR + `: == 1`}</S.InputHelper>
-        )}
-        <AddTagsButton
-          tagName="Qualities"
-          tagsList={createProfileInfo.qualityTags}
-          setProfile={setCreateProfileInfo}
-          propsName="qualityTags"
-        ></AddTagsButton>
-        {!validQualityTags && (
-          <S.InputHelper>
-            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
-          </S.InputHelper>
-        )}
-        <AddTagsButton
-          tagName="Skills"
-          tagsList={createProfileInfo.skillTags}
-          setProfile={setCreateProfileInfo}
-          propsName="skillTags"
-        ></AddTagsButton>
+        <SkillTagsButton newProfile={newProfile.skillTags}></SkillTagsButton>
         {!validSkillTags && (
           <S.InputHelper>
             {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
           </S.InputHelper>
         )}
-        <AddTagsButton
-          tagName="Languages"
-          tagsList={createProfileInfo.languageTags}
-          setProfile={setCreateProfileInfo}
-          propsName="languageTags"
-        ></AddTagsButton>
-        {!validLanguageTags && (
-          <S.InputHelper>
-            {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
-          </S.InputHelper>
-        )}
+        <EducationTagsButton></EducationTagsButton>
+        <ExperienceTagsButton></ExperienceTagsButton>
         <SProfile.ContentDiv>
           <SProfile.ContentDiv>
             <SProfile.LabelDiv>Website:</SProfile.LabelDiv>
             <SProfile.WebsiteForm
               onChange={input => {
-                setCreateProfileInfo(prev => ({
-                  ...prev,
-                  website: input.target.value.trim(),
-                }));
+                setWebsite(input.target.value.trim());
               }}
             />
             {!validWebUrl && (
@@ -190,10 +121,7 @@ const CreateProfilePage: React.FC<Props> = () => {
           <SProfile.IntroForm
             maxLength={maxIntroLength}
             onChange={input => {
-              setCreateProfileInfo(prev => ({
-                ...prev,
-                introduction: input.target.value.trim(),
-              }));
+              setIntroduction(input.target.value.trim());
             }}
           ></SProfile.IntroForm>
           {!validIntro && <S.InputHelper>{HelperText.REQUIRED}</S.InputHelper>}

@@ -25,7 +25,6 @@ export interface Profile {
   imgUrl: string;
 }
 
-export type ProfileKey = keyof Pick<
-  Profile,
-  "skillTags" | "education" | "jobExperience"
->;
+export type SkillTagKey = keyof Pick<Profile, "skillTags">;
+export type EducationKey = keyof Pick<Profile, "education">;
+export type JobKey = keyof Pick<Profile, "jobExperience">;

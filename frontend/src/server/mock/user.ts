@@ -23,7 +23,7 @@ export default function applyAuthApi(
   server.get<unknown, GetFriendListResDto, unknown>(
     "/api/user/onechon/",
     async (req, res) => {
-      const friendList = db.get("chonList").value();
+      const friendList = db.get("freindList").value();
       if (!friendList) {
         res.status(404).json(friendList);
       } else {
