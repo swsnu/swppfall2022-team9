@@ -21,7 +21,7 @@ const renderAccountPage = (alertProviderProps?: AlertContextProps) => {
       preloadedState: {
         users: {
           currentUser: usersStub[0],
-          chonList: [],
+          friendList: [],
         },
       },
     },
