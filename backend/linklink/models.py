@@ -29,6 +29,7 @@ class LinkLinkUser(models.Model):
     )
     imgUrl = models.CharField(max_length=400, default="https://catimage.com")
     emailValidated = models.BooleanField(default=False)
+    email_unique = models.EmailField(unique=True)
 
     def __str__(self):
         return f"{self.user.last_name + self.user.first_name}"

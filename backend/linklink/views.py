@@ -137,7 +137,7 @@ def signup(request):
     1. Create django User object
     2. Create LinkLinkUser object with emailValidated=False
     3. Create Verification object
-    4. Send register email to user.email
+    4. Send register email to linklinkuser.email_unique
     """
     try:
         req_data = json.loads(request.body.decode())
@@ -152,14 +152,15 @@ def signup(request):
     user = User.objects.create_user(
         username=username,
         password=password,
-        email=email,
+        #email=email, email will be added not in User, but LinkLinkUser
         first_name=firstname,
         last_name=lastname
     )
     # Create LinkLinkUser object with emailValidated=False
     linklinkuser = LinkLinkUser.objects.create(
         user=user,
-        emailValidated=False
+        emailValidated=False,
+        email_unique = email
     )
     # Create Verification object
     expire_time = datetime.now() + timedelta(days=EMAIL_EXPIRE_DAYS)
@@ -170,9 +171,9 @@ def signup(request):
         purpose="Register",
         expiresAt=expire_time
     )
-    # Send register email to user.email
+    # Send register email to linklinkuser.email_unique
     send_register_email(
-        recipient=user.email,
+        recipient=linklinkuser.email_unique,
         token=str(verification.token)
     )
     return HttpResponse(status=201)
@@ -200,7 +201,7 @@ def signin(request):
             login(request, user)
             response_dict = {
                 "id": user.id,
-                "email": user.email,
+                "email": user.linklinkuser.email_unique,
                 "username": user.username,
                 "firstname": user.first_name,
                 "lastname": user.last_name,
@@ -224,10 +225,14 @@ def signin(request):
                 verification_found.expiresAt = new_expire_time
                 verification_found.save()
             # Resend register email
-            send_register_email(user.email, str(verification_found.token))
+            send_register_email(
+                user.linklinkuser.email_unique,
+                str(verification_found.token)
+            )
             resent_email_message = (
                 f"Account {username} exists, but is not validated. "
-                f"A validation email has been resent to {user.email}."
+                "A validation email has been resent to "
+                f"{user.linklinkuser.email_unique}."
             )
             return JsonResponse(
                 status=401,

@@ -24,6 +24,8 @@ ignore-patterns=manage.py,
                 0008_alter_verification_linklinkuser.py,
                 0009_alter_linklinkuser_friendrequesttoken_and_more.py,
                 0010_rename_user_profile_linklinkuser_and_more.py,
+                0011_linklinkuser_email_unique.py,
+                0012_alter_linklinkuser_email_unique,
 
 # Pickle collected data for later comparisons.
 persistent=no

@@ -9,7 +9,6 @@
             "username": "linklinkadmin",
             "first_name": "",
             "last_name": "",
-            "email": "",
             "is_staff": true,
             "is_active": true,
             "date_joined": "2022-11-03T05:50:03.769Z",
@@ -27,7 +26,6 @@
             "username": "wotmd",
             "first_name": "재승",
             "last_name": "박",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-03T05:54:03Z",
@@ -45,7 +43,6 @@
             "username": "tlsgP",
             "first_name": "신혜",
             "last_name": "박",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-03T05:57:09Z",
@@ -63,7 +60,6 @@
             "username": "guswls",
             "first_name": "현진",
             "last_name": "서",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-03T06:03:24Z",
@@ -81,7 +77,6 @@
             "username": "alsdk",
             "first_name": "민아",
             "last_name": "신",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-05T06:38:52Z",
@@ -99,7 +94,6 @@
             "username": "dbwls",
             "first_name": "유진",
             "last_name": "안",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-05T06:41:20Z",
@@ -117,7 +111,6 @@
             "username": "dnjsdud",
             "first_name": "원영",
             "last_name": "장",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -135,7 +128,6 @@
             "username": "alswn",
             "first_name": "민주",
             "last_name": "김",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -153,7 +145,6 @@
             "username": "alswjd",
             "first_name": "민정",
             "last_name": "이",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -171,7 +162,6 @@
             "username": "thgml",
             "first_name": "소희",
             "last_name": "한",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -189,7 +179,6 @@
             "username": "qudgjs",
             "first_name": "병헌",
             "last_name": "이",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -207,7 +196,6 @@
             "username": "wotjr",
             "first_name": "재석",
             "last_name": "유",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -225,7 +213,6 @@
             "username": "audtn",
             "first_name": "명수",
             "last_name": "박",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -243,7 +230,6 @@
             "username": "gudehs",
             "first_name": "형돈",
             "last_name": "정",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -261,7 +247,6 @@
             "username": "gowls",
             "first_name": "해진",
             "last_name": "유",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -279,7 +264,6 @@
             "username": "tmddnjs",
             "first_name": "승원",
             "last_name": "차",
-            "email": "notiona@snu.ac.kr",
             "is_staff": false,
             "is_active": true,
             "date_joined": "2022-11-07T05:54:59.808Z",
@@ -294,7 +278,8 @@
             "user": 2,
             "friendRequestToken": "e23b34ab-5983-47f5-9b6f-ec86486bea91",
             "imgUrl": "http://www.math.snu.ac.kr/~ernestryu/courses/photos/jspark.jpg",
-            "emailValidated": true
+            "emailValidated": true,
+            "email_unique": "invalid1@snu.ac.kr"
         }
     },
     {
@@ -304,7 +289,8 @@
             "user": 3,
             "friendRequestToken": "42ee8c31-3248-475c-8d3d-0e7aa3ebd559",
             "imgUrl": "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid2@snu.ac.kr"
         }
     },
     {
@@ -314,7 +300,8 @@
             "user": 4,
             "friendRequestToken": "bc1b0c18-fc88-44bd-b543-1887465462b8",
             "imgUrl": "https://mblogthumb-phinf.pstatic.net/MjAxNzAzMjFfMTEy/MDAxNDkwMTA2MTM3MzMy.oUSVW9DfguOg7VE2aGWPyNNPuJ88kSOf2G4_8l00hRAg.rtQLGbftrweAtW2gpEJ9vG5HR4qYfDkh2athLbpZdwog.JPEG.badpark/1680x1050-1.jpg?type=w800",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid3@snu.ac.kr"
         }
     },
     {
@@ -324,7 +311,8 @@
             "user": 5,
             "friendRequestToken": "16a4971a-5cb9-46b8-813a-62304161e180",
             "imgUrl": "https://search.pstatic.net/common?type=b&size=216&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202110%2F20211028162722613.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid4@snu.ac.kr"
         }
     },
     {
@@ -334,7 +322,8 @@
             "user": 6,
             "friendRequestToken": "d8d1b737-c28a-4b7e-ba3a-a04c3e3bb215",
             "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrg6_A9laCoJj6foa4xvUVoxd7SwCS7uKttg&usqp=CAU",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid5@snu.ac.kr"
         }
     },
     {
@@ -344,7 +333,8 @@
             "user": 7,
             "friendRequestToken": "3c14c6a2-6f80-4dd8-9495-83eddccf66f3",
             "imgUrl": "https://w.namu.la/s/6eb1c248bfe3e65e379895405895de473e87d8c68c8185b564be5d4f305aa3f5674de1fb2559d07988a48105185fd4481dc9f9d948282123cc8f05b563f0f210efcede139ce8f5635c8f7f9cb0e443e8fb366415c47fab637aa8b33dec9a53e833eab501c8d94531edce4e3e6cca090a",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid6@snu.ac.kr"
         }
     },
     {
@@ -354,7 +344,8 @@
             "user": 8,
             "friendRequestToken": "75a477fb-bee7-48b1-915d-0fc1dc4bfd29",
             "imgUrl": "https://i.pinimg.com/736x/4f/55/4f/4f554fd63632cf7704740c548a3dba98.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid7@snu.ac.kr"
         }
     },
     {
@@ -364,7 +355,8 @@
             "user": 9,
             "friendRequestToken": "2794749b-6012-4a1a-863c-4e89aa5cc0b3",
             "imgUrl": "https://w.namu.la/s/146a3cab6b30fe866f15358611221d2a4de60eec333a51dbd89b4cf4363feadefdd37b2ae1c3061ea9a924f36e1733cfec44f6e086007b1fa61ce1b026de3959ad231492cbe9b37e9c7e6bc3dd2be99c1a864e0d44e3353b40e3b25a2c7659a35ed805e81886ad6f4fec6ae27ae2c3e7",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid8@snu.ac.kr"
         }
     },
     {
@@ -374,7 +366,8 @@
             "user": 10,
             "friendRequestToken": "dfc2ed36-04ce-4ec3-891b-05f8454e4e98",
             "imgUrl": "https://www.smlounge.co.kr/upload/woman/article/202112/thumb/49686-473794-sampleM.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid9@snu.ac.kr"
         }
     },
     {
@@ -384,7 +377,8 @@
             "user": 11,
             "friendRequestToken": "cce922b0-0ff6-436f-94aa-1d9cf266f89a",
             "imgUrl": "https://blog.kakaocdn.net/dn/pvThZ/btrHnyoN53Z/CfPa8zGUCBEp0V4Mo4uCj1/img.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid10@snu.ac.kr"
         }
     },
     {
@@ -394,7 +388,8 @@
             "user": 12,
             "friendRequestToken": "1a968859-8873-4df9-9332-dafb93531b76",
             "imgUrl": "https://newsimg-hams.hankookilbo.com/2022/11/05/b34e2afc-ed88-4f66-ac04-1ce0f963f487.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid11@snu.ac.kr"
         }
     },
     {
@@ -404,7 +399,8 @@
             "user": 13,
             "friendRequestToken": "37bc587e-cb63-4173-8dfb-93e52fe00958",
             "imgUrl": "https://post-phinf.pstatic.net/MjAxOTA2MTlfMjYy/MDAxNTYwOTI1NzY3MDgw.fbjdjSHG0aV1sWTIBf5i3Tt4X-eX56UYjUZYZTKQ_Ywg.R_NKSI6rYZPJ-X2izK44fup8P8dSXH3trSALCtmlNmMg.JPEG/image_1887121981560925741830.jpg?type=w1200",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid12@snu.ac.kr"
         }
     },
     {
@@ -414,7 +410,8 @@
             "user": 14,
             "friendRequestToken": "fcbc6909-22e1-45c0-ae44-f7f125fe66fa",
             "imgUrl": "https://image.kmib.co.kr/online_image/2020/1220/611811110015341674_1.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid13@snu.ac.kr"
         }
     },
     {
@@ -424,7 +421,8 @@
             "user": 15,
             "friendRequestToken": "fa641491-9875-406c-870e-cdaa39ed205b",
             "imgUrl": "https://thumb.mt.co.kr/06/2020/02/2020022110594033358_1.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid14@snu.ac.kr"
         }
     },
     {
@@ -434,7 +432,8 @@
             "user": 16,
             "friendRequestToken": "35f8557c-3334-484b-a9ce-72fc4ad5227e",
             "imgUrl": "http://img.segye.com/content/image/2016/09/09/20160909513537.jpg",
-            "emailValidated": false
+            "emailValidated": false,
+            "email_unique": "invalid15@snu.ac.kr"
         }
     },
     {

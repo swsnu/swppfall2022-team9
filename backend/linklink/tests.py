@@ -24,62 +24,67 @@ class LinkLinkTestCase(TestCase):
         john = User.objects.create_user(
             username="john",
             password="johnpassword",
-            email="notiona@snu.ac.kr",
+            #email="notiona@snu.ac.kr",
             first_name="John",
             last_name="Cena"
         )
         james = User.objects.create_user(
             username="james",
             password="jamespassword",
-            email="notiona@snu.ac.kr",
+            #email="notiona@snu.ac.kr",
             first_name="James",
             last_name="Gunn"
         )
         emily = User.objects.create_user(
             username="emily",
             password="emilypassword",
-            email="notiona@snu.ac.kr",
+            #email="notiona@snu.ac.kr",
             first_name="Emily",
             last_name="Blunt"
         )
         will = User.objects.create_user(
             username="will",
             password="willpassword",
-            email="notiona@snu.ac.kr",
+            #email="notiona@snu.ac.kr",
             first_name="Will",
             last_name="Smith"
         )
         chris = User.objects.create_user(
             username="chris",
             password="chrispassword",
-            email="notiona@snu.ac.kr",
+            #email="notiona@snu.ac.kr",
             first_name="Chris",
             last_name="Rock"
         )
         john_linklinkuser = LinkLinkUser.objects.create(
             user=john,
             emailValidated=False,
-            imgUrl = "https://catimage.com"
+            imgUrl = "https://catimage.com",
+            email_unique="notiona@snu.ac.kr",
         )
         james_linklinkuser = LinkLinkUser.objects.create(
             user=james,
             emailValidated=False,
-            imgUrl = "https://catimage.com"
+            imgUrl = "https://catimage.com",
+            email_unique="invalid_but_unique1@snu.ac.kr",
         )
         emily_linklinkuser = LinkLinkUser.objects.create(
             user=emily,
             emailValidated=False,
-            imgUrl = "https://catimage.com"
+            imgUrl = "https://catimage.com",
+            email_unique="invalid_but_unique2@snu.ac.kr",
         )
         will_linklinkuser = LinkLinkUser.objects.create(
             user=will,
             emailValidated=False,
-            imgUrl = "https://catimage.com"
+            imgUrl = "https://catimage.com",
+            email_unique="invalid_but_unique3@snu.ac.kr",
         )
         chris_linklinkuser = LinkLinkUser.objects.create(
             user=chris,
             emailValidated=False,
-            imgUrl = "https://catimage.com"
+            imgUrl = "https://catimage.com",
+            email_unique="invalid_but_unique4@snu.ac.kr",
         )
         expire_time = \
             datetime.now() + timedelta(days=settings.EMAIL_EXPIRE_DAYS)
@@ -129,7 +134,7 @@ class LinkLinkTestCase(TestCase):
             {
                 "username": "jim",
                 "password": "jimpassword",
-                "email": "notiona@snu.ac.kr",
+                "email": "newuniqueinvalidemail@snu.ac.kr",
                 "firstname": "jim",
                 "lastname": "carry"
             },
@@ -150,7 +155,7 @@ class LinkLinkTestCase(TestCase):
         self.assertNotEqual(new_user.username, "")
         # Check valid email form regex
         self.assertRegex(
-            new_user.email,
+            new_linklinkuser.email_unique,
             r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
         )
         # Check new user emailValidated=False
@@ -185,7 +190,19 @@ class LinkLinkTestCase(TestCase):
             content_type="application/json",
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
+        # Check response
+        expected_response_dict = {
+            "id": 1,
+            "email": "notiona@snu.ac.kr",
+            "username": "john",
+            "firstname": "John",
+            "lastname": "Cena",
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            expected_response_dict
+        )
 
 
     def test_signin_incorrect_info(self):
