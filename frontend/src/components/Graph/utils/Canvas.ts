@@ -1,6 +1,10 @@
 import { User } from "server/models/users.model";
 import { Coord, PanZoom } from "types/canvas.types";
-import { OneChonNode, UserNode } from "components/Graph/utils/node";
+import {
+  NODE_RADIUS,
+  OneChonNode,
+  UserNode,
+} from "components/Graph/utils/node";
 import {
   addPoints,
   convertCartesianToScreen,
@@ -42,7 +46,11 @@ export class Canvas {
 
   private currentUserNode?: UserNode;
 
+  private currentUserNodeRadius = (NODE_RADIUS * 5) / 4;
+
   private chonNodes?: OneChonNode[];
+
+  private EDGE_LENGTH = 28;
 
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
@@ -256,6 +264,7 @@ export class Canvas {
       "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw",
       currentUser.lastname + currentUser.firstname,
       { x: 0, y: 0 },
+      this.currentUserNodeRadius,
     );
     this.currentUserNode.imgElement.onload = () => {
       this.render();
@@ -265,11 +274,10 @@ export class Canvas {
   setOneChonNodes(chonList: OneChonInfo[]) {
     const oneChonCount = chonList.length;
     const twoChonCount = chonList.map(oneChon => oneChon.chons.length);
-    const radius = 30;
     const coords = getOneAndTwoChonCoordinates(
       oneChonCount,
       twoChonCount,
-      radius,
+      this.EDGE_LENGTH,
     );
 
     this.chonNodes = chonList.map((oneChon, oneChonIdx) => {
@@ -330,25 +338,25 @@ export class Canvas {
 
   drawGraph() {
     if (this.currentUserNode) {
-      this.drawUserNode(this.currentUserNode);
       this.chonNodes?.forEach(oneChonNode => {
         const [edgeFromCurrentUser, edgeToOneChon] = getEdgeCoords(
           this.currentUserNode!.coord,
           oneChonNode.coord,
           oneChonNode.radius,
         );
-        this.drawUserNode(oneChonNode);
         this.drawEdge(edgeFromCurrentUser, edgeToOneChon, 1); // Edge from current user to 1-chon
+        this.drawUserNode(oneChonNode);
         oneChonNode.twoChonNodes?.forEach(twoChonNode => {
           const [edgeFromOneChon, edgeToTwoChon] = getEdgeCoords(
             oneChonNode.coord,
             twoChonNode.coord,
             oneChonNode.radius,
           );
-          this.drawUserNode(twoChonNode);
           this.drawEdge(edgeFromOneChon, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+          this.drawUserNode(twoChonNode);
         });
       });
+      this.drawUserNode(this.currentUserNode);
     }
   }
 
@@ -380,9 +388,12 @@ export class Canvas {
 
     // Round border
     ctx.beginPath();
+    ctx.lineWidth = // Set border line width
+      userNode === this.currentUserNode
+        ? scaledRadius * 0.13
+        : scaledRadius * 0.1;
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
-    ctx.arc(centerX, centerY, scaledRadius * 0.95, 0, Math.PI * 2);
-    ctx.fill("evenodd");
+    ctx.stroke();
     ctx.closePath();
     ctx.restore();
   }
@@ -405,8 +416,7 @@ export class Canvas {
     ctx.save();
     ctx.lineWidth = 2;
     if (chon == 2) {
-      // Dashline from 1-chons to 2-chons
-      ctx.setLineDash([4, 2]);
+      ctx.setLineDash([4, 2]); // Dashline from 1-chons to 2-chons
     }
     ctx.beginPath();
     ctx.moveTo(screenEdgeA.x, screenEdgeA.y);
