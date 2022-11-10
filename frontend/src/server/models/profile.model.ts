@@ -1,16 +1,31 @@
+export interface SkillTag {
+  name: string;
+}
+
+export interface EducationTag {
+  school: string;
+  major: string;
+  dateStart: Date;
+  dateEnd: Date;
+}
+
+export interface ExperienceTag {
+  company: string;
+  position: string;
+  dateStart: Date;
+  dateEnd: Date;
+}
+
 export interface Profile {
-  id: number;
-  imgUrl: string;
-  qualityTags: string[];
-  majorTags: string[];
-  degreeTags: string[];
-  skillTags: string[];
-  languageTags: string[];
-  website: string;
   introduction: string;
+  skillTags: SkillTag[];
+  education: EducationTag[];
+  jobExperience: ExperienceTag[];
+  website: string;
+  imgUrl: string;
 }
 
 export type ProfileKey = keyof Pick<
   Profile,
-  "qualityTags" | "majorTags" | "degreeTags" | "skillTags" | "languageTags"
+  "skillTags" | "education" | "jobExperience"
 >;
