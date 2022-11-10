@@ -37,13 +37,10 @@ export const postSignIn = createAsyncThunk<void, PostSignInDto>(
   },
 );
 
-export const postSignUp = createAsyncThunk<PostSignUpResDto, PostSignUpDto>(
+export const postSignUp = createAsyncThunk<void, PostSignUpDto>(
   "users/postSignUp",
-  async (body, { dispatch }) => {
-    const response = (
-      await axios.post<PostSignUpResDto>("/api/auth/signup/", body)
-    ).data;
-    return response;
+  async body => {
+    await axios.post<PostSignUpResDto>("/api/auth/signup/", body);
   },
 );
 

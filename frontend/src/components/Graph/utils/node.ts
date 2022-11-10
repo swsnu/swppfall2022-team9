@@ -1,7 +1,9 @@
 import { Coord } from "types/canvas.types";
 
+export const NODE_RADIUS = 40;
+
 export class UserNode {
-  radius = 40;
+  radius: number;
 
   imgElement: HTMLImageElement;
 
@@ -9,11 +11,17 @@ export class UserNode {
 
   coord: Coord;
 
-  constructor(imgUrl: string, name: string, coord: Coord) {
+  constructor(
+    imgUrl: string,
+    name: string,
+    coord: Coord,
+    radius = NODE_RADIUS,
+  ) {
     this.imgElement = new Image();
     this.imgElement.src = imgUrl;
     this.name = name;
     this.coord = coord;
+    this.radius = radius;
   }
 }
 
