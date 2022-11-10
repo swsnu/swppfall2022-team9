@@ -91,10 +91,11 @@ export const OptionCheckBox = styled.input.attrs({ type: "checkbox" })`
   }
 `;
 
+export const InputContainerMinHeight = 36;
 export const InputContainer = styled.div`
   width: 100%;
   border: none;
-  min-height: 30px;
+  min-height: ${InputContainerMinHeight}px;
   padding: 0;
   display: flex;
 `;
@@ -102,6 +103,7 @@ export const InputContainer = styled.div`
 export const InputModifyButton = styled.button`
   background: none;
   cursor: pointer;
+  max-height: ${InputContainerMinHeight}px;
   background-color: ${ThemeColor};
   min-width: 80px;
   border: none;
