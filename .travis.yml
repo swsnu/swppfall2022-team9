@@ -6,12 +6,12 @@ jobs:
   include:
     - language: node_js
       node_js: 14
-      python: "3.8.13"
+      python: '3.8.13'
       addons:
         sonarcloud:
           organization: swsnu
           token:
-            secure: "WCPrwgnit3FIB7pQ0LiXo1fHl2sBOLsNpBwG87+YAsW+w5HUCAQEJxnoKBjzleJHZITUyfXaRu1LRd5mmc3XDxAkwE+SQtsI86wkBmuaYTZ3+V3PG/AdOY+Nho4FK26nZ6SPmj6RQzYgFuVGtgS/ysd+pEzieTWZNbdYD/iQOjD5QXnPNBE2L5ihMEpmSpHsKSLsMAPV1Akg968zFFFwP1eSBHV9Xn33kbyecrqSZ/DUUBaPREIwN+n9HKM72qV4VrSd3wCjuEcP0rSv7L/0zH0V01LlWg7ap6b8OBkzuVDy/bfPh7vc2MIUjshvpY+NbVuJHiPuYqgHIn2XRgwSTJ72QaCNHmp0JAXkbWDgTlvRZfUNxknmSXrdLLBGjnrDCjrMiSH7Tn5iabB8dKOk1KFg7ChfuhWOEf2AO/7ESo5vQTf0a25y3Fr8QhEc84VMkLnFmkF3zfsGKI1VF0TAEkB8ZRhr5KCkbCrsY6wmXYPjILkkX3hZXco7tJvJFr7xBSWjcshPBG6Z50AKFp0HHbWb0UA1LuxqTaP/3qoPdE+/7XwDDZkEoTC+aJ1WuCkfR5P15FLJAfg/nBmRhqaTCDmcIOFoKYdK37BKx/udXDoYhcnpUBk2PvY7qgtu5eDc6oenJjmvwdeEESwT0xsnnvB5O2CAI56PRLwrwPJQiy0="
+            secure: 'WCPrwgnit3FIB7pQ0LiXo1fHl2sBOLsNpBwG87+YAsW+w5HUCAQEJxnoKBjzleJHZITUyfXaRu1LRd5mmc3XDxAkwE+SQtsI86wkBmuaYTZ3+V3PG/AdOY+Nho4FK26nZ6SPmj6RQzYgFuVGtgS/ysd+pEzieTWZNbdYD/iQOjD5QXnPNBE2L5ihMEpmSpHsKSLsMAPV1Akg968zFFFwP1eSBHV9Xn33kbyecrqSZ/DUUBaPREIwN+n9HKM72qV4VrSd3wCjuEcP0rSv7L/0zH0V01LlWg7ap6b8OBkzuVDy/bfPh7vc2MIUjshvpY+NbVuJHiPuYqgHIn2XRgwSTJ72QaCNHmp0JAXkbWDgTlvRZfUNxknmSXrdLLBGjnrDCjrMiSH7Tn5iabB8dKOk1KFg7ChfuhWOEf2AO/7ESo5vQTf0a25y3Fr8QhEc84VMkLnFmkF3zfsGKI1VF0TAEkB8ZRhr5KCkbCrsY6wmXYPjILkkX3hZXco7tJvJFr7xBSWjcshPBG6Z50AKFp0HHbWb0UA1LuxqTaP/3qoPdE+/7XwDDZkEoTC+aJ1WuCkfR5P15FLJAfg/nBmRhqaTCDmcIOFoKYdK37BKx/udXDoYhcnpUBk2PvY7qgtu5eDc6oenJjmvwdeEESwT0xsnnvB5O2CAI56PRLwrwPJQiy0='
       install:
         - source ~/virtualenv/python3.8/bin/activate
         - cd backend
@@ -30,4 +30,4 @@ jobs:
         - coverage run --source='.' manage.py test
         - coverage xml
         - cd .. && sonar-scanner
-        - coveralls --merge=./frontend/coverage.json
+        - cd backend && coveralls --merge=../frontend/coverage.json
