@@ -32,15 +32,4 @@ export default function applyAuthApi(
       }
     },
   );
-
-  server.post<unknown, unknown, PostCreateProfileDto>(
-    "/api/profile/",
-    async req => {
-      const profiles = db.get("profiles").value();
-      await db
-        .get("profiles")
-        .push({ ...req.body, id: profiles.length })
-        .write();
-    },
-  );
 }
