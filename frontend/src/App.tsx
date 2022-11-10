@@ -24,12 +24,11 @@ const App = () => {
           <Route
             path="/"
             element={
-              // <AuthWrapper>
-              <HomePage />
-              // </AuthWrapper>
+              <AuthWrapper>
+                <HomePage />
+              </AuthWrapper>
             }
           />
-          <Route path="/createProfile" element={<CreateProfilePage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/account">
             <Route index={true} element={<AccountPage />} />
