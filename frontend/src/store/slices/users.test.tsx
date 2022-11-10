@@ -24,7 +24,7 @@ describe("users reducer", () => {
 
   // WARNING!! THIS TEST IS SKIPPED FOR NOW!
   // MUST REMOVE '.skip' TO RUN THIS TEST
-  it.skip("should handle initial state", async () => {
+  it("should handle initial state", async () => {
     expect(reducer(undefined, { type: "unknown" })).toEqual({
       currentUser: null,
       friendList: [],
