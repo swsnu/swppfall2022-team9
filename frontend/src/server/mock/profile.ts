@@ -24,7 +24,6 @@ export default function applyProfileApi(
   server.post<unknown, unknown, PostCreateProfileDto>(
     "/api/profile/",
     async req => {
-      const profiles = db.get("profiles").value();
       await db
         .get("profiles")
         .push({ ...req.body })

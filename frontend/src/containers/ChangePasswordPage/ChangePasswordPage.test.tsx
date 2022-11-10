@@ -39,7 +39,7 @@ const renderChangePasswordPageWithToken = (
       preloadedState: {
         users: {
           currentUser: usersStub[0],
-          chonList: [],
+          friendList: [],
         },
       },
     },

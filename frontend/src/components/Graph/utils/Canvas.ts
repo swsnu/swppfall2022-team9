@@ -271,16 +271,16 @@ export class Canvas {
     };
   }
 
-  setOneChonNodes(chonList: OneChonInfo[]) {
-    const oneChonCount = chonList.length;
-    const twoChonCount = chonList.map(oneChon => oneChon.chons.length);
+  setOneChonNodes(friendList: OneChonInfo[]) {
+    const oneChonCount = friendList.length;
+    const twoChonCount = friendList.map(oneChon => oneChon.chons.length);
     const coords = getOneAndTwoChonCoordinates(
       oneChonCount,
       twoChonCount,
       this.EDGE_LENGTH,
     );
 
-    this.chonNodes = chonList.map((oneChon, oneChonIdx) => {
+    this.chonNodes = friendList.map((oneChon, oneChonIdx) => {
       const twoChonNodes = oneChon.chons.map((twoChon, twoChonIdx) => {
         const twoChonNode = new UserNode(
           twoChon.imgUrl,

@@ -32,7 +32,7 @@ const renderCreateProfilePage = (currentUser: boolean) => {
                 lastname: "swpp",
               }
             : null,
-          chonList: [
+          friendList: [
             {
               id: 1,
               firstname: "swpp",

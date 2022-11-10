@@ -30,7 +30,8 @@
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/server",
       "<rootDir>/src/test-utils",
-      "<rootDir>/src/types"
+      "<rootDir>/src/types",
+      "<rootDir>/src/react-app-env.d.ts"
     ],
     "resetMocks": false
   },
