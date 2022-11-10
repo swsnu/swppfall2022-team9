@@ -1,8 +1,8 @@
 import { PostSignUpDto } from "server/dto/users/users.dto";
 import useAlert from "hooks/useAlert";
 import React, { useCallback, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "store/hooks";
 import { postSignUp } from "store/slices/users";
 import * as S from "../../styles/common.form.styles";
 
@@ -57,6 +57,10 @@ const SignUpPage: React.FC<Props> = () => {
       const isFormValid = checkFormValidity(signUpInfo);
 
       if (isFormValid) {
+        alert.open({
+          message: "처리 중입니다...",
+          buttons: [],
+        });
         const result = await dispatch(
           postSignUp({
             firstname: signUpInfo.firstname,
