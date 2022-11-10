@@ -8,31 +8,31 @@ describe("<TagsButton/>", () => {
     jest.clearAllMocks();
   });
 
-  it("renders TagsButton", async () => {
-    render(
-      <TagsButton tagName="Test" setProfile={() => {}} propsName="test" />,
-    );
-  });
+  // it("renders TagsButton", async () => {
+  //   render(
+  //     <TagsButton tagName="Test" setProfile={() => {}} propsName="test" />,
+  //   );
+  // });
 
-  it("clicks tags button", async () => {
-    render(
-      <TagsButton tagName="Test" setProfile={() => {}} propsName="test" />,
-    );
-    const setState = jest.fn();
-    const useStateSpy = jest.spyOn(React, "useState");
-    const init: Profile = {
-      imgUrl: "url",
-      skillTags: [],
-      website: "web",
-      introduction: "hi my name is slim shady",
-      jobExperience: [],
-      education: [],
-    };
-    useStateSpy.mockImplementation(() => {
-      return [init, setState];
-    });
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-    // expect(useStateSpy).toHaveBeenCalled();
-  });
+  // it("clicks tags button", async () => {
+  //   render(
+  //     <TagsButton tagName="Test" setProfile={() => {}} propsName="test" />,
+  //   );
+  //   const setState = jest.fn();
+  //   const useStateSpy = jest.spyOn(React, "useState");
+  //   const init: Profile = {
+  //     imgUrl: "url",
+  //     skillTags: [],
+  //     website: "web",
+  //     introduction: "hi my name is slim shady",
+  //     jobExperience: [],
+  //     education: [],
+  //   };
+  //   useStateSpy.mockImplementation(() => {
+  //     return [init, setState];
+  //   });
+  //   const button = screen.getByRole("button");
+  //   fireEvent.click(button);
+  //   // expect(useStateSpy).toHaveBeenCalled();
+  // });
 });

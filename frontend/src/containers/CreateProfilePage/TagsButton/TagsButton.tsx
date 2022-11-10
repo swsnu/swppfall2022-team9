@@ -1,26 +1,26 @@
 import * as SProfile from "../styles";
-import { Profile } from "server/models/profile.model";
+import { Profile, SkillTag } from "server/models/profile.model";
 interface Props {
-  tagName: string;
-  setProfile: React.Dispatch<React.SetStateAction<Profile>>;
-  propsName: string;
+  skillTag: SkillTag;
+  setUpdatedProfile: React.Dispatch<React.SetStateAction<Profile>>;
 }
 
-const TagsButton: React.FC<Props> = ({ tagName, setProfile, propsName }) => {
+const TagsButton: React.FC<Props> = ({ skillTag, setUpdatedProfile }) => {
   const onClickTagsContainer = () => {
     {
-      // setProfile(prevProfile => {
-      //   const tempProfile = { ...prevProfile };
-      //   tempProfile[propsName as ProfileKey] = tempProfile[
-      //     propsName as ProfileKey
-      //   ].filter(item => item !== tagName);
-      //   return tempProfile;
+      setUpdatedProfile(prevProfile => {
+        const tempProfile = { ...prevProfile };
+        tempProfile.skillTags = tempProfile.skillTags.filter(
+          item => item.name !== skillTag.name,
+        );
+        return tempProfile;
+      });
     }
   };
   return (
     <SProfile.SkillTagsDiv>
       <SProfile.SkillTagsButton onClick={onClickTagsContainer}>
-        {tagName}
+        {skillTag.name}
       </SProfile.SkillTagsButton>
     </SProfile.SkillTagsDiv>
   );

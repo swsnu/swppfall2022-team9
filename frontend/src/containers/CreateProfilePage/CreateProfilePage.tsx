@@ -1,4 +1,4 @@
-import { Profile } from "server/models/profile.model";
+import { Profile, SkillTag } from "server/models/profile.model";
 import React, { useState } from "react";
 import * as S from "../../styles/common.form.styles";
 import * as SProfile from "./styles";
@@ -6,7 +6,7 @@ import SkillTagsButton from "./SkillTagsButton/SkillTagsButton";
 import ExperienceTagsButton from "./ExperienceTagsButton/ExperienceTagsButton";
 import EducationTagsButton from "./EducationTagsButton/EducationTagsButton";
 import { useAppSelector } from "../../store/hooks";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { postCreateProfile } from "store/slices/profile";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store";
@@ -34,6 +34,8 @@ const CreateProfilePage: React.FC<Props> = () => {
   const [website, setWebsite] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
 
+  const [updatedProfile, setUpdatedProfile] = useState<Profile>(newProfile);
+
   const maxNumberTags = 6;
   const maxIntroLength = 300;
   const uploadImageHandler = () => {};
@@ -57,24 +59,25 @@ const CreateProfilePage: React.FC<Props> = () => {
   const [validImgUrl, setValidImageUrl] = useState<boolean>(true);
   const [validWebUrl, setValidWebUrl] = useState<boolean>(true);
 
+  console.log(newProfile.skillTags);
   const createProfileHandler = async () => {
     setValidImageUrl(
-      newProfile.imgUrl ? urlValdiation(newProfile.imgUrl) : true,
+      updatedProfile.imgUrl ? urlValdiation(updatedProfile.imgUrl) : true,
     );
     setValidWebUrl(
-      newProfile.website ? urlValdiation(newProfile.website) : true,
+      updatedProfile.website ? urlValdiation(updatedProfile.website) : true,
     );
-    setValidIntro(!!newProfile.introduction);
-    setValidSkillTags(newProfile.skillTags.length < maxNumberTags);
+    setValidIntro(!!updatedProfile.introduction);
+    setValidSkillTags(updatedProfile.skillTags.length < maxNumberTags);
     if (validImgUrl && validIntro && validSkillTags && validWebUrl) {
       // update
-      dispatch(postCreateProfile(newProfile));
+      dispatch(postCreateProfile(updatedProfile));
     } else {
       // do nothing; forbidden
     }
   };
-  const isInvalid = newProfile.skillTags.length == 0;
-
+  const isInvalid = updatedProfile.skillTags.length == 0;
+  console.log(updatedProfile);
   return (
     <S.Container>
       <SProfile.FormContainer>
@@ -83,7 +86,7 @@ const CreateProfilePage: React.FC<Props> = () => {
         </S.GuideContainer>
         <SProfile.Container>
           <SProfile.DefaultContainer>
-            <SProfile.UserNode url={newProfile.imgUrl}></SProfile.UserNode>
+            <SProfile.UserNode url={updatedProfile.imgUrl} />
             <SProfile.Username>
               {currentUser?.lastname ? currentUser.lastname : ""}
               {currentUser?.firstname ? currentUser.firstname : ""}
@@ -95,7 +98,10 @@ const CreateProfilePage: React.FC<Props> = () => {
             </SProfile.Button>
           </SProfile.ImageButtonContainer>
         </SProfile.Container>
-        <SkillTagsButton newProfile={newProfile.skillTags}></SkillTagsButton>
+        <SkillTagsButton
+          skillTags={updatedProfile.skillTags}
+          setUpdatedProfile={setUpdatedProfile}
+        />
         {!validSkillTags && (
           <S.InputHelper>
             {HelperText.TAGS_ERROR + `: < ${maxNumberTags}`}
