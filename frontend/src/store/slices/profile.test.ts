@@ -1,6 +1,12 @@
 import { AnyAction, configureStore, EnhancedStore } from "@reduxjs/toolkit";
 import { ThunkMiddleware } from "redux-thunk";
-import reducer, { ProfileState } from "./profile";
+import reducer, {
+  getMyProfile,
+  getFriendProfile,
+  editMyProfile,
+  editFriendProfile,
+  ProfileState,
+} from "./profile";
 import { profileStub } from "server/stubs/profiles.stub";
 import { postCreateProfile } from "./profile";
 import axios from "axios";
@@ -25,9 +31,33 @@ describe("profile reducer", () => {
     jest.clearAllMocks();
   });
 
-  it("renders profile page", async () => {});
   it("tests postCreateProfile", async () => {
     axios.post = jest.fn().mockResolvedValue(null);
     await store.dispatch(postCreateProfile(profileStub));
+    expect(store.getState().profile.currentProfile).toEqual(null);
+  });
+
+  it("tests getMyProfile", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: profileStub });
+    await store.dispatch(getMyProfile());
+    expect(store.getState().profile.currentProfile).toEqual(profileStub);
+  });
+
+  it("tests getMyProfile", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: profileStub });
+    await store.dispatch(getFriendProfile(1));
+    expect(store.getState().profile.currentProfile).toEqual(profileStub);
+  });
+
+  it("tests editMyProfile", async () => {
+    jest.spyOn(axios, "put").mockResolvedValue({ data: profileStub });
+    await store.dispatch(editMyProfile({ body: profileStub }));
+    expect(store.getState().profile.currentProfile).toEqual(profileStub);
+  });
+
+  it("tests editMFriendrofile", async () => {
+    jest.spyOn(axios, "put").mockResolvedValue({ data: profileStub });
+    await store.dispatch(editFriendProfile({ id: 1, body: profileStub }));
+    expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
 });
