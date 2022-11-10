@@ -10,6 +10,7 @@ import AccountPage from "containers/AccountPage/AccountPage";
 import axios from "axios";
 import ChangePasswordPage from "containers/ChangePasswordPage/ChangePasswordPage";
 import AuthenticatedChangePasswordPage from "containers/AuthenticatedChangePasswordPage/AuthenticatedChangePasswordPage";
+import EvaluateQualityPage from "containers/EvaluateQualityPage/EvaluateQualityPage";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -28,6 +29,7 @@ const App = () => {
               </AuthWrapper>
             }
           />
+          <Route path="/quality" element={<EvaluateQualityPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/account">
             <Route index={true} element={<AccountPage />} />
