@@ -10,7 +10,6 @@ import {
   // PostSignUpResDto,
 } from "../dto/users/users.res.dto";
 // IMPORTANT: everything related to dto, models, stubs should be relative imports
-import { PostCreateProfileDto } from "../dto/profile/profile.dto";
 
 import { Application } from "express";
 

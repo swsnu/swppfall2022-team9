@@ -27,7 +27,7 @@ describe("users reducer", () => {
   it.skip("should handle initial state", async () => {
     expect(reducer(undefined, { type: "unknown" })).toEqual({
       currentUser: null,
-      chonList: [],
+      friendList: [],
     });
   });
 

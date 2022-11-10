@@ -27,7 +27,7 @@ const renderFriendListSideBar = () => {
             firstname: "iluv",
             lastname: "swpp",
           },
-          chonList: [
+          friendList: [
             {
               id: 1,
               firstname: "swpp",
