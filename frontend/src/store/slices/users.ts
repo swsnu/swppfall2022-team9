@@ -48,6 +48,7 @@ export const getSignOut = createAsyncThunk<void>(
   async (_, { dispatch }) => {
     await axios.get(`/api/auth/signout/`);
     dispatch(userActions.resetCurrentUser());
+    dispatch(userActions.resetFriendList());
   },
 );
 
@@ -67,11 +68,6 @@ export const getFriendList = createAsyncThunk<void>(
   },
 );
 
-// export const resetFriendList = createAsyncThunk<void, void>(
-//   "users/resetFriendList",
-//   async () => {},
-// );
-
 export const userSlice = createSlice({
   name: "users",
   initialState,
@@ -85,9 +81,9 @@ export const userSlice = createSlice({
     setFriendList: (state, actions: PayloadAction<Array<OneChonInfo>>) => {
       state.friendList = actions.payload;
     },
-    // resetFriendList: state => {
-    //   state.friendList = [];
-    // },
+    resetFriendList: state => {
+      state.friendList = [];
+    },
   },
 });
 
