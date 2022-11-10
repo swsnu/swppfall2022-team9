@@ -1,9 +1,4 @@
-import {
-  Coord,
-  OneChonUserCoord,
-  TwoChonUserCoord,
-  PanZoom,
-} from "types/canvas.types";
+import { Coord } from "types/canvas.types";
 import { assert } from "console";
 import * as MATH from "./math";
 

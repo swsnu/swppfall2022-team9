@@ -12,7 +12,7 @@ export default function applyProfileApi(
 ) {
   server.post<unknown, unknown, PostCreateProfileDto>(
     "/api/profile/",
-    async (req, res) => {
+    async req => {
       await db
         .get("profiles")
         .push({ ...req.body })
