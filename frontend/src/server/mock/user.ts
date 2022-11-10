@@ -10,12 +10,12 @@ import {
   // PostSignUpResDto,
 } from "../dto/users/users.res.dto";
 // IMPORTANT: everything related to dto, models, stubs should be relative imports
+import { PostCreateProfileDto } from "../dto/profile/profile.dto";
 
 import { Application } from "express";
 
 import low from "lowdb";
 import { Schema } from ".";
-import { PostCreateProfileDto } from "../dto/profile/profile.dto";
 
 export default function applyAuthApi(
   server: Application,
