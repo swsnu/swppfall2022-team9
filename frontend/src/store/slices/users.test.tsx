@@ -69,7 +69,7 @@ describe("users reducer", () => {
   });
 
   it("tests verify register token", async () => {
-    axios.get = jest.fn().mockResolvedValue({});
+    axios.post = jest.fn().mockResolvedValue({});
     await store.dispatch(verifyRegisterToken("token"));
   });
 
