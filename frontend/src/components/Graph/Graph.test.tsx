@@ -5,7 +5,7 @@ import Graph from "./Graph";
 
 import { OneChonInfo } from "types/friend.types";
 
-import { usersStub } from "server/stubs/users.stub";
+import { usersStub, friendListStub2 } from "server/stubs/users.stub";
 
 const mockNavigate = jest.fn();
 
@@ -50,5 +50,10 @@ describe("<Graph/>", () => {
 
   it("render graph canvas with no current user", async () => {
     renderGraph(null, []);
+  });
+
+  it("render graph canvas with twochons", async () => {
+    const renderedGraph = renderGraph(usersStub[0], friendListStub2);
+    renderedGraph.unmount();
   });
 });

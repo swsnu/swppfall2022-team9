@@ -76,7 +76,7 @@ describe("users reducer", () => {
   it("tests get chon list", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({
       data: {
-        onechon: [
+        friendList: [
           {
             id: 1,
             firstname: "신혜",
@@ -89,7 +89,6 @@ describe("users reducer", () => {
       },
     });
     await store.dispatch(getFriendList());
-    // NOT WORKING
-    // expect(store.getState().users.friendList.length).toEqual(1);
+    expect(store.getState().users.friendList.length).toEqual(1);
   });
 });
