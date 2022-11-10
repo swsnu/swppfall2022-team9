@@ -303,6 +303,7 @@ def friend(request):
             onechon_dict["firstname"] = onechon_linklinkuser.user.first_name
             onechon_dict["lastname"] = onechon_linklinkuser.user.last_name
             onechon_dict["imgUrl"] = onechon_linklinkuser.imgUrl
+            onechon_dict["isTwoChon"] = False
             onechon_dict["chons"] = []
             twochon_list = get_onechon_linklinkuser_list(
                 all_accepted_friend_requests,
@@ -321,6 +322,7 @@ def friend(request):
                     twochon_dict["lastname"] = \
                         twochon_linklinkuser.user.last_name
                     twochon_dict["imgUrl"] = twochon_linklinkuser.imgUrl
+                    twochon_dict["isTwoChon"] = True
                     # Append constructed twochon_dict
                     onechon_dict["chons"].append(twochon_dict)
             # Append constructed onechon_dict
