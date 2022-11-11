@@ -55,15 +55,21 @@ describe("profile reducer", () => {
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
 
-  it("tests getMyProfile", async () => {
+  it("tests getFriendProfile", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: profileStub });
     await store.dispatch(getFriendProfile(1));
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
 
   it("tests editMyProfile", async () => {
-    jest.spyOn(axios, "put").mockResolvedValue({ data: profileStub });
-    await store.dispatch(editMyProfile(profileStub));
+    const editedProfile = { ...profileStub, introduction: "hello new intro" };
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
+    jest.spyOn(axios, "put").mockResolvedValue({ data: editedProfile });
+    await store.dispatch(
+      editMyProfile({
+        profile: profileStub,
+        fieldsToUpdate: { introduction: "hello new intro" },
+      }),
+    );
   });
 });
