@@ -9,7 +9,6 @@ import reducer, {
   getMyProfile,
   getFriendProfile,
   editMyProfile,
-  editFriendProfile,
   ProfileState,
 } from "./profile";
 import { profileStub } from "server/stubs/profiles.stub";
@@ -64,13 +63,7 @@ describe("profile reducer", () => {
 
   it("tests editMyProfile", async () => {
     jest.spyOn(axios, "put").mockResolvedValue({ data: profileStub });
-    await store.dispatch(editMyProfile({ body: profileStub }));
-    expect(store.getState().profile.currentProfile).toEqual(profileStub);
-  });
-
-  it("tests editMFriendrofile", async () => {
-    jest.spyOn(axios, "put").mockResolvedValue({ data: profileStub });
-    await store.dispatch(editFriendProfile({ id: 1, body: profileStub }));
+    await store.dispatch(editMyProfile(profileStub));
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
 });

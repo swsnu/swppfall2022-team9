@@ -46,22 +46,7 @@ export const editMyProfile = createAsyncThunk<
   EditProfileResDto,
   EditProfileDto
 >("profile/editMyProfile", async (body: EditProfileDto) => {
-  const response = await axios.put<EditProfileResDto>(
-    "/api/profile/",
-    body.body,
-  );
-  return response.data;
-});
-
-export const editFriendProfile = createAsyncThunk<
-  EditProfileResDto,
-  EditProfileDto & { id: number }
->("profile/editFriendProfile", async ({ id, body }) => {
-  const data: EditProfileDto = { body };
-  const response = await axios.put<EditProfileResDto>(
-    `/api/profile/${id}`,
-    data,
-  );
+  const response = await axios.put<EditProfileResDto>("/api/profile/", body);
   return response.data;
 });
 
@@ -77,9 +62,6 @@ export const profileSlice = createSlice({
       state.currentProfile = action.payload;
     });
     builder.addCase(editMyProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload;
-    });
-    builder.addCase(editFriendProfile.fulfilled, (state, action) => {
       state.currentProfile = action.payload;
     });
   },
