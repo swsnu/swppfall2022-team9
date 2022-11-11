@@ -6,7 +6,7 @@ export type GetProfileDto = Profile;
 export type PostCreateProfileDto = Profile;
 
 // change profile
-export type EditProfileDto = Profile;
+export type EditProfileDto = Partial<Profile>;
 
 // When someone evalutes the user's qualities
 export type PostUpdateProfileDto = Profile;
