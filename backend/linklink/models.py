@@ -137,10 +137,10 @@ class Profile(models.Model):
     Profile model class
     """
     linklinkuser = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
-    skillTags = models.ManyToManyField(SkillTag)
-    qualityTags = models.ManyToManyField(QualityTag)
     introduction = models.TextField()
     website = models.CharField(max_length=100, blank=True)
+    skillTags = models.ManyToManyField(SkillTag)
+    qualityTags = models.ManyToManyField(QualityTag)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
