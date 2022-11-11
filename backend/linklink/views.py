@@ -24,7 +24,16 @@ from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .decorators import allowed_method_or_405, logged_in_or_401
-from .models import LinkLinkUser, FriendRequest, Verification
+from .models import (
+    LinkLinkUser,
+    FriendRequest,
+    Verification,
+    SkillTag,
+    QualityTag,
+    Profile,
+    Education,
+    JobExperience,
+)
 
 #--------------------------------------------------------------------------
 #   Setting constants
@@ -343,10 +352,9 @@ def friend(request):
 def profile(request):
     """
     When user enters profile info and posts,
-    1. Create SkillTag objects
+    1. Create Profile object
     2. Create Education objects
     3. Create JobExperience objects
-    4. Create Profile object based on above
     """
     if request.method == "POST": # pragma: no branch
         try:
@@ -359,7 +367,35 @@ def profile(request):
             img_url = req_data["imgUrl"]
         except (KeyError, JSONDecodeError) as e:
             return HttpResponseBadRequest(e) # implicit status code = 400
-        # Create SkillTag objects
+        # Create Profile Object
+        profile = Profile.objects.create(
+            linklinkuser=request.user.linklinkuser,
+            introduction=introduction,
+            website=website,
+        )
+        for skill_tag in skill_tags:
+            skill_tag_instance = SkillTag.objects.get(name=skill_tag["name"])
+            profile.skillTags.add(skill_tag_instance)
+            profile.save()
+        # Create Education objects
+        for education in educations:
+            Education.objects.create(
+                profile=profile,
+                school=education["school"],
+                major=education["major"],
+                dateStart=education["dateStart"],
+                dateEnd=education["dateEnd"],
+            )
+        # Create JobExperience objects
+        for job_experience in job_experiences:
+            JobExperience.objects.create(
+                profile=profile,
+                company=job_experience["company"],
+                position=job_experience["position"],
+                dateStart=job_experience["dateStart"],
+                dateEnd=job_experience["dateEnd"],
+            )
+        return HttpResponse(status=201)
     # elif request.method == "GET":
     #     pass
     # elif request.method == "DELETE":
