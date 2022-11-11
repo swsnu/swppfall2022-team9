@@ -3,11 +3,11 @@ This module generates a init_fake_quality_tags.json file
 based on tags_list/tags.py
 """
 
-import json
+import json # pragma: no cover
 
-import tags_list.tags as tags
+import tags_list.tags as tags # pragma: no cover
 
-if __name__=="__main__":
+if __name__=="__main__": # pragma: no cover
     quality_tags = tags.QUALITY_TAGS
     quality_tags_json_fixture = []
     for idx, quality_tag in enumerate(quality_tags):

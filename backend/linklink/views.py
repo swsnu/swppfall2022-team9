@@ -29,7 +29,6 @@ from .models import (
     FriendRequest,
     Verification,
     SkillTag,
-    QualityTag,
     Profile,
     Education,
     JobExperience,
@@ -286,7 +285,6 @@ def verify(request, token):
     #     pass
     return JsonResponse({"message":"Successfully verified"})
 
-
 #--------------------------------------------------------------------------
 #   LinkLinkUser Related APIs
 #--------------------------------------------------------------------------
@@ -342,7 +340,6 @@ def friend(request):
     # elif request.method == "DELETE":
     #     pass
 
-
 #--------------------------------------------------------------------------
 #   LinkLinkUser Related APIs
 #--------------------------------------------------------------------------
@@ -353,8 +350,9 @@ def profile(request):
     """
     When user enters profile info and posts,
     1. Create Profile object
-    2. Create Education objects
-    3. Create JobExperience objects
+    2. Update imgUrl of LinkLinkUser
+    3. Create Education objects
+    4. Create JobExperience objects
     """
     if request.method == "POST": # pragma: no branch
         try:
@@ -368,19 +366,22 @@ def profile(request):
         except (KeyError, JSONDecodeError) as e:
             return HttpResponseBadRequest(e) # implicit status code = 400
         # Create Profile Object
-        profile = Profile.objects.create(
+        new_profile = Profile.objects.create(
             linklinkuser=request.user.linklinkuser,
             introduction=introduction,
             website=website,
         )
         for skill_tag in skill_tags:
             skill_tag_instance = SkillTag.objects.get(name=skill_tag["name"])
-            profile.skillTags.add(skill_tag_instance)
-            profile.save()
+            new_profile.skillTags.add(skill_tag_instance)
+            new_profile.save()
+        # Update imgUrl of LinkLinkUser
+        linklinkuser = request.user.linklinkuser
+        linklinkuser.imgUrl = img_url
         # Create Education objects
         for education in educations:
             Education.objects.create(
-                profile=profile,
+                profile=new_profile,
                 school=education["school"],
                 major=education["major"],
                 dateStart=education["dateStart"],
@@ -389,7 +390,7 @@ def profile(request):
         # Create JobExperience objects
         for job_experience in job_experiences:
             JobExperience.objects.create(
-                profile=profile,
+                profile=new_profile,
                 company=job_experience["company"],
                 position=job_experience["position"],
                 dateStart=job_experience["dateStart"],

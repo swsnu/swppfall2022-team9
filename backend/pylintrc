@@ -25,7 +25,11 @@ ignore-patterns=manage.py,
                 0009_alter_linklinkuser_friendrequesttoken_and_more.py,
                 0010_rename_user_profile_linklinkuser_and_more.py,
                 0011_linklinkuser_email_unique.py,
-                0012_alter_linklinkuser_email_unique,
+                0012_alter_linklinkuser_email_unique.py,
+                0013_remove_profile_qualitytags_remove_profile_skilltags.py,
+                0014_profile_qualitytags_profile_skilltags.py,
+                0015_remove_chatroom_chatlogs_remove_chatroom_users_and_more.py,
+
 
 # Pickle collected data for later comparisons.
 persistent=no
@@ -163,6 +167,7 @@ disable=abstract-method,
         zip-builtin-not-iterating,
 # LINKLINK_MANUAL_FIX: ignore imported-auth-user
         imported-auth-user,
+        relative-beyond-top-level,
 
 
 [REPORTS]
