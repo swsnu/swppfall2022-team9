@@ -1,7 +1,13 @@
 import { QualityTags } from "../../models/qualityTags.model";
 
-export type GetAllQualityTagsDto = QualityTags;
+export interface GetAllQualityTagsDto {
+  //   qualityTags: QualityTags;
+}
 
-export type GetUserQualityTagsDto = QualityTags;
+export interface GetUserQualityTagsDto {
+  //   qualityTags: QualityTags;
+}
 
-export type PutUserQualityTagsDto = QualityTags;
+export interface PutUserQualityTagsDto {
+  qualityTags: QualityTags;
+}
