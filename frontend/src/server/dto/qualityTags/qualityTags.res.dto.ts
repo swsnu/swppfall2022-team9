@@ -7,3 +7,7 @@ export interface GetAllQualityTagsResDto {
 export interface GetUserQualityTagsResDto {
   qualityTags: QualityTags;
 }
+
+export interface PutUserQualityTagsResDto {
+  qualityTags: QualityTags;
+}

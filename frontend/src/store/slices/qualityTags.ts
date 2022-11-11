@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   GetAllQualityTagsResDto,
   GetUserQualityTagsResDto,
+  PutUserQualityTagsResDto,
 } from "server/dto/qualityTags/qualityTags.res.dto";
 import { QualityTags } from "server/models/qualityTags.model";
 import { PutUserQualityTagsDto } from "server/dto/qualityTags/qualityTags.dto";
@@ -37,10 +38,14 @@ export const getUserQualityTags = createAsyncThunk<
 });
 
 export const putUserQualityTags = createAsyncThunk<
-  void,
+  PutUserQualityTagsResDto,
   { body: PutUserQualityTagsDto; id: number }
 >("qualities/getFriendProfile", async ({ body, id }) => {
-  await axios.put<PutUserQualityTagsDto>(`/api/qualities/${id}`, body);
+  const response = await axios.put<PutUserQualityTagsDto>(
+    `/api/qualities/${id}`,
+    body,
+  );
+  return { qualityTags: response.data };
 });
 
 export const qualityTagsSlice = createSlice({
@@ -52,6 +57,9 @@ export const qualityTagsSlice = createSlice({
       state.skillTagsList = action.payload.qualityTags;
     });
     builder.addCase(getUserQualityTags.fulfilled, (state, action) => {
+      state.currentUserQualityTags = action.payload.qualityTags;
+    });
+    builder.addCase(putUserQualityTags.fulfilled, (state, action) => {
       state.currentUserQualityTags = action.payload.qualityTags;
     });
   },
