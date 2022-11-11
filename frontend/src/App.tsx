@@ -29,7 +29,7 @@ const App = () => {
               </AuthWrapper>
             }
           />
-          <Route path="/quality" element={<EvaluateQualityPage />} />
+          <Route path="/evaluate/:userId" element={<EvaluateQualityPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/account">
             <Route index={true} element={<AccountPage />} />
