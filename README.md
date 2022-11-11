@@ -44,12 +44,18 @@ Used `Pytest` and `Coverage`
 - `cd backend`
 - `coverage run --branch --source='./linklink' manage.py test`
 
+Or type:
+- `yarn testb`
+
 ### Lint Check
 
 Used `Pylint`
 
 - `cd backend`
 - `pylint --rcfile=pylintrc **/*.py`
+
+Or type:
+- `yarn lintb`
 
 # Language & Framework Versions
 - python == 3.8
@@ -60,3 +66,6 @@ Used `Pylint`
 ## Load initial fake data
 - `cd backend`
 - `python manage.py loaddata */fixtures/*.json`
+
+Or simply type:
+- `yarn loaddb`

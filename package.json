@@ -13,7 +13,10 @@
     "installf": "cd frontend && yarn install",
     "installb": "cd backend && pip install -r requirements.txt",
     "lintf": "cd frontend && yarn lint",
+    "lintb": "cd backend && pylint --rcfile=pylintrc **/*.py",
     "backend": "python backend/manage.py runserver 8000",
-    "testf": "cd frontend && yarn testf_"
+    "testf": "cd frontend && yarn testf_",
+    "testb": "cd backend && coverage run --branch --source='./linklink' manage.py test",
+    "loaddb": "cd backend && python manage.py loaddata */fixtures/*.json"
   }
 }

@@ -352,15 +352,14 @@ def profile(request):
         try:
             req_data = json.loads(request.body.decode())
             introduction = req_data["introduction"]
-            skillTags = req_data["skillTags"]
+            skill_tags = req_data["skillTags"]
             educations = req_data["educations"]
-            jobExperiences = req_data["jobExperiences"]
+            job_experiences = req_data["jobExperiences"]
             website = req_data["website"]
-            imgUrl = req_data["imgUrl"]
+            img_url = req_data["imgUrl"]
         except (KeyError, JSONDecodeError) as e:
             return HttpResponseBadRequest(e) # implicit status code = 400
         # Create SkillTag objects
-        
     # elif request.method == "GET":
     #     pass
     # elif request.method == "DELETE":
