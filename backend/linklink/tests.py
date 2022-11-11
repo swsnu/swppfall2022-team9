@@ -12,7 +12,16 @@ from django.core import mail
 from django.test import TestCase, Client
 from django.utils import timezone
 
-from .models import LinkLinkUser, FriendRequest, Verification
+from .models import (
+    LinkLinkUser,
+    FriendRequest,
+    Verification,
+    SkillTag,
+    QualityTag,
+    Profile,
+    Education,
+    JobExperience,
+)
 
 
 class LinkLinkTestCase(TestCase):
@@ -114,6 +123,15 @@ class LinkLinkTestCase(TestCase):
             purpose="Register",
             expiresAt=expire_time
         )
+        SkillTag.objects.create(
+            name="Frontend"
+        )
+        SkillTag.objects.create(
+            name="Backend"
+        )
+        SkillTag.objects.create(
+            name="DevOps"
+        )
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
         self.csrftoken = \
@@ -122,6 +140,7 @@ class LinkLinkTestCase(TestCase):
 #--------------------------------------------------------------------------
 #   Auth Related Tests
 #--------------------------------------------------------------------------
+
     def test_signup_success(self):
         target_url = "/api/auth/signup/"
         # Save initial object count
@@ -355,6 +374,7 @@ class LinkLinkTestCase(TestCase):
 #--------------------------------------------------------------------------
 #   /api/user/friend Tests
 #--------------------------------------------------------------------------
+
     def test_success_friend_general(self):
         target_url = "/api/user/friend/"
         # Initialize Connection
@@ -407,8 +427,54 @@ class LinkLinkTestCase(TestCase):
         )
 
 #--------------------------------------------------------------------------
+#   /api/profile Tests
+#--------------------------------------------------------------------------
+
+    def test_success_post_profile(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "introduction": "안녕하세요 박재승입니다.",
+                "skillTags": [
+                    {"name": "Frontend"},
+                    {"name": "Backend"}
+                ],
+                "educations": [
+                    {
+                        "school": "서울대학교",
+                        "major": "자유전공학부",
+                        "dateStart": "2017-03-01",
+                        "dateEnd": "2023-02-28"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "송현오 교수님 랩",
+                        "position": "Intern",
+                        "dateStart": "2019-06-01",
+                        "dateEnd": "2020-06-01"
+                    }
+                ],
+                "website": "jaeseung@pr.com",
+                "imgUrl": "jaeseungimage.com"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 201)
+        # Check Create Profile, Education, JobExperience
+        self.assertTrue(Profile.objects.filter(id=1).exists())
+        self.assertTrue(Education.objects.filter(id=1).exists())
+        self.assertTrue(JobExperience.objects.filter(id=1).exists())
+
+#--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------
+
     def test_405_friend(self):
         target_url = "/api/user/friend/"
         # PUT
@@ -443,6 +509,7 @@ class LinkLinkTestCase(TestCase):
 #--------------------------------------------------------------------------
 #   401 Checking Tests
 #--------------------------------------------------------------------------
+
     def test_401_signout(self):
         target_url = "/api/auth/signout/"
         # GET
@@ -459,6 +526,7 @@ class LinkLinkTestCase(TestCase):
 #--------------------------------------------------------------------------
 #   400 Checking Tests
 #--------------------------------------------------------------------------
+
     def test_400_signup(self):
         target_url = "/api/auth/signup/"
         # POST
@@ -490,4 +558,92 @@ class LinkLinkTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 400)
-    
+
+
+    def test_400_post_profile(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "introduction": "안녕하세요 박재승입니다.",
+                "skillTags": [
+                    {"name": "Frontend"},
+                    {"name": "Backend"}
+                ],
+                "educations": [
+                    {
+                        "school": "서울대학교",
+                        "major": "자유전공학부",
+                        "dateStart": "2017-03-01",
+                        "dateEnd": "2023-02-28"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "송현오 교수님 랩",
+                        "position": "Intern",
+                        "dateStart": "2019-06-01",
+                        "dateEnd": "2020-06-01"
+                    }
+                ],
+                "website": "jaeseung@pr.com",
+                # "imgUrl": "jaeseungimage.com" # no imgUrl
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+
+#--------------------------------------------------------------------------
+#   Misc Tests
+#--------------------------------------------------------------------------
+
+    def test_model_str(self):
+        linklinkuser = LinkLinkUser.objects.get(id=1)
+        another_linklinkuser = LinkLinkUser.objects.get(id=2)
+        verification = Verification.objects.get(id=1)
+        self.assertEqual(str(linklinkuser), "CenaJohn")
+        self.assertIn("john", str(verification))
+        self.assertIn("Register", str(verification))
+        friend_request = FriendRequest.objects.create(
+            senderId=linklinkuser,
+            getterId=another_linklinkuser,
+            status="Accepted",
+        )
+        self.assertEqual(
+            str(friend_request),
+            "CenaJohn->GunnJames, status:Accepted"
+        )
+        skill_tag = SkillTag.objects.create(
+            name="Frontend"
+        )
+        self.assertEqual(str(skill_tag), "Frontend")
+        quality_tag = QualityTag.objects.create(
+            name="Helpful"
+        )
+        self.assertEqual(str(quality_tag), "Helpful")
+        profile = Profile.objects.create(
+            linklinkuser=linklinkuser,
+            introduction="Hi",
+            website="cutecat.com",
+        )
+        self.assertEqual(str(profile), "CenaJohn's profile")
+        education = Education.objects.create(
+            profile=profile,
+            school="SNU",
+            major="CLS",
+            dateStart="2018-03-03",
+            dateEnd="2022-02-28",
+        )
+        self.assertEqual(str(education), "SNU-CLS")
+        job_experience = JobExperience.objects.create(
+            profile=profile,
+            company="SWPP Lab",
+            position="Intern",
+            dateStart="2018-03-03",
+            dateEnd="2022-02-28",
+        )
+        self.assertEqual(str(job_experience), "SWPP Lab-Intern")

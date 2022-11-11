@@ -3,11 +3,11 @@ This module generates a init_fake_skill_tags.json file
 based on tags_list/tags.py
 """
 
-import json
+import json # pragma: no cover
 
-import tags_list.tags as tags
+import tags_list.tags as tags # pragma: no cover
 
-if __name__=="__main__":
+if __name__=="__main__": # pragma: no cover
     skill_tags = tags.SKILL_TAGS
     skill_tags_json_fixture = []
     for idx, skill_tag in enumerate(skill_tags):
