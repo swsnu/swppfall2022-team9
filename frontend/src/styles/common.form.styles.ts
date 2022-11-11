@@ -1,6 +1,7 @@
 import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
+import { IoCloseCircleOutline, IoCloseOutline } from "react-icons/io5";
 import styled from "styled-components";
-import { ThemeColor } from "styles/common.styles";
+import { CommonGreyColor, ThemeColor } from "styles/common.styles";
 
 export const FormContainerMarginTop = 150;
 export const FormInnerPadding = 40;
@@ -32,7 +33,7 @@ export const HeaderText = styled.div`
 
 export const FormContainer = styled.div`
   margin-top: ${FormContainerMarginTop}px;
-  background-color: white;
+  background-color: #fcfcff;
   width: 100%;
   max-width: 500px;
   padding: ${FormInnerPadding}px;
@@ -103,7 +104,6 @@ export const InputContainer = styled.div`
 export const InputModifyButton = styled.button`
   background: none;
   cursor: pointer;
-  max-height: ${InputContainerMinHeight}px;
   background-color: ${ThemeColor};
   min-width: 80px;
   border: none;
@@ -146,6 +146,34 @@ export const InputHelper = styled.div`
   padding: 5px;
   font-size: 0.9rem;
   color: red;
+`;
+
+export const BubblesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const Bubble = styled.div`
+  display: flex;
+  border: 1px solid black;
+  padding: 5px 10px;
+  border-radius: 15px;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-right: 5px;
+`;
+
+export const BubbleCancelButton = styled(IoCloseOutline)`
+  cursor: pointer;
+  border-radius: 50%;
+  :hover {
+    background-color: #d4d4d4;
+  }
+  transition: 0.3s;
+`;
+
+export const BubbleLabel = styled.div`
+  margin-right: 5px;
 `;
 
 export const Submit = styled.button<{ backgroundColor?: string }>`
