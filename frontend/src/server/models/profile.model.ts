@@ -1,6 +1,5 @@
-export interface SkillTag {
-  name: string;
-}
+import { Tag } from "./qualityTags.model";
+export type SkillTag = Tag;
 
 export interface EducationTag {
   school: string;

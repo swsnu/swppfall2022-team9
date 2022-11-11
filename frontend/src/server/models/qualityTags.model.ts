@@ -1,5 +1,5 @@
-interface QualityTag {
+export interface Tag {
   name: string;
 }
 
-export type QualityTags = QualityTag[];
+export type QualityTags = Tag[];
