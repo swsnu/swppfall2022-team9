@@ -9474,6 +9474,11 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+use-file-upload@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/use-file-upload/-/use-file-upload-1.0.11.tgz#6d1ca8644256ad480e2be1a0a1609315b038aa73"
+  integrity sha512-Q8Rueyo1FC9zMdpFEBEVDTSFsstTf29TUnCsjo468buqbjpZREvvAZ+ELyABVf3HmNygvJKeOARp9Q80lo14kw==
+
 use-isomorphic-layout-effect@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.2.tgz#497cefb13d863d687b08477d9e5a164ad8c1a6fb"

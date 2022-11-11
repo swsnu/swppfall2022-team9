@@ -96,7 +96,6 @@ export const InputContainerMinHeight = 36;
 export const InputContainer = styled.div`
   width: 100%;
   border: none;
-  min-height: ${InputContainerMinHeight}px;
   padding: 0;
   display: flex;
 `;
@@ -105,7 +104,8 @@ export const InputModifyButton = styled.button`
   background: none;
   cursor: pointer;
   background-color: ${ThemeColor};
-  min-width: 80px;
+  min-width: 60px;
+  padding: 0;
   border: none;
   margin-left: 5px;
   border-radius: 5px;
@@ -132,10 +132,11 @@ export const Input = styled.input`
   width: 100%;
   border: none;
   height: 30px;
-  padding: 0;
+  padding: 4px 0;
   border-bottom: 1px solid #bababa;
-  font-size: 13px;
+  font-size: 14px;
   padding-left: 5px;
+
   :focus {
     outline: none;
   }
@@ -161,6 +162,26 @@ export const Bubble = styled.div`
   align-items: center;
   margin-bottom: 10px;
   margin-right: 5px;
+`;
+
+export const Image = styled.div<{ imgUrl: string }>`
+  width: 90px;
+  height: 90px;
+  background-image: url(${props => props.imgUrl});
+  border: 2px solid black;
+  border-radius: 50%;
+  background-position: 50%;
+  background-size: cover;
+`;
+
+export const DivisionLine = styled.div`
+  height: 1px;
+  /* background-color: black; */
+  width: 100%;
+  flex: 1 0;
+  opacity: 0.2;
+  border-bottom: 1px dashed black;
+  margin: 50px 0;
 `;
 
 export const BubbleCancelButton = styled(IoCloseOutline)`
