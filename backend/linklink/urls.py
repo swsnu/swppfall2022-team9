@@ -12,4 +12,5 @@ urlpatterns = [
     path('auth/signout/', views.signout, name='signout'),
     path('auth/verify/<str:token>/', views.verify, name='verify'),
     path('user/friend/', views.friend, name='friend'),
+    path('profile/', views.profile, name='profile'),
 ]

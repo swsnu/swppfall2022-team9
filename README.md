@@ -41,19 +41,22 @@ Used `Eslint` with `eslint-config-airbnb`
 
 Used `Pytest` and `Coverage`
 
-- `coverage run --branch --source="." -m pytest`
-- `coverage report --fail-under=80 -m`
-
-  Or just type
-
-- `yarn testb`
+- `cd backend`
+- `coverage run --branch --source='./linklink' manage.py test`
 
 ### Lint Check
 
 Used `Pylint`
 
-- `pylint ./*/` or `yarn lintb`
+- `cd backend`
+- `pylint --rcfile=pylintrc **/*.py`
 
 # Language & Framework Versions
 - python == 3.8
 - Django == 4.1
+
+# Backend Commands
+
+## Load initial fake data
+- `cd backend`
+- `python manage.py loaddata */fixtures/*.json`

@@ -1,0 +1,93 @@
+[
+    {
+        "model": "linklink.skilltag",
+        "pk": 1,
+        "fields": {
+            "name": "Frontend"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 2,
+        "fields": {
+            "name": "Backend"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 3,
+        "fields": {
+            "name": "Software Engineering"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 4,
+        "fields": {
+            "name": "Deep Learning"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 5,
+        "fields": {
+            "name": "Machine Learning"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 6,
+        "fields": {
+            "name": "DevOps"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 7,
+        "fields": {
+            "name": "MLOps"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 8,
+        "fields": {
+            "name": "Financial Engineering"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 9,
+        "fields": {
+            "name": "Consulting"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 10,
+        "fields": {
+            "name": "Human Resources"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 11,
+        "fields": {
+            "name": "Entrepreneurship"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 12,
+        "fields": {
+            "name": "Blockchain"
+        }
+    },
+    {
+        "model": "linklink.skilltag",
+        "pk": 13,
+        "fields": {
+            "name": "Accounting"
+        }
+    }
+]

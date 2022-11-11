@@ -332,4 +332,36 @@ def friend(request):
     #     pass
     # elif request.method == "DELETE":
     #     pass
-    
+
+
+#--------------------------------------------------------------------------
+#   LinkLinkUser Related APIs
+#--------------------------------------------------------------------------
+
+@allowed_method_or_405(["GET", "POST", "DELETE"])
+@logged_in_or_401
+def profile(request):
+    """
+    When user enters profile info and posts,
+    1. Create SkillTag objects
+    2. Create Education objects
+    3. Create JobExperience objects
+    4. Create Profile object based on above
+    """
+    if request.method == "POST": # pragma: no branch
+        try:
+            req_data = json.loads(request.body.decode())
+            introduction = req_data["introduction"]
+            skillTags = req_data["skillTags"]
+            educations = req_data["educations"]
+            jobExperiences = req_data["jobExperiences"]
+            website = req_data["website"]
+            imgUrl = req_data["imgUrl"]
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest(e) # implicit status code = 400
+        # Create SkillTag objects
+        
+    # elif request.method == "GET":
+    #     pass
+    # elif request.method == "DELETE":
+    #     pass
