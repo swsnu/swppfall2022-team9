@@ -49,10 +49,10 @@ export const qualityTagsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getAllQualityTags.fulfilled, (state, action) => {
-      state.skillTagsList = action.payload;
+      state.skillTagsList = action.payload.qualityTags;
     });
     builder.addCase(getUserQualityTags.fulfilled, (state, action) => {
-      state.currentUserQualityTags = action.payload;
+      state.currentUserQualityTags = action.payload.qualityTags;
     });
   },
 });
