@@ -1,9 +1,4 @@
-import {
-  AnyAction,
-  configureStore,
-  EnhancedStore,
-  MiddlewareArray,
-} from "@reduxjs/toolkit";
+import { AnyAction, configureStore, EnhancedStore } from "@reduxjs/toolkit";
 import { ThunkMiddleware } from "redux-thunk";
 import reducer, {
   getMyProfile,
@@ -26,17 +21,11 @@ describe("profile reducer", () => {
   let store: EnhancedStore<
     { profile: ProfileState },
     AnyAction,
-    MiddlewareArray<
-      [ThunkMiddleware<{ profile: ProfileState }, AnyAction, undefined>]
-    >
+    [ThunkMiddleware<{ profile: ProfileState }, AnyAction, undefined>]
   >;
   beforeAll(() => {
     store = configureStore({
       reducer: { profile: reducer },
-      middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({
-          serializableCheck: false,
-        }),
     });
   });
   afterEach(() => {

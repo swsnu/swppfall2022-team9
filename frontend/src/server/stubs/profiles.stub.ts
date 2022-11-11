@@ -14,22 +14,22 @@ const educations: EducationTag[] = [
   {
     school: "SNU",
     major: "Math",
-    dateStart: new Date("February 27, 2017"),
-    dateEnd: new Date("December 17, 2023"),
+    dateStart: "2017-02-27",
+    dateEnd: "2023-02-27",
   },
   {
     school: "SNU",
     major: "Computer Science",
-    dateStart: new Date("February 27, 2019"),
-    dateEnd: new Date("February 17, 2023"),
+    dateStart: "2017-01-23",
+    dateEnd: "2020-10-23",
   },
 ];
 const jobExp: ExperienceTag[] = [
   {
     company: "Gauss Labs",
-    position: "Slave",
-    dateStart: new Date("February 27, 2019"),
-    dateEnd: new Date("February 17, 2100"),
+    position: "CTO",
+    dateStart: "2019-12-13",
+    dateEnd: "2100-10-17",
   },
 ];
 

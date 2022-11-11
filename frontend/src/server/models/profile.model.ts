@@ -5,15 +5,15 @@ export interface SkillTag {
 export interface EducationTag {
   school: string;
   major: string;
-  dateStart: Date;
-  dateEnd: Date;
+  dateStart: string;
+  dateEnd: string;
 }
 
 export interface ExperienceTag {
   company: string;
   position: string;
-  dateStart: Date;
-  dateEnd: Date;
+  dateStart: string;
+  dateEnd: string;
 }
 
 export interface Profile {

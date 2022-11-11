@@ -153,15 +153,26 @@
   ],
   "profiles": [
     {
-      "id": 0,
+      "skillTags": [{ "name": "Beautiful" }],
+      "education": [
+        {
+          "school": "snu",
+          "major": "math",
+          "dateStart": "1998-12-17",
+          "dateEnd": "2017-12-17"
+        }
+      ],
+      "jobExperience": [
+        {
+          "company": "snu",
+          "position": "professor",
+          "dateStart": "1998-12-17",
+          "dateEnd": "2017-12-17"
+        }
+      ],
+      "website": "https://naver.com",
       "imgUrl": "",
-      "qualityTags": ["Beautiful"],
-      "majorTags": ["Computer"],
-      "degreeTags": ["Ph.D"],
-      "skillTags": ["Beautiful"],
-      "languageTags": ["Korean"],
-      "website": "",
-      "introduction": ""
+      "introduction": "Korea no 1 actress"
     }
   ]
 }
