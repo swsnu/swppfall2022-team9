@@ -6,9 +6,7 @@ export type GetProfileDto = Profile;
 export type PostCreateProfileDto = Profile;
 
 // change profile
-export interface EditProfileDto {
-  body: Profile;
-}
+export type EditProfileDto = Profile;
 
 // When someone evalutes the user's qualities
 export type PostUpdateProfileDto = Profile;
