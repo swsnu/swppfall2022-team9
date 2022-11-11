@@ -50,8 +50,12 @@ describe("profile reducer", () => {
   });
 
   it("tests putUserQualityTags", async () => {
-    jest.spyOn(axios, "put").mockResolvedValue({ data: qualityTagStub });
-    await store.dispatch(putUserQualityTags({ body: qualityTagStub, id: 1 }));
+    jest
+      .spyOn(axios, "put")
+      .mockResolvedValue({ data: { qualityTags: qualityTagStub } });
+    await store.dispatch(
+      putUserQualityTags({ qualityTags: qualityTagStub, id: 1 }),
+    );
     expect(store.getState().quality.currentUserQualityTags).toEqual(
       qualityTagStub,
     );

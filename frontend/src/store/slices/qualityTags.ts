@@ -30,22 +30,23 @@ export const getAllQualityTags = createAsyncThunk<
 export const getUserQualityTags = createAsyncThunk<
   GetUserQualityTagsResDto,
   number
->("qualities/getMyProfile", async (id: number) => {
+>("qualities/getUserQualityTags", async (id: number) => {
   const response = await axios.get<GetUserQualityTagsResDto>(
-    `/api/qualities/${id}`,
+    `/api/qualities/${id}/`,
   );
   return response.data;
 });
 
 export const putUserQualityTags = createAsyncThunk<
   PutUserQualityTagsResDto,
-  { body: PutUserQualityTagsDto; id: number }
->("qualities/getFriendProfile", async ({ body, id }) => {
-  const response = await axios.put<PutUserQualityTagsDto>(
-    `/api/qualities/${id}`,
-    body,
+  PutUserQualityTagsDto & { id: number }
+>("qualities/getFriendProfile", async ({ qualityTags, id }) => {
+  const data: PutUserQualityTagsDto = { qualityTags };
+  const response = await axios.put<PutUserQualityTagsResDto>(
+    `/api/qualities/${id}/`,
+    data,
   );
-  return { qualityTags: response.data };
+  return response.data;
 });
 
 export const qualityTagsSlice = createSlice({

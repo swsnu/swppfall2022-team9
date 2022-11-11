@@ -1,7 +1,7 @@
 import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
-import { IoCloseCircleOutline, IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
 import styled from "styled-components";
-import { CommonGreyColor, ThemeColor } from "styles/common.styles";
+import { ThemeColor } from "styles/common.styles";
 
 export const FormContainerMarginTop = 150;
 export const FormInnerPadding = 40;
