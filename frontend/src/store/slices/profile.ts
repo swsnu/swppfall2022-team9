@@ -8,6 +8,7 @@ import {
 import {
   EditProfileResDto,
   GetProfileResDto,
+  PostCreateProfileResDto,
 } from "server/dto/profile/profile.res.dto";
 import { Profile } from "server/models/profile.model";
 
@@ -19,12 +20,17 @@ const initialState: ProfileState = {
   currentProfile: null,
 };
 
-export const postCreateProfile = createAsyncThunk<void, PostCreateProfileDto>(
-  "profile/postCreateProfile",
-  async () => {
-    await axios.post<PostCreateProfileDto>("/api/profile/");
-  },
-);
+export const postCreateProfile = createAsyncThunk<
+  PostCreateProfileResDto,
+  PostCreateProfileDto
+>("profile/postCreateProfile", async profile => {
+  const body: PostCreateProfileDto = profile;
+  const response = await axios.post<PostCreateProfileResDto>(
+    "/api/profile/",
+    body,
+  );
+  return response.data;
+});
 
 export const getMyProfile = createAsyncThunk<GetProfileResDto, void>(
   "profile/getMyProfile",
@@ -59,13 +65,13 @@ export const profileSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getMyProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload;
+      state.currentProfile = action.payload.profile;
     });
     builder.addCase(getFriendProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload;
+      state.currentProfile = action.payload.profile;
     });
     builder.addCase(editMyProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload;
+      state.currentProfile = action.payload.profile;
     });
   },
 });

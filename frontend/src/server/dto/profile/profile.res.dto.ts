@@ -1,5 +1,11 @@
 import { Profile } from "../../models/profile.model";
 
-export type GetProfileResDto = Profile;
+export type GetProfileResDto = {
+  profile: Profile;
+};
 
-export type EditProfileResDto = Profile;
+export type EditProfileResDto = {
+  profile: Profile;
+};
+
+export interface PostCreateProfileResDto {}
