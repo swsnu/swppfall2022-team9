@@ -178,6 +178,8 @@ export const Bubble = styled.div`
 `;
 
 export const BubbleText = styled.div`
+  white-space: nowrap;
+  display: inline-block;
   mask-image: linear-gradient(
     90deg,
     #000,

@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import * as FormStyles from "styles/common.form.styles";
 import { FileUpload, useFileUpload } from "use-file-upload";
-import {
-  EducationTag,
-  ExperienceTag,
-  Profile,
-  SkillTag,
-} from "server/models/profile.model";
+import { Profile } from "server/models/profile.model";
 import styled from "styled-components";
 import ExperienceInput, {
   ExperienceBubble,
+  ExperienceType,
 } from "./ExperienceInput/ExperienceInput";
-import { useAppDispatch } from "store/hooks";
-import { getMyProfile } from "store/slices/profile";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { getMyProfile, postCreateProfile } from "store/slices/profile";
+import { useNavigate } from "react-router-dom";
 
 export const CreateProfileFormTitle = styled.div`
   display: flex;
@@ -25,10 +22,11 @@ export const CreateProfileLabel = styled(FormStyles.Label)`
   margin-bottom: 15px;
 `;
 
-// This pages is going to be use for both creation and modification
+// DESC: This pages is going to be use for both creation and modification
 const ChangeProfilePage: React.FC = () => {
   // reference: https://github.com/Marvinified/use-file-upload
   // This part might be tricky when creating test code
+  // you could mock useFileUpload hook just as we mock useDispatch
   const [, setImageFile] = useFileUpload();
 
   // profile state
@@ -44,21 +42,39 @@ const ChangeProfilePage: React.FC = () => {
   const [skillInput, setSkillInput] = useState<string>("");
 
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const currentUser = useAppSelector(state => state.users.currentUser);
+
+  // DESC: this is for getting already stored profile data in server
   const getCurrentUserProfile = async () => {
     try {
       const response = await dispatch(getMyProfile()).unwrap();
-      setProfile(response);
+      setProfile(response.profile);
     } catch (err) {
       // the user
       console.log(err);
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCurrentUserProfile();
+  }, []);
 
-  const onSubmit = (e: React.SyntheticEvent) => {
+  const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    try {
+      await dispatch(postCreateProfile(profile)).unwrap();
+      if (currentUser) {
+        // DESC: we navigate to personal profile page after creation of profile
+        navigate(`/profile/${currentUser.id}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   const onAddSkillTag = (tagValue: string) => {
     setProfile(prev => ({
       ...prev,
@@ -66,6 +82,7 @@ const ChangeProfilePage: React.FC = () => {
     }));
     setSkillInput("");
   };
+
   const onDeleteSkillTag = (tagValue: string) => {
     setProfile(prev => ({
       ...prev,
@@ -73,7 +90,64 @@ const ChangeProfilePage: React.FC = () => {
     }));
   };
 
-  const onAddEducation = (bubble: ExperienceBubble) => {};
+  const onAddEducation = (bubble: ExperienceBubble) => {
+    setProfile(prev => ({
+      ...prev,
+      education: [
+        ...prev.education,
+        {
+          school: bubble.name,
+          dateStart: bubble.dateStart,
+          dateEnd: bubble.dateEnd,
+          major: bubble.role,
+        },
+      ],
+    }));
+  };
+
+  const onDeleteEducation = (bubble: ExperienceBubble) => {
+    setProfile(prev => ({
+      ...prev,
+      education: prev.education.filter(edu => {
+        return !(
+          edu.school === bubble.name &&
+          edu.dateStart === bubble.dateStart &&
+          edu.dateEnd === bubble.dateEnd &&
+          edu.major === bubble.role
+        );
+      }),
+    }));
+  };
+
+  const onAddJob = (bubble: ExperienceBubble) => {
+    setProfile(prev => ({
+      ...prev,
+      jobExperience: [
+        ...prev.jobExperience,
+        {
+          company: bubble.name,
+          dateStart: bubble.dateStart,
+          dateEnd: bubble.dateEnd,
+          position: bubble.role,
+        },
+      ],
+    }));
+  };
+
+  const onDeleteJob = (bubble: ExperienceBubble) => {
+    setProfile(prev => ({
+      ...prev,
+      jobExperience: prev.jobExperience.filter(job => {
+        return !(
+          job.company === bubble.name &&
+          job.dateStart === bubble.dateStart &&
+          job.dateEnd === bubble.dateEnd &&
+          job.position === bubble.role
+        );
+      }),
+    }));
+  };
+
   return (
     <FormStyles.Container>
       <FormStyles.FormContainer>
@@ -105,6 +179,7 @@ const ChangeProfilePage: React.FC = () => {
           <CreateProfileLabel>
             <FormStyles.BubblesContainer>
               <CreateProfileFormTitle>나의 태그들</CreateProfileFormTitle>
+
               {profile.skillTags.map((tag, index) => (
                 <FormStyles.Bubble key={index}>
                   <FormStyles.BubbleCancelButton
@@ -117,6 +192,16 @@ const ChangeProfilePage: React.FC = () => {
               ))}
             </FormStyles.BubblesContainer>
           </CreateProfileLabel>
+          <FormStyles.ExtraContainer
+            style={{
+              alignSelf: "flex-start",
+              marginTop: -30,
+              fontSize: 12,
+              marginBottom: -25,
+            }}
+          >
+            나를 대표하는 키워드를 설정해주세요
+          </FormStyles.ExtraContainer>
 
           <FormStyles.InputContainer>
             <FormStyles.Input
@@ -138,29 +223,35 @@ const ChangeProfilePage: React.FC = () => {
 
           <FormStyles.DivisionLine></FormStyles.DivisionLine>
           <ExperienceInput
-            type="education"
+            type={ExperienceType.EDUCATION}
             title="교육 이력"
             experienceName="학교 이름"
-            onAddBubble={bubble => {
-              console.log(bubble);
-            }}
-            bubbles={[]}
-            onDeleteBubble={bubble => {
-              console.log(bubble);
-            }}
+            onAddBubble={onAddEducation}
+            bubbles={profile.education.map(edu => {
+              return {
+                name: edu.school,
+                dateStart: edu.dateStart,
+                dateEnd: edu.dateEnd,
+                role: edu.major,
+              };
+            })}
+            onDeleteBubble={onDeleteEducation}
           />
           <FormStyles.DivisionLine></FormStyles.DivisionLine>
           <ExperienceInput
-            type="experience"
+            type={ExperienceType.JOB}
             title="직업 경험"
             experienceName="기관 이름"
-            onAddBubble={bubble => {
-              console.log(bubble);
-            }}
-            bubbles={[]}
-            onDeleteBubble={bubble => {
-              console.log(bubble);
-            }}
+            onAddBubble={onAddJob}
+            bubbles={profile.jobExperience.map(job => {
+              return {
+                name: job.company,
+                dateStart: job.dateStart,
+                dateEnd: job.dateEnd,
+                role: job.position,
+              };
+            })}
+            onDeleteBubble={onDeleteJob}
           />
           <FormStyles.DivisionLine></FormStyles.DivisionLine>
           <CreateProfileLabel>
@@ -168,14 +259,22 @@ const ChangeProfilePage: React.FC = () => {
           </CreateProfileLabel>
           <FormStyles.Label>
             <FormStyles.InputContainer>
-              <FormStyles.Input />
+              <FormStyles.Input
+                onChange={e => {
+                  setProfile(prev => ({ ...prev, website: e.target.value }));
+                }}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <CreateProfileLabel>
             <CreateProfileFormTitle>소개</CreateProfileFormTitle>
           </CreateProfileLabel>
           <FormStyles.Label>
-            <FormStyles.TextArea />
+            <FormStyles.TextArea
+              onChange={e => {
+                setProfile(prev => ({ ...prev, introduction: e.target.value }));
+              }}
+            />
           </FormStyles.Label>
 
           <FormStyles.Submit style={{ marginBottom: 100 }}>
