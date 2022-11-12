@@ -31,11 +31,12 @@ export const HeaderText = styled.div`
   font-weight: bold;
 `;
 
+const FormContainerInnerWidth = 500;
 export const FormContainer = styled.div`
   margin-top: ${FormContainerMarginTop}px;
   background-color: #fcfcff;
   width: 100%;
-  max-width: 500px;
+  max-width: ${FormContainerInnerWidth}px;
   padding: ${FormInnerPadding}px;
   /* position: absolute; */
   flex: 1 0;
@@ -128,6 +129,15 @@ export const ExtraContainer = styled.div`
   opacity: 0.5;
 `;
 
+export const TextArea = styled.textarea`
+  width: 100%;
+  padding: 4px 6px;
+  height: 100px;
+  :focus {
+    outline: none;
+  }
+`;
+
 export const Input = styled.input`
   width: 100%;
   border: none;
@@ -162,6 +172,24 @@ export const Bubble = styled.div`
   align-items: center;
   margin-bottom: 10px;
   margin-right: 5px;
+  max-width: calc(${FormContainerInnerWidth - 20}px);
+  overflow: hidden;
+  /* oveflow-x: hidden; */
+`;
+
+export const BubbleText = styled.div`
+  mask-image: linear-gradient(
+    90deg,
+    #000,
+    ${FormContainerInnerWidth - 50}px,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000,
+    ${FormContainerInnerWidth - 50}px,
+    transparent
+  );
 `;
 
 export const Image = styled.div<{ imgUrl: string }>`
@@ -185,6 +213,7 @@ export const DivisionLine = styled.div`
 `;
 
 export const BubbleCancelButton = styled(IoCloseOutline)`
+  min-width: 18px;
   cursor: pointer;
   border-radius: 50%;
   :hover {
