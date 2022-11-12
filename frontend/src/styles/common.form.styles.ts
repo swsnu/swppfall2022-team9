@@ -222,10 +222,6 @@ export const BubbleCancelButton = styled(IoCloseOutline)`
   transition: 0.3s;
 `;
 
-export const BubbleLabel = styled.div`
-  margin-right: 5px;
-`;
-
 export const Submit = styled.button<{ backgroundColor?: string }>`
   background: none;
   border: none;

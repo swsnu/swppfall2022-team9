@@ -125,9 +125,6 @@ const EvaluateQualityPage: React.FC<Props> = () => {
             <FormStyles.BubblesContainer>
               {assignedQualities.map(quality => (
                 <FormStyles.Bubble key={quality.label}>
-                  <FormStyles.BubbleLabel>
-                    {quality.label}
-                  </FormStyles.BubbleLabel>
                   <FormStyles.BubbleCancelButton
                     onClick={() => {
                       onDeleteQuality(quality.label);
@@ -137,6 +134,7 @@ const EvaluateQualityPage: React.FC<Props> = () => {
                     color="black"
                     size={20}
                   />
+                  <FormStyles.BubbleText>{quality.label}</FormStyles.BubbleText>
                 </FormStyles.Bubble>
               ))}
             </FormStyles.BubblesContainer>
