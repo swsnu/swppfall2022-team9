@@ -51,7 +51,7 @@ const ChangeProfilePage: React.FC = () => {
   const getCurrentUserProfile = async () => {
     try {
       const response = await dispatch(getMyProfile()).unwrap();
-      setProfile(response.profile);
+      setProfile(response);
     } catch (err) {
       // the user
       console.log(err);

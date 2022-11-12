@@ -65,13 +65,13 @@ export const profileSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getMyProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload.profile;
+      state.currentProfile = action.payload;
     });
     builder.addCase(getFriendProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload.profile;
+      state.currentProfile = action.payload;
     });
     builder.addCase(editMyProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload.profile;
+      state.currentProfile = action.payload;
     });
   },
 });

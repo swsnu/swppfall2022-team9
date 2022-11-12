@@ -39,17 +39,13 @@ describe("profile reducer", () => {
   });
 
   it("tests getMyProfile", async () => {
-    jest
-      .spyOn(axios, "get")
-      .mockResolvedValue({ data: { profile: profileStub } });
+    jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
     await store.dispatch(getMyProfile());
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
 
   it("tests getFriendProfile", async () => {
-    jest
-      .spyOn(axios, "get")
-      .mockResolvedValue({ data: { profile: profileStub } });
+    jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
     await store.dispatch(getFriendProfile(1));
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
