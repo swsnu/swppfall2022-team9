@@ -136,6 +136,7 @@ class LinkLinkTestCase(TestCase):
         self.client = Client(enforce_csrf_checks=True)
         self.csrftoken = \
             self.client.get("/api/csrf_token/").cookies["csrftoken"].value
+        self.linklink_path = os.path.dirname(os.path.realpath(__file__))
 
 #--------------------------------------------------------------------------
 #   Auth Related Tests
@@ -413,9 +414,8 @@ class LinkLinkTestCase(TestCase):
         # GET
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 200) # Successful GET
-        linklink_path = os.path.dirname(os.path.realpath(__file__))
         answer_json_path = os.path.join(
-            linklink_path,
+            self.linklink_path,
             "test_answers",
             "test_success_friend_general.json"
         )
@@ -430,7 +430,75 @@ class LinkLinkTestCase(TestCase):
 #   /api/profile Tests
 #--------------------------------------------------------------------------
 
-    def test_success_post_profile(self):
+    def test_get_profile_success(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Create Profile
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        john_profile = Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            website="johnwebsite.com",
+        )
+        john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
+        john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
+        Education.objects.create(
+            profile=john_profile,
+            school="SNU",
+            major="CSE",
+            dateStart="2018-03-12",
+            dateEnd="2022-04-12",
+        )
+        Education.objects.create(
+            profile=john_profile,
+            school="MIT",
+            major="CSE",
+            dateStart="2013-03-12",
+            dateEnd="2019-04-12",
+        )
+        JobExperience.objects.create(
+            profile=john_profile,
+            company="Google",
+            position="CEO",
+            dateStart="2018-02-12",
+            dateEnd="2022-09-12",
+        )
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "test_get_profile_success.json"
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertDictEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_profile_not_found(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # There is no profile for John
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message":
+            "Profile not found. Your profile is not created yet."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_post_profile_success(self):
         target_url = "/api/profile/"
         # Login John
         self.client.login(username="john", password="johnpassword")
