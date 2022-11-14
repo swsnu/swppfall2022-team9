@@ -416,6 +416,7 @@ def profile(request):
             try:
                 skill_tag_instance = \
                     SkillTag.objects.get(name=skill_tag["name"])
+                new_profile.skillTags.add(skill_tag_instance)
             except SkillTag.DoesNotExist:
                 return JsonResponse(
                     status=404,
@@ -481,6 +482,7 @@ def profile(request):
                 try:
                     skill_tag_instance = \
                         SkillTag.objects.get(name=skill_tag["name"])
+                    profile_found.skillTags.add(skill_tag_instance)
                 except SkillTag.DoesNotExist:
                     return JsonResponse(
                         status=404,
@@ -489,7 +491,6 @@ def profile(request):
                             f"SkillTag {skill_tag['name']} not found."
                         }
                     )
-                profile_found.skillTags.add(skill_tag_instance)
             # Update Education objects
             profile_found.education_set.all().delete()
             for education in educations:
