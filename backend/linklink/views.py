@@ -346,7 +346,7 @@ def friend(request):
 
 @allowed_method_or_405(["GET", "POST", "PUT"])
 @logged_in_or_401
-def profile(request):
+def my_profile(request):
     if request.method == "GET":
         # Get user's profile, if it exists
         if Profile.objects.filter(
@@ -523,5 +523,30 @@ def profile(request):
                 data={
                     "message":
                     "Profile not found. Your profile is not created yet."
+                }
+            )
+
+
+@allowed_method_or_405(["GET"])
+@logged_in_or_401
+def other_profile(request, user_id):
+    if request.method == "GET": # pragma: no branch
+        if LinkLinkUser.objects.filter(pk=user_id).exists():
+            linklinkuser = LinkLinkUser.objects.get(pk=user_id)
+            # Get all Accepted FriendRequest
+            all_accepted_friend_requests = FriendRequest.objects.filter(
+                status="Accepted"
+            )
+            # Get onechon of current user
+            onechon_list = get_onechon_linklinkuser_list(
+                all_accepted_friend_requests,
+                request.user.linklinkuser
+            )
+        else:
+            return JsonResponse(
+                status=404,
+                data={
+                    "message":
+                    "userId={user_id} not found."
                 }
             )
