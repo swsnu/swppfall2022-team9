@@ -376,7 +376,7 @@ class LinkLinkTestCase(TestCase):
 #   /api/user/friend Tests
 #--------------------------------------------------------------------------
 
-    def test_success_friend_general(self):
+    def test_friend_general_success(self):
         target_url = "/api/user/friend/"
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
@@ -417,7 +417,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_success_friend_general.json"
+            "test_friend_general_success.json"
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -480,7 +480,7 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_get_profile_not_found(self):
+    def test_get_profile_profile_not_found(self):
         target_url = "/api/profile/"
         # Login John
         self.client.login(username="john", password="johnpassword")
@@ -506,29 +506,29 @@ class LinkLinkTestCase(TestCase):
         response = self.client.post(
             target_url,
             {
-                "introduction": "안녕하세요 박재승입니다.",
+                "introduction": "This is john",
                 "skillTags": [
                     {"name": "Frontend"},
                     {"name": "Backend"}
                 ],
                 "educations": [
                     {
-                        "school": "서울대학교",
-                        "major": "자유전공학부",
-                        "dateStart": "2017-03-01",
-                        "dateEnd": "2023-02-28"
+                        "school": "SNU",
+                        "major": "CSE",
+                        "dateStart": "2018-03-12",
+                        "dateEnd": "2022-04-12"
                     }
                 ],
                 "jobExperiences": [
                     {
-                        "company": "송현오 교수님 랩",
-                        "position": "Intern",
-                        "dateStart": "2019-06-01",
-                        "dateEnd": "2020-06-01"
+                        "company": "Google",
+                        "position": "CEO",
+                        "dateStart": "2018-02-12",
+                        "dateEnd": "2022-09-12"
                     }
                 ],
-                "website": "jaeseung@pr.com",
-                "imgUrl": "jaeseungimage.com"
+                "website": "johnwebsite.com",
+                "imgUrl": "https://catimage.com"
             },
             content_type="application/json",
             HTTP_X_CSRFTOKEN=self.csrftoken
@@ -538,6 +538,254 @@ class LinkLinkTestCase(TestCase):
         self.assertTrue(Profile.objects.filter(id=1).exists())
         self.assertTrue(Education.objects.filter(id=1).exists())
         self.assertTrue(JobExperience.objects.filter(id=1).exists())
+
+
+    def test_post_profile_skill_tag_not_found(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "introduction": "This is john",
+                "skillTags": [
+                    {"name": "Frontend"},
+                    {"name": "Backend"},
+                    {"name": "NONEXISTANT SKILL"} # nonexistant skill
+                ],
+                "educations": [
+                    {
+                        "school": "SNU",
+                        "major": "CSE",
+                        "dateStart": "2018-03-12",
+                        "dateEnd": "2022-04-12"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "Google",
+                        "position": "CEO",
+                        "dateStart": "2018-02-12",
+                        "dateEnd": "2022-09-12"
+                    }
+                ],
+                "website": "johnwebsite.com",
+                "imgUrl": "https://catimage.com"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message":
+            "SkillTag NONEXISTANT SKILL not found."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_profile_success(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Create Profile
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        john_profile = Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            website="johnwebsite.com",
+        )
+        john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
+        john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
+        Education.objects.create(
+            profile=john_profile,
+            school="SNU",
+            major="CSE",
+            dateStart="2018-03-12",
+            dateEnd="2022-04-12",
+        )
+        Education.objects.create(
+            profile=john_profile,
+            school="MIT",
+            major="CSE",
+            dateStart="2013-03-12",
+            dateEnd="2019-04-12",
+        )
+        JobExperience.objects.create(
+            profile=john_profile,
+            company="Google",
+            position="CEO",
+            dateStart="2018-02-12",
+            dateEnd="2022-09-12",
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "introduction": "This is john modified",
+                "skillTags": [
+                    {"name": "Frontend"}
+                ],
+                "educations": [
+                    {
+                        "school": "SNU2",
+                        "major": "CSE2",
+                        "dateStart": "2017-03-01",
+                        "dateEnd": "2023-02-28"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "Google2",
+                        "position": "CEO2",
+                        "dateStart": "2019-06-01",
+                        "dateEnd": "2020-06-01"
+                    }
+                ],
+                "website": "modified@pr.com",
+                "imgUrl": "modifiedimage.com"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "test_put_profile_success.json"
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertDictEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_put_profile_profile_not_found(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # There is no profile for John
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "introduction": "This is john modified",
+                "skillTags": [
+                    {"name": "Frontend"}
+                ],
+                "educations": [
+                    {
+                        "school": "SNU2",
+                        "major": "CSE2",
+                        "dateStart": "2018-03-12",
+                        "dateEnd": "2022-04-12"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "Google2",
+                        "position": "CEO2",
+                        "dateStart": "2018-02-12",
+                        "dateEnd": "2022-09-12"
+                    }
+                ],
+                "website": "modified@pr.com",
+                "imgUrl": "modifiedimage.com"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message":
+            "Profile not found. Your profile is not created yet."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_profile_skill_tag_not_found(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Create Profile
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        john_profile = Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            website="johnwebsite.com",
+        )
+        john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
+        john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
+        Education.objects.create(
+            profile=john_profile,
+            school="SNU",
+            major="CSE",
+            dateStart="2018-03-12",
+            dateEnd="2022-04-12",
+        )
+        Education.objects.create(
+            profile=john_profile,
+            school="MIT",
+            major="CSE",
+            dateStart="2013-03-12",
+            dateEnd="2019-04-12",
+        )
+        JobExperience.objects.create(
+            profile=john_profile,
+            company="Google",
+            position="CEO",
+            dateStart="2018-02-12",
+            dateEnd="2022-09-12",
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "introduction": "This is john modified",
+                "skillTags": [
+                    {"name": "Frontend"},
+                    {"name": "Backend"},
+                    {"name": "NONEXISTANT SKILL"} # nonexistant skill
+                ],
+                "educations": [
+                    {
+                        "school": "SNU2",
+                        "major": "CSE2",
+                        "dateStart": "2018-03-12",
+                        "dateEnd": "2022-04-12"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "Google2",
+                        "position": "CEO2",
+                        "dateStart": "2018-02-12",
+                        "dateEnd": "2022-09-12"
+                    }
+                ],
+                "website": "modified@pr.com",
+                "imgUrl": "modifiedimage.com"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message":
+            "SkillTag NONEXISTANT SKILL not found."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
 
 #--------------------------------------------------------------------------
 #   405 Checking Tests
@@ -636,29 +884,96 @@ class LinkLinkTestCase(TestCase):
         response = self.client.post(
             target_url,
             {
-                "introduction": "안녕하세요 박재승입니다.",
+                "introduction": "This is john",
                 "skillTags": [
                     {"name": "Frontend"},
                     {"name": "Backend"}
                 ],
                 "educations": [
                     {
-                        "school": "서울대학교",
-                        "major": "자유전공학부",
-                        "dateStart": "2017-03-01",
-                        "dateEnd": "2023-02-28"
+                        "school": "SNU",
+                        "major": "CSE",
+                        "dateStart": "2018-03-12",
+                        "dateEnd": "2022-04-12"
                     }
                 ],
                 "jobExperiences": [
                     {
-                        "company": "송현오 교수님 랩",
-                        "position": "Intern",
-                        "dateStart": "2019-06-01",
-                        "dateEnd": "2020-06-01"
+                        "company": "Google",
+                        "position": "CEO",
+                        "dateStart": "2018-02-12",
+                        "dateEnd": "2022-09-12"
                     }
                 ],
-                "website": "jaeseung@pr.com",
-                # "imgUrl": "jaeseungimage.com" # no imgUrl
+                "website": "johnwebsite.com",
+                # "imgUrl": "https://catimage.com" # no imgUrl
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_400_put_profile(self):
+        target_url = "/api/profile/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Create Profile
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        john_profile = Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            website="johnwebsite.com",
+        )
+        john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
+        john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
+        Education.objects.create(
+            profile=john_profile,
+            school="SNU",
+            major="CSE",
+            dateStart="2018-03-12",
+            dateEnd="2022-04-12",
+        )
+        Education.objects.create(
+            profile=john_profile,
+            school="MIT",
+            major="CSE",
+            dateStart="2013-03-12",
+            dateEnd="2019-04-12",
+        )
+        JobExperience.objects.create(
+            profile=john_profile,
+            company="Google",
+            position="CEO",
+            dateStart="2018-02-12",
+            dateEnd="2022-09-12",
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "introduction": "This is john modified",
+                "skillTags": [
+                    {"name": "Frontend"}
+                ],
+                "educations": [
+                    {
+                        "school": "SNU2",
+                        "major": "CSE2",
+                        "dateStart": "2018-03-12",
+                        "dateEnd": "2022-04-12"
+                    }
+                ],
+                "jobExperiences": [
+                    {
+                        "company": "Google2",
+                        "position": "CEO2",
+                        "dateStart": "2018-02-12",
+                        "dateEnd": "2022-09-12"
+                    }
+                ],
+                "website": "modified@pr.com",
+                # "imgUrl": "modifiedimage.com" # no imgUrl
             },
             content_type="application/json",
             HTTP_X_CSRFTOKEN=self.csrftoken
