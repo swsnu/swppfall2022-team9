@@ -347,14 +347,53 @@ def friend(request):
 @allowed_method_or_405(["GET", "POST", "DELETE"])
 @logged_in_or_401
 def profile(request):
-    """
-    When user enters profile info and posts,
-    1. Create Profile object
-    2. Update imgUrl of LinkLinkUser
-    3. Create Education objects
-    4. Create JobExperience objects
-    """
-    if request.method == "POST": # pragma: no branch
+    if request.method == "GET":
+        # Get user's profile, if it exists
+        if Profile.objects.filter(
+                linklinkuser=request.user.linklinkuser
+            ).exists():
+            profile_found = \
+                Profile.objects.get(linklinkuser=request.user.linklinkuser)
+            print(profile_found)
+            # Construct Profile
+            response_dict = {}
+            response_dict["introduction"] = profile_found.introduction
+            response_dict["skillTags"] = []
+            for skill_tag in profile_found.skillTags.all():
+                response_dict["skillTags"].append({"name": skill_tag.name})
+            response_dict["educations"] = []
+            for education in profile_found.education_set.all():
+                education_dict = {}
+                education_dict["school"] = education.school
+                education_dict["major"] = education.major
+                education_dict["dateStart"] = education.dateStart
+                education_dict["dateEnd"] = education.dateEnd
+                response_dict["educations"].append(education_dict)
+            response_dict["jobExperiences"] = []
+            for job_experience in profile_found.jobexperience_set.all():
+                job_experience_dict = {}
+                job_experience_dict["company"] = job_experience.company
+                job_experience_dict["position"] = job_experience.position
+                job_experience_dict["dateStart"] = job_experience.dateStart
+                job_experience_dict["dateEnd"] = job_experience.dateEnd
+                response_dict["jobExperiences"].append(job_experience_dict)
+            response_dict["website"] = profile_found.website
+            response_dict["imgUrl"] = profile_found.linklinkuser.imgUrl
+            return JsonResponse(status=200, data=response_dict)
+        else:
+            return JsonResponse(
+                status=404,
+                data={
+                    "message":
+                    "Profile not found. Your profile is not created yet."
+                }
+            )
+    elif request.method == "POST": # pragma: no branch
+        # When user enters profile info and posts,
+        # 1. Create Profile object
+        # 2. Update imgUrl of LinkLinkUser
+        # 3. Create Education objects
+        # 4. Create JobExperience objects
         try:
             req_data = json.loads(request.body.decode())
             introduction = req_data["introduction"]
@@ -397,7 +436,5 @@ def profile(request):
                 dateEnd=job_experience["dateEnd"],
             )
         return HttpResponse(status=201)
-    # elif request.method == "GET":
-    #     pass
-    # elif request.method == "DELETE":
+    # elif request.method == "PUT":
     #     pass
