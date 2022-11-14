@@ -344,7 +344,7 @@ def friend(request):
 #   LinkLinkUser Related APIs
 #--------------------------------------------------------------------------
 
-@allowed_method_or_405(["GET", "POST", "DELETE"])
+@allowed_method_or_405(["GET", "POST", "PUT"])
 @logged_in_or_401
 def profile(request):
     if request.method == "GET":
@@ -354,7 +354,6 @@ def profile(request):
             ).exists():
             profile_found = \
                 Profile.objects.get(linklinkuser=request.user.linklinkuser)
-            print(profile_found)
             # Construct Profile
             response_dict = {}
             response_dict["introduction"] = profile_found.introduction
@@ -379,7 +378,10 @@ def profile(request):
                 response_dict["jobExperiences"].append(job_experience_dict)
             response_dict["website"] = profile_found.website
             response_dict["imgUrl"] = profile_found.linklinkuser.imgUrl
-            return JsonResponse(status=200, data=response_dict)
+            return JsonResponse(
+                status=200,
+                data=response_dict
+            )
         else:
             return JsonResponse(
                 status=404,
@@ -388,7 +390,7 @@ def profile(request):
                     "Profile not found. Your profile is not created yet."
                 }
             )
-    elif request.method == "POST": # pragma: no branch
+    elif request.method == "POST":
         # When user enters profile info and posts,
         # 1. Create Profile object
         # 2. Update imgUrl of LinkLinkUser
@@ -411,12 +413,21 @@ def profile(request):
             website=website,
         )
         for skill_tag in skill_tags:
-            skill_tag_instance = SkillTag.objects.get(name=skill_tag["name"])
-            new_profile.skillTags.add(skill_tag_instance)
-            new_profile.save()
+            try:
+                skill_tag_instance = \
+                    SkillTag.objects.get(name=skill_tag["name"])
+            except SkillTag.DoesNotExist:
+                return JsonResponse(
+                    status=404,
+                    data={
+                        "message":
+                        f"SkillTag {skill_tag['name']} not found."
+                    }
+                )
         # Update imgUrl of LinkLinkUser
         linklinkuser = request.user.linklinkuser
         linklinkuser.imgUrl = img_url
+        linklinkuser.save()
         # Create Education objects
         for education in educations:
             Education.objects.create(
@@ -435,6 +446,81 @@ def profile(request):
                 dateStart=job_experience["dateStart"],
                 dateEnd=job_experience["dateEnd"],
             )
+        new_profile.save()
         return HttpResponse(status=201)
-    # elif request.method == "PUT":
-    #     pass
+    elif request.method == "PUT": # pragma: no branch
+        # When user enters profile info and puts,
+        # 1. Find Profile object, if it exists
+        # 2. Construct new profile object and save
+        # Find Profile object, if it exists
+        if Profile.objects.filter(
+                linklinkuser=request.user.linklinkuser
+            ).exists():
+            profile_found = \
+                Profile.objects.get(linklinkuser=request.user.linklinkuser)
+            try:
+                req_data = json.loads(request.body.decode())
+                introduction = req_data["introduction"]
+                skill_tags = req_data["skillTags"]
+                educations = req_data["educations"]
+                job_experiences = req_data["jobExperiences"]
+                website = req_data["website"]
+                img_url = req_data["imgUrl"]
+            except (KeyError, JSONDecodeError) as e:
+                return HttpResponseBadRequest(e) # implicit status code = 400
+            # Update simple fields
+            profile_found.introduction = introduction
+            profile_found.website = website
+            # Update imgUrl of LinkLinkUser
+            linklinkuser = request.user.linklinkuser
+            linklinkuser.imgUrl = img_url
+            linklinkuser.save()
+            # Update skillTags
+            profile_found.skillTags.clear()
+            for skill_tag in skill_tags:
+                try:
+                    skill_tag_instance = \
+                        SkillTag.objects.get(name=skill_tag["name"])
+                except SkillTag.DoesNotExist:
+                    return JsonResponse(
+                        status=404,
+                        data={
+                            "message":
+                            f"SkillTag {skill_tag['name']} not found."
+                        }
+                    )
+                profile_found.skillTags.add(skill_tag_instance)
+            # Update Education objects
+            profile_found.education_set.all().delete()
+            for education in educations:
+                Education.objects.create(
+                    profile=profile_found,
+                    school=education["school"],
+                    major=education["major"],
+                    dateStart=education["dateStart"],
+                    dateEnd=education["dateEnd"],
+                )
+            # Update JobExperience objects
+            profile_found.jobexperience_set.all().delete()
+            for job_experience in job_experiences:
+                JobExperience.objects.create(
+                    profile=profile_found,
+                    company=job_experience["company"],
+                    position=job_experience["position"],
+                    dateStart=job_experience["dateStart"],
+                    dateEnd=job_experience["dateEnd"],
+                )
+            # Save updated profile
+            profile_found.save()
+            return JsonResponse(
+                status=200,
+                data=req_data,
+            )
+        else:
+            return JsonResponse(
+                status=404,
+                data={
+                    "message":
+                    "Profile not found. Your profile is not created yet."
+                }
+            )
