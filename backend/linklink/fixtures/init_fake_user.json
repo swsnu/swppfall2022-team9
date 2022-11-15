@@ -1,0 +1,274 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$PEMJIA7EuWfArBF9X67hE6$JX689enrDtCFY9SKuo/ctHssWGrRuzOb/8ssMxcrmTc=",
+            "last_login": "2022-11-03T05:50:16.548Z",
+            "is_superuser": true,
+            "username": "linklinkadmin",
+            "first_name": "",
+            "last_name": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-11-03T05:50:03.769Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$j83nu5fgwmhwVrUmuna2eI$WrcmTJo9jIxcnD+azokGuCGeqw8XlY/NLFNIT/JHK/M=",
+            "last_login": "2022-11-05T07:02:45.504Z",
+            "is_superuser": false,
+            "username": "wotmd",
+            "first_name": "재승",
+            "last_name": "박",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-03T05:54:03Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$BY8sKnzPjgcc2HxUbbO0hh$cfOTzKVOksd2cQX16lE5EHxleqEOaNWptBxG3AFMJ30=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "tlsgP",
+            "first_name": "신혜",
+            "last_name": "박",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-03T05:57:09Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$implX97TmXKsMwkxxzSYN7$3CsmEWVB0nuFYdlxv8cU8dC+6JFpzKd1+jp6OULGSw4=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "guswls",
+            "first_name": "현진",
+            "last_name": "서",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-03T06:03:24Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$CVjYx2ICE9mIPV77QhEaW4$W4r3wl27pjFwUThe/oPE8Amn4JhV66Q+bn6XOtQiV0g=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "alsdk",
+            "first_name": "민아",
+            "last_name": "신",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-05T06:38:52Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 6,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$BLAVLpiyCQWv4dgfHt5RTo$LiFZ4d9EdHS+0cv3mZJFffGaRMbP6xE+XbR4YZgoTEE=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "dbwls",
+            "first_name": "유진",
+            "last_name": "안",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-05T06:41:20Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 7,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$OXlJJuLhLv5TOyj6sQTlTM$49f4pzbwJjPWhftIVH63VVYeipjvEIQfRw9Ub0a4LIY=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "dnjsdud",
+            "first_name": "원영",
+            "last_name": "장",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 8,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$UPs7t57EFnoRcHQ3yw84CJ$3ErxMKHC5HC9Arc0cBHrfysyCAKfKz8pyr24m+wuaC8=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "alswn",
+            "first_name": "민주",
+            "last_name": "김",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 9,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$Nru5LaR2YWhQvbCNbPRW3O$tfYzcA35x0zUx1/y+qgUDbgzYI61jHjdv4/JogilZ5Q=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "alswjd",
+            "first_name": "민정",
+            "last_name": "이",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 10,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$342PwEkjsYr6BX7mdwnLOF$mZGAoeo1hEkcRRn1ZfTwUuQfwHWYCiOmcRKr2S4qsTA=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "thgml",
+            "first_name": "소희",
+            "last_name": "한",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 11,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$Xj4uKboYUUDQ1M2wzeB4aK$BAJKrjzuQgcc0TiePXe/jncEJboh6GSaiWNhPStXXMo=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "qudgjs",
+            "first_name": "병헌",
+            "last_name": "이",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 12,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$JdjQzfeBRgCELvLQomM07q$edaXzbuP34jDQhvLd4OlnYA8MWVheA90OPyLmtHXAdI=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "wotjr",
+            "first_name": "재석",
+            "last_name": "유",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 13,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$vz9OebXMeSRhlOJEIgFYsX$24S6IWL2qY+CdV5GonOBKzbnoO5Ss/mvxPFsekMoLRM=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "audtn",
+            "first_name": "명수",
+            "last_name": "박",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 14,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$ve63lQhOPhh2XJ6W0ZoDle$9UJ2/JOnCPfeK+tuCWf0fidVd53kE10Oy+y1mX4RAEI=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "gudehs",
+            "first_name": "형돈",
+            "last_name": "정",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 15,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$uHO5ggrAEqnj91sdeuaZR0$FBfP1381sz79r+vO2W/vG5Zoby4gqzNNj7NBQ7pMwEo=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "gowls",
+            "first_name": "해진",
+            "last_name": "유",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 16,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$DXzc09h7aumuU5Tjx4Xghz$Fzu9fABJEwLVHKN2/mRjn6e2snN5wKaww4zVKFBQY9A=",
+            "last_login": "2022-11-07T14:10:07.150Z",
+            "is_superuser": false,
+            "username": "tmddnjs",
+            "first_name": "승원",
+            "last_name": "차",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-11-07T05:54:59.808Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

@@ -1,0 +1,157 @@
+[
+    {
+        "model": "linklink.friendrequest",
+        "pk": 1,
+        "fields": {
+            "senderId": 1,
+            "getterId": 2,
+            "status": "Accepted",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 2,
+        "fields": {
+            "senderId": 5,
+            "getterId": 1,
+            "status": "Accepted",
+            "createdAt": "2022-11-03T06:04:22.493Z",
+            "updatedAt": "2022-11-03T07:46:42.691Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 3,
+        "fields": {
+            "senderId": 1,
+            "getterId": 8,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T06:47:23.853Z",
+            "updatedAt": "2022-11-05T06:47:23.853Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 4,
+        "fields": {
+            "senderId": 11,
+            "getterId": 1,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:38:12.929Z",
+            "updatedAt": "2022-11-05T12:38:12.929Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 5,
+        "fields": {
+            "senderId": 1,
+            "getterId": 14,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:16.226Z",
+            "updatedAt": "2022-11-05T12:44:16.226Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 6,
+        "fields": {
+            "senderId": 2,
+            "getterId": 3,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 7,
+        "fields": {
+            "senderId": 2,
+            "getterId": 4,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 8,
+        "fields": {
+            "senderId": 6,
+            "getterId": 5,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 9,
+        "fields": {
+            "senderId": 7,
+            "getterId": 5,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 10,
+        "fields": {
+            "senderId": 8,
+            "getterId": 9,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 11,
+        "fields": {
+            "senderId": 8,
+            "getterId": 10,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 12,
+        "fields": {
+            "senderId": 12,
+            "getterId": 11,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 13,
+        "fields": {
+            "senderId": 13,
+            "getterId": 11,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    },
+    {
+        "model": "linklink.friendrequest",
+        "pk": 14,
+        "fields": {
+            "senderId": 14,
+            "getterId": 15,
+            "status": "Accepted",
+            "createdAt": "2022-11-05T12:44:32.382Z",
+            "updatedAt": "2022-11-05T12:44:32.382Z"
+        }
+    }
+]
+    
