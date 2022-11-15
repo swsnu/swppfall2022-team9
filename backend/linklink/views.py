@@ -475,17 +475,8 @@ def other_profile(request, user_id):
             friend_list = list(set(onechon_list + twochon_list))
             if linklinkuser in friend_list:
                 # Construct Profile
-                try:
-                    profile_found = \
-                        Profile.objects.get(linklinkuser=linklinkuser)
-                except Profile.DoesNotExist:
-                    return JsonResponse(
-                        status=404,
-                        data={
-                            "message":
-                            f"Profile userId={user_id} not found."
-                        }
-                    )
+                profile_found = \
+                    Profile.objects.get(linklinkuser=linklinkuser)
                 response_dict = {}
                 response_dict["introduction"] = profile_found.introduction
                 response_dict["skillTags"] = []
@@ -533,6 +524,6 @@ def other_profile(request, user_id):
                 status=404,
                 data={
                     "message":
-                    "userId={user_id} not found."
+                    f"userId={user_id} not found."
                 }
             )

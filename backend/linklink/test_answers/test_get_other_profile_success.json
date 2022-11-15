@@ -1,0 +1,35 @@
+{
+    "introduction": "This is james",
+    "skillTags": [
+        {"name": "Frontend"},
+        {"name": "Backend"}
+    ],
+    "qualityTags": [
+        {"name": "Sincere"},
+        {"name": "Loyal"}
+    ],
+    "educations": [
+        {
+            "school": "SNU",
+            "major": "CSE",
+            "dateStart": "2018-03-12",
+            "dateEnd": "2022-04-12"
+        },
+        {   
+            "school": "MIT",
+            "major": "CSE",
+            "dateStart": "2013-03-12",
+            "dateEnd": "2019-04-12"
+        }
+    ],
+    "jobExperiences": [
+        {
+            "company": "Google",
+            "position": "CEO",
+            "dateStart": "2018-02-12",
+            "dateEnd": "2022-09-12"
+        }
+    ],
+    "imgUrl": "https://catimage.com",
+    "website": "jameswebsite.com"
+}
