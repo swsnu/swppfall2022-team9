@@ -386,7 +386,7 @@ class LinkLinkTestCase(TestCase):
 #   /api/user/friend Tests
 #--------------------------------------------------------------------------
 
-    def test_friend_general_success(self):
+    def test_get_friend_general_success(self):
         target_url = "/api/user/friend/"
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
@@ -452,7 +452,98 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_friend_general_success.json"
+            "test_get_friend_general_success.json"
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_friend_no_friend_success(self):
+        target_url = "/api/user/friend/"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200) # Successful GET
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "test_get_friend_no_friend_success.json"
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_friend_only_onechon_success(self):
+        target_url = "/api/user/friend/"
+        # Initialize Connection
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        will_linklinkuser = LinkLinkUser.objects.get(pk=4)
+        chris_linklinkuser = LinkLinkUser.objects.get(pk=5)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=will_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=chris_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=will_linklinkuser,
+            introduction="This is will",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=chris_linklinkuser,
+            introduction="This is chris",
+            imgUrl="https://catimage.com",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200) # Successful GET
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "test_get_friend_only_onechon_success.json"
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)

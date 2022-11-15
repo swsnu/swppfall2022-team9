@@ -13,6 +13,13 @@
                     "lastname": "Blunt",
                     "imgUrl": "https://catimage.com",
                     "isTwoChon": true
+                },
+                {
+                    "id": 5,
+                    "firstname": "Chris",
+                    "lastname": "Rock",
+                    "imgUrl": "https://catimage.com",
+                    "isTwoChon": true
                 }
             ]
         },
@@ -30,7 +37,15 @@
             "lastname": "Rock",
             "imgUrl": "https://catimage.com",
             "isTwoChon": false,
-            "chons": []
+            "chons": [
+                {
+                    "id": 2,
+                    "firstname": "James",
+                    "lastname": "Gunn",
+                    "imgUrl": "https://catimage.com",
+                    "isTwoChon": true
+                }
+            ]
         }
     ]
 }

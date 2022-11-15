@@ -324,20 +324,17 @@ def friend(request):
                 exclude_linklinkuser=request.user.linklinkuser
             )
             for twochon_linklinkuser in twochon_list:
-                # for linklinkuser who is both onechon AND twochon,
-                # count the user as onechon!
-                if twochon_linklinkuser not in onechon_list:
-                    # Construct twochon_dict
-                    twochon_dict = {}
-                    twochon_dict["id"] = twochon_linklinkuser.user.id
-                    twochon_dict["firstname"] = \
-                        twochon_linklinkuser.user.first_name
-                    twochon_dict["lastname"] = \
-                        twochon_linklinkuser.user.last_name
-                    twochon_dict["imgUrl"] = twochon_linklinkuser.profile.imgUrl
-                    twochon_dict["isTwoChon"] = True
-                    # Append constructed twochon_dict
-                    onechon_dict["chons"].append(twochon_dict)
+                # Construct twochon_dict
+                twochon_dict = {}
+                twochon_dict["id"] = twochon_linklinkuser.user.id
+                twochon_dict["firstname"] = \
+                    twochon_linklinkuser.user.first_name
+                twochon_dict["lastname"] = \
+                    twochon_linklinkuser.user.last_name
+                twochon_dict["imgUrl"] = twochon_linklinkuser.profile.imgUrl
+                twochon_dict["isTwoChon"] = True
+                # Append constructed twochon_dict
+                onechon_dict["chons"].append(twochon_dict)
             # Append constructed onechon_dict
             response_dict["friendList"].append(onechon_dict)
         return JsonResponse(response_dict) # implicit status code = 200
