@@ -1,9 +1,8 @@
-import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import { renderWithProviders } from "test-utils/mocks";
 import EvaluateQualityPage from "./EvaluateQualityPage";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
-import axios from "axios";
 import { fireEvent, screen, render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 const mockNavigate = jest.fn();
 
@@ -42,35 +41,65 @@ describe("<EvaluateQualityPage/>", () => {
     renderEvaluateQualityPage();
   });
 
+  it("tests dispatch", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({
+        qualityTags: [{ name: "tag" }, { name: "tag2" }],
+      }),
+    });
+    renderEvaluateQualityPage();
+  });
+
   it("tests add and submit button and delete", async () => {
     renderEvaluateQualityPage();
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "sincere" } });
     const select = screen.getByText("Sincere");
     fireEvent.click(select);
+
     const button = screen.getAllByRole("button");
-
     fireEvent.click(button[0]);
-    fireEvent.click(button[1]);
 
-    const close = screen.getByRole("close-icon");
+    const close = await waitFor(() => screen.getAllByRole("close-icon")[0]);
     fireEvent.click(close);
+    const submit = screen.getByText("제출");
+    fireEvent.click(submit);
   });
 
-  it("tests dispatch", async () => {
-    // axios.get = jest.fn().mockResolvedValue({
-    //   data: [
-    //     { value: "tag", label: "tag" },
-    //     { value: "tag1", label: "tag1" },
-    //   ],
-    // });
-    mockDispatch.mockReturnValue({
-      unwrap: () =>
-        Promise.resolve([
-          { value: "tag", label: "tag" },
-          { value: "tag2", label: "tag2" },
-        ]),
-    });
+  it("tests no-userId", async () => {
+    render(
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={<EvaluateQualityPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+  });
+
+  it("tests duplicate tag", async () => {
     renderEvaluateQualityPage();
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "sincere" } });
+    const select = screen.getByText("Sincere");
+    fireEvent.click(select);
+
+    const button = screen.getAllByRole("button");
+    fireEvent.click(button[0]);
+
+    fireEvent.change(input, { target: { value: "sincere" } });
+    const select2 = screen.getAllByText("Sincere")[1];
+    fireEvent.click(select2);
+    fireEvent.click(button[0]);
+  });
+
+  it("tests onFocus", async () => {
+    renderEvaluateQualityPage();
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "s" } });
+    userEvent.hover(screen.getByText("Honest"));
+    fireEvent.click(screen.getByText("Honest"));
+    await waitFor(() => screen.getByText("Honest"));
+    // this renders honest option
+    fireEvent.change(input, { target: { value: "s" } });
   });
 });
