@@ -488,10 +488,7 @@ class LinkLinkTestCase(TestCase):
         # GET
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 404)
-        error_message_dict = {
-            "message":
-            "Profile not found. Your profile is not created yet."
-        }
+        error_message_dict = {"message": "Profile userId=1 not found."}
         self.assertDictEqual(
             json.loads(response.content.decode()),
             error_message_dict
@@ -701,10 +698,7 @@ class LinkLinkTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 404)
-        error_message_dict = {
-            "message":
-            "Profile not found. Your profile is not created yet."
-        }
+        error_message_dict = {"message": "Profile userId=1 not found."}
         self.assertDictEqual(
             json.loads(response.content.decode()),
             error_message_dict
