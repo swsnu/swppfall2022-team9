@@ -143,6 +143,7 @@ class LinkLinkTestCase(TestCase):
         user_count = User.objects.count()
         linklinkuser_count = LinkLinkUser.objects.count()
         verification_count = Verification.objects.count()
+        profile_count = Profile.objects.count()
         # POST
         response = self.client.post(
             target_url,
@@ -157,16 +158,19 @@ class LinkLinkTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 201)
-        # Check Create User, LinkLinkUser, Verification
+        # Check Create User, LinkLinkUser, Verification, Profile
         self.assertTrue(User.objects.filter(id=user_count+1
             ).exists())
         self.assertTrue(LinkLinkUser.objects.filter(id=linklinkuser_count+1
             ).exists())
         self.assertTrue(Verification.objects.filter(id=verification_count+1
             ).exists())
+        self.assertTrue(Profile.objects.filter(id=profile_count+1
+            ).exists())
         new_user = User.objects.get(id=user_count+1)
         new_linklinkuser = LinkLinkUser.objects.get(id=linklinkuser_count+1)
         new_verification = Verification.objects.get(id=verification_count+1)
+        new_profile = Profile.objects.get(id=profile_count+1)
         self.assertNotEqual(new_user.username, "")
         # Check valid email form regex
         self.assertRegex(
@@ -181,6 +185,8 @@ class LinkLinkTestCase(TestCase):
             datetime.now().astimezone(timezone.get_default_timezone()),
             new_verification.expiresAt
         )
+        # Check new profile is correctly made
+        self.assertEqual(new_profile.introduction, "안녕하세요, carryjim입니다.")
         # Check email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
