@@ -181,7 +181,7 @@ def signup(request):
         expiresAt=expire_time
     )
     # Create Profile object
-    profile = Profile.objects.create(
+    Profile.objects.create(
         linklinkuser=linklinkuser,
         introduction=f"안녕하세요, {linklinkuser}입니다."
     )
@@ -350,7 +350,7 @@ def friend(request):
 #   LinkLinkUser Related APIs
 #--------------------------------------------------------------------------
 
-@allowed_method_or_405(["GET", "POST", "PUT"])
+@allowed_method_or_405(["GET", "PUT"])
 @logged_in_or_401
 def my_profile(request):
     if request.method == "GET":
@@ -396,61 +396,6 @@ def my_profile(request):
                     f"Profile userId={request.user.linklinkuser.id} not found."
                 }
             )
-    elif request.method == "POST":
-        # When user enters profile info and posts,
-        # 1. Create Profile object
-        # 2. Create Education objects
-        # 3. Create JobExperience objects
-        try:
-            req_data = json.loads(request.body.decode())
-            introduction = req_data["introduction"]
-            skill_tags = req_data["skillTags"]
-            educations = req_data["educations"]
-            job_experiences = req_data["jobExperiences"]
-            website = req_data["website"]
-            img_url = req_data["imgUrl"]
-        except (KeyError, JSONDecodeError) as e:
-            return HttpResponseBadRequest(e) # implicit status code = 400
-        # Create Profile Object
-        new_profile = Profile.objects.create(
-            linklinkuser=request.user.linklinkuser,
-            introduction=introduction,
-            website=website,
-            imgUrl=img_url
-        )
-        for skill_tag in skill_tags:
-            try:
-                skill_tag_instance = \
-                    SkillTag.objects.get(name=skill_tag["name"])
-                new_profile.skillTags.add(skill_tag_instance)
-            except SkillTag.DoesNotExist:
-                return JsonResponse(
-                    status=404,
-                    data={
-                        "message":
-                        f"SkillTag {skill_tag['name']} not found."
-                    }
-                )
-        # Create Education objects
-        for education in educations:
-            Education.objects.create(
-                profile=new_profile,
-                school=education["school"],
-                major=education["major"],
-                dateStart=education["dateStart"],
-                dateEnd=education["dateEnd"],
-            )
-        # Create JobExperience objects
-        for job_experience in job_experiences:
-            JobExperience.objects.create(
-                profile=new_profile,
-                company=job_experience["company"],
-                position=job_experience["position"],
-                dateStart=job_experience["dateStart"],
-                dateEnd=job_experience["dateEnd"],
-            )
-        new_profile.save()
-        return HttpResponse(status=201)
     elif request.method == "PUT": # pragma: no branch
         # When user enters profile info and puts,
         # 1. Find Profile object, if it exists
@@ -592,7 +537,8 @@ def other_profile(request, user_id):
                     job_experience_dict["dateEnd"] = job_experience.dateEnd
                     response_dict["jobExperiences"].append(job_experience_dict)
                 response_dict["website"] = profile_found.website
-                response_dict["imgUrl"] = profile_found.linklinkuser.profile.imgUrl
+                response_dict["imgUrl"] = \
+                    profile_found.linklinkuser.profile.imgUrl
                 return JsonResponse(
                     status=200,
                     data=response_dict
