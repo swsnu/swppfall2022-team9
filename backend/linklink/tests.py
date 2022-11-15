@@ -507,21 +507,6 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_get_profile_profile_not_found(self):
-        target_url = "/api/profile/"
-        # Login John
-        self.client.login(username="john", password="johnpassword")
-        # There is no profile for John
-        # GET
-        response = self.client.get(target_url)
-        self.assertEqual(response.status_code, 404)
-        error_message_dict = {"message": "Profile userId=1 not found."}
-        self.assertDictEqual(
-            json.loads(response.content.decode()),
-            error_message_dict
-        )
-
-
     def test_put_profile_success(self):
         target_url = "/api/profile/"
         # Login John
@@ -598,49 +583,6 @@ class LinkLinkTestCase(TestCase):
         self.assertDictEqual( # Expected response assert
             json.loads(response.content.decode()),
             expected_json
-        )
-
-
-    def test_put_profile_profile_not_found(self):
-        target_url = "/api/profile/"
-        # Login John
-        self.client.login(username="john", password="johnpassword")
-        # There is no profile for John
-        # PUT
-        response = self.client.put(
-            target_url,
-            {
-                "introduction": "This is john modified",
-                "skillTags": [
-                    {"name": "Frontend"}
-                ],
-                "educations": [
-                    {
-                        "school": "SNU2",
-                        "major": "CSE2",
-                        "dateStart": "2018-03-12",
-                        "dateEnd": "2022-04-12"
-                    }
-                ],
-                "jobExperiences": [
-                    {
-                        "company": "Google2",
-                        "position": "CEO2",
-                        "dateStart": "2018-02-12",
-                        "dateEnd": "2022-09-12"
-                    }
-                ],
-                "website": "modified@pr.com",
-                "imgUrl": "modifiedimage.com"
-            },
-            content_type="application/json",
-            HTTP_X_CSRFTOKEN=self.csrftoken
-        )
-        self.assertEqual(response.status_code, 404)
-        error_message_dict = {"message": "Profile userId=1 not found."}
-        self.assertDictEqual(
-            json.loads(response.content.decode()),
-            error_message_dict
         )
 
 

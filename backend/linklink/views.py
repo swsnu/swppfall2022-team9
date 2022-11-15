@@ -354,121 +354,99 @@ def friend(request):
 @logged_in_or_401
 def my_profile(request):
     if request.method == "GET":
-        # Get user's profile, if it exists
-        if Profile.objects.filter(
-                linklinkuser=request.user.linklinkuser
-            ).exists():
-            profile_found = \
-                Profile.objects.get(linklinkuser=request.user.linklinkuser)
-            # Construct Profile
-            response_dict = {}
-            response_dict["introduction"] = profile_found.introduction
-            response_dict["skillTags"] = []
-            for skill_tag in profile_found.skillTags.all():
-                response_dict["skillTags"].append({"name": skill_tag.name})
-            response_dict["educations"] = []
-            for education in profile_found.education_set.all():
-                education_dict = {}
-                education_dict["school"] = education.school
-                education_dict["major"] = education.major
-                education_dict["dateStart"] = education.dateStart
-                education_dict["dateEnd"] = education.dateEnd
-                response_dict["educations"].append(education_dict)
-            response_dict["jobExperiences"] = []
-            for job_experience in profile_found.jobexperience_set.all():
-                job_experience_dict = {}
-                job_experience_dict["company"] = job_experience.company
-                job_experience_dict["position"] = job_experience.position
-                job_experience_dict["dateStart"] = job_experience.dateStart
-                job_experience_dict["dateEnd"] = job_experience.dateEnd
-                response_dict["jobExperiences"].append(job_experience_dict)
-            response_dict["website"] = profile_found.website
-            response_dict["imgUrl"] = profile_found.linklinkuser.profile.imgUrl
-            return JsonResponse(
-                status=200,
-                data=response_dict
-            )
-        else:
-            return JsonResponse(
-                status=404,
-                data={
-                    "message":
-                    f"Profile userId={request.user.linklinkuser.id} not found."
-                }
-            )
+        # Get user's profile
+        profile_found = \
+            Profile.objects.get(linklinkuser=request.user.linklinkuser)
+        # Construct Profile
+        response_dict = {}
+        response_dict["introduction"] = profile_found.introduction
+        response_dict["skillTags"] = []
+        for skill_tag in profile_found.skillTags.all():
+            response_dict["skillTags"].append({"name": skill_tag.name})
+        response_dict["educations"] = []
+        for education in profile_found.education_set.all():
+            education_dict = {}
+            education_dict["school"] = education.school
+            education_dict["major"] = education.major
+            education_dict["dateStart"] = education.dateStart
+            education_dict["dateEnd"] = education.dateEnd
+            response_dict["educations"].append(education_dict)
+        response_dict["jobExperiences"] = []
+        for job_experience in profile_found.jobexperience_set.all():
+            job_experience_dict = {}
+            job_experience_dict["company"] = job_experience.company
+            job_experience_dict["position"] = job_experience.position
+            job_experience_dict["dateStart"] = job_experience.dateStart
+            job_experience_dict["dateEnd"] = job_experience.dateEnd
+            response_dict["jobExperiences"].append(job_experience_dict)
+        response_dict["website"] = profile_found.website
+        response_dict["imgUrl"] = profile_found.imgUrl
+        return JsonResponse(
+            status=200,
+            data=response_dict
+        )
     elif request.method == "PUT": # pragma: no branch
         # When user enters profile info and puts,
-        # 1. Find Profile object, if it exists
+        # 1. Find Profile object
         # 2. Construct new profile object and save
-        # Find Profile object, if it exists
-        if Profile.objects.filter(
-                linklinkuser=request.user.linklinkuser
-            ).exists():
-            profile_found = \
-                Profile.objects.get(linklinkuser=request.user.linklinkuser)
+        # Find Profile object
+        profile_found = \
+            Profile.objects.get(linklinkuser=request.user.linklinkuser)
+        try:
+            req_data = json.loads(request.body.decode())
+            introduction = req_data["introduction"]
+            skill_tags = req_data["skillTags"]
+            educations = req_data["educations"]
+            job_experiences = req_data["jobExperiences"]
+            website = req_data["website"]
+            img_url = req_data["imgUrl"]
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest(e) # implicit status code = 400
+        # Update simple fields
+        profile_found.introduction = introduction
+        profile_found.website = website
+        profile_found.imgUrl = img_url
+        # Update skillTags
+        profile_found.skillTags.clear()
+        for skill_tag in skill_tags:
             try:
-                req_data = json.loads(request.body.decode())
-                introduction = req_data["introduction"]
-                skill_tags = req_data["skillTags"]
-                educations = req_data["educations"]
-                job_experiences = req_data["jobExperiences"]
-                website = req_data["website"]
-                img_url = req_data["imgUrl"]
-            except (KeyError, JSONDecodeError) as e:
-                return HttpResponseBadRequest(e) # implicit status code = 400
-            # Update simple fields
-            profile_found.introduction = introduction
-            profile_found.website = website
-            profile_found.imgUrl = img_url
-            # Update skillTags
-            profile_found.skillTags.clear()
-            for skill_tag in skill_tags:
-                try:
-                    skill_tag_instance = \
-                        SkillTag.objects.get(name=skill_tag["name"])
-                    profile_found.skillTags.add(skill_tag_instance)
-                except SkillTag.DoesNotExist:
-                    return JsonResponse(
-                        status=404,
-                        data={
-                            "message":
-                            f"SkillTag {skill_tag['name']} not found."
-                        }
-                    )
-            # Update Education objects
-            profile_found.education_set.all().delete()
-            for education in educations:
-                Education.objects.create(
-                    profile=profile_found,
-                    school=education["school"],
-                    major=education["major"],
-                    dateStart=education["dateStart"],
-                    dateEnd=education["dateEnd"],
+                skill_tag_instance = \
+                    SkillTag.objects.get(name=skill_tag["name"])
+                profile_found.skillTags.add(skill_tag_instance)
+            except SkillTag.DoesNotExist:
+                return JsonResponse(
+                    status=404,
+                    data={
+                        "message":
+                        f"SkillTag {skill_tag['name']} not found."
+                    }
                 )
-            # Update JobExperience objects
-            profile_found.jobexperience_set.all().delete()
-            for job_experience in job_experiences:
-                JobExperience.objects.create(
-                    profile=profile_found,
-                    company=job_experience["company"],
-                    position=job_experience["position"],
-                    dateStart=job_experience["dateStart"],
-                    dateEnd=job_experience["dateEnd"],
-                )
-            # Save updated profile
-            profile_found.save()
-            return JsonResponse(
-                status=200,
-                data=req_data,
+        # Update Education objects
+        profile_found.education_set.all().delete()
+        for education in educations:
+            Education.objects.create(
+                profile=profile_found,
+                school=education["school"],
+                major=education["major"],
+                dateStart=education["dateStart"],
+                dateEnd=education["dateEnd"],
             )
-        else:
-            return JsonResponse(
-                status=404,
-                data={
-                    "message":
-                    f"Profile userId={request.user.linklinkuser.id} not found."
-                }
+        # Update JobExperience objects
+        profile_found.jobexperience_set.all().delete()
+        for job_experience in job_experiences:
+            JobExperience.objects.create(
+                profile=profile_found,
+                company=job_experience["company"],
+                position=job_experience["position"],
+                dateStart=job_experience["dateStart"],
+                dateEnd=job_experience["dateEnd"],
             )
+        # Save updated profile
+        profile_found.save()
+        return JsonResponse(
+            status=200,
+            data=req_data,
+        )
 
 
 @allowed_method_or_405(["GET"])
@@ -537,8 +515,7 @@ def other_profile(request, user_id):
                     job_experience_dict["dateEnd"] = job_experience.dateEnd
                     response_dict["jobExperiences"].append(job_experience_dict)
                 response_dict["website"] = profile_found.website
-                response_dict["imgUrl"] = \
-                    profile_found.linklinkuser.profile.imgUrl
+                response_dict["imgUrl"] = profile_found.imgUrl
                 return JsonResponse(
                     status=200,
                     data=response_dict
