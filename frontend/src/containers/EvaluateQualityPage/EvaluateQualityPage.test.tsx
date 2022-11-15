@@ -23,7 +23,7 @@ const renderEvaluateQualityPage = () => {
   return renderWithProviders(
     <MemoryRouter>
       <Routes>
-        <Route path="/:id" element={<EvaluateQualityPage />} />
+        <Route path="/:userId" element={<EvaluateQualityPage />} />
         <Route path="*" element={<Navigate to="/1" />} />
       </Routes>
     </MemoryRouter>,
@@ -57,13 +57,20 @@ describe("<EvaluateQualityPage/>", () => {
     fireEvent.click(close);
   });
 
-  it("tests useParams", async () => {
-    jest.mock("react-router-dom", () => ({
-      ...jest.requireActual("react-router-dom"),
-      useParams: () => ({
-        userId: 1,
-      }),
-    }));
+  it("tests dispatch", async () => {
+    // axios.get = jest.fn().mockResolvedValue({
+    //   data: [
+    //     { value: "tag", label: "tag" },
+    //     { value: "tag1", label: "tag1" },
+    //   ],
+    // });
+    mockDispatch.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve([
+          { value: "tag", label: "tag" },
+          { value: "tag2", label: "tag2" },
+        ]),
+    });
     renderEvaluateQualityPage();
   });
 });
