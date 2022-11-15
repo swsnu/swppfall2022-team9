@@ -127,6 +127,15 @@ class LinkLinkTestCase(TestCase):
         SkillTag.objects.create(
             name="DevOps"
         )
+        QualityTag.objects.create(
+            name="Sincere"
+        )
+        QualityTag.objects.create(
+            name="Loyal"
+        )
+        QualityTag.objects.create(
+            name="Intelligent"
+        )
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
         self.csrftoken = \
@@ -657,6 +666,100 @@ class LinkLinkTestCase(TestCase):
         error_message_dict = {
             "message":
             "SkillTag NONEXISTANT SKILL not found."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_get_other_profile_success(self):
+        target_url = "/api/profile/2/"
+        # Initialize Connection
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Create Profile of James
+        james_profile = Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            website="jameswebsite.com",
+            imgUrl="https://catimage.com",
+        )
+        james_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
+        james_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
+        james_profile.qualityTags.add(QualityTag.objects.get(name="Sincere"))
+        james_profile.qualityTags.add(QualityTag.objects.get(name="Loyal"))
+        Education.objects.create(
+            profile=james_profile,
+            school="SNU",
+            major="CSE",
+            dateStart="2018-03-12",
+            dateEnd="2022-04-12",
+        )
+        Education.objects.create(
+            profile=james_profile,
+            school="MIT",
+            major="CSE",
+            dateStart="2013-03-12",
+            dateEnd="2019-04-12",
+        )
+        JobExperience.objects.create(
+            profile=james_profile,
+            company="Google",
+            position="CEO",
+            dateStart="2018-02-12",
+            dateEnd="2022-09-12",
+        )
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "test_get_other_profile_success.json"
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertDictEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_other_profile_linklinkuser_not_found(self):
+        target_url = "/api/profile/1000/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message":
+            "userId=1000 not found."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_get_other_profile_read_permission_forbidden(self):
+        target_url = "/api/profile/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "No read permission for userId=2."
         }
         self.assertDictEqual(
             json.loads(response.content.decode()),
