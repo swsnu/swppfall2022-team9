@@ -145,7 +145,8 @@ def signup(request):
     1. Create django User object
     2. Create LinkLinkUser object with emailValidated=False
     3. Create Verification object
-    4. Send register email to linklinkuser.email_unique
+    4. Create Profile object
+    5. Send register email to linklinkuser.email_unique
     """
     try:
         req_data = json.loads(request.body.decode())
@@ -178,6 +179,11 @@ def signup(request):
         linklinkuser=linklinkuser,
         purpose="Register",
         expiresAt=expire_time
+    )
+    # Create Profile object
+    profile = Profile.objects.create(
+        linklinkuser=linklinkuser,
+        introduction=f"안녕하세요, {linklinkuser}입니다."
     )
     # Send register email to linklinkuser.email_unique
     send_register_email(
