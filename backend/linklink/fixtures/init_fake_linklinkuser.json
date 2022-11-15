@@ -1,0 +1,152 @@
+[
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "friendRequestToken": "e23b34ab-5983-47f5-9b6f-ec86486bea91",
+            "emailValidated": true,
+            "email_unique": "invalid1@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 2,
+        "fields": {
+            "user": 3,
+            "friendRequestToken": "42ee8c31-3248-475c-8d3d-0e7aa3ebd559",
+            "emailValidated": false,
+            "email_unique": "invalid2@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 3,
+        "fields": {
+            "user": 4,
+            "friendRequestToken": "bc1b0c18-fc88-44bd-b543-1887465462b8",
+            "emailValidated": false,
+            "email_unique": "invalid3@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 4,
+        "fields": {
+            "user": 5,
+            "friendRequestToken": "16a4971a-5cb9-46b8-813a-62304161e180",
+            "emailValidated": false,
+            "email_unique": "invalid4@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 5,
+        "fields": {
+            "user": 6,
+            "friendRequestToken": "d8d1b737-c28a-4b7e-ba3a-a04c3e3bb215",
+            "emailValidated": false,
+            "email_unique": "invalid5@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 6,
+        "fields": {
+            "user": 7,
+            "friendRequestToken": "3c14c6a2-6f80-4dd8-9495-83eddccf66f3",
+            "emailValidated": false,
+            "email_unique": "invalid6@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 7,
+        "fields": {
+            "user": 8,
+            "friendRequestToken": "75a477fb-bee7-48b1-915d-0fc1dc4bfd29",
+            "emailValidated": false,
+            "email_unique": "invalid7@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 8,
+        "fields": {
+            "user": 9,
+            "friendRequestToken": "2794749b-6012-4a1a-863c-4e89aa5cc0b3",
+            "emailValidated": false,
+            "email_unique": "invalid8@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 9,
+        "fields": {
+            "user": 10,
+            "friendRequestToken": "dfc2ed36-04ce-4ec3-891b-05f8454e4e98",
+            "emailValidated": false,
+            "email_unique": "invalid9@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 10,
+        "fields": {
+            "user": 11,
+            "friendRequestToken": "cce922b0-0ff6-436f-94aa-1d9cf266f89a",
+            "emailValidated": false,
+            "email_unique": "invalid10@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 11,
+        "fields": {
+            "user": 12,
+            "friendRequestToken": "1a968859-8873-4df9-9332-dafb93531b76",
+            "emailValidated": false,
+            "email_unique": "invalid11@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 12,
+        "fields": {
+            "user": 13,
+            "friendRequestToken": "37bc587e-cb63-4173-8dfb-93e52fe00958",
+            "emailValidated": false,
+            "email_unique": "invalid12@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 13,
+        "fields": {
+            "user": 14,
+            "friendRequestToken": "fcbc6909-22e1-45c0-ae44-f7f125fe66fa",
+            "emailValidated": false,
+            "email_unique": "invalid13@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 14,
+        "fields": {
+            "user": 15,
+            "friendRequestToken": "fa641491-9875-406c-870e-cdaa39ed205b",
+            "emailValidated": false,
+            "email_unique": "invalid14@snu.ac.kr"
+        }
+    },
+    {
+        "model": "linklink.linklinkuser",
+        "pk": 15,
+        "fields": {
+            "user": 16,
+            "friendRequestToken": "35f8557c-3334-484b-a9ce-72fc4ad5227e",
+            "emailValidated": false,
+            "email_unique": "invalid15@snu.ac.kr"
+        }
+    }
+]

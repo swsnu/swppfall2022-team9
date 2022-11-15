@@ -1,0 +1,35 @@
+[
+    {
+        "model": "linklink.verification",
+        "pk": 1,
+        "fields": {
+            "linklinkuser": 1,
+            "token": "96a88d67-4bf7-4d47-ae79-073bd34a6606",
+            "createdAt": "2022-11-03T05:54:34.324Z",
+            "expiresAt": "2022-11-03T05:54:31Z",
+            "purpose": "Register"
+        }
+    },
+    {
+        "model": "linklink.verification",
+        "pk": 2,
+        "fields": {
+            "linklinkuser": 2,
+            "token": "47a86d60-f27a-4af7-90c1-5c5975218cc9",
+            "createdAt": "2022-11-03T05:57:55.172Z",
+            "expiresAt": "2022-11-03T05:38:53Z",
+            "purpose": "Register"
+        }
+    },
+    {
+        "model": "linklink.verification",
+        "pk": 3,
+        "fields": {
+            "linklinkuser": 3,
+            "token": "a12fab77-67b4-4720-8180-fc6a0d56d5f8",
+            "createdAt": "2022-11-03T06:04:02.320Z",
+            "expiresAt": "2022-11-03T06:04:00Z",
+            "purpose": "Register"
+        }
+    }
+]
