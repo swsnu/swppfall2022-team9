@@ -137,10 +137,7 @@ class Profile(models.Model):
     """
     linklinkuser = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
     introduction = models.TextField()
-    imgUrl = models.CharField(
-        max_length=400,
-        default="https://catadoptionteam.org/wp-content/uploads/2021/07/Homepage-MiddleBox-768x512.jpg"
-    )
+    imgUrl = models.CharField(max_length=400,blank=True)
     website = models.CharField(max_length=100, blank=True)
     skillTags = models.ManyToManyField(SkillTag)
     qualityTags = models.ManyToManyField(QualityTag)
