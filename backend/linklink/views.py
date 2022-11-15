@@ -315,7 +315,7 @@ def friend(request):
             onechon_dict["id"] = onechon_linklinkuser.user.id
             onechon_dict["firstname"] = onechon_linklinkuser.user.first_name
             onechon_dict["lastname"] = onechon_linklinkuser.user.last_name
-            onechon_dict["imgUrl"] = onechon_linklinkuser.imgUrl
+            onechon_dict["imgUrl"] = onechon_linklinkuser.profile.imgUrl
             onechon_dict["isTwoChon"] = False
             onechon_dict["chons"] = []
             twochon_list = get_onechon_linklinkuser_list(
@@ -334,7 +334,7 @@ def friend(request):
                         twochon_linklinkuser.user.first_name
                     twochon_dict["lastname"] = \
                         twochon_linklinkuser.user.last_name
-                    twochon_dict["imgUrl"] = twochon_linklinkuser.imgUrl
+                    twochon_dict["imgUrl"] = twochon_linklinkuser.profile.imgUrl
                     twochon_dict["isTwoChon"] = True
                     # Append constructed twochon_dict
                     onechon_dict["chons"].append(twochon_dict)
@@ -383,7 +383,7 @@ def my_profile(request):
                 job_experience_dict["dateEnd"] = job_experience.dateEnd
                 response_dict["jobExperiences"].append(job_experience_dict)
             response_dict["website"] = profile_found.website
-            response_dict["imgUrl"] = profile_found.linklinkuser.imgUrl
+            response_dict["imgUrl"] = profile_found.linklinkuser.profile.imgUrl
             return JsonResponse(
                 status=200,
                 data=response_dict
@@ -399,9 +399,8 @@ def my_profile(request):
     elif request.method == "POST":
         # When user enters profile info and posts,
         # 1. Create Profile object
-        # 2. Update imgUrl of LinkLinkUser
-        # 3. Create Education objects
-        # 4. Create JobExperience objects
+        # 2. Create Education objects
+        # 3. Create JobExperience objects
         try:
             req_data = json.loads(request.body.decode())
             introduction = req_data["introduction"]
@@ -417,6 +416,7 @@ def my_profile(request):
             linklinkuser=request.user.linklinkuser,
             introduction=introduction,
             website=website,
+            imgUrl=img_url
         )
         for skill_tag in skill_tags:
             try:
@@ -431,10 +431,6 @@ def my_profile(request):
                         f"SkillTag {skill_tag['name']} not found."
                     }
                 )
-        # Update imgUrl of LinkLinkUser
-        linklinkuser = request.user.linklinkuser
-        linklinkuser.imgUrl = img_url
-        linklinkuser.save()
         # Create Education objects
         for education in educations:
             Education.objects.create(
@@ -478,10 +474,7 @@ def my_profile(request):
             # Update simple fields
             profile_found.introduction = introduction
             profile_found.website = website
-            # Update imgUrl of LinkLinkUser
-            linklinkuser = request.user.linklinkuser
-            linklinkuser.imgUrl = img_url
-            linklinkuser.save()
+            profile_found.imgUrl = img_url
             # Update skillTags
             profile_found.skillTags.clear()
             for skill_tag in skill_tags:
@@ -599,7 +592,7 @@ def other_profile(request, user_id):
                     job_experience_dict["dateEnd"] = job_experience.dateEnd
                     response_dict["jobExperiences"].append(job_experience_dict)
                 response_dict["website"] = profile_found.website
-                response_dict["imgUrl"] = profile_found.linklinkuser.imgUrl
+                response_dict["imgUrl"] = profile_found.linklinkuser.profile.imgUrl
                 return JsonResponse(
                     status=200,
                     data=response_dict

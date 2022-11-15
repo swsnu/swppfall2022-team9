@@ -68,31 +68,26 @@ class LinkLinkTestCase(TestCase):
         john_linklinkuser = LinkLinkUser.objects.create(
             user=john,
             emailValidated=False,
-            imgUrl = "https://catimage.com",
             email_unique="notiona@snu.ac.kr",
         )
         james_linklinkuser = LinkLinkUser.objects.create(
             user=james,
             emailValidated=False,
-            imgUrl = "https://catimage.com",
             email_unique="invalid_but_unique1@snu.ac.kr",
         )
         emily_linklinkuser = LinkLinkUser.objects.create(
             user=emily,
             emailValidated=False,
-            imgUrl = "https://catimage.com",
             email_unique="invalid_but_unique2@snu.ac.kr",
         )
         will_linklinkuser = LinkLinkUser.objects.create(
             user=will,
             emailValidated=False,
-            imgUrl = "https://catimage.com",
             email_unique="invalid_but_unique3@snu.ac.kr",
         )
         chris_linklinkuser = LinkLinkUser.objects.create(
             user=chris,
             emailValidated=False,
-            imgUrl = "https://catimage.com",
             email_unique="invalid_but_unique4@snu.ac.kr",
         )
         expire_time = \
@@ -409,6 +404,31 @@ class LinkLinkTestCase(TestCase):
             getterId=james_linklinkuser,
             status="Accepted",
         )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=will_linklinkuser,
+            introduction="This is will",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=chris_linklinkuser,
+            introduction="This is chris",
+            imgUrl="https://catimage.com",
+        )
         # Login John
         response = self.client.login(username="john", password="johnpassword")
         # GET
@@ -440,6 +460,7 @@ class LinkLinkTestCase(TestCase):
             linklinkuser=john_linklinkuser,
             introduction="This is john",
             website="johnwebsite.com",
+            imgUrl="https://catimage.com",
         )
         john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
         john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
@@ -594,6 +615,7 @@ class LinkLinkTestCase(TestCase):
             linklinkuser=john_linklinkuser,
             introduction="This is john",
             website="johnwebsite.com",
+            imgUrl="https://catimage.com",
         )
         john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
         john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
@@ -715,6 +737,7 @@ class LinkLinkTestCase(TestCase):
             linklinkuser=john_linklinkuser,
             introduction="This is john",
             website="johnwebsite.com",
+            imgUrl="https://catimage.com",
         )
         john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
         john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
@@ -918,6 +941,7 @@ class LinkLinkTestCase(TestCase):
             linklinkuser=john_linklinkuser,
             introduction="This is john",
             website="johnwebsite.com",
+            imgUrl="https://catimage.com",
         )
         john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
         john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
