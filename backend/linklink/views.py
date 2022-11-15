@@ -208,7 +208,7 @@ def signin(request):
         if user.linklinkuser.emailValidated:
             login(request, user)
             response_dict = {
-                "id": user.id,
+                "id": user.linklinkuser.id,
                 "email": user.linklinkuser.email_unique,
                 "username": user.username,
                 "firstname": user.first_name,
@@ -387,7 +387,7 @@ def my_profile(request):
                 status=404,
                 data={
                     "message":
-                    "Profile not found. Your profile is not created yet."
+                    f"Profile userId={request.user.linklinkuser.id} not found."
                 }
             )
     elif request.method == "POST":
@@ -522,7 +522,7 @@ def my_profile(request):
                 status=404,
                 data={
                     "message":
-                    "Profile not found. Your profile is not created yet."
+                    f"Profile userId={request.user.linklinkuser.id} not found."
                 }
             )
 
@@ -537,11 +537,75 @@ def other_profile(request, user_id):
             all_accepted_friend_requests = FriendRequest.objects.filter(
                 status="Accepted"
             )
-            # Get onechon of current user
+            # Get onechon, twochon of current user
             onechon_list = get_onechon_linklinkuser_list(
                 all_accepted_friend_requests,
                 request.user.linklinkuser
             )
+            twochon_list = []
+            for onechon_linklinkuser in onechon_list:
+                twochon_list.extend(get_onechon_linklinkuser_list(
+                    all_accepted_friend_requests,
+                    onechon_linklinkuser,
+                    exclude_linklinkuser=request.user.linklinkuser
+                ))
+            # remove duplicates and extend onechon & twochon
+            friend_list = list(set(onechon_list + twochon_list))
+            if linklinkuser in friend_list:
+                # Construct Profile
+                try:
+                    profile_found = \
+                        Profile.objects.get(linklinkuser=linklinkuser)
+                except Profile.DoesNotExist:
+                    return JsonResponse(
+                        status=404,
+                        data={
+                            "message":
+                            f"Profile userId={user_id} not found."
+                        }
+                    )
+                response_dict = {}
+                response_dict["introduction"] = profile_found.introduction
+                response_dict["skillTags"] = []
+                for skill_tag in profile_found.skillTags.all():
+                    response_dict["skillTags"].append(
+                        {"name": skill_tag.name}
+                    )
+                response_dict["qualityTags"] = []
+                for quality_tag in profile_found.qualityTags.all():
+                    response_dict["qualityTags"].append(
+                        {"name": quality_tag.name}
+                    )
+                response_dict["educations"] = []
+                for education in profile_found.education_set.all():
+                    education_dict = {}
+                    education_dict["school"] = education.school
+                    education_dict["major"] = education.major
+                    education_dict["dateStart"] = education.dateStart
+                    education_dict["dateEnd"] = education.dateEnd
+                    response_dict["educations"].append(education_dict)
+                response_dict["jobExperiences"] = []
+                for job_experience in profile_found.jobexperience_set.all():
+                    job_experience_dict = {}
+                    job_experience_dict["company"] = job_experience.company
+                    job_experience_dict["position"] = job_experience.position
+                    job_experience_dict["dateStart"] = job_experience.dateStart
+                    job_experience_dict["dateEnd"] = job_experience.dateEnd
+                    response_dict["jobExperiences"].append(job_experience_dict)
+                response_dict["website"] = profile_found.website
+                response_dict["imgUrl"] = profile_found.linklinkuser.imgUrl
+                return JsonResponse(
+                    status=200,
+                    data=response_dict
+                )
+            else:
+                return JsonResponse(
+                    status=403,
+                    data={
+                        "message":
+                        f"No read permission for userId={user_id}."
+                    }
+                )
         else:
             return JsonResponse(
                 status=404,
