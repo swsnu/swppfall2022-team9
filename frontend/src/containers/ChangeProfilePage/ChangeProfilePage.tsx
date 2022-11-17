@@ -186,6 +186,7 @@ const ChangeProfilePage: React.FC = () => {
                     onClick={() => {
                       onDeleteSkillTag(tag.name);
                     }}
+                    role="cancel"
                   />
                   <FormStyles.BubbleText>{tag.name}</FormStyles.BubbleText>
                 </FormStyles.Bubble>
@@ -260,6 +261,7 @@ const ChangeProfilePage: React.FC = () => {
           <FormStyles.Label>
             <FormStyles.InputContainer>
               <FormStyles.Input
+              role="website"
                 onChange={e => {
                   setProfile(prev => ({ ...prev, website: e.target.value }));
                 }}
@@ -271,6 +273,7 @@ const ChangeProfilePage: React.FC = () => {
           </CreateProfileLabel>
           <FormStyles.Label>
             <FormStyles.TextArea
+              role="introduction"
               onChange={e => {
                 setProfile(prev => ({ ...prev, introduction: e.target.value }));
               }}
