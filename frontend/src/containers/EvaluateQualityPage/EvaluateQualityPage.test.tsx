@@ -54,11 +54,13 @@ describe("<EvaluateQualityPage/>", () => {
   });
 
   it("tests add and submit button and delete", async () => {
-    mockDispatch.mockReturnValueOnce({
-      unwrap: () => ({}),
-    }).mockReturnValueOnce({
-      unwrap: () => ({}),
-    });
+    mockDispatch
+      .mockReturnValueOnce({
+        unwrap: () => ({}),
+      })
+      .mockReturnValueOnce({
+        unwrap: () => ({}),
+      });
     renderEvaluateQualityPage();
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "sincere" } });
