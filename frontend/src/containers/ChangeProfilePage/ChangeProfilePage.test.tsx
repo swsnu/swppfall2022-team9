@@ -28,7 +28,9 @@ const mockFileUpload = jest.fn();
 
 jest.mock("use-file-upload", () => ({
   ...jest.requireActual("use-file-upload"),
-  useFileUpload: () => {return [null, mockFileUpload]}
+  useFileUpload: () => {
+    return [null, mockFileUpload];
+  },
 }));
 
 const renderChangeProfilePage = (
@@ -88,21 +90,21 @@ describe("<ChangeProfilePage/>", () => {
   it("tests onDeleteSkillTag", async () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({
-        profile: {...profileStub},
+        profile: { ...profileStub },
       }),
     });
     renderChangeProfilePage(usersStub[0], alertProviderProps);
     const input = screen.getAllByRole("textbox")[0];
-    fireEvent.change(input, {target: {value: "hi"}})
+    fireEvent.change(input, { target: { value: "hi" } });
     const changeButton = screen.getAllByText("추가")[0];
     fireEvent.click(changeButton);
     const cancelButton = screen.getByRole("cancel");
     fireEvent.click(cancelButton);
   });
-  it("tests onAddEducation and onDeleteEducation", async () =>{
+  it("tests onAddEducation and onDeleteEducation", async () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({
-        profile: {...profileStub},
+        profile: { ...profileStub },
       }),
     });
     renderChangeProfilePage(usersStub[0], alertProviderProps);
@@ -112,17 +114,17 @@ describe("<ChangeProfilePage/>", () => {
     fireEvent.change(dateEnd, { target: { value: "2021-10-25" } });
     const inputSchool = screen.getAllByRole("textbox")[1];
     const inputMajor = screen.getAllByRole("textbox")[2];
-    fireEvent.change(inputSchool, {target: {value: "snu"}})
-    fireEvent.change(inputMajor, {target:{value:"cse"}});
+    fireEvent.change(inputSchool, { target: { value: "snu" } });
+    fireEvent.change(inputMajor, { target: { value: "cse" } });
     const addButton = screen.getAllByText("추가")[1];
-    fireEvent.click(addButton)
+    fireEvent.click(addButton);
     const cancelButton = screen.getByRole("cancel");
     fireEvent.click(cancelButton);
-  })
-  it("tests onAddJob and onDeleteJob", async () =>{
+  });
+  it("tests onAddJob and onDeleteJob", async () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({
-        profile: {...profileStub},
+        profile: { ...profileStub },
       }),
     });
     renderChangeProfilePage(usersStub[0], alertProviderProps);
@@ -132,24 +134,24 @@ describe("<ChangeProfilePage/>", () => {
     fireEvent.change(dateEnd, { target: { value: "2021-10-25" } });
     const inputSchool = screen.getAllByRole("textbox")[3];
     const inputMajor = screen.getAllByRole("textbox")[4];
-    fireEvent.change(inputSchool, {target: {value: "snu"}})
-    fireEvent.change(inputMajor, {target:{value:"cse"}});
+    fireEvent.change(inputSchool, { target: { value: "snu" } });
+    fireEvent.change(inputMajor, { target: { value: "cse" } });
     const addButton = screen.getAllByText("추가")[2];
-    fireEvent.click(addButton)
+    fireEvent.click(addButton);
     const cancelButton = screen.getByRole("cancel");
     fireEvent.click(cancelButton);
-  })
+  });
   it("tests website and introduction input", async () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({
-        profile: {...profileStub},
+        profile: { ...profileStub },
       }),
     });
     renderChangeProfilePage(usersStub[0], alertProviderProps);
     const websiteInput = screen.getByRole("website");
     const introInput = screen.getByRole("introduction");
-    fireEvent.change(websiteInput, {target: {value: "hi"}})
-    fireEvent.change(introInput, {target: {value: "hi"}})
+    fireEvent.change(websiteInput, { target: { value: "hi" } });
+    fireEvent.change(introInput, { target: { value: "hi" } });
   });
   // it("tests img upload", async () => {
   //   mockDispatch.mockReturnValue({
