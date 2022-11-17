@@ -74,10 +74,6 @@ describe("<ChangeProfilePage/>", () => {
     });
     renderChangeProfilePage(usersStub[0], alertProviderProps);
     const buttons = screen.getAllByRole("button");
-    // fireEvent.click(buttons[0]);
-    // fireEvent.click(buttons[1]);
-    // fireEvent.click(buttons[2]);
-    // fireEvent.click(buttons[3]);
     fireEvent.click(buttons[4]);
   });
 
@@ -155,18 +151,14 @@ describe("<ChangeProfilePage/>", () => {
     fireEvent.change(websiteInput, {target: {value: "hi"}})
     fireEvent.change(introInput, {target: {value: "hi"}})
   });
-  it("tests img upload", async () => {
-    mockDispatch.mockReturnValue({
-      unwrap: () => ({
-        profile: {...profileStub},
-      }),
-    });
-    mockFileUpload.mockImplementation(() => {
-      
-    })
-    renderChangeProfilePage(usersStub[0], alertProviderProps);
-    const uploadButton = screen.getAllByRole("button")[0];
-    fireEvent.click(uploadButton);
-
-  })
+  // it("tests img upload", async () => {
+  //   mockDispatch.mockReturnValue({
+  //     unwrap: () => ({
+  //       profile: {...profileStub},
+  //     }),
+  //   });
+  //   renderChangeProfilePage(usersStub[0], alertProviderProps);
+  //   const uploadButton = screen.getAllByRole("button")[0];
+  //   fireEvent.click(uploadButton);
+  // })
 });
