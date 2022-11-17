@@ -61,10 +61,6 @@ const ExperienceInput: React.FC<Props> = ({
       alert.open({ message: "시작일이 종료일보다 늦을 수 없습니다." });
       return;
     }
-    if (!bubbleInfo.dateStart) {
-      alert.open({ message: "시작일을 입력해주세요." });
-      return;
-    }
     onAddBubble(bubbleInfo);
     setBubbleInfo({
       name: "",
@@ -82,6 +78,7 @@ const ExperienceInput: React.FC<Props> = ({
           {bubbles.map((tag, index) => (
             <FormStyles.Bubble key={index}>
               <FormStyles.BubbleCancelButton
+                role="cancel"
                 onClick={() => {
                   onDeleteBubble(tag);
                 }}
