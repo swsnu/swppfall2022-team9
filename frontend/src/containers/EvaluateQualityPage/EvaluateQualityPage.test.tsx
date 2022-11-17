@@ -38,6 +38,9 @@ describe("<EvaluateQualityPage/>", () => {
   });
 
   it("renders EvaluateQualityPage", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({}),
+    });
     renderEvaluateQualityPage();
   });
 
@@ -51,6 +54,11 @@ describe("<EvaluateQualityPage/>", () => {
   });
 
   it("tests add and submit button and delete", async () => {
+    mockDispatch.mockReturnValueOnce({
+      unwrap: () => ({}),
+    }).mockReturnValueOnce({
+      unwrap: () => ({}),
+    });
     renderEvaluateQualityPage();
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "sincere" } });
@@ -67,6 +75,9 @@ describe("<EvaluateQualityPage/>", () => {
   });
 
   it("tests no-userId", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({}),
+    });
     render(
       <MemoryRouter>
         <Routes>
@@ -77,6 +88,9 @@ describe("<EvaluateQualityPage/>", () => {
   });
 
   it("tests duplicate tag", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({}),
+    });
     renderEvaluateQualityPage();
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "sincere" } });
@@ -93,6 +107,9 @@ describe("<EvaluateQualityPage/>", () => {
   });
 
   it("tests onFocus", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({}),
+    });
     renderEvaluateQualityPage();
     const input = screen.getByRole("combobox");
     fireEvent.change(input, { target: { value: "s" } });
