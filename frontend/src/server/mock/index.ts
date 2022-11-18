@@ -9,6 +9,7 @@ import FileSync from "lowdb/adapters/FileSync";
 import applyAuthApi from "./auth";
 import applyFriendRequestApi from "./friendRequests";
 import { Profile } from "../models/profile.model";
+import applyProfileApi from "./profile";
 
 export interface Schema {
   users: Array<User>;
@@ -34,6 +35,9 @@ applyAuthApi(server, db);
 
 // DESC: applyFriendRequestApi
 applyFriendRequestApi(server, db);
+
+// DESC: applyProfileApi
+applyProfileApi(server, db);
 
 server.use(router);
 
