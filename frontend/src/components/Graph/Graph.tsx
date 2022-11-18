@@ -1,3 +1,4 @@
+import SearchBar from "components/SearchBar/SearchBar";
 import React, { useEffect, useRef } from "react";
 import { useAppSelector } from "store/hooks";
 import useCanvas from "./hooks/useCanvas";
@@ -11,20 +12,27 @@ const Graph: React.FC<Props> = () => {
   const divRef = useRef<HTMLDivElement>(null);
   const canvas = useCanvas({ divRef: divRef, canvasRef: canvasRef });
   const users = useAppSelector(state => state.users);
+  const search = useAppSelector(state => state.search);
   const currentUser = users.currentUser;
   const friendList = users.friendList;
+  const isSearchMode = search.isSearchMode;
+  const searchWord = search.searchWord;
+  const filteredFriendList = search.filteredFriendList;
   useEffect(() => {
     if (currentUser && canvas) {
       canvas.setCurrentUserNode(currentUser);
-      if (friendList.length > 0) {
+      if (isSearchMode && searchWord != "") {
+        canvas.setOneChonNodes(filteredFriendList);
+      } else {
         canvas.setOneChonNodes(friendList);
       }
       canvas.render();
     }
-  }, [currentUser, friendList, canvas]);
+  }, [currentUser, friendList, isSearchMode, filteredFriendList, canvas]);
 
   return (
     <S.CanvasContainer ref={divRef}>
+      {isSearchMode && <SearchBar />}
       <canvas ref={canvasRef} />
     </S.CanvasContainer>
   );

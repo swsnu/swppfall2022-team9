@@ -48,7 +48,9 @@ export class Canvas {
 
   private currentUserNodeRadius = (NODE_RADIUS * 5) / 4;
 
-  private chonNodes?: OneChonNode[];
+  private oneChonNodes?: OneChonNode[];
+
+  private EDGE_WIDTH = 3;
 
   private EDGE_LENGTH = 28;
 
@@ -261,9 +263,11 @@ export class Canvas {
 
   setCurrentUserNode(currentUser: User) {
     this.currentUserNode = new UserNode(
+      0,
       "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw",
       currentUser.lastname + currentUser.firstname,
       { x: 0, y: 0 },
+      false,
       this.currentUserNodeRadius,
     );
     this.currentUserNode.imgElement.onload = () => {
@@ -272,6 +276,10 @@ export class Canvas {
   }
 
   setOneChonNodes(friendList: OneChonInfo[]) {
+    if (friendList.length == 0) {
+      this.oneChonNodes = undefined;
+      return;
+    }
     const oneChonCount = friendList.length;
     const twoChonCount = friendList.map(oneChon => oneChon.chons.length);
     const coords = getOneAndTwoChonCoordinates(
@@ -280,12 +288,14 @@ export class Canvas {
       this.EDGE_LENGTH,
     );
 
-    this.chonNodes = friendList.map((oneChon, oneChonIdx) => {
+    this.oneChonNodes = friendList.map((oneChon, oneChonIdx) => {
       const twoChonNodes = oneChon.chons.map((twoChon, twoChonIdx) => {
         const twoChonNode = new UserNode(
+          twoChon.id,
           twoChon.imgUrl,
           twoChon.lastname + twoChon.firstname,
           coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
+          twoChon.isNotFiltered,
         );
         twoChonNode.imgElement.onload = () => {
           this.render();
@@ -294,10 +304,12 @@ export class Canvas {
       });
 
       const oneChonNode = new OneChonNode(
+        oneChon.id,
         oneChon.imgUrl,
         oneChon.lastname + oneChon.firstname,
         coords[oneChonIdx].userCoord,
         twoChonNodes,
+        oneChon.isNotFiltered,
       );
       oneChonNode.imgElement.onload = () => {
         this.render();
@@ -338,7 +350,7 @@ export class Canvas {
 
   drawGraph() {
     if (this.currentUserNode) {
-      this.chonNodes?.forEach(oneChonNode => {
+      this.oneChonNodes?.forEach(oneChonNode => {
         const [edgeFromCurrentUser, edgeToOneChon] = getEdgeCoords(
           this.currentUserNode!.coord,
           oneChonNode.coord,
@@ -378,6 +390,10 @@ export class Canvas {
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
     ctx.clip();
     ctx.closePath();
+
+    if (userNode.isNotFiltered) {
+      ctx.filter = "opacity(30%)";
+    }
     ctx.drawImage(
       userNode.imgElement,
       centerX - scaledRadius,
@@ -414,7 +430,7 @@ export class Canvas {
     );
 
     ctx.save();
-    ctx.lineWidth = 2;
+    ctx.lineWidth = this.EDGE_WIDTH;
     if (chon == 2) {
       ctx.setLineDash([4, 2]); // Dashline from 1-chons to 2-chons
     }

@@ -3,6 +3,7 @@ export interface TwoChonInfo {
   firstname: string;
   lastname: string;
   imgUrl: string;
+  isNotFiltered?: boolean;
 }
 
 export interface OneChonInfo extends TwoChonInfo {
