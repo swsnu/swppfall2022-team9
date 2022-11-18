@@ -5,6 +5,7 @@ import { Application } from "express";
 
 import low from "lowdb";
 import { Schema } from ".";
+import { GetProfileResDto } from "../dto/profile/profile.res.dto";
 
 export default function applyProfileApi(
   server: Application,
@@ -17,6 +18,18 @@ export default function applyProfileApi(
         .get("profiles")
         .push({ ...req.body })
         .write();
+    },
+  );
+
+  server.get<{ userId: number }, GetProfileResDto>(
+    "/api/profile/:userId/",
+    async (req, res) => {
+      const profile = db.get("profiles").findLast().value();
+      if (!profile) {
+        res.status(404).json();
+      } else {
+        res.status(200).json(profile);
+      }
     },
   );
 }
