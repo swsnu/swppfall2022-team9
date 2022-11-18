@@ -25,6 +25,17 @@ const initialState: UserState = {
   friendList: [],
 };
 
+// DESC: this is for checking if user is logged in
+export const getSessionCookie = createAsyncThunk<void>(
+  "users/getSessionCookie",
+  //you can test with swpp@snu.ac.kr
+  async (_, { dispatch }) => {
+    const response = (await axios.get<PostSignInResDto>("/api/auth/session/"))
+      .data;
+    dispatch(userActions.setCurrentUser(response));
+  },
+);
+
 export const postSignIn = createAsyncThunk<void, PostSignInDto>(
   "users/postSignIn",
   //you can test with swpp@snu.ac.kr
