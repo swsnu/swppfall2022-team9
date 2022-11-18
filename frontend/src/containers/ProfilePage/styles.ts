@@ -37,6 +37,8 @@ export const ProfileActionButtonsContainer = styled.div`
 
 export const ProfileActionButton = styled.button<{ backgroundColor: string }>`
   background: none;
+  border-radius: 5px;
+  cursor: pointer;
   border: none;
   margin: 5px 0;
   min-width: 130px;

@@ -30,6 +30,11 @@ const ProfileFriendItem: React.FC<Props> = ({
     website: "",
     imgUrl: "",
   });
+
+  const onClickFriend = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    navigate(`/profile/${friend.id}`);
+  };
   const getFriendProfile = async (id: number) => {
     try {
       const response = await dispatch(
@@ -53,7 +58,7 @@ const ProfileFriendItem: React.FC<Props> = ({
   }, []);
 
   return (
-    <S.ListItemContainer>
+    <S.ListItemContainer onClick={onClickFriend}>
       <S.ImageContainer imgUrl={friend.imgUrl} />
       <S.Name>{friend.lastname + friend.firstname}</S.Name>
       <S.InfoContainer>
