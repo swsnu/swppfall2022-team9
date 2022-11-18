@@ -8,8 +8,6 @@ import * as S from "./styles";
 interface Props {}
 
 const HomePage: React.FC<Props> = () => {
-  // WARNING! This is a hack to make the graph work
-  // it should later be erased
   const dispatch = useAppDispatch();
   const users = useAppSelector(state => state.users);
   const currentUser = users.currentUser;

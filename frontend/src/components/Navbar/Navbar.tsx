@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { FriendRequestStatus } from "server/models/friendRequests.model";
 import useHandleClickOutside from "hooks/useHandleClickOutside";
+import { searchActions } from "store/slices/search";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
@@ -62,7 +63,7 @@ const Navbar: React.FC<Props> = () => {
 
   // TODO: search click should render a search bar in the canvas!!
   const onClickSearch = () => {
-    console.log("search");
+    dispatch(searchActions.toggleSearchMode());
   };
 
   useHandleClickOutside({
