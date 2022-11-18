@@ -16,6 +16,16 @@ export default function applyAuthApi(
   server: Application,
   db: low.LowdbSync<Schema>,
 ) {
+  server.get("/api/auth/session/", async (req, res) => {
+    const username = "swpp";
+    const user = db.get("users").find({ username }).value();
+    if (!user) {
+      res.status(404).json(user);
+    } else {
+      res.status(200).json(user);
+    }
+  });
+
   server.post<unknown, PostSignInResDto, PostSignInDto>(
     "/api/auth/signin/",
     async (req, res) => {

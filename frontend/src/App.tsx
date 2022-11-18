@@ -13,11 +13,20 @@ import AuthenticatedChangePasswordPage from "containers/AuthenticatedChangePassw
 import EvaluateQualityPage from "containers/EvaluateQualityPage/EvaluateQualityPage";
 import ChangeProfilePage from "containers/ChangeProfilePage/ChangeProfilePage";
 import ProfilePage from "containers/ProfilePage/ProfilePage";
+import { useEffect } from "react";
+import { useAppDispatch } from "store/hooks";
+import { getSessionCookie } from "store/slices/users";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 const App = () => {
+  // DESC: For now I have implemented login session get request
+  // in App.tsx. It may be better to move this to AuthWrapper later
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getSessionCookie());
+  }, []);
   return (
     <div className="App">
       <BrowserRouter>

@@ -16,18 +16,19 @@ import { Application } from "express";
 import low from "lowdb";
 import { Schema } from ".";
 
-export default function applyAuthApi(
+export default function applyUserApi(
   server: Application,
   db: low.LowdbSync<Schema>,
 ) {
   server.get<unknown, GetFriendListResDto, unknown>(
-    "/api/user/onechon/",
+    "/api/user/friend/",
     async (req, res) => {
-      const friendList = db.get("freindList").value();
+      const friendList = db.get("friendList").value();
+      console.log(friendList);
       if (!friendList) {
-        res.status(404).json(friendList);
+        res.status(404).json({ friendList });
       } else {
-        res.status(200).json(friendList);
+        res.status(200).json({ friendList });
       }
     },
   );

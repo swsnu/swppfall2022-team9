@@ -43,10 +43,18 @@ export const getMyProfile = createAsyncThunk<GetProfileResDto, void>(
 export const getFriendProfile = createAsyncThunk<GetProfileResDto, number>(
   "profile/getFriendProfile",
   async (id: number) => {
-    const response = await axios.get<GetProfileResDto>(`/api/profile/${id}`);
+    const response = await axios.get<GetProfileResDto>(`/api/profile/${id}/`);
     return response.data;
   },
 );
+
+export const getFriendProfileWithoutStateUpdate = createAsyncThunk<
+  GetProfileResDto,
+  number
+>("profile/getFriendProfileWithoutStateUpdate", async (id: number) => {
+  const response = await axios.get<GetProfileResDto>(`/api/profile/${id}/`);
+  return response.data;
+});
 
 export const editMyProfile = createAsyncThunk<
   EditProfileResDto,

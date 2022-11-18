@@ -10,10 +10,13 @@ import applyAuthApi from "./auth";
 import applyFriendRequestApi from "./friendRequests";
 import { Profile } from "../models/profile.model";
 import applyProfileApi from "./profile";
+import applyUserApi from "./user";
+import { OneChonInfo } from "../../types/friend.types";
 
 export interface Schema {
   users: Array<User>;
   friendRequests: Array<FriendRequest>;
+  friendList: Array<OneChonInfo>;
   profiles: Array<Profile>;
 }
 
@@ -35,6 +38,9 @@ applyAuthApi(server, db);
 
 // DESC: applyFriendRequestApi
 applyFriendRequestApi(server, db);
+
+// DESC: applyUserApi
+applyUserApi(server, db);
 
 // DESC: applyProfileApi
 applyProfileApi(server, db);
