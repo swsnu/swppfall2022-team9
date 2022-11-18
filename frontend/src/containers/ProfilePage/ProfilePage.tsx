@@ -1,10 +1,14 @@
 import useAlert from "hooks/useAlert";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Profile } from "server/models/profile.model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getFriendProfile } from "store/slices/profile";
+import {
+  getFriendProfile,
+  getFriendProfileWithoutStateUpdate,
+} from "store/slices/profile";
 import { getFriendList } from "store/slices/users";
-import { CommonGreyColor, ThemeColor } from "styles/common.styles";
+import { ThemeColor } from "styles/common.styles";
 import { TwoChonInfo } from "types/friend.types";
 import NetworkAnalysis from "./NetworkAnalysis/NetworkAnalysis";
 import ProfileFriends from "./ProfileFriends/ProfileFriends";
@@ -15,6 +19,7 @@ interface Props {}
 const ProfilePage: React.FC<Props> = () => {
   const { userId } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const profile = useAppSelector(state => state.profile.currentProfile);
   const alert = useAlert();
   const getProfileData = async (id: number) => {
@@ -28,9 +33,16 @@ const ProfilePage: React.FC<Props> = () => {
   const [profileUserFriends, setProfileUserFriends] = useState<
     Array<TwoChonInfo> | undefined
   >(undefined);
+  const [profileUserFriendProfiles, setProfileUserFriendProfiles] = useState<
+    Array<Profile & { name: string }>
+  >([]);
   const currentUser = useAppSelector(state => state.users.currentUser);
   const friendList = useAppSelector(state => state.users.friendList);
   const currentUserFriendList = useAppSelector(state => state.users.friendList);
+
+  const onClickChangeProfile = () => {
+    navigate("/profile/change");
+  };
 
   useEffect(() => {
     if (currentUser) {
@@ -70,6 +82,39 @@ const ProfilePage: React.FC<Props> = () => {
     }
   }, [friendList, userId]);
 
+  const getFriendProfileDataNoStateUpdate = async (
+    id: number,
+    name: string,
+  ) => {
+    try {
+      const response = await dispatch(
+        getFriendProfileWithoutStateUpdate(id),
+      ).unwrap();
+      return { ...response, name: name };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (profileUserFriends && profileUserFriends.length > 0) {
+      const promises = profileUserFriends.map(friend =>
+        getFriendProfileDataNoStateUpdate(
+          friend.id,
+          friend.lastname + friend.firstname,
+        ),
+      );
+      // DESC: this waits for all data to be fetched
+      Promise.all(promises).then(data => {
+        const validData = data.filter(profileData => profileData) as Array<
+          Profile & { name: string }
+        >;
+        setProfileUserFriendProfiles(validData);
+        console.log(data);
+      });
+    }
+  }, [profileUserFriends]);
+
   useEffect(() => {
     if (userId) {
       getProfileData(Number(userId));
@@ -104,22 +149,24 @@ const ProfilePage: React.FC<Props> = () => {
                 채팅하기
               </S.ProfileActionButton>
             )}
-            {userId &&
-            currentUser &&
-            Number(userId) !== currentUser.id &&
-            friendList.findIndex(element => element.id === Number(userId)) !==
+            {userId && currentUser && Number(userId) !== currentUser.id ? (
+              friendList.findIndex(element => element.id === Number(userId)) !==
               -1 ? (
-              <S.ProfileActionButton backgroundColor={"#d9d9d9"}>
-                동료로서 평가하기
-              </S.ProfileActionButton>
-            ) : (
-              <S.ProfileActionButton backgroundColor={"#d9d9d9"}>
-                친구 추가하기
-              </S.ProfileActionButton>
-            )}
+                <S.ProfileActionButton backgroundColor={"#d9d9d9"}>
+                  동료로서 평가하기
+                </S.ProfileActionButton>
+              ) : (
+                <S.ProfileActionButton backgroundColor={"#d9d9d9"}>
+                  친구 추가하기
+                </S.ProfileActionButton>
+              )
+            ) : null}
 
             {userId && currentUser && Number(userId) === currentUser.id && (
-              <S.ProfileActionButton backgroundColor={ThemeColor}>
+              <S.ProfileActionButton
+                backgroundColor={ThemeColor}
+                onClick={onClickChangeProfile}
+              >
                 프로필 수정
               </S.ProfileActionButton>
             )}

@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { useAppDispatch } from "store/hooks";
-import { getFriendProfileWithoutStateUpdate } from "store/slices/profile";
 import { TwoChonInfo } from "types/friend.types";
 import ProfileFriendItem from "./ProfileFriendItem/ProfileFriendItem";
 import * as S from "./styles";
