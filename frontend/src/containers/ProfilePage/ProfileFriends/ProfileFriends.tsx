@@ -1,5 +1,4 @@
 import { Profile } from "server/models/profile.model";
-import { TwoChonInfo } from "types/friend.types";
 import ProfileFriendItem from "./ProfileFriendItem/ProfileFriendItem";
 import * as S from "./styles";
 
@@ -17,7 +16,6 @@ const ProfileFriends: React.FC<Props> = ({
   currentProfileUserId,
   currentProfileUserName,
 }) => {
-  console.log(profileUserFriendProfiles);
   return (
     <S.Container>
       <S.Title>친구들</S.Title>

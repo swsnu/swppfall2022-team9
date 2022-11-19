@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Profile } from "server/models/profile.model";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getFriendProfileWithoutStateUpdate } from "store/slices/profile";
-import { TwoChonInfo } from "types/friend.types";
+import { useAppSelector } from "store/hooks";
 import * as S from "../styles";
 
 interface Props {

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ThemeColor } from "styles/common.styles";
 
 export const Container = styled.div``;
 
@@ -31,5 +32,6 @@ export const NetworkSkillGraph = styled.div<{
 }>`
   width: ${props => props.fillAmount * 100}%;
   height: 15px;
-  background-color: #d9d9d9;
+  background-color: ${ThemeColor};
+  border: 1px solid black;
 `;

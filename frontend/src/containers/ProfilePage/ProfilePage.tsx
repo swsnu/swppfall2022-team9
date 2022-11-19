@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Profile } from "server/models/profile.model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { postFriendRequest } from "store/slices/friendRequests";
 import {
   getFriendProfile,
   getFriendProfileWithoutStateUpdate,
@@ -48,6 +49,31 @@ const ProfilePage: React.FC<Props> = () => {
 
   const onClickChangeProfile = () => {
     navigate("/profile/change");
+  };
+
+  const onClickChatWithUser = () => {
+    navigate(`/chat/${userId}`);
+  };
+
+  const onClickEvaluateQuality = () => {
+    navigate(`/evaluate/${userId}`);
+  };
+
+  const onClickAddFriend = async () => {
+    if (userId && currentUser) {
+      try {
+        await dispatch(
+          postFriendRequest({
+            senderId: currentUser.id,
+            getterId: Number(userId),
+          }),
+        ).unwrap();
+        alert.open({ message: "친구 요청을 보냈습니다" });
+      } catch (err) {
+        console.log(err);
+        alert.open({ message: "친구 요청에 실패했습니다" });
+      }
+    }
   };
 
   useEffect(() => {
@@ -154,18 +180,27 @@ const ProfilePage: React.FC<Props> = () => {
           </S.BasicInfoContainer>
           <S.ProfileActionButtonsContainer>
             {userId && currentUser && Number(userId) !== currentUser.id && (
-              <S.ProfileActionButton backgroundColor={ThemeColor}>
+              <S.ProfileActionButton
+                backgroundColor={ThemeColor}
+                onClick={onClickChatWithUser}
+              >
                 채팅하기
               </S.ProfileActionButton>
             )}
             {userId && currentUser && Number(userId) !== currentUser.id ? (
               friendList.findIndex(element => element.id === Number(userId)) !==
               -1 ? (
-                <S.ProfileActionButton backgroundColor={"#d9d9d9"}>
+                <S.ProfileActionButton
+                  backgroundColor={"#d9d9d9"}
+                  onClick={onClickEvaluateQuality}
+                >
                   동료로서 평가하기
                 </S.ProfileActionButton>
               ) : (
-                <S.ProfileActionButton backgroundColor={"#d9d9d9"}>
+                <S.ProfileActionButton
+                  backgroundColor={"#d9d9d9"}
+                  onClick={onClickAddFriend}
+                >
                   친구 추가하기
                 </S.ProfileActionButton>
               )
