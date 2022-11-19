@@ -1,19 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { TwoChonInfo } from "types/friend.types";
+import React from "react";
+import { Profile } from "server/models/profile.model";
+import * as S from "./styles";
 
 interface Props {
-  profileUserFriends: Array<TwoChonInfo> | undefined;
+  profileUserFriendProfiles:
+    | Array<Profile & { name: string; id: number; profileImgUrl: string }>
+    | undefined;
 }
 
-const NetworkAnalysis: React.FC<Props> = ({ profileUserFriends }) => {
-  const [networkMap, setNetworkMap] = useState<Map<string, number>>(new Map());
-  useEffect(() => {
-    if (profileUserFriends) {
-      const tempNetworkMap = new Map();
-      setNetworkMap(tempNetworkMap);
-    }
-  }, []);
-  return <div>NetworkAnalysis</div>;
+const NetworkAnalysis: React.FC<Props> = ({ profileUserFriendProfiles }) => {
+  let totalAnalysisCount = 0;
+  const profileAnalysis = profileUserFriendProfiles?.reduce((acc, cur) => {
+    const { skillTags } = cur;
+    skillTags.forEach(skillTag => {
+      totalAnalysisCount++;
+      if (acc[skillTag.name]) {
+        acc[skillTag.name] = acc[skillTag.name] + 1;
+      } else {
+        acc[skillTag.name] = 1;
+      }
+    });
+    return acc;
+  }, {} as { [key: string]: number });
+
+  return (
+    <S.Container>
+      {profileAnalysis &&
+        Object.keys(
+          Object.fromEntries(
+            Object.entries(profileAnalysis).sort(([, a], [, b]) => a - b),
+          ),
+        )
+          //we only show top 4 skills
+          .filter((_, index) => index < 4)
+          .map(skill => {
+            return (
+              <S.NetworkSkillItem key={skill}>
+                <S.NetworkSkillNameCountContainer>
+                  <S.NetworkSkillName>{skill}</S.NetworkSkillName>
+                  <S.NetworkSkillAmount>
+                    {profileAnalysis[skill]}
+                  </S.NetworkSkillAmount>
+                </S.NetworkSkillNameCountContainer>
+                <S.NetworkSkillGraphContainer>
+                  <S.NetworkSkillGraph
+                    fillAmount={profileAnalysis[skill] / totalAnalysisCount}
+                  />
+                </S.NetworkSkillGraphContainer>
+              </S.NetworkSkillItem>
+            );
+          })}
+    </S.Container>
+  );
 };
 
 export default NetworkAnalysis;
