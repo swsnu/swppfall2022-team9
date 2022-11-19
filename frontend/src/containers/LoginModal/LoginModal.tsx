@@ -36,7 +36,13 @@ const LoginModal: React.FC = () => {
       )
         .unwrap()
         .then(() => {})
-        .catch(() => {
+        .catch(err => {
+          if (err.status === 401) {
+            alert.open({
+              message:
+                "이미엘 인증이 아직 완료되지 않은 유저입니다. 이메일을 확인해주세요.",
+            });
+          }
           setLoginMessage(LoginModalMessage.LOGIN_FAIL);
         });
     },

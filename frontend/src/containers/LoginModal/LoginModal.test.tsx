@@ -69,7 +69,7 @@ describe("<LoginModal/>", () => {
 
   it("click login error", async () => {
     mockDispatch.mockReturnValue({
-      unwrap: () => Promise.reject({}),
+      unwrap: () => Promise.reject({ status: 401 }),
     });
     renderLoginModal(alertProviderProps);
     const usernameInput = screen.getByRole("username");
