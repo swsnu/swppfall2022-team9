@@ -58,11 +58,22 @@ class FriendRequest(models.Model):
         choices=FRIEND_REQUEST_STATUS,
         default="Pending"
     )
+    unique_request_id = models.CharField(
+        max_length=100,
+        unique=True,
+    )
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.senderId}->{self.getterId}, status:{self.status}"
+
+    def save(self, *args, **kwargs):
+        self.unique_request_id = "-".join([
+            min(self.senderId.id, self.getterId.id),
+            max(self.senderId.id, self.getterId.id)
+        ])
+        super(FriendRequest, self).save(*args, **kwargs)
 
 
 class Verification(models.Model):
