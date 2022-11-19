@@ -36,8 +36,8 @@ const jobExp: ExperienceTag[] = [
 export const profileStub: Profile = {
   introduction: "Korea No.1 Actress",
   skillTags: skills,
-  education: educations,
-  jobExperience: jobExp,
+  educations: educations,
+  jobExperiences: jobExp,
   website: "https://www.naver.com",
   imgUrl:
     "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",

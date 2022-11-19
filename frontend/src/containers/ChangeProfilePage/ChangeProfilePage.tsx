@@ -33,8 +33,8 @@ const ChangeProfilePage: React.FC = () => {
   const [profile, setProfile] = useState<Profile>({
     introduction: "",
     skillTags: [],
-    education: [],
-    jobExperience: [],
+    educations: [],
+    jobExperiences: [],
     website: "",
     imgUrl:
       "https://www.smlounge.co.kr/upload/woman/article/202112/thumb/49686-473794-sampleM.jpg",
@@ -94,7 +94,7 @@ const ChangeProfilePage: React.FC = () => {
     setProfile(prev => ({
       ...prev,
       education: [
-        ...prev.education,
+        ...prev.educations,
         {
           school: bubble.name,
           dateStart: bubble.dateStart,
@@ -108,7 +108,7 @@ const ChangeProfilePage: React.FC = () => {
   const onDeleteEducation = (bubble: ExperienceBubble) => {
     setProfile(prev => ({
       ...prev,
-      education: prev.education.filter(edu => {
+      education: prev.educations.filter(edu => {
         return !(
           edu.school === bubble.name &&
           edu.dateStart === bubble.dateStart &&
@@ -123,7 +123,7 @@ const ChangeProfilePage: React.FC = () => {
     setProfile(prev => ({
       ...prev,
       jobExperience: [
-        ...prev.jobExperience,
+        ...prev.jobExperiences,
         {
           company: bubble.name,
           dateStart: bubble.dateStart,
@@ -137,7 +137,7 @@ const ChangeProfilePage: React.FC = () => {
   const onDeleteJob = (bubble: ExperienceBubble) => {
     setProfile(prev => ({
       ...prev,
-      jobExperience: prev.jobExperience.filter(job => {
+      jobExperience: prev.jobExperiences.filter(job => {
         return !(
           job.company === bubble.name &&
           job.dateStart === bubble.dateStart &&
@@ -228,7 +228,7 @@ const ChangeProfilePage: React.FC = () => {
             title="교육 이력"
             experienceName="학교 이름"
             onAddBubble={onAddEducation}
-            bubbles={profile.education.map(edu => {
+            bubbles={profile.educations.map(edu => {
               return {
                 name: edu.school,
                 dateStart: edu.dateStart,
@@ -244,7 +244,7 @@ const ChangeProfilePage: React.FC = () => {
             title="직업 경험"
             experienceName="기관 이름"
             onAddBubble={onAddJob}
-            bubbles={profile.jobExperience.map(job => {
+            bubbles={profile.jobExperiences.map(job => {
               return {
                 name: job.company,
                 dateStart: job.dateStart,
