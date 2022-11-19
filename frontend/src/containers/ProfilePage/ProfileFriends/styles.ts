@@ -88,6 +88,7 @@ export const FriendActionButton = styled.button`
   width: 90px;
   min-width: 90px;
   font-size: 12px;
+  line-height: 17px;
   word-break: keep-all;
   border-radius: 5px;
   background: none;
