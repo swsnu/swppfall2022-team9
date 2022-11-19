@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
+import { Title } from "../styles";
 
 export const Container = styled.div``;
+
+export const ContainerTitle = styled(Title)``;
 
 export const NetworkSkillNameCountContainer = styled.div`
   display: flex;

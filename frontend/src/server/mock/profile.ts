@@ -28,7 +28,7 @@ export default function applyProfileApi(
       if (!profile) {
         res.status(404).json();
       } else {
-        res.status(200).json(profile);
+        res.status(200).json({ ...profile, qualityTags: [{ name: "test" }] });
       }
     },
   );

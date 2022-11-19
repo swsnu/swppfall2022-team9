@@ -18,12 +18,12 @@ export interface ExperienceTag {
 export interface Profile {
   introduction: string;
   skillTags: SkillTag[];
-  education: EducationTag[];
-  jobExperience: ExperienceTag[];
+  educations: EducationTag[];
+  jobExperiences: ExperienceTag[];
   website: string;
   imgUrl: string;
 }
 
 export type SkillTagKey = keyof Pick<Profile, "skillTags">;
-export type EducationKey = keyof Pick<Profile, "education">;
-export type JobKey = keyof Pick<Profile, "jobExperience">;
+export type EducationKey = keyof Pick<Profile, "educations">;
+export type JobKey = keyof Pick<Profile, "jobExperiences">;

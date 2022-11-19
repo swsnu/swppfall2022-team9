@@ -13,6 +13,7 @@ import { ThemeColor } from "styles/common.styles";
 import { TwoChonInfo } from "types/friend.types";
 import NetworkAnalysis from "./NetworkAnalysis/NetworkAnalysis";
 import ProfileFriends from "./ProfileFriends/ProfileFriends";
+import QualityAnalysis from "./QualityAnalysis/QualityAnalysis";
 import * as S from "./styles";
 
 interface Props {}
@@ -165,7 +166,6 @@ const ProfilePage: React.FC<Props> = () => {
           <S.BasicInfoContainer>
             <S.ProfileName>{profileUserName}</S.ProfileName>
             <S.SkillTagsContainer>
-              <S.SkillTagTitle>태그:</S.SkillTagTitle>
               {profile?.skillTags.map(tag => {
                 return <S.SkillTag key={tag.name}>#{tag.name}</S.SkillTag>;
               })}
@@ -219,16 +219,14 @@ const ProfilePage: React.FC<Props> = () => {
           <S.Title>소개</S.Title>
           <S.Introduction>{profile?.introduction}</S.Introduction>
         </S.IntroductionContainer>
-        <S.OtherTagsContainer>
-          <S.Title>
-            {profileUserName}님의 친구들이 보는 ${profileUserName}님은?
-          </S.Title>
-          <S.QualityTagContainer></S.QualityTagContainer>
-        </S.OtherTagsContainer>
+        <QualityAnalysis
+          profileUserName={profileUserName}
+          qualityTags={profile?.qualityTags}
+        />
         <S.OtherTagsContainer>
           <S.Title>교육 이력</S.Title>
           <S.TagBubblesContainer>
-            {profile?.education.map(tag => {
+            {profile?.educations.map(tag => {
               return (
                 <S.TagBubble key={tag.school + tag.dateStart}>
                   <S.TagBubbleText>
@@ -248,7 +246,7 @@ const ProfilePage: React.FC<Props> = () => {
         <S.OtherTagsContainer>
           <S.Title>경력</S.Title>
           <S.TagBubblesContainer>
-            {profile?.jobExperience.map(tag => {
+            {profile?.jobExperiences.map(tag => {
               return (
                 <S.TagBubble key={tag.company + tag.dateStart}>
                   <S.TagBubbleText>
@@ -266,12 +264,10 @@ const ProfilePage: React.FC<Props> = () => {
           </S.TagBubblesContainer>
         </S.OtherTagsContainer>
         {profileUserFriends && profileUserFriends.length !== 0 && (
-          <S.NetworkAnalysisContainer>
-            <S.Title>{profileUserName}님의 친구들 태그 분포도</S.Title>
-            <NetworkAnalysis
-              profileUserFriendProfiles={profileUserFriendProfiles}
-            />
-          </S.NetworkAnalysisContainer>
+          <NetworkAnalysis
+            profileUserName={profileUserName}
+            profileUserFriendProfiles={profileUserFriendProfiles}
+          />
         )}
       </S.InfoContainer>
       <ProfileFriends

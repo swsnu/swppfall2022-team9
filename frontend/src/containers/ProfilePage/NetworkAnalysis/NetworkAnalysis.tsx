@@ -6,9 +6,13 @@ interface Props {
   profileUserFriendProfiles:
     | Array<Profile & { name: string; id: number; profileImgUrl: string }>
     | undefined;
+  profileUserName: string;
 }
 
-const NetworkAnalysis: React.FC<Props> = ({ profileUserFriendProfiles }) => {
+const NetworkAnalysis: React.FC<Props> = ({
+  profileUserFriendProfiles,
+  profileUserName,
+}) => {
   let totalAnalysisCount = 0;
   const profileAnalysis = profileUserFriendProfiles?.reduce((acc, cur) => {
     const { skillTags } = cur;
@@ -23,8 +27,17 @@ const NetworkAnalysis: React.FC<Props> = ({ profileUserFriendProfiles }) => {
     return acc;
   }, {} as { [key: string]: number });
 
+  if (
+    !profileAnalysis ||
+    (profileAnalysis && Object.keys(profileAnalysis).length === 0)
+  )
+    return null;
+
   return (
     <S.Container>
+      <S.ContainerTitle>
+        {profileUserName}님의 친구들 태그 분포도
+      </S.ContainerTitle>
       {profileAnalysis &&
         Object.keys(
           Object.fromEntries(

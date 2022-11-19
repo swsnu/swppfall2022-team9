@@ -75,18 +75,16 @@ export const ProfileName = styled.div`
 export const SkillTagsContainer = styled.div`
   display: flex;
   margin-bottom: 30px;
-`;
-
-export const SkillTagTitle = styled.div`
-  padding: 5px 0;
-  margin-right: 10px;
+  flex-wrap: wrap;
 `;
 
 export const SkillTag = styled.div`
   background-color: #d9d9d9;
   white-space: nowrap;
   display: inline-block;
+  margin-right: 5px;
   padding: 5px 10px;
+  margin-bottom: 10px;
   border-radius: 15px;
   mask-image: linear-gradient(90deg, #000, 100%, transparent);
   -webkit-mask-image: linear-gradient(90deg, #000, 100%, transparent);
