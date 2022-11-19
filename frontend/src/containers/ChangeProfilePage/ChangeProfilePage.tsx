@@ -93,7 +93,7 @@ const ChangeProfilePage: React.FC = () => {
   const onAddEducation = (bubble: ExperienceBubble) => {
     setProfile(prev => ({
       ...prev,
-      education: [
+      educations: [
         ...prev.educations,
         {
           school: bubble.name,
@@ -108,7 +108,7 @@ const ChangeProfilePage: React.FC = () => {
   const onDeleteEducation = (bubble: ExperienceBubble) => {
     setProfile(prev => ({
       ...prev,
-      education: prev.educations.filter(edu => {
+      educations: prev.educations.filter(edu => {
         return !(
           edu.school === bubble.name &&
           edu.dateStart === bubble.dateStart &&
@@ -122,7 +122,7 @@ const ChangeProfilePage: React.FC = () => {
   const onAddJob = (bubble: ExperienceBubble) => {
     setProfile(prev => ({
       ...prev,
-      jobExperience: [
+      jobExperiences: [
         ...prev.jobExperiences,
         {
           company: bubble.name,
@@ -137,7 +137,7 @@ const ChangeProfilePage: React.FC = () => {
   const onDeleteJob = (bubble: ExperienceBubble) => {
     setProfile(prev => ({
       ...prev,
-      jobExperience: prev.jobExperiences.filter(job => {
+      jobExperiences: prev.jobExperiences.filter(job => {
         return !(
           job.company === bubble.name &&
           job.dateStart === bubble.dateStart &&
