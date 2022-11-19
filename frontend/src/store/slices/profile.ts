@@ -11,9 +11,10 @@ import {
   PostCreateProfileResDto,
 } from "server/dto/profile/profile.res.dto";
 import { Profile } from "server/models/profile.model";
+import { QualityTags } from "server/models/qualityTags.model";
 
 export type ProfileState = {
-  currentProfile: Profile | null;
+  currentProfile: (Profile & { qualityTags: QualityTags | null }) | null;
 };
 
 const initialState: ProfileState = {
