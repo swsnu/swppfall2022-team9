@@ -75,6 +75,7 @@ export const TagsContainer = styled.div`
 
 export const Tag = styled.div`
   background-color: #d9d9d9;
+  margin: 2px 2px;
   white-space: nowrap;
   display: inline-block;
   padding: 5px 10px;
