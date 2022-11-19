@@ -45,7 +45,6 @@ const ProfilePage: React.FC<Props> = () => {
 
   const currentUser = useAppSelector(state => state.users.currentUser);
   const friendList = useAppSelector(state => state.users.friendList);
-  const currentUserFriendList = useAppSelector(state => state.users.friendList);
 
   const onClickChangeProfile = () => {
     navigate("/profile/change");
@@ -84,7 +83,7 @@ const ProfilePage: React.FC<Props> = () => {
       if (currentUser.id === Number(userId)) {
         // DESC: If we are viewing my profile, the name should be the name of current user
         setProfileUserName(currentUser.firstname + currentUser.lastname);
-        setProfileUserFriends(currentUserFriendList);
+        setProfileUserFriends(friendList);
       }
     }
   }, [currentUser]);
