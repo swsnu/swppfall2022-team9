@@ -359,7 +359,7 @@ def friend(request):
         for onechon_linklinkuser in onechon_list:
             # Construct onechon_dict
             onechon_dict = {}
-            onechon_dict["id"] = onechon_linklinkuser.user.id
+            onechon_dict["id"] = onechon_linklinkuser.id
             onechon_dict["firstname"] = onechon_linklinkuser.user.first_name
             onechon_dict["lastname"] = onechon_linklinkuser.user.last_name
             onechon_dict["imgUrl"] = onechon_linklinkuser.profile.imgUrl
@@ -373,7 +373,7 @@ def friend(request):
             for twochon_linklinkuser in twochon_list:
                 # Construct twochon_dict
                 twochon_dict = {}
-                twochon_dict["id"] = twochon_linklinkuser.user.id
+                twochon_dict["id"] = twochon_linklinkuser.id
                 twochon_dict["firstname"] = \
                     twochon_linklinkuser.user.first_name
                 twochon_dict["lastname"] = \
