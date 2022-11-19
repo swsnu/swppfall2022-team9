@@ -68,10 +68,10 @@ export const TagsContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-export const TagTitle = styled.div`
-  padding: 5px 0;
-  margin-right: 10px;
-`;
+// export const TagTitle = styled.div`
+//   padding: 5px 0;
+//   margin-right: 10px;
+// `;
 
 export const Tag = styled.div`
   background-color: #d9d9d9;
