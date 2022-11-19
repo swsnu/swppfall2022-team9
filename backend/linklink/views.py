@@ -123,6 +123,53 @@ def get_onechon_linklinkuser_list(
         onechon_list.remove(exclude_linklinkuser)
     return list(onechon_list)
 
+
+def profile_package_response_body(profile_found, is_me):
+    """
+    Helper function to package the response body for profile APIs
+
+    Args:
+    profile_found: Profile
+    is_me: indicates whether profile belongs to request.user.linklinkuser
+    Return:
+    Dict
+    """
+    response_dict = {}
+    # Construct Profile
+    response_dict["introduction"] = profile_found.introduction
+    response_dict["skillTags"] = []
+    for skill_tag in profile_found.skillTags.all():
+        response_dict["skillTags"].append(
+            {"name": skill_tag.name}
+        )
+    if is_me:
+        response_dict["qualityTags"] = None # set as null
+    else:
+        response_dict["qualityTags"] = []
+        for quality_tag in profile_found.qualityTags.all():
+            response_dict["qualityTags"].append(
+                {"name": quality_tag.name}
+            )
+    response_dict["educations"] = []
+    for education in profile_found.education_set.all():
+        education_dict = {}
+        education_dict["school"] = education.school
+        education_dict["major"] = education.major
+        education_dict["dateStart"] = education.dateStart
+        education_dict["dateEnd"] = education.dateEnd
+        response_dict["educations"].append(education_dict)
+    response_dict["jobExperiences"] = []
+    for job_experience in profile_found.jobexperience_set.all():
+        job_experience_dict = {}
+        job_experience_dict["company"] = job_experience.company
+        job_experience_dict["position"] = job_experience.position
+        job_experience_dict["dateStart"] = job_experience.dateStart
+        job_experience_dict["dateEnd"] = job_experience.dateEnd
+        response_dict["jobExperiences"].append(job_experience_dict)
+    response_dict["website"] = profile_found.website
+    response_dict["imgUrl"] = profile_found.imgUrl
+    return response_dict
+
 #--------------------------------------------------------------------------
 #   Auth Related APIs
 #--------------------------------------------------------------------------
@@ -350,39 +397,7 @@ def friend(request):
 @allowed_method_or_405(["GET", "PUT"])
 @logged_in_or_401
 def my_profile(request):
-    if request.method == "GET":
-        # Get user's profile
-        profile_found = \
-            Profile.objects.get(linklinkuser=request.user.linklinkuser)
-        # Construct Profile
-        response_dict = {}
-        response_dict["introduction"] = profile_found.introduction
-        response_dict["skillTags"] = []
-        for skill_tag in profile_found.skillTags.all():
-            response_dict["skillTags"].append({"name": skill_tag.name})
-        response_dict["educations"] = []
-        for education in profile_found.education_set.all():
-            education_dict = {}
-            education_dict["school"] = education.school
-            education_dict["major"] = education.major
-            education_dict["dateStart"] = education.dateStart
-            education_dict["dateEnd"] = education.dateEnd
-            response_dict["educations"].append(education_dict)
-        response_dict["jobExperiences"] = []
-        for job_experience in profile_found.jobexperience_set.all():
-            job_experience_dict = {}
-            job_experience_dict["company"] = job_experience.company
-            job_experience_dict["position"] = job_experience.position
-            job_experience_dict["dateStart"] = job_experience.dateStart
-            job_experience_dict["dateEnd"] = job_experience.dateEnd
-            response_dict["jobExperiences"].append(job_experience_dict)
-        response_dict["website"] = profile_found.website
-        response_dict["imgUrl"] = profile_found.imgUrl
-        return JsonResponse(
-            status=200,
-            data=response_dict
-        )
-    elif request.method == "PUT": # pragma: no branch
+    if request.method == "PUT": # pragma: no branch
         # When user enters profile info and puts,
         # 1. Find Profile object
         # 2. Construct new profile object and save
@@ -448,7 +463,7 @@ def my_profile(request):
 
 @allowed_method_or_405(["GET"])
 @logged_in_or_401
-def other_profile(request, user_id):
+def profile(request, user_id):
     if request.method == "GET": # pragma: no branch
         if LinkLinkUser.objects.filter(pk=user_id).exists():
             linklinkuser = LinkLinkUser.objects.get(pk=user_id)
@@ -469,41 +484,15 @@ def other_profile(request, user_id):
                     exclude_linklinkuser=request.user.linklinkuser
                 ))
             # remove duplicates and extend onechon & twochon
-            friend_list = list(set(onechon_list + twochon_list))
-            if linklinkuser in friend_list:
-                # Construct Profile
+            profile_read_permission = list(set(onechon_list + twochon_list))
+            # Add myself as profile_read_permission
+            profile_read_permission.append(request.user.linklinkuser)
+            if linklinkuser in profile_read_permission:
                 profile_found = \
                     Profile.objects.get(linklinkuser=linklinkuser)
-                response_dict = {}
-                response_dict["introduction"] = profile_found.introduction
-                response_dict["skillTags"] = []
-                for skill_tag in profile_found.skillTags.all():
-                    response_dict["skillTags"].append(
-                        {"name": skill_tag.name}
-                    )
-                response_dict["qualityTags"] = []
-                for quality_tag in profile_found.qualityTags.all():
-                    response_dict["qualityTags"].append(
-                        {"name": quality_tag.name}
-                    )
-                response_dict["educations"] = []
-                for education in profile_found.education_set.all():
-                    education_dict = {}
-                    education_dict["school"] = education.school
-                    education_dict["major"] = education.major
-                    education_dict["dateStart"] = education.dateStart
-                    education_dict["dateEnd"] = education.dateEnd
-                    response_dict["educations"].append(education_dict)
-                response_dict["jobExperiences"] = []
-                for job_experience in profile_found.jobexperience_set.all():
-                    job_experience_dict = {}
-                    job_experience_dict["company"] = job_experience.company
-                    job_experience_dict["position"] = job_experience.position
-                    job_experience_dict["dateStart"] = job_experience.dateStart
-                    job_experience_dict["dateEnd"] = job_experience.dateEnd
-                    response_dict["jobExperiences"].append(job_experience_dict)
-                response_dict["website"] = profile_found.website
-                response_dict["imgUrl"] = profile_found.imgUrl
+                response_dict = profile_package_response_body(
+                    profile_found=profile_found,
+                    is_me=linklinkuser.id==request.user.linklinkuser.id)
                 return JsonResponse(
                     status=200,
                     data=response_dict
