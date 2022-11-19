@@ -13,5 +13,5 @@ urlpatterns = [
     path('auth/verify/<str:token>/', views.verify, name='verify'),
     path('user/friend/', views.friend, name='friend'),
     path('profile/', views.my_profile, name='my_profile'),
-    path('profile/<int:user_id>/', views.other_profile, name='other_profile'),
+    path('profile/<int:user_id>/', views.profile, name='profile'),
 ]

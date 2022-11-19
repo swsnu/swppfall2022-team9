@@ -556,58 +556,7 @@ class LinkLinkTestCase(TestCase):
 #   /api/profile Tests
 #--------------------------------------------------------------------------
 
-    def test_get_profile_success(self):
-        target_url = "/api/profile/"
-        # Login John
-        self.client.login(username="john", password="johnpassword")
-        # Create Profile
-        john_linklinkuser = LinkLinkUser.objects.get(id=1)
-        john_profile = Profile.objects.create(
-            linklinkuser=john_linklinkuser,
-            introduction="This is john",
-            website="johnwebsite.com",
-            imgUrl="https://catimage.com",
-        )
-        john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
-        john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
-        Education.objects.create(
-            profile=john_profile,
-            school="SNU",
-            major="CSE",
-            dateStart="2018-03-12",
-            dateEnd="2022-04-12",
-        )
-        Education.objects.create(
-            profile=john_profile,
-            school="MIT",
-            major="CSE",
-            dateStart="2013-03-12",
-            dateEnd="2019-04-12",
-        )
-        JobExperience.objects.create(
-            profile=john_profile,
-            company="Google",
-            position="CEO",
-            dateStart="2018-02-12",
-            dateEnd="2022-09-12",
-        )
-        # GET
-        response = self.client.get(target_url)
-        self.assertEqual(response.status_code, 200)
-        answer_json_path = os.path.join(
-            self.linklink_path,
-            "test_answers",
-            "test_get_profile_success.json"
-        )
-        with open(answer_json_path, "r", encoding="utf") as json_file:
-            expected_json = json.load(json_file)
-        self.assertDictEqual( # Expected response assert
-            json.loads(response.content.decode()),
-            expected_json
-        )
-
-
-    def test_put_profile_success(self):
+    def test_put_my_profile_success(self):
         target_url = "/api/profile/"
         # Login John
         self.client.login(username="john", password="johnpassword")
@@ -676,7 +625,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_put_profile_success.json"
+            "test_put_my_profile_success.json"
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -686,7 +635,7 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_put_profile_skill_tag_not_found(self):
+    def test_put_my_profile_skill_tag_not_found(self):
         target_url = "/api/profile/"
         # Login John
         self.client.login(username="john", password="johnpassword")
@@ -764,7 +713,60 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_get_other_profile_success(self):
+    def test_get_my_profile_success(self):
+        target_url = "/api/profile/1/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Create Profile
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        john_profile = Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            website="johnwebsite.com",
+            imgUrl="https://catimage.com",
+        )
+        john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
+        john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
+        john_profile.qualityTags.add(QualityTag.objects.get(name="Sincere"))
+        john_profile.qualityTags.add(QualityTag.objects.get(name="Loyal"))
+        Education.objects.create(
+            profile=john_profile,
+            school="SNU",
+            major="CSE",
+            dateStart="2018-03-12",
+            dateEnd="2022-04-12",
+        )
+        Education.objects.create(
+            profile=john_profile,
+            school="MIT",
+            major="CSE",
+            dateStart="2013-03-12",
+            dateEnd="2019-04-12",
+        )
+        JobExperience.objects.create(
+            profile=john_profile,
+            company="Google",
+            position="CEO",
+            dateStart="2018-02-12",
+            dateEnd="2022-09-12",
+        )
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "test_get_my_profile_success.json"
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertDictEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_profile_success(self):
         target_url = "/api/profile/2/"
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
@@ -824,7 +826,7 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_get_other_profile_linklinkuser_not_found(self):
+    def test_get_profile_linklinkuser_not_found(self):
         target_url = "/api/profile/1000/"
         # Login John
         self.client.login(username="john", password="johnpassword")
@@ -841,7 +843,7 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_get_other_profile_read_permission_forbidden(self):
+    def test_get_profile_read_permission_forbidden(self):
         target_url = "/api/profile/2/"
         # Login John
         self.client.login(username="john", password="johnpassword")

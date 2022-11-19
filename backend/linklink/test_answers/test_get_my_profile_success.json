@@ -4,6 +4,7 @@
         {"name": "Frontend"},
         {"name": "Backend"}
     ],
+    "qualityTags": null,
     "educations": [
         {
             "school": "SNU",
