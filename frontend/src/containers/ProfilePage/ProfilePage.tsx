@@ -22,6 +22,7 @@ const ProfilePage: React.FC<Props> = () => {
   const navigate = useNavigate();
   const profile = useAppSelector(state => state.profile.currentProfile);
   const alert = useAlert();
+
   const getProfileData = async (id: number) => {
     try {
       await dispatch(getFriendProfile(id));
@@ -29,13 +30,18 @@ const ProfilePage: React.FC<Props> = () => {
       alert.open({ message: "존재하지 않는 유저입니다" });
     }
   };
+
   const [profileUserName, setProfileUserName] = useState<string>("");
+
   const [profileUserFriends, setProfileUserFriends] = useState<
     Array<TwoChonInfo> | undefined
   >(undefined);
+
   const [profileUserFriendProfiles, setProfileUserFriendProfiles] = useState<
-    Array<Profile & { name: string }>
-  >([]);
+    | Array<Profile & { name: string; id: number; profileImgUrl: string }>
+    | undefined
+  >(undefined);
+
   const currentUser = useAppSelector(state => state.users.currentUser);
   const friendList = useAppSelector(state => state.users.friendList);
   const currentUserFriendList = useAppSelector(state => state.users.friendList);
@@ -85,33 +91,36 @@ const ProfilePage: React.FC<Props> = () => {
   const getFriendProfileDataNoStateUpdate = async (
     id: number,
     name: string,
+    profileImgUrl: string,
   ) => {
     try {
       const response = await dispatch(
         getFriendProfileWithoutStateUpdate(id),
       ).unwrap();
-      return { ...response, name: name };
+      return { ...response, name: name, profileImgUrl: profileImgUrl, id: id };
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if (profileUserFriends && profileUserFriends.length > 0) {
+    if (profileUserFriends) {
       const promises = profileUserFriends.map(friend =>
         getFriendProfileDataNoStateUpdate(
           friend.id,
           friend.lastname + friend.firstname,
+          friend.imgUrl,
         ),
       );
       // DESC: this waits for all data to be fetched
       Promise.all(promises).then(data => {
         const validData = data.filter(profileData => profileData) as Array<
-          Profile & { name: string }
+          Profile & { name: string; profileImgUrl: string; id: number }
         >;
         setProfileUserFriendProfiles(validData);
-        console.log(data);
       });
+    } else {
+      setProfileUserFriendProfiles(undefined);
     }
   }, [profileUserFriends]);
 
@@ -218,15 +227,17 @@ const ProfilePage: React.FC<Props> = () => {
         </S.OtherTagsContainer>
         {profileUserFriends && profileUserFriends.length !== 0 && (
           <S.NetworkAnalysisContainer>
-            <S.Title>친구 분포도</S.Title>
-            <NetworkAnalysis profileUserFriends={profileUserFriends} />
+            <S.Title>{profileUserName}님의 친구들 태그 분포도</S.Title>
+            <NetworkAnalysis
+              profileUserFriendProfiles={profileUserFriendProfiles}
+            />
           </S.NetworkAnalysisContainer>
         )}
       </S.InfoContainer>
       <ProfileFriends
-        profileUserId={Number(userId)}
-        profileUserFriends={profileUserFriends}
-        profileUserName={profileUserName}
+        profileUserFriendProfiles={profileUserFriendProfiles}
+        currentProfileUserId={Number(userId)}
+        currentProfileUserName={profileUserName}
       />
     </S.Container>
   );

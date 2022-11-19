@@ -24,7 +24,7 @@ export const FriendEmptyOrErrorContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 29px;
   word-break: keep-all;
   text-align: center;

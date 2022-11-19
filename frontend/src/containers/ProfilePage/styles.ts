@@ -2,11 +2,15 @@ import { NavbarVerticalPadding, NavbarHeight } from "components/Navbar/styles";
 import styled from "styled-components";
 import { device } from "utils/cssMedia";
 
+const ProfilePagePaddingTop = 40;
 export const Container = styled.div`
   background-color: #f8f8f8;
-  min-height: calc(100vh - ${NavbarHeight}px - ${NavbarVerticalPadding * 2}px);
+  min-height: calc(
+    100vh -
+      ${NavbarHeight + NavbarVerticalPadding * 2 + ProfilePagePaddingTop}px
+  );
   padding: 0 10px;
-  padding-top: 40px;
+  padding-top: ${ProfilePagePaddingTop}px;
   display: flex;
   flex-direction: column;
   @media ${device.laptop} {

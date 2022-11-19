@@ -7,64 +7,42 @@ import { TwoChonInfo } from "types/friend.types";
 import * as S from "../styles";
 
 interface Props {
-  profileUserName: string;
-  profileUserId: number;
-  friend: TwoChonInfo;
+  currentProfileUserId: number;
+  currentProfileUserName: string;
+  profileUserFriend: Profile & {
+    name: string;
+    id: number;
+    profileImgUrl: string;
+  };
 }
 
 const ProfileFriendItem: React.FC<Props> = ({
-  friend,
-  profileUserName,
-  profileUserId,
+  profileUserFriend,
+  currentProfileUserName,
+  currentProfileUserId,
 }) => {
-  const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   const friendList = useAppSelector(state => state.users.friendList);
-  const [profile, setProfile] = useState<Profile>({
-    introduction: "",
-    skillTags: [],
-    education: [],
-    jobExperience: [],
-    website: "",
-    imgUrl: "",
-  });
 
   const onClickFriend = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-    navigate(`/profile/${friend.id}`);
-  };
-  const getFriendProfile = async (id: number) => {
-    try {
-      const response = await dispatch(
-        getFriendProfileWithoutStateUpdate(id),
-      ).unwrap();
-      setProfile(response);
-    } catch (err) {
-      console.log(err);
-    }
+    navigate(`/profile/${profileUserFriend.id}`);
   };
 
   const onAskFriendForIntroduction = () => {
     // we send a query to chat room for introduction
-    navigate(
-      `/chat/${profileUserId}?name=${friend.lastname + friend.firstname}`,
-    );
+    navigate(`/chat/${currentProfileUserId}?name=${profileUserFriend.name}`);
   };
-
-  useEffect(() => {
-    getFriendProfile(friend.id);
-  }, []);
 
   return (
     <S.ListItemContainer onClick={onClickFriend}>
-      <S.ImageContainer imgUrl={friend.imgUrl} />
-      <S.Name>{friend.lastname + friend.firstname}</S.Name>
+      <S.ImageContainer imgUrl={profileUserFriend.profileImgUrl} />
+      <S.Name>{profileUserFriend.name}</S.Name>
       <S.InfoContainer>
         <S.TagsContainer>
           <S.TagTitle>Tags:</S.TagTitle>
-          {profile.skillTags.map((tag, index) => {
+          {profileUserFriend.skillTags.map((tag, index) => {
             return (
               <S.Tag key={index}>
                 <S.TagText>#{tag.name}</S.TagText>
@@ -75,9 +53,10 @@ const ProfileFriendItem: React.FC<Props> = ({
       </S.InfoContainer>
       {/* -1 means that there is no such index */}
       {/* we will let one chon friend recomment that friend */}
-      {friendList.findIndex(element => element.id === friend.id) !== -1 && (
+      {friendList.findIndex(element => element.id === profileUserFriend.id) !==
+        -1 && (
         <S.FriendActionButton onClick={onAskFriendForIntroduction}>
-          {profileUserName}에게 친구 소개 부탁하기
+          {currentProfileUserName}에게 친구 소개 부탁하기
         </S.FriendActionButton>
       )}
     </S.ListItemContainer>
