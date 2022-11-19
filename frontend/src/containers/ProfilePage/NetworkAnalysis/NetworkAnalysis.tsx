@@ -41,7 +41,7 @@ const NetworkAnalysis: React.FC<Props> = ({
       {profileAnalysis &&
         Object.keys(
           Object.fromEntries(
-            Object.entries(profileAnalysis).sort(([, a], [, b]) => a - b),
+            Object.entries(profileAnalysis).sort(([, a], [, b]) => b - a),
           ),
         )
           //we only show top 4 skills

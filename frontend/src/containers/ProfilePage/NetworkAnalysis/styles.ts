@@ -8,9 +8,10 @@ export const ContainerTitle = styled(Title)``;
 
 export const NetworkSkillNameCountContainer = styled.div`
   display: flex;
-  max-width: 100px;
-  min-width: 100px;
+  max-width: 150px;
+  min-width: 150px;
   overflow-x: hidden;
+  align-items: center;
 `;
 
 export const NetworkSkillItem = styled.div`
@@ -21,10 +22,15 @@ export const NetworkSkillItem = styled.div`
 
 export const NetworkSkillName = styled.div`
   margin-right: 5px;
+  max-width: 90px;
+  word-break: keep-all;
+  align-self: center;
   font-weight: bold;
 `;
 
-export const NetworkSkillAmount = styled.div``;
+export const NetworkSkillAmount = styled.div`
+  padding: 5px 10px;
+`;
 
 export const NetworkSkillGraphContainer = styled.div`
   flex: 1 0;
