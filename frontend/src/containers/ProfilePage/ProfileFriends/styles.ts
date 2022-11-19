@@ -16,7 +16,7 @@ export const Title = styled.div`
 
 export const ListContainer = styled.div`
   background-color: white;
-  min-height: 600px;
+  min-height: 700px;
   position: relative;
 `;
 
