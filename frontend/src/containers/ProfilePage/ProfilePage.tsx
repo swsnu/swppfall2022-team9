@@ -190,14 +190,14 @@ const ProfilePage: React.FC<Props> = () => {
               friendList.findIndex(element => element.id === Number(userId)) !==
               -1 ? (
                 <S.ProfileActionButton
-                  backgroundColor={"#d9d9d9"}
+                  backgroundColor={"#dedede"}
                   onClick={onClickEvaluateQuality}
                 >
                   동료로서 평가하기
                 </S.ProfileActionButton>
               ) : (
                 <S.ProfileActionButton
-                  backgroundColor={"#d9d9d9"}
+                  backgroundColor={"#dedede"}
                   onClick={onClickAddFriend}
                 >
                   친구 추가하기

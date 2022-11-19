@@ -39,7 +39,6 @@ const ProfileFriendItem: React.FC<Props> = ({
       <S.Name>{profileUserFriend.name}</S.Name>
       <S.InfoContainer>
         <S.TagsContainer>
-          <S.TagTitle>Tags:</S.TagTitle>
           {profileUserFriend.skillTags.map((tag, index) => {
             return (
               <S.Tag key={index}>
