@@ -220,6 +220,12 @@ const ProfilePage: React.FC<Props> = () => {
           <S.Introduction>{profile?.introduction}</S.Introduction>
         </S.IntroductionContainer>
         <S.OtherTagsContainer>
+          <S.Title>
+            {profileUserName}님의 친구들이 보는 ${profileUserName}님은?
+          </S.Title>
+          <S.QualityTagContainer></S.QualityTagContainer>
+        </S.OtherTagsContainer>
+        <S.OtherTagsContainer>
           <S.Title>교육 이력</S.Title>
           <S.TagBubblesContainer>
             {profile?.education.map(tag => {

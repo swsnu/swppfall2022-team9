@@ -1,10 +1,10 @@
-import { render } from "@testing-library/react";
 import { renderWithProviders } from "test-utils/mocks";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import ProfilePage from "./ProfilePage";
 import { User } from "server/models/users.model";
 import { OneChonInfo } from "types/friend.types";
 import { Profile } from "server/models/profile.model";
+import { QualityTags } from "server/models/qualityTags.model";
 
 const mockNavigate = jest.fn();
 //외부 dependency useNavigate
@@ -25,7 +25,7 @@ jest.mock("react-redux", () => ({
 const renderProfilePage = (
   currentUser: User | null,
   friendList: OneChonInfo[],
-  currentProfile: Profile | null,
+  currentProfile: (Profile & { qualityTags: QualityTags }) | null,
 ) => {
   return renderWithProviders(
     <MemoryRouter>

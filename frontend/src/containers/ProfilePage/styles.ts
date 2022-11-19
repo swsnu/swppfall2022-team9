@@ -92,6 +92,15 @@ export const SkillTag = styled.div`
   -webkit-mask-image: linear-gradient(90deg, #000, 100%, transparent);
 `;
 
+export const QualityTagContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const QualityTagItem = styled.div``;
+
+export const QualityTagText = styled.div``;
+
 export const WebsiteContainer = styled.div`
   font-weight: bold;
   display: flex;
