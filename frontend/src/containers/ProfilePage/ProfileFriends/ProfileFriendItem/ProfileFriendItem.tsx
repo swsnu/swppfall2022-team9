@@ -35,7 +35,7 @@ const ProfileFriendItem: React.FC<Props> = ({
   };
 
   return (
-    <S.ListItemContainer onClick={onClickFriend}>
+    <S.ListItemContainer role="list" onClick={onClickFriend}>
       <S.ImageContainer imgUrl={profileUserFriend.profileImgUrl} />
       <S.Name>{profileUserFriend.name}</S.Name>
       <S.InfoContainer>
