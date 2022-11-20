@@ -5,6 +5,7 @@ import reducer, {
   getFriendProfile,
   editMyProfile,
   ProfileState,
+  getFriendProfileWithoutStateUpdate,
 } from "./profile";
 import { profileStub } from "server/stubs/profiles.stub";
 import { postCreateProfile } from "./profile";
@@ -48,6 +49,11 @@ describe("profile reducer", () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
     await store.dispatch(getFriendProfile(1));
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
+  });
+  
+  it("tests getFriendProfileWithoutStateUpdate", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
+    await store.dispatch(getFriendProfileWithoutStateUpdate(1));
   });
 
   it("tests editMyProfile", async () => {
