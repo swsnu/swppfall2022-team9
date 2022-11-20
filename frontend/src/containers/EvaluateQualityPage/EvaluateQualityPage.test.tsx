@@ -73,8 +73,6 @@ describe("<EvaluateQualityPage/>", () => {
     const close = await waitFor(() => screen.getAllByRole("close-icon")[0]);
     fireEvent.click(close);
 
-    screen.debug();
-
     const submit = screen.getByText("제출");
     await waitFor(() => fireEvent.click(submit));
   });
