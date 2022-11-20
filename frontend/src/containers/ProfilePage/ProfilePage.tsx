@@ -27,9 +27,20 @@ const ProfilePage: React.FC<Props> = () => {
 
   const getProfileData = async (id: number) => {
     try {
-      await dispatch(getFriendProfile(id));
+      await dispatch(getFriendProfile(id)).unwrap();
     } catch (err) {
-      alert.open({ message: "존재하지 않는 유저입니다" });
+      alert.open({
+        message: "존재하지 않는 유저입니다",
+        buttons: [
+          {
+            label: "확인",
+            onClick: () => {
+              alert.close();
+              navigate("/");
+            },
+          },
+        ],
+      });
     }
   };
 
