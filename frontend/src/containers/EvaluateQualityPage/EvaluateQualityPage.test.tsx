@@ -59,7 +59,7 @@ describe("<EvaluateQualityPage/>", () => {
         unwrap: () => ({}),
       })
       .mockReturnValueOnce({
-        unwrap: () => ({}),
+        unwrap: () => ({ qualityTags: [{ name: "tag" }, { name: "tag2" }] }),
       });
     renderEvaluateQualityPage();
     const input = screen.getByRole("combobox");
@@ -72,8 +72,11 @@ describe("<EvaluateQualityPage/>", () => {
 
     const close = await waitFor(() => screen.getAllByRole("close-icon")[0]);
     fireEvent.click(close);
+
+    screen.debug();
+
     const submit = screen.getByText("제출");
-    fireEvent.click(submit);
+    await waitFor(() => fireEvent.click(submit));
   });
 
   it("tests no-userId", async () => {
