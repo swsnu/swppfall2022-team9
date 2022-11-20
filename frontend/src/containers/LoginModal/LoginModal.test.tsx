@@ -95,4 +95,25 @@ describe("<LoginModal/>", () => {
     fireEvent.click(loginButton);
     expect(mockDispatch).toHaveBeenCalled();
   });
+
+  it("click login failure", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () =>
+        Promise.reject({
+          response: {
+            status: 401,
+            statusText: "Unauthorized",
+            data: {},
+          },
+        }),
+    });
+    renderLoginModal(alertProviderProps);
+    const usernameInput = screen.getByRole("username");
+    const passwordInput = screen.getByRole("password");
+    fireEvent.change(usernameInput, { target: { value: "swpp@snu.ac.kr" } });
+    fireEvent.change(passwordInput, { target: { value: "iluvswpp" } });
+    const loginButton = screen.getByRole("button", { name: /로그인하기/i });
+    fireEvent.click(loginButton);
+    expect(mockDispatch).toHaveBeenCalled();
+  });
 });
