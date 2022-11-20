@@ -1,6 +1,7 @@
 import { AnyAction, configureStore, EnhancedStore } from "@reduxjs/toolkit";
 import reducer, {
   getFriendList,
+  getSessionCookie,
   UserState,
   verifyRegisterToken,
 } from "./users";
@@ -71,6 +72,11 @@ describe("users reducer", () => {
   it("tests verify register token", async () => {
     axios.post = jest.fn().mockResolvedValue({});
     await store.dispatch(verifyRegisterToken("token"));
+  });
+
+  it("tests verify get Session Cookie", async () => {
+    axios.post = jest.fn().mockResolvedValue(null);
+    await store.dispatch(getSessionCookie());
   });
 
   it("tests get chon list", async () => {
