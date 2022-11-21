@@ -140,3 +140,6 @@ HOMEPAGE_URL = "http://127.0.0.1:3000/"
 
 # Email Verification Expire Days
 EMAIL_EXPIRE_DAYS = 1
+
+# Max Onechon Invariant
+MAX_ONECHON = 10
