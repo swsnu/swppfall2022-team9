@@ -61,6 +61,7 @@ class FriendRequest(models.Model):
     unique_request_id = models.CharField(
         max_length=100,
         unique=True,
+        editable=False,
     )
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
