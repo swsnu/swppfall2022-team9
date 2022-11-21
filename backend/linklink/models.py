@@ -70,9 +70,10 @@ class FriendRequest(models.Model):
 
     def save(self, *args, **kwargs):
         self.unique_request_id = "-".join([
-            min(self.senderId.id, self.getterId.id),
-            max(self.senderId.id, self.getterId.id)
+            str(min(self.senderId.id, self.getterId.id)),
+            str(max(self.senderId.id, self.getterId.id))
         ])
+        # pylint: disable=super-with-arguments
         super(FriendRequest, self).save(*args, **kwargs)
 
 

@@ -16,7 +16,7 @@ def max_onechon_invariant(linklinkuser):
     if not met,
     raise ValueError with logs
     """
-    MAX_ONECHON = settings.MAX_ONECHON
+    max_onechon = settings.MAX_ONECHON
     # Get all Accepted FriendRequest
     all_accepted_friend_requests = FriendRequest.objects.filter(
         status="Accepted"
@@ -26,11 +26,11 @@ def max_onechon_invariant(linklinkuser):
         all_accepted_friend_requests,
         linklinkuser
     )
-    if len(onechon_list) > MAX_ONECHON:
+    if len(onechon_list) > max_onechon:
         max_onechon_error_message = (
             f"Onechon Invariant Failed for {linklinkuser}."
             f"Onechon list length: {len(onechon_list)}"
             f"Onechon list of {linklinkuser}:"
             f"{onechon_list}"
         )
-        raise ValueError(max_onechon_error_message)    
+        raise ValueError(max_onechon_error_message)
