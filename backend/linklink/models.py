@@ -196,36 +196,3 @@ class JobExperience(models.Model):
 #--------------------------------------------------------------------------
 #   Chat Related Models
 #--------------------------------------------------------------------------
-
-# class ChatLog(models.Model):
-#     """
-#     ChatLog model class
-#     """
-#     senderId = models.ForeignKey(
-#         LinkLinkUser,
-#         on_delete=models.CASCADE,
-#         related_name="senderIdChat", # avoid fields.E304 error
-#     )
-#     getterId = models.ForeignKey(
-#         LinkLinkUser,
-#         on_delete=models.CASCADE,
-#         related_name="getterIdChat", # avoid fields.E304 error
-#     )
-#     message = models.TextField()
-#     createdAt = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.senderId}->{self.getterId}, message:{self.message}"
-
-
-# class ChatRoom(models.Model):
-#     """
-#     ChatRoom model class
-#     """
-#     users = models.ManyToManyField(LinkLinkUser)
-#     chatLogs = models.ManyToManyField(ChatLog)
-#     createdAt = models.DateTimeField(auto_now_add=True)
-#     updatedAt = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return f"Chatroom {self.id}"
