@@ -521,9 +521,77 @@ def profile(request, user_id):
 @allowed_method_or_405(["GET", "POST"])
 @logged_in_or_401
 def friend_request(request):
-    pass
+    if request.method == "GET":
+        # Check whether query params are requested
+        user1_id = request.GET.get("user1_id", None)
+        user2_id = request.GET.get("user2_id", None)
+        linklinkuser = request.user.linklinkuser
+        if user1_id is None and user2_id is None:
+            # Return all my pending FriendRequests
+            pending_friend_requests = FriendRequest.objects.filter(
+                status="Pending"
+            ).filter(
+                Q(senderId=linklinkuser) | Q(getterId=linklinkuser)
+            )
+            # Construct response
+            response_dict = {"friendRequests": []}
+            for pending_friend_request in pending_friend_requests:
+                friend_request_dict = {}
+                friend_request_dict["id"] = pending_friend_request.id
+                friend_request_dict["senderId"] = \
+                    pending_friend_request.senderId
+                friend_request_dict["getterId"] = \
+                    pending_friend_request.getterId
+                friend_request_dict["status"] = pending_friend_request.status
+                response_dict["friendRequests"].append(friend_request_dict)
+            return JsonResponse(status=200, data=response_dict)
+        elif user1_id is not None and user2_id is not None:
+            # If read permission,
+            # Find FriendRequest such that user1_id AND user2_id
+            # Check read permission
+            if linklinkuser not in (user1_id, user2_id):
+                no_read_permission_message = (
+                    "No read permission for FriendRequest "
+                    f"user1Id={user1_id}, user2Id={user2_id}."
+                )
+                return JsonResponse(
+                    status=403,
+                    data={"message": no_read_permission_message}
+                )
+            try:
+                friend_request_found = FriendRequest.objects.get(
+                    (Q(senderId=user1_id) & Q(getterId=user2_id))
+                    |
+                    (Q(senderId=user2_id) & Q(getterId=user1_id))
+                )
+            except FriendRequest.DoesNotExist:
+                friend_request_not_found_message = (
+                    f"FriendRequest user1Id={user1_id}, "
+                    f"user2Id={user2_id} not found."
+                )
+                return JsonResponse(
+                    status=404,
+                    data={"message": friend_request_not_found_message}
+                )
+            return JsonResponse(
+                status=200,
+                data={
+                    "id": friend_request_found.id,
+                    "senderId": friend_request_found.senderId,
+                    "getterId": friend_request_found.getterId,
+                    "status": friend_request_found.status,
+                }
+            )
+        else:
+            return JsonResponse(
+                status=405,
+                data={"message":"invalid query param"}
+            )
+    elif request.method == "POST":
+        pass
 
 @allowed_method_or_405(["PUT"])
 @logged_in_or_401
 def friend_request_respond(request):
-    pass
+    if request.method == "PUT":
+        pass
