@@ -391,10 +391,10 @@ def friend(request):
     #     pass
 
 #--------------------------------------------------------------------------
-#   LinkLinkUser Related APIs
+#   Profile Related APIs
 #--------------------------------------------------------------------------
 
-@allowed_method_or_405(["GET", "PUT"])
+@allowed_method_or_405(["PUT"])
 @logged_in_or_401
 def my_profile(request):
     if request.method == "PUT": # pragma: no branch
@@ -513,3 +513,17 @@ def profile(request, user_id):
                     f"userId={user_id} not found."
                 }
             )
+
+#--------------------------------------------------------------------------
+#   FriendRequest Related APIs
+#--------------------------------------------------------------------------
+
+@allowed_method_or_405(["GET", "POST"])
+@logged_in_or_401
+def friend_request(request):
+    pass
+
+@allowed_method_or_405(["PUT"])
+@logged_in_or_401
+def friend_request_respond(request):
+    pass
