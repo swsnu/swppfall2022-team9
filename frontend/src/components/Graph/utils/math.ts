@@ -143,6 +143,10 @@ export function addPoints(p1: Coord, p2: Coord): Coord {
   return { x: p1.x + p2.x, y: p1.y + p2.y };
 }
 
+export function distPoints(p1: Coord, p2: Coord): number {
+  return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+}
+
 /**
  * Actual world point is converted to screen(=viewing) point
  * @param point
