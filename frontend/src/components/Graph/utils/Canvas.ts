@@ -27,7 +27,7 @@ export class Canvas {
 
   private EDGE_WIDTH = 3;
 
-  private EDGE_LENGTH = 28;
+  private EDGE_LENGTH = NODE_RADIUS;
 
   private element: HTMLCanvasElement;
 
@@ -109,6 +109,9 @@ export class Canvas {
       // TODO
       // Add node click action
       console.log(touchedNode.name);
+      this.setCenterNode(touchedNode.id);
+      this.setOneChonNodes(touchedNode.id);
+      this.render();
     }
 
     if (window.TouchEvent && evt instanceof TouchEvent) {
@@ -132,6 +135,12 @@ export class Canvas {
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
+      if (this.touchedNode && this.touchedNode != touchedNode) {
+        window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
+        this.touchedNode.expandAnimationId = 0;
+        this.touchedNode.contract();
+      }
+
       this.touchedNode = touchedNode;
       if (
         !this.touchedNode.expandAnimationId &&
@@ -332,6 +341,7 @@ export class Canvas {
         ? targetOneChon.lastname + targetOneChon.firstname
         : this.currentUser!.lastname + this.currentUser!.firstname,
       { x: 0, y: 0 },
+      { x: 0, y: 0 },
       this,
       false,
       this.CENTER_NODE_RADIUS,
@@ -363,6 +373,7 @@ export class Canvas {
           oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
           coords[oneChonIdx].userCoord,
+          { x: 0, y: 0 },
           this,
           [],
           oneChon.isNotFiltered,
@@ -394,6 +405,7 @@ export class Canvas {
             twoChon.imgUrl,
             twoChon.lastname + twoChon.firstname,
             coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
+            coords[oneChonIdx].userCoord,
             this,
             twoChon.isNotFiltered,
           );
@@ -409,6 +421,7 @@ export class Canvas {
           oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
           coords[oneChonIdx].userCoord,
+          { x: 0, y: 0 },
           this,
           twoChonNodes,
           oneChon.isNotFiltered,
