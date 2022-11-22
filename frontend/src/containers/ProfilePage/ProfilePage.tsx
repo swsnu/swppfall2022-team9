@@ -71,20 +71,20 @@ const ProfilePage: React.FC<Props> = () => {
   };
 
   const onClickAddFriend = async () => {
-    if (userId && currentUser) {
-      try {
-        await dispatch(
-          postFriendRequest({
-            senderId: currentUser.id,
-            getterId: Number(userId),
-          }),
-        ).unwrap();
-        alert.open({ message: "친구 요청을 보냈습니다" });
-      } catch (err) {
-        console.log(err);
-        alert.open({ message: "친구 요청에 실패했습니다" });
-      }
+    // if (userId && currentUser) {
+    try {
+      await dispatch(
+        postFriendRequest({
+          senderId: currentUser.id,
+          getterId: Number(userId),
+        }),
+      ).unwrap();
+      alert.open({ message: "친구 요청을 보냈습니다" });
+    } catch (err) {
+      console.log(err);
+      alert.open({ message: "친구 요청에 실패했습니다" });
     }
+    // }
   };
 
   useEffect(() => {
