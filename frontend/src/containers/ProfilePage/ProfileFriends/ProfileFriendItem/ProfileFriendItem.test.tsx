@@ -110,7 +110,6 @@ describe("<ProfileFriendItem/>", () => {
       usersStub[0],
       friendList,
     );
-    screen.debug();
     const askFriend = screen.getByRole("button");
     fireEvent.click(askFriend);
   });
