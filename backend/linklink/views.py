@@ -588,7 +588,38 @@ def friend_request(request):
                 data={"message":"invalid query param"}
             )
     elif request.method == "POST":
-        pass
+        # If there is no FriendRequest, Create FriendRequest to getterId
+        try:
+            req_data = json.loads(request.body.decode())
+            getter_id = req_data["getterId"]
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest(e) # implicit status code = 400
+        linklinkuser_sender = request.user.linklinkuser
+        linklinkuser_getter = LinkLinkUser.objects.get(id=getter_id)
+        # Check whether FriendRequest exist between two users
+        friend_request_found = FriendRequest.objects.filter(
+            (Q(senderId=linklinkuser_sender) & Q(getterId=linklinkuser_getter))
+            |
+            (Q(senderId=linklinkuser_getter) & Q(getterId=linklinkuser_sender))
+        )
+        if friend_request_found:
+            friend_request_already_exist_message = (
+                "FriendRequest already exists between "
+                f"user1Id={linklinkuser_sender}, user2Id={linklinkuser_getter}."
+            )
+            return JsonResponse(
+                status=403,
+                data={"message":friend_request_already_exist_message}
+            )
+        else:
+            # Create FriendRequest to getterId
+            FriendRequest.objects.create(
+                senderId=linklinkuser_sender,
+                getterId=linklinkuser_getter,
+                status="Pending",
+            )
+            return HttpResponse(status=201)
+
 
 @allowed_method_or_405(["PUT"])
 @logged_in_or_401
