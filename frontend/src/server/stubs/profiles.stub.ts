@@ -42,3 +42,13 @@ export const profileStub: Profile = {
   imgUrl:
     "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
 };
+
+export const profileStub2: Profile = {
+  introduction: "Korea No.2 Actress",
+  skillTags: skills,
+  educations: educations,
+  jobExperiences: jobExp,
+  website: "https://www.naver.com",
+  imgUrl:
+    "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
+};
