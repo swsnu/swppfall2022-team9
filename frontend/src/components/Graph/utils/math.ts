@@ -24,7 +24,6 @@ const degToRad = (degrees: number) => {
  * @param expandRatio
  * @returns Coords[]
  */
-// TODO: update params to accept User[]
 export const getOneAndTwoChonCoordinates = (
   oneChonCount: number,
   twoChonCount: number[],
@@ -59,7 +58,7 @@ export const getOneAndTwoChonCoordinates = (
 
     const max2Chon = Math.min(Math.floor(budget / margin) + 1, maxConnections);
     if (max2Chon < twoChonCount[i]) {
-      throw new Error("Number of 2-chons exceeded the maximum capacity.");
+      console.error("Number of 2-chons exceeded the maximum capacity.");
     }
 
     if (twoChonCount[i] === 0) {

@@ -1,8 +1,8 @@
-import { Coord, PanZoom } from "types/canvas.types";
+import { Coord } from "types/canvas.types";
 import { Canvas } from "./Canvas";
 import { convertCartesianToScreen, distPoints, getScreenPoint } from "./math";
 
-export const NODE_RADIUS = 40;
+export const NODE_RADIUS = 28;
 
 export class UserNode {
   id: number;
@@ -17,6 +17,8 @@ export class UserNode {
 
   coord: Coord;
 
+  startCoord: Coord;
+
   canvas: Canvas;
 
   isNotFiltered: boolean; // true if does not contain search keyword
@@ -25,7 +27,7 @@ export class UserNode {
 
   contractAnimationId = 0;
 
-  private EXPAND_RATE = 4.5 / 4;
+  private EXPAND_RATE = 1.3;
 
   private EXPAND_SPEED = 0.5;
 
@@ -36,6 +38,7 @@ export class UserNode {
     imgUrl: string,
     name: string,
     coord: Coord,
+    startCoord: Coord,
     canvas: Canvas,
     isNotFiltered = false,
     radius = NODE_RADIUS,
@@ -45,6 +48,7 @@ export class UserNode {
     this.imgElement.src = imgUrl;
     this.name = name;
     this.coord = coord;
+    this.startCoord = startCoord;
     this.canvas = canvas;
     this.radius = radius;
     this.originalRadius = radius;
@@ -100,11 +104,12 @@ export class OneChonNode extends UserNode {
     imgUrl: string,
     name: string,
     coord: Coord,
+    startCoord: Coord,
     canvas: Canvas,
     twoChonNodes: UserNode[],
     isNotFiltered = false,
   ) {
-    super(id, imgUrl, name, coord, canvas, isNotFiltered);
+    super(id, imgUrl, name, coord, startCoord, canvas, isNotFiltered);
     this.twoChonNodes = twoChonNodes;
   }
 }
