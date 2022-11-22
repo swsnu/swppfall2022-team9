@@ -27,11 +27,11 @@ export class UserNode {
 
   contractAnimationId = 0;
 
-  private EXPAND_RATE = 1.3;
+  EXPAND_RATE = 1.3;
 
-  private EXPAND_SPEED = 0.5;
+  EXPAND_SPEED = 0.5;
 
-  private CONTRACT_SPEED = 0.5;
+  CONTRACT_SPEED = 0.5;
 
   constructor(
     id: number,
@@ -57,8 +57,10 @@ export class UserNode {
 
   expand() {
     if (this.radius >= this.originalRadius * this.EXPAND_RATE) {
+      this.radius = this.originalRadius * this.EXPAND_RATE;
       window.cancelAnimationFrame(this.expandAnimationId);
       this.expandAnimationId = 0;
+      this.canvas.render();
       return;
     }
     this.radius += this.EXPAND_SPEED;
@@ -70,6 +72,7 @@ export class UserNode {
 
   contract() {
     if (this.radius <= this.originalRadius) {
+      this.radius = this.originalRadius;
       window.cancelAnimationFrame(this.contractAnimationId);
       this.contractAnimationId = 0;
       return;

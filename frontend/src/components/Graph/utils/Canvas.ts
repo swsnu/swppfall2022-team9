@@ -16,6 +16,7 @@ import {
 } from "./math";
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
 import { OneChonInfo } from "types/friend.types";
+import { ThemeColor } from "styles/common.styles";
 export class Canvas {
   private MAX_SCALE = 2;
 
@@ -23,7 +24,7 @@ export class Canvas {
 
   private ZOOM_SENSITIVITY = 300;
 
-  private CENTER_NODE_RADIUS = (NODE_RADIUS * 5) / 4;
+  private CENTER_NODE_RADIUS = NODE_RADIUS * 1.5;
 
   private EDGE_WIDTH = 3;
 
@@ -109,9 +110,11 @@ export class Canvas {
       // TODO
       // Add node click action
       console.log(touchedNode.name);
-      this.setCenterNode(touchedNode.id);
-      this.setOneChonNodes(touchedNode.id);
-      this.render();
+      if (touchedNode !== this.centerNode) {
+        this.setCenterNode(touchedNode.id);
+        this.setOneChonNodes(touchedNode.id);
+        this.render();
+      }
     }
 
     if (window.TouchEvent && evt instanceof TouchEvent) {
@@ -135,7 +138,11 @@ export class Canvas {
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
-      if (this.touchedNode && this.touchedNode !== touchedNode) {
+      if (
+        this.touchedNode &&
+        this.touchedNode !== touchedNode &&
+        !this.touchedNode.isNotFiltered
+      ) {
         window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
         this.touchedNode.expandAnimationId = 0;
         this.touchedNode.contract();
@@ -331,7 +338,9 @@ export class Canvas {
   }
 
   setCenterNode(userId: number) {
-    const targetOneChon = this.friendList.find(oneChon => oneChon.id == userId);
+    const targetOneChon = this.friendList.find(
+      oneChon => oneChon.id === userId,
+    );
     const centerNode = new UserNode(
       userId,
       targetOneChon
@@ -354,9 +363,11 @@ export class Canvas {
   }
 
   setOneChonNodes(userId: number) {
-    const targetOneChon = this.friendList.find(oneChon => oneChon.id == userId);
+    const targetOneChon = this.friendList.find(
+      oneChon => oneChon.id === userId,
+    );
     if (targetOneChon) {
-      if (targetOneChon.chons.length == 0) {
+      if (targetOneChon.chons.length === 0) {
         this.oneChonNodes = undefined;
         return;
       }
@@ -386,7 +397,7 @@ export class Canvas {
       });
     } else {
       const friendList = this.friendList;
-      if (friendList.length == 0) {
+      if (friendList.length === 0) {
         this.oneChonNodes = undefined;
         return;
       }
@@ -504,17 +515,23 @@ export class Canvas {
     );
     const centerX = screenPosition.x;
     const centerY = screenPosition.y;
+    const opacity = userNode.isNotFiltered
+      ? 20
+      : userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE
+      ? 50
+      : 100;
 
     // User node clipped in circle
     ctx.save();
     ctx.beginPath();
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
+    ctx.fillStyle = ThemeColor;
+    ctx.fill();
     ctx.clip();
     ctx.closePath();
 
-    if (userNode.isNotFiltered) {
-      ctx.filter = "opacity(30%)";
-    }
+    // Draw user image
+    ctx.filter = `opacity(${opacity}%)`;
     ctx.drawImage(
       userNode.imgElement,
       centerX - scaledRadius,
@@ -522,12 +539,26 @@ export class Canvas {
       scaledRadius * 2,
       scaledRadius * 2,
     );
+    if (userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE) {
+      ctx.restore();
+      ctx.fillStyle = "black";
+      ctx.font = `900 ${scaledRadius * 0.5}px monospace`;
+      ctx.textAlign = "center";
+      ctx.fillText(
+        userNode.name,
+        centerX,
+        centerY + scaledRadius * 0.13,
+        scaledRadius * 1.8,
+      );
+    }
 
-    // Round border
+    // Draw round border
+    ctx.restore();
     ctx.beginPath();
     ctx.lineWidth = // Set border line width
-      userNode === this.centerNode ? scaledRadius * 0.13 : scaledRadius * 0.1;
+      userNode === this.centerNode ? scaledRadius * 0.1 : scaledRadius * 0.07;
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "black";
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
@@ -550,7 +581,7 @@ export class Canvas {
 
     ctx.save();
     ctx.lineWidth = this.EDGE_WIDTH;
-    if (chon == 2) {
+    if (chon === 2) {
       ctx.setLineDash([4, 2]); // Dashline from 1-chons to 2-chons
     }
     ctx.beginPath();
