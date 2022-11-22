@@ -668,7 +668,8 @@ def friend_request_respond(request, friend_request_id):
             return HttpResponseBadRequest(e) # implicit status code = 400
         # Get FriendRequest=friendRequestId
         try:
-            friend_request_found = FriendRequest.objects.get(id=friend_request_id)
+            friend_request_found = \
+                FriendRequest.objects.get(id=friend_request_id)
         except FriendRequest.DoesNotExist:
             friend_request_not_found_message = \
                 f"FriendRequest id={friend_request_id} not found."
@@ -680,11 +681,11 @@ def friend_request_respond(request, friend_request_id):
         # State Transition Table
         #--------------------------------------------------|
         # Before\After | Accepted  | Pending   | Rejected  |
-        # Accepted     | No change | Illegal   | Both      |     
+        # Accepted     | No change | Illegal   | Both      |
         # Pending      | Getter    | No change | Getter    |
         # Rejected     | Illegal   | Both*     | No change |
         #--------------------------------------------------|
-        # No change: No state change, do nothing 
+        # No change: No state change, do nothing
         # Illegal: State Change not allowed
         # Getter: Only Getter has write permission
         # Both: Both Sender and Getter have write permission
@@ -743,8 +744,11 @@ def friend_request_respond(request, friend_request_id):
                     data={"message": no_write_permission_message}
                 )
         elif state_transition_result == "Both":
-            if friend_request_found.senderId.id != linklinkuser.id and \
-                friend_request_found.getterId.id != linklinkuser.id:
+            sender_or_getter = (
+                friend_request_found.senderId.id,
+                friend_request_found.getterId.id
+            )
+            if linklinkuser.id not in sender_or_getter:
                 no_write_permission_message = (
                     "Current user has no write permission for "
                     f"FriendRequest id={friend_request_id}."
