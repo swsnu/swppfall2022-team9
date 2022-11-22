@@ -1,12 +1,6 @@
-import { render, fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "test-utils/mocks";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { render } from "@testing-library/react";
 import { profileStub, profileStub2 } from "server/stubs/profiles.stub";
-import { Profile } from "server/models/profile.model";
 import NetworkAnalysis from "./NetworkAnalysis";
-import { usersStub } from "server/stubs/users.stub";
-import { OneChonInfo } from "types/friend.types";
-import { User } from "server/models/users.model";
 
 describe("<QualityAnalsys/>", () => {
   beforeEach(() => {
