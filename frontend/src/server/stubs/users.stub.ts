@@ -4,7 +4,7 @@ import { User } from "../models/users.model";
 //this file is for later creating test codes easily
 export const usersStub: Array<User> = [
   {
-    id: 1,
+    id: 0,
     email: "swpp@snu.ac.kr",
     username: "swpp",
     firstname: "software",
