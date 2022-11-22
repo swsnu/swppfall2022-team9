@@ -61,7 +61,6 @@ const Navbar: React.FC<Props> = () => {
     navigate("/chat");
   };
 
-  // TODO: search click should render a search bar in the canvas!!
   const onClickSearch = () => {
     dispatch(searchActions.toggleSearchMode());
   };
