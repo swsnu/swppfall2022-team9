@@ -568,6 +568,10 @@ def friend_request(request):
                 friend_request_dict["getterId"] = \
                     pending_friend_request.getterId.id
                 friend_request_dict["status"] = pending_friend_request.status
+                friend_request_dict["senderImgUrl"] = \
+                    pending_friend_request.senderId.profile.imgUrl
+                friend_request_dict["senderName"] = \
+                    str(pending_friend_request.senderId)
                 response_dict["friendRequests"].append(friend_request_dict)
             return JsonResponse(status=200, data=response_dict)
         elif user1_id is not None and user2_id is not None:
