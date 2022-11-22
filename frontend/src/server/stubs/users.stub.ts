@@ -66,6 +66,10 @@ export const makeStubFriendList = (
   twoChonNumber: number,
 ): OneChonInfo[] => {
   const stubFriendList: OneChonInfo[] = [];
+  const oneChonImgUrl =
+    "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3";
+  const twoChonImgUrl =
+    "https://i.pinimg.com/736x/4f/55/4f/4f554fd63632cf7704740c548a3dba98.jpg";
   let id = 0;
   for (let i = 0; i < oneChonNumber; i++) {
     const chons: TwoChonInfo[] = [];
@@ -74,16 +78,14 @@ export const makeStubFriendList = (
         id: id++,
         lastname: "사",
         firstname: `용자${id}`,
-        imgUrl:
-          "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3",
+        imgUrl: twoChonImgUrl,
       });
     }
     stubFriendList.push({
       id: id++,
       lastname: "사",
       firstname: `용자${id}`,
-      imgUrl:
-        "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3",
+      imgUrl: oneChonImgUrl,
       chons: chons,
     });
   }
