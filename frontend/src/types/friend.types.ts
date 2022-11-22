@@ -3,7 +3,7 @@ export interface TwoChonInfo {
   firstname: string;
   lastname: string;
   imgUrl: string;
-  isNotFiltered?: boolean;
+  isNotFiltered?: boolean; // true if does not contain search keyword
 }
 
 export interface OneChonInfo extends TwoChonInfo {

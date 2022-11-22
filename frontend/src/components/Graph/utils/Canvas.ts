@@ -1,5 +1,5 @@
 import { User } from "server/models/users.model";
-import { Coord, NodeTouchInfo, PanZoom } from "types/canvas.types";
+import { Coord, PanZoom } from "types/canvas.types";
 import {
   NODE_RADIUS,
   OneChonNode,
@@ -9,7 +9,6 @@ import {
   addPoints,
   convertCartesianToScreen,
   diffPoints,
-  distPoints,
   getEdgeCoords,
   getOneAndTwoChonCoordinates,
   getScreenPoint,
@@ -26,11 +25,9 @@ export class Canvas {
 
   private CENTER_NODE_RADIUS = (NODE_RADIUS * 5) / 4;
 
-  private EXPAND_SPEED = 0.5;
+  private EDGE_WIDTH = 3;
 
-  private EXPAND_RATE = 4.5 / 4;
-
-  private CONTRACT_SPEED = 0.5;
+  private EDGE_LENGTH = 28;
 
   private element: HTMLCanvasElement;
 
@@ -63,15 +60,7 @@ export class Canvas {
 
   private nodes?: UserNode[]; // For convenient node iteration
 
-  private touchingNode?: NodeTouchInfo;
-
-  private touchedNode?: NodeTouchInfo;
-
-  private requestAnimationId = 0;
-
-  private EDGE_WIDTH = 3;
-
-  private EDGE_LENGTH = 28;
+  private touchedNode?: UserNode;
 
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
@@ -82,6 +71,18 @@ export class Canvas {
 
   getContext() {
     return this.ctx;
+  }
+
+  getPanZoom() {
+    return this.panZoom;
+  }
+
+  getCanvasElement() {
+    return this.element;
+  }
+
+  getDpr() {
+    return this.dpr;
   }
 
   initialize() {
@@ -103,11 +104,7 @@ export class Canvas {
     const point = this.getPointFromTouchyEvent(evt);
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     this.panPoint.lastMousePos = { x: point.offsetX, y: point.offsetY };
-
-    const touchedNode = this.nodes?.find(node =>
-      this.isNodeTouched(node, pointCoord),
-    );
-
+    const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
       // TODO
       // Add node click action
@@ -133,31 +130,23 @@ export class Canvas {
     evt.preventDefault();
     const point = this.getPointFromTouchyEvent(evt);
     const pointCoord = { x: point.offsetX, y: point.offsetY };
-
-    const touchingNode = this.nodes?.find(node =>
-      this.isNodeTouched(node, pointCoord),
-    );
-
-    if (touchingNode) {
-      if (!this.touchedNode) {
-        this.touchingNode = {
-          userNode: touchingNode,
-          minRadius: touchingNode.radius,
-          maxRadius: touchingNode.radius * this.EXPAND_RATE,
-        };
-        this.touchedNode = {
-          userNode: touchingNode,
-          minRadius: touchingNode.radius,
-          maxRadius: touchingNode.radius * this.EXPAND_RATE,
-        };
-        window.cancelAnimationFrame(this.requestAnimationId);
-        this.nodeExpandAnimation();
+    const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
+    if (touchedNode) {
+      this.touchedNode = touchedNode;
+      if (
+        !this.touchedNode.expandAnimationId &&
+        !this.touchedNode.isNotFiltered // Only filtered nodes can expand and contract
+      ) {
+        window.cancelAnimationFrame(this.touchedNode.contractAnimationId);
+        this.touchedNode.contractAnimationId = 0;
+        touchedNode.expand();
       }
     } else {
-      if (this.touchingNode && this.touchedNode) {
-        this.touchingNode = undefined;
-        window.cancelAnimationFrame(this.requestAnimationId);
-        this.nodeContractAnimation();
+      if (this.touchedNode && !this.touchedNode.contractAnimationId) {
+        window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
+        this.touchedNode.expandAnimationId = 0;
+        this.touchedNode.contract();
+        this.touchedNode = undefined;
       }
     }
   }
@@ -343,6 +332,7 @@ export class Canvas {
         ? targetOneChon.lastname + targetOneChon.firstname
         : this.currentUser!.lastname + this.currentUser!.firstname,
       { x: 0, y: 0 },
+      this,
       false,
       this.CENTER_NODE_RADIUS,
     );
@@ -373,6 +363,7 @@ export class Canvas {
           oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
           coords[oneChonIdx].userCoord,
+          this,
           [],
           oneChon.isNotFiltered,
         );
@@ -403,6 +394,7 @@ export class Canvas {
             twoChon.imgUrl,
             twoChon.lastname + twoChon.firstname,
             coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
+            this,
             twoChon.isNotFiltered,
           );
           twoChonNode.imgElement.onload = () => {
@@ -417,6 +409,7 @@ export class Canvas {
           oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
           coords[oneChonIdx].userCoord,
+          this,
           twoChonNodes,
           oneChon.isNotFiltered,
         );
@@ -553,47 +546,6 @@ export class Canvas {
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
-  }
-
-  isNodeTouched(node: UserNode, touchPoint: Coord) {
-    const scaledRadius = node.radius * this.panZoom.scale;
-    const correctedPosition = getScreenPoint(node.coord, this.panZoom);
-    const userNodeCenterScreenPosition = convertCartesianToScreen(
-      this.element,
-      correctedPosition,
-      this.dpr,
-    );
-    return distPoints(touchPoint, userNodeCenterScreenPosition) <= scaledRadius;
-  }
-
-  nodeExpandAnimation() {
-    const touchedNode = this.touchedNode!;
-    if (touchedNode.userNode.radius >= touchedNode.maxRadius) {
-      window.cancelAnimationFrame(this.requestAnimationId);
-      return;
-    }
-    touchedNode.userNode.radius += this.EXPAND_SPEED;
-    this.render();
-
-    this.requestAnimationId = window.requestAnimationFrame(
-      this.nodeExpandAnimation.bind(this),
-    );
-  }
-
-  nodeContractAnimation() {
-    const touchedNode = this.touchedNode!;
-    if (touchedNode.userNode.radius <= touchedNode.minRadius) {
-      window.cancelAnimationFrame(this.requestAnimationId);
-      this.touchedNode = undefined;
-      // return new Promise(resolve => {});
-      return;
-    }
-    touchedNode.userNode.radius -= this.CONTRACT_SPEED;
-    this.render();
-
-    this.requestAnimationId = window.requestAnimationFrame(
-      this.nodeContractAnimation.bind(this),
-    );
   }
 
   render() {
