@@ -101,7 +101,19 @@ export class Canvas {
   onMouseDown(evt: TouchyEvent) {
     evt.preventDefault();
     const point = this.getPointFromTouchyEvent(evt);
+    const pointCoord = { x: point.offsetX, y: point.offsetY };
     this.panPoint.lastMousePos = { x: point.offsetX, y: point.offsetY };
+
+    const touchedNode = this.nodes?.find(node =>
+      this.isNodeTouched(node, pointCoord),
+    );
+
+    if (touchedNode) {
+      // TODO
+      // Add node click action
+      console.log(touchedNode.name);
+    }
+
     if (window.TouchEvent && evt instanceof TouchEvent) {
       const touchCount = evt.touches.length;
       if (touchCount >= 2) {
