@@ -67,6 +67,8 @@ export class Canvas {
 
   private touchedNode?: NodeTouchInfo;
 
+  private requestAnimationId = 0;
+
   private EDGE_WIDTH = 3;
 
   private EDGE_LENGTH = 28;
@@ -136,10 +138,14 @@ export class Canvas {
           minRadius: touchingNode.radius,
           maxRadius: touchingNode.radius * this.EXPAND_RATE,
         };
+        window.cancelAnimationFrame(this.requestAnimationId);
+        this.nodeExpandAnimation();
       }
     } else {
       if (this.touchingNode && this.touchedNode) {
         this.touchingNode = undefined;
+        window.cancelAnimationFrame(this.requestAnimationId);
+        this.nodeContractAnimation();
       }
     }
   }
@@ -546,6 +552,36 @@ export class Canvas {
       this.dpr,
     );
     return distPoints(touchPoint, userNodeCenterScreenPosition) <= scaledRadius;
+  }
+
+  nodeExpandAnimation() {
+    const touchedNode = this.touchedNode!;
+    if (touchedNode.userNode.radius >= touchedNode.maxRadius) {
+      window.cancelAnimationFrame(this.requestAnimationId);
+      return;
+    }
+    touchedNode.userNode.radius += this.EXPAND_SPEED;
+    this.render();
+
+    this.requestAnimationId = window.requestAnimationFrame(
+      this.nodeExpandAnimation.bind(this),
+    );
+  }
+
+  nodeContractAnimation() {
+    const touchedNode = this.touchedNode!;
+    if (touchedNode.userNode.radius <= touchedNode.minRadius) {
+      window.cancelAnimationFrame(this.requestAnimationId);
+      this.touchedNode = undefined;
+      // return new Promise(resolve => {});
+      return;
+    }
+    touchedNode.userNode.radius -= this.CONTRACT_SPEED;
+    this.render();
+
+    this.requestAnimationId = window.requestAnimationFrame(
+      this.nodeContractAnimation.bind(this),
+    );
   }
 
   render() {
