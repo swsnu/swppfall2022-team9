@@ -135,7 +135,7 @@ export class Canvas {
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
-      if (this.touchedNode && this.touchedNode != touchedNode) {
+      if (this.touchedNode && this.touchedNode !== touchedNode) {
         window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
         this.touchedNode.expandAnimationId = 0;
         this.touchedNode.contract();

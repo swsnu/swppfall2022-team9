@@ -21,7 +21,7 @@ const Graph: React.FC<Props> = () => {
   useEffect(() => {
     if (currentUser && canvas) {
       canvas.setCurrentUser(currentUser);
-      if (isSearchMode && searchWord != "") {
+      if (isSearchMode && searchWord !== "") {
         canvas.setFriendList(filteredFriendList);
       } else {
         canvas.setFriendList(friendList);
