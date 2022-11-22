@@ -1,4 +1,4 @@
-import { OneChonInfo } from "../../types/friend.types";
+import { OneChonInfo, TwoChonInfo } from "../../types/friend.types";
 import { User } from "../models/users.model";
 
 //this file is for later creating test codes easily
@@ -60,6 +60,35 @@ export const usersStub: Array<User> = [
     lastname: "seven",
   },
 ];
+
+export const makeStubFriendList = (
+  oneChonNumber: number,
+  twoChonNumber: number,
+): OneChonInfo[] => {
+  const stubFriendList: OneChonInfo[] = [];
+  let id = 0;
+  for (let i = 0; i < oneChonNumber; i++) {
+    const chons: TwoChonInfo[] = [];
+    for (let j = 0; j < twoChonNumber; j++) {
+      chons.push({
+        id: id++,
+        lastname: "사",
+        firstname: `용자${id}`,
+        imgUrl:
+          "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3",
+      });
+    }
+    stubFriendList.push({
+      id: id++,
+      lastname: "사",
+      firstname: `용자${id}`,
+      imgUrl:
+        "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3",
+      chons: chons,
+    });
+  }
+  return stubFriendList;
+};
 
 export const friendListStub2: Array<OneChonInfo> = [
   {
