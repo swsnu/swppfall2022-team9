@@ -174,7 +174,12 @@ export function getWorldPoint(point: Coord, panZoom: PanZoom): Coord {
   return { x: (point.x - offset.x) / scale, y: (point.y - offset.y) / scale };
 }
 
-export const getEdgeCoords = (coordA: Coord, coordB: Coord, radius: number) => {
+export const getEdgeCoords = (
+  coordA: Coord,
+  coordB: Coord,
+  radiusA: number,
+  radiusB: number,
+) => {
   const delX = coordB.x - coordA.x;
   const delY = coordB.y - coordA.y;
   let theta = Math.atan(delY / delX);
@@ -182,12 +187,12 @@ export const getEdgeCoords = (coordA: Coord, coordB: Coord, radius: number) => {
     theta += Math.PI;
   }
   const edgeA = {
-    x: Math.floor(coordA.x + radius * Math.cos(theta)),
-    y: Math.floor(coordA.y + radius * Math.sin(theta)),
+    x: Math.floor(coordA.x + radiusA * Math.cos(theta)),
+    y: Math.floor(coordA.y + radiusA * Math.sin(theta)),
   };
   const edgeB = {
-    x: Math.floor(coordB.x + radius * Math.cos(theta + Math.PI)),
-    y: Math.floor(coordB.y + radius * Math.sin(theta + Math.PI)),
+    x: Math.floor(coordB.x + radiusB * Math.cos(theta + Math.PI)),
+    y: Math.floor(coordB.y + radiusB * Math.sin(theta + Math.PI)),
   };
   return [edgeA, edgeB];
 };

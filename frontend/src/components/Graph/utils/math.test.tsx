@@ -59,14 +59,14 @@ describe("<math.ts/>", () => {
     const coordA: Coord = { x: 10, y: 10 };
     const coordB: Coord = { x: 15, y: 15 };
     const radius = 3;
-    const res = MATH.getEdgeCoords(coordA, coordB, radius);
+    const res = MATH.getEdgeCoords(coordA, coordB, radius, radius);
     assert(res.length === 2);
   });
   it("computes edge coordinates given two coordinates in opposite orientation", () => {
     const coordA: Coord = { x: 15, y: 10 };
     const coordB: Coord = { x: 10, y: 15 };
     const radius = 3;
-    const res = MATH.getEdgeCoords(coordA, coordB, radius);
+    const res = MATH.getEdgeCoords(coordA, coordB, radius, radius);
     assert(res.length === 2);
   });
 });
