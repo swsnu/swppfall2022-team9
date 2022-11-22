@@ -98,10 +98,8 @@ describe("<ProfileFriendItem/>", () => {
       usersStub[0],
       friendList,
     );
-    screen.debug();
     const clickFrined = screen.getByRole("list");
     fireEvent.click(clickFrined);
-    const askFriend = screen.getByRole("button");
   });
 
   it("tests onAskFriendForIntroduction buttons", async () => {
