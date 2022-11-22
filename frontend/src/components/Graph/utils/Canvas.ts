@@ -1,5 +1,5 @@
 import { User } from "server/models/users.model";
-import { Coord, PanZoom } from "types/canvas.types";
+import { Coord, NodeTouchInfo, PanZoom } from "types/canvas.types";
 import {
   NODE_RADIUS,
   OneChonNode,
@@ -9,6 +9,7 @@ import {
   addPoints,
   convertCartesianToScreen,
   diffPoints,
+  distPoints,
   getEdgeCoords,
   getOneAndTwoChonCoordinates,
   getScreenPoint,
@@ -22,6 +23,14 @@ export class Canvas {
   private MIN_SCALE = 0.6;
 
   private ZOOM_SENSITIVITY = 300;
+
+  private CENTER_NODE_RADIUS = (NODE_RADIUS * 5) / 4;
+
+  private EXPAND_SPEED = 0.5;
+
+  private EXPAND_RATE = 4.5 / 4;
+
+  private CONTRACT_SPEED = 0.5;
 
   private element: HTMLCanvasElement;
 
@@ -44,11 +53,19 @@ export class Canvas {
 
   private ctx: CanvasRenderingContext2D;
 
-  private currentUserNode?: UserNode;
+  private currentUser?: User;
 
-  private currentUserNodeRadius = (NODE_RADIUS * 5) / 4;
+  private friendList: OneChonInfo[] = [];
+
+  private centerNode?: UserNode;
 
   private oneChonNodes?: OneChonNode[];
+
+  private nodes?: UserNode[]; // For convenient node iteration
+
+  private touchingNode?: NodeTouchInfo;
+
+  private touchedNode?: NodeTouchInfo;
 
   private EDGE_WIDTH = 3;
 
@@ -75,6 +92,7 @@ export class Canvas {
     touchy(this.element, addEvent, "mousedown", this.onMouseDown);
     touchy(this.element, addEvent, "mouseup", this.onMouseUp);
     touchy(this.element, addEvent, "mouseout", this.onMouseOut);
+    touchy(this.element, addEvent, "mousemove", this.onMouseMove);
     this.element.addEventListener("wheel", this.handleWheel);
   }
 
@@ -97,16 +115,41 @@ export class Canvas {
     touchy(this.element, addEvent, "mousemove", this.handlePinchZoom);
   }
 
-  onMouseMove() {}
+  onMouseMove(evt: TouchyEvent) {
+    evt.preventDefault();
+    const point = this.getPointFromTouchyEvent(evt);
+    const pointCoord = { x: point.offsetX, y: point.offsetY };
+
+    const touchingNode = this.nodes?.find(node =>
+      this.isNodeTouched(node, pointCoord),
+    );
+
+    if (touchingNode) {
+      if (!this.touchedNode) {
+        this.touchingNode = {
+          userNode: touchingNode,
+          minRadius: touchingNode.radius,
+          maxRadius: touchingNode.radius * this.EXPAND_RATE,
+        };
+        this.touchedNode = {
+          userNode: touchingNode,
+          minRadius: touchingNode.radius,
+          maxRadius: touchingNode.radius * this.EXPAND_RATE,
+        };
+      }
+    } else {
+      if (this.touchingNode && this.touchedNode) {
+        this.touchingNode = undefined;
+      }
+    }
+  }
 
   onMouseUp() {
-    touchy(this.element, removeEvent, "mousemove", this.onMouseMove);
     touchy(this.element, removeEvent, "mousemove", this.handlePanning);
     touchy(this.element, removeEvent, "mousemove", this.handlePinchZoom);
   }
 
   onMouseOut() {
-    touchy(this.element, removeEvent, "mousemove", this.onMouseMove);
     touchy(this.element, removeEvent, "mousemove", this.handlePanning);
     touchy(this.element, removeEvent, "mousemove", this.handlePinchZoom);
   }
@@ -261,61 +304,111 @@ export class Canvas {
     }
   }
 
-  setCurrentUserNode(currentUser: User) {
-    this.currentUserNode = new UserNode(
-      0,
-      "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw",
-      currentUser.lastname + currentUser.firstname,
-      { x: 0, y: 0 },
-      false,
-      this.currentUserNodeRadius,
-    );
-    this.currentUserNode.imgElement.onload = () => {
-      this.render();
-    };
+  setCurrentUser(currentUser: User) {
+    this.currentUser = currentUser;
+    this.setCenterNode(currentUser.id);
   }
 
-  setOneChonNodes(friendList: OneChonInfo[]) {
-    if (friendList.length == 0) {
-      this.oneChonNodes = undefined;
-      return;
-    }
-    const oneChonCount = friendList.length;
-    const twoChonCount = friendList.map(oneChon => oneChon.chons.length);
-    const coords = getOneAndTwoChonCoordinates(
-      oneChonCount,
-      twoChonCount,
-      this.EDGE_LENGTH,
-    );
+  setFriendList(friendList: OneChonInfo[]) {
+    this.friendList = friendList;
+    this.setOneChonNodes(this.centerNode!.id);
+  }
 
-    this.oneChonNodes = friendList.map((oneChon, oneChonIdx) => {
-      const twoChonNodes = oneChon.chons.map((twoChon, twoChonIdx) => {
-        const twoChonNode = new UserNode(
-          twoChon.id,
-          twoChon.imgUrl,
-          twoChon.lastname + twoChon.firstname,
-          coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
-          twoChon.isNotFiltered,
+  setCenterNode(userId: number) {
+    const targetOneChon = this.friendList.find(oneChon => oneChon.id == userId);
+    const centerNode = new UserNode(
+      userId,
+      targetOneChon
+        ? targetOneChon.imgUrl
+        : "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw",
+      targetOneChon
+        ? targetOneChon.lastname + targetOneChon.firstname
+        : this.currentUser!.lastname + this.currentUser!.firstname,
+      { x: 0, y: 0 },
+      false,
+      this.CENTER_NODE_RADIUS,
+    );
+    this.centerNode = centerNode;
+    this.centerNode.imgElement.onload = () => {
+      this.render();
+    };
+    this.nodes = [centerNode];
+  }
+
+  setOneChonNodes(userId: number) {
+    const targetOneChon = this.friendList.find(oneChon => oneChon.id == userId);
+    if (targetOneChon) {
+      if (targetOneChon.chons.length == 0) {
+        this.oneChonNodes = undefined;
+        return;
+      }
+      const oneChonCount = targetOneChon.chons.length;
+      const coords = getOneAndTwoChonCoordinates(
+        oneChonCount,
+        Array(oneChonCount).fill(0),
+        this.EDGE_LENGTH,
+      );
+
+      this.oneChonNodes = targetOneChon.chons.map((oneChon, oneChonIdx) => {
+        const oneChonNode = new OneChonNode(
+          oneChon.id,
+          oneChon.imgUrl,
+          oneChon.lastname + oneChon.firstname,
+          coords[oneChonIdx].userCoord,
+          [],
+          oneChon.isNotFiltered,
         );
-        twoChonNode.imgElement.onload = () => {
+        oneChonNode.imgElement.onload = () => {
           this.render();
         };
-        return twoChonNode;
+        this.nodes?.push(oneChonNode);
+        return oneChonNode;
       });
-
-      const oneChonNode = new OneChonNode(
-        oneChon.id,
-        oneChon.imgUrl,
-        oneChon.lastname + oneChon.firstname,
-        coords[oneChonIdx].userCoord,
-        twoChonNodes,
-        oneChon.isNotFiltered,
+    } else {
+      const friendList = this.friendList;
+      if (friendList.length == 0) {
+        this.oneChonNodes = undefined;
+        return;
+      }
+      const oneChonCount = friendList.length;
+      const twoChonCount = friendList.map(oneChon => oneChon.chons.length);
+      const coords = getOneAndTwoChonCoordinates(
+        oneChonCount,
+        twoChonCount,
+        this.EDGE_LENGTH,
       );
-      oneChonNode.imgElement.onload = () => {
-        this.render();
-      };
-      return oneChonNode;
-    });
+
+      this.oneChonNodes = friendList.map((oneChon, oneChonIdx) => {
+        const twoChonNodes = oneChon.chons.map((twoChon, twoChonIdx) => {
+          const twoChonNode = new UserNode(
+            twoChon.id,
+            twoChon.imgUrl,
+            twoChon.lastname + twoChon.firstname,
+            coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
+            twoChon.isNotFiltered,
+          );
+          twoChonNode.imgElement.onload = () => {
+            this.render();
+          };
+          this.nodes?.push(twoChonNode);
+          return twoChonNode;
+        });
+
+        const oneChonNode = new OneChonNode(
+          oneChon.id,
+          oneChon.imgUrl,
+          oneChon.lastname + oneChon.firstname,
+          coords[oneChonIdx].userCoord,
+          twoChonNodes,
+          oneChon.isNotFiltered,
+        );
+        oneChonNode.imgElement.onload = () => {
+          this.render();
+        };
+        this.nodes?.push(oneChonNode);
+        return oneChonNode;
+      });
+    }
   }
 
   getWidth() {
@@ -349,26 +442,30 @@ export class Canvas {
   }
 
   drawGraph() {
-    if (this.currentUserNode) {
+    if (this.centerNode) {
+      this.drawUserNode(this.centerNode);
       this.oneChonNodes?.forEach(oneChonNode => {
-        const [edgeFromCurrentUser, edgeToOneChon] = getEdgeCoords(
-          this.currentUserNode!.coord,
+        const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
+          this.centerNode!.coord,
           oneChonNode.coord,
+          this.centerNode!.radius,
           oneChonNode.radius,
         );
-        this.drawEdge(edgeFromCurrentUser, edgeToOneChon, 1); // Edge from current user to 1-chon
-        this.drawUserNode(oneChonNode);
+        this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
         oneChonNode.twoChonNodes?.forEach(twoChonNode => {
-          const [edgeFromOneChon, edgeToTwoChon] = getEdgeCoords(
+          const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
             oneChonNode.coord,
             twoChonNode.coord,
-            oneChonNode.radius,
+            // oneChonNode.radius,
+            // twoChonNode.radius,
+            NODE_RADIUS,
+            NODE_RADIUS,
           );
-          this.drawEdge(edgeFromOneChon, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+          this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
           this.drawUserNode(twoChonNode);
         });
+        this.drawUserNode(oneChonNode);
       });
-      this.drawUserNode(this.currentUserNode);
     }
   }
 
@@ -405,9 +502,7 @@ export class Canvas {
     // Round border
     ctx.beginPath();
     ctx.lineWidth = // Set border line width
-      userNode === this.currentUserNode
-        ? scaledRadius * 0.13
-        : scaledRadius * 0.1;
+      userNode === this.centerNode ? scaledRadius * 0.13 : scaledRadius * 0.1;
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
     ctx.stroke();
     ctx.closePath();
@@ -442,6 +537,17 @@ export class Canvas {
     ctx.restore();
   }
 
+  isNodeTouched(node: UserNode, touchPoint: Coord) {
+    const scaledRadius = node.radius * this.panZoom.scale;
+    const correctedPosition = getScreenPoint(node.coord, this.panZoom);
+    const userNodeCenterScreenPosition = convertCartesianToScreen(
+      this.element,
+      correctedPosition,
+      this.dpr,
+    );
+    return distPoints(touchPoint, userNodeCenterScreenPosition) <= scaledRadius;
+  }
+
   render() {
     this.clear();
     this.drawGraph();
@@ -455,6 +561,7 @@ export class Canvas {
     touchy(this.element, removeEvent, "mouseup", this.onMouseUp);
     touchy(this.element, removeEvent, "mouseout", this.onMouseOut);
     touchy(this.element, removeEvent, "mousedown", this.onMouseDown);
+    touchy(this.element, removeEvent, "mousemove", this.onMouseMove);
     touchy(this.element, removeEvent, "mousemove", this.handlePanning);
     touchy(this.element, removeEvent, "mousemove", this.handlePinchZoom);
     this.element.removeEventListener("wheel", this.handleWheel);
