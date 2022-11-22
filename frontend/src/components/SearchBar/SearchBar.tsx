@@ -30,6 +30,7 @@ const SearchBar: React.FC<Props> = () => {
         }}
         placeholder={"검색어를 입력하세요"}
         maxLength={26}
+        autoFocus={true}
       />
     </S.Container>
   );
