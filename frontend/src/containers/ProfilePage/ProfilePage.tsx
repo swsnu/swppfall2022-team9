@@ -75,7 +75,7 @@ const ProfilePage: React.FC<Props> = () => {
     try {
       await dispatch(
         postFriendRequest({
-          senderId: currentUser.id,
+          senderId: currentUser!.id,
           getterId: Number(userId),
         }),
       ).unwrap();

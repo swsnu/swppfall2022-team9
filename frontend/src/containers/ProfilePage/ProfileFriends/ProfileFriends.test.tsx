@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import { profileStub } from "server/stubs/profiles.stub";
 import { renderWithProviders } from "test-utils/mocks";
 import ProfileFriends from "./ProfileFriends";

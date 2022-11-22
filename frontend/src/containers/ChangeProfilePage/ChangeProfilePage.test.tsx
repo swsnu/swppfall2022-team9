@@ -1,11 +1,11 @@
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
-import { renderWithProviders } from "test-utils/mocks";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { User } from "server/models/users.model";
-import { screen, fireEvent } from "@testing-library/react";
-import ChangeProfilePage from "./ChangeProfilePage";
 import { profileStub } from "server/stubs/profiles.stub";
 import { usersStub } from "server/stubs/users.stub";
+import { renderWithProviders } from "test-utils/mocks";
+import ChangeProfilePage from "./ChangeProfilePage";
 
 const mockDispatch = jest.fn();
 
@@ -17,6 +17,7 @@ jest.mock("react-redux", () => ({
 }));
 
 const mockNavigate = jest.fn();
+const callBack = jest.fn();
 
 jest.mock("react-router", () => ({
   // 그래야 NavLink 같은 걸 쓸 수 있다.
@@ -24,7 +25,9 @@ jest.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const mockFileUpload = jest.fn();
+const mockFileUpload = jest.fn().mockImplementation(file => {
+  callBack(file);
+});
 
 jest.mock("use-file-upload", () => ({
   ...jest.requireActual("use-file-upload"),
@@ -153,14 +156,27 @@ describe("<ChangeProfilePage/>", () => {
     fireEvent.change(websiteInput, { target: { value: "hi" } });
     fireEvent.change(introInput, { target: { value: "hi" } });
   });
-  // it("tests img upload", async () => {
+  it("tests img upload", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({
+        profile: { ...profileStub },
+      }),
+    });
+    renderChangeProfilePage(usersStub[0], alertProviderProps);
+    const uploadButton = screen.getAllByRole("button")[0];
+    fireEvent.click(uploadButton);
+    await waitFor(() => expect(mockFileUpload).toHaveBeenCalled());
+  });
+  // it("tests body of the custom img upload hook", async () => {
   //   mockDispatch.mockReturnValue({
   //     unwrap: () => ({
-  //       profile: {...profileStub},
+  //       profile: { ...profileStub },
   //     }),
   //   });
+  //   const {result} = renderHook(() => useFileUpload);
   //   renderChangeProfilePage(usersStub[0], alertProviderProps);
   //   const uploadButton = screen.getAllByRole("button")[0];
   //   fireEvent.click(uploadButton);
-  // })
+  //   await waitFor(() => expect(mockFileUpload).toHaveBeenCalled());
+  // });
 });
