@@ -34,7 +34,7 @@ describe("useCanvas hook", () => {
     result.current?.setSize(500, 500);
     waitFor(() => expect(result.current?.getWidth()).toBe(500));
 
-    result.current?.setCurrentUserNode(usersStub[0]);
+    result.current?.setCurrentUser(usersStub[0]);
     result.current?.render();
     const ctx = result.current?.getContext();
     const events = ctx?.__getEvents();

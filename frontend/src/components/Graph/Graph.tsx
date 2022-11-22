@@ -20,11 +20,11 @@ const Graph: React.FC<Props> = () => {
   const filteredFriendList = search.filteredFriendList;
   useEffect(() => {
     if (currentUser && canvas) {
-      canvas.setCurrentUserNode(currentUser);
+      canvas.setCurrentUser(currentUser);
       if (isSearchMode && searchWord != "") {
-        canvas.setOneChonNodes(filteredFriendList);
+        canvas.setFriendList(filteredFriendList);
       } else {
-        canvas.setOneChonNodes(friendList);
+        canvas.setFriendList(friendList);
       }
       canvas.render();
     }
