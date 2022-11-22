@@ -523,8 +523,8 @@ def profile(request, user_id):
 def friend_request(request):
     if request.method == "GET":
         # Check whether query params are requested
-        user1_id = request.GET.get("user1_id", None)
-        user2_id = request.GET.get("user2_id", None)
+        user1_id = request.GET.get("user1Id", None)
+        user2_id = request.GET.get("user2Id", None)
         linklinkuser = request.user.linklinkuser
         if user1_id is None and user2_id is None:
             # Return all my pending FriendRequests
@@ -539,9 +539,9 @@ def friend_request(request):
                 friend_request_dict = {}
                 friend_request_dict["id"] = pending_friend_request.id
                 friend_request_dict["senderId"] = \
-                    pending_friend_request.senderId
+                    pending_friend_request.senderId.id
                 friend_request_dict["getterId"] = \
-                    pending_friend_request.getterId
+                    pending_friend_request.getterId.id
                 friend_request_dict["status"] = pending_friend_request.status
                 response_dict["friendRequests"].append(friend_request_dict)
             return JsonResponse(status=200, data=response_dict)
@@ -549,7 +549,7 @@ def friend_request(request):
             # If read permission,
             # Find FriendRequest such that user1_id AND user2_id
             # Check read permission
-            if linklinkuser not in (user1_id, user2_id):
+            if linklinkuser.id not in map(int, (user1_id, user2_id)):
                 no_read_permission_message = (
                     "No read permission for FriendRequest "
                     f"user1Id={user1_id}, user2Id={user2_id}."
@@ -577,8 +577,8 @@ def friend_request(request):
                 status=200,
                 data={
                     "id": friend_request_found.id,
-                    "senderId": friend_request_found.senderId,
-                    "getterId": friend_request_found.getterId,
+                    "senderId": friend_request_found.senderId.id,
+                    "getterId": friend_request_found.getterId.id,
                     "status": friend_request_found.status,
                 }
             )
