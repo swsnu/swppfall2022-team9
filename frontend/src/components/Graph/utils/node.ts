@@ -1,10 +1,24 @@
 import { Coord } from "types/canvas.types";
 import { Canvas } from "./Canvas";
-import { convertCartesianToScreen, distPoints, getScreenPoint } from "./math";
+import {
+  convertCartesianToScreen,
+  directionPoints,
+  distPoints,
+  getScreenPoint,
+  gradientPoints,
+} from "./math";
 
 export const NODE_RADIUS = 28;
 
 export class UserNode {
+  EXPAND_RATE = 1.3;
+
+  EXPAND_SPEED = 0.5;
+
+  CONTRACT_SPEED = 0.5;
+
+  JOURNEY_SPEED = 0.015;
+
   id: number;
 
   radius: number;
@@ -17,28 +31,30 @@ export class UserNode {
 
   coord: Coord;
 
-  startCoord: Coord;
+  destCoord: Coord;
 
   canvas: Canvas;
 
   isNotFiltered: boolean; // true if does not contain search keyword
 
+  gradient: number;
+
+  direction: number;
+
   expandAnimationId = 0;
 
   contractAnimationId = 0;
 
-  EXPAND_RATE = 1.3;
+  journeyAnimationId = 0;
 
-  EXPAND_SPEED = 0.5;
-
-  CONTRACT_SPEED = 0.5;
+  journeySpeed: number;
 
   constructor(
     id: number,
     imgUrl: string,
     name: string,
     coord: Coord,
-    startCoord: Coord,
+    destCoord: Coord,
     canvas: Canvas,
     isNotFiltered = false,
     radius = NODE_RADIUS,
@@ -48,11 +64,16 @@ export class UserNode {
     this.imgElement.src = imgUrl;
     this.name = name;
     this.coord = coord;
-    this.startCoord = startCoord;
+    this.destCoord = destCoord;
     this.canvas = canvas;
     this.radius = radius;
     this.originalRadius = radius;
     this.isNotFiltered = isNotFiltered;
+    this.gradient = gradientPoints(coord, destCoord);
+    this.direction = directionPoints(coord, destCoord);
+    this.journeySpeed = Math.abs(coord.x - destCoord.x)
+      ? Math.abs(coord.x - destCoord.x) * this.JOURNEY_SPEED
+      : Math.abs(coord.y - destCoord.y) * this.JOURNEY_SPEED;
   }
 
   expand() {
@@ -84,10 +105,63 @@ export class UserNode {
     );
   }
 
+  journey() {
+    const isJourneyEnd =
+      directionPoints(this.coord, this.destCoord) === 5 ||
+      this.direction + directionPoints(this.coord, this.destCoord) === 10
+        ? true
+        : false;
+    if (isJourneyEnd) {
+      this.coord = this.destCoord;
+      this.canvas.render();
+      window.cancelAnimationFrame(this.journeyAnimationId);
+      return;
+    }
+
+    switch (this.direction) {
+      case 1:
+        this.coord.x -= this.journeySpeed;
+        this.coord.y -= this.gradient * this.journeySpeed;
+        break;
+      case 2:
+        this.coord.y += this.journeySpeed;
+        break;
+      case 3:
+        this.coord.x += this.journeySpeed;
+        this.coord.y += this.gradient * this.journeySpeed;
+        break;
+      case 4:
+        this.coord.x -= this.journeySpeed;
+        break;
+      case 5:
+        // NA
+        break;
+      case 6:
+        this.coord.x += this.journeySpeed;
+        break;
+      case 7:
+        this.coord.x -= this.journeySpeed;
+        this.coord.y -= this.gradient * this.journeySpeed;
+        break;
+      case 8:
+        this.coord.y -= this.journeySpeed;
+        break;
+      case 9:
+        this.coord.x += this.journeySpeed;
+        this.coord.y += this.gradient * this.journeySpeed;
+        break;
+    }
+
+    this.canvas.render();
+    this.journeyAnimationId = window.requestAnimationFrame(
+      this.journey.bind(this),
+    );
+  }
+
   isTouched(touchPoint: Coord) {
     const scaledRadius = this.radius * this.canvas.getPanZoom().scale;
     const correctedPosition = getScreenPoint(
-      this.coord,
+      this.destCoord,
       this.canvas.getPanZoom(),
     );
     const userNodeCenterScreenPosition = convertCartesianToScreen(
@@ -107,12 +181,12 @@ export class OneChonNode extends UserNode {
     imgUrl: string,
     name: string,
     coord: Coord,
-    startCoord: Coord,
+    destCoord: Coord,
     canvas: Canvas,
     twoChonNodes: UserNode[],
     isNotFiltered = false,
   ) {
-    super(id, imgUrl, name, coord, startCoord, canvas, isNotFiltered);
+    super(id, imgUrl, name, coord, destCoord, canvas, isNotFiltered);
     this.twoChonNodes = twoChonNodes;
   }
 }

@@ -24,11 +24,15 @@ export class Canvas {
 
   private ZOOM_SENSITIVITY = 300;
 
-  private CENTER_NODE_RADIUS = NODE_RADIUS * 1.5;
+  private CENTER_NODE_RADIUS = NODE_RADIUS * 1.4;
 
   private EDGE_WIDTH = 3;
 
   private EDGE_LENGTH = NODE_RADIUS;
+
+  private OPACITY_NOT_FILTERED = 10;
+
+  private OPACITY_EXPANDED = 30;
 
   private element: HTMLCanvasElement;
 
@@ -62,6 +66,12 @@ export class Canvas {
   private nodes?: UserNode[]; // For convenient node iteration
 
   private touchedNode?: UserNode;
+
+  private isOneChonNodesJourneyFinished = false;
+
+  private isTwoChonNodesJourneyFinished = false;
+
+  private flag = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
@@ -109,8 +119,11 @@ export class Canvas {
     if (touchedNode) {
       // TODO
       // Add node click action
-      console.log(touchedNode.name);
-      if (touchedNode !== this.centerNode) {
+      if (
+        this.oneChonNodes?.find(
+          oneChonNode => oneChonNode.id === touchedNode.id,
+        )
+      ) {
         this.setCenterNode(touchedNode.id);
         this.setOneChonNodes(touchedNode.id);
         this.render();
@@ -156,6 +169,7 @@ export class Canvas {
         window.cancelAnimationFrame(this.touchedNode.contractAnimationId);
         this.touchedNode.contractAnimationId = 0;
         touchedNode.expand();
+        console.log(touchedNode.direction);
       }
     } else {
       if (this.touchedNode && !this.touchedNode.contractAnimationId) {
@@ -383,8 +397,8 @@ export class Canvas {
           oneChon.id,
           oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
-          coords[oneChonIdx].userCoord,
           { x: 0, y: 0 },
+          coords[oneChonIdx].userCoord,
           this,
           [],
           oneChon.isNotFiltered,
@@ -415,8 +429,8 @@ export class Canvas {
             twoChon.id,
             twoChon.imgUrl,
             twoChon.lastname + twoChon.firstname,
-            coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
             coords[oneChonIdx].userCoord,
+            coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
             this,
             twoChon.isNotFiltered,
           );
@@ -431,8 +445,8 @@ export class Canvas {
           oneChon.id,
           oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
-          coords[oneChonIdx].userCoord,
           { x: 0, y: 0 },
+          coords[oneChonIdx].userCoord,
           this,
           twoChonNodes,
           oneChon.isNotFiltered,
@@ -478,7 +492,6 @@ export class Canvas {
 
   drawGraph() {
     if (this.centerNode) {
-      this.drawUserNode(this.centerNode);
       this.oneChonNodes?.forEach(oneChonNode => {
         const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
           this.centerNode!.coord,
@@ -487,26 +500,48 @@ export class Canvas {
           oneChonNode.radius,
         );
         this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
-        oneChonNode.twoChonNodes?.forEach(twoChonNode => {
-          const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
-            oneChonNode.coord,
-            twoChonNode.coord,
-            // oneChonNode.radius,
-            // twoChonNode.radius,
-            NODE_RADIUS,
-            NODE_RADIUS,
-          );
-          this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
-          this.drawUserNode(twoChonNode);
-        });
+
+        if (this.isOneChonNodesJourneyFinished) {
+          oneChonNode.twoChonNodes?.forEach(twoChonNode => {
+            const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
+              oneChonNode.coord,
+              twoChonNode.coord,
+              // oneChonNode.radius,
+              // twoChonNode.radius,
+              NODE_RADIUS,
+              NODE_RADIUS,
+            );
+            this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+            this.drawUserNode(twoChonNode);
+          });
+        }
         this.drawUserNode(oneChonNode);
       });
+      this.drawUserNode(this.centerNode);
+    }
+  }
+
+  drawAnimatedGraph() {
+    if (this.centerNode) {
+      this.flag = true;
+      const oneChonNodes: OneChonNode[] = [];
+      const twoChonNodes: UserNode[] = [];
+      this.oneChonNodes?.forEach(oneChonNode => {
+        oneChonNode.journey();
+        // oneChonNodes.push(oneChonNode);
+        // oneChonNode.twoChonNodes?.forEach(twoChonNode => {
+        //   twoChonNodes.push(twoChonNode);
+        // });
+      });
+      // oneChonNodes.forEach(oneChonNode => oneChonNode.journey());
+      // this.isOneChonNodesJourneyFinished = true;
     }
   }
 
   drawUserNode(userNode: UserNode) {
     const ctx = this.ctx;
     const scaledRadius = userNode.radius * this.panZoom.scale;
+    // const correctedPosition = getScreenPoint(userNode.destCoord, this.panZoom);
     const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
     const screenPosition = convertCartesianToScreen(
       this.element,
@@ -516,9 +551,9 @@ export class Canvas {
     const centerX = screenPosition.x;
     const centerY = screenPosition.y;
     const opacity = userNode.isNotFiltered
-      ? 20
+      ? this.OPACITY_NOT_FILTERED
       : userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE
-      ? 50
+      ? this.OPACITY_EXPANDED
       : 100;
 
     // User node clipped in circle
@@ -594,7 +629,11 @@ export class Canvas {
 
   render() {
     this.clear();
-    this.drawGraph();
+    if (!this.flag) {
+      this.drawAnimatedGraph();
+    } else {
+      this.drawGraph();
+    }
   }
 
   clear() {
