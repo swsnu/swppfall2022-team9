@@ -3,11 +3,11 @@ invariants module to ensure LinkLink invariants
 """
 
 from django.conf import settings
+from django.http import JsonResponse
 
 from .models import (
     FriendRequest,
 )
-from .views import get_onechon_linklinkuser_list
 
 def max_onechon_invariant(linklinkuser):
     """
@@ -22,6 +22,9 @@ def max_onechon_invariant(linklinkuser):
         status="Accepted"
     )
     # Get onechon of current user
+    # pylint: disable=import-outside-toplevel
+    # to avoid circular import
+    from .views import get_onechon_linklinkuser_list
     onechon_list = get_onechon_linklinkuser_list(
         all_accepted_friend_requests,
         linklinkuser
@@ -33,4 +36,7 @@ def max_onechon_invariant(linklinkuser):
             f"Onechon list of {linklinkuser}:"
             f"{onechon_list}"
         )
-        raise ValueError(max_onechon_error_message)
+        return JsonResponse(
+            status=403,
+            data={"message":max_onechon_error_message}
+        )
