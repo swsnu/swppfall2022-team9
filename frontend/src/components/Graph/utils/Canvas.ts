@@ -24,7 +24,7 @@ export class Canvas {
 
   private ZOOM_SENSITIVITY = 300;
 
-  private CENTER_NODE_RADIUS = NODE_RADIUS * 1.4;
+  private CENTER_NODE_RADIUS = NODE_RADIUS * 1.35;
 
   private EDGE_WIDTH = 3;
 
@@ -135,7 +135,7 @@ export class Canvas {
         )
       ) {
         this.setCenterNode(touchedNode.id);
-        this.setOneChonNodes(touchedNode.id);
+        this.setNodes(touchedNode.id);
         this.render();
       }
     }
@@ -355,7 +355,7 @@ export class Canvas {
 
   setFriendList(friendList: OneChonInfo[]) {
     this.friendList = friendList;
-    this.setOneChonNodes(this.centerNode!.id);
+    this.setNodes(this.centerNode!.id);
   }
 
   setCenterNode(userId: number) {
@@ -383,7 +383,7 @@ export class Canvas {
     this.nodes = [centerNode];
   }
 
-  setOneChonNodes(userId: number) {
+  setNodes(userId: number) {
     const targetOneChon = this.friendList.find(
       oneChon => oneChon.id === userId,
     );
@@ -398,7 +398,6 @@ export class Canvas {
         Array(oneChonCount).fill(0),
         this.EDGE_LENGTH,
       );
-
       this.oneChonNodes = targetOneChon.chons.map((oneChon, oneChonIdx) => {
         const oneChonNode = new OneChonNode(
           oneChon.id,
@@ -416,6 +415,8 @@ export class Canvas {
         this.nodes?.push(oneChonNode);
         return oneChonNode;
       });
+      // No two-chons(my three-chons) in one-chon's graph
+      this.twoChonNodes = [];
     } else {
       const friendList = this.friendList;
       if (friendList.length === 0) {
@@ -668,7 +669,7 @@ export class Canvas {
     }
     ctx.beginPath();
     ctx.lineWidth = // Set border line width
-      userNode === this.centerNode ? scaledRadius * 0.1 : scaledRadius * 0.07;
+      userNode === this.centerNode ? scaledRadius * 0.08 : scaledRadius * 0.07;
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
     ctx.strokeStyle = "black";
     ctx.stroke();
