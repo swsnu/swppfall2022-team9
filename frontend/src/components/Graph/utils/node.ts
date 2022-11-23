@@ -11,9 +11,9 @@ import {
 export const NODE_RADIUS = 28;
 
 export class UserNode {
-  EXPAND_RATE = 1.3;
+  EXPAND_RATE = 1.4;
 
-  EXPAND_SPEED = 0.5;
+  EXPAND_SPEED = 0.8;
 
   CONTRACT_SPEED = 0.5;
 
@@ -30,6 +30,8 @@ export class UserNode {
   name: string;
 
   coord: Coord;
+
+  originCoord: Coord;
 
   destCoord: Coord;
 
@@ -49,6 +51,8 @@ export class UserNode {
 
   journeySpeed: number;
 
+  isJourneyEnd = false;
+
   constructor(
     id: number,
     imgUrl: string,
@@ -64,6 +68,7 @@ export class UserNode {
     this.imgElement.src = imgUrl;
     this.name = name;
     this.coord = coord;
+    this.originCoord = { ...coord };
     this.destCoord = destCoord;
     this.canvas = canvas;
     this.radius = radius;
@@ -106,13 +111,14 @@ export class UserNode {
   }
 
   journey() {
-    const isJourneyEnd =
+    this.isJourneyEnd =
       directionPoints(this.coord, this.destCoord) === 5 ||
-      this.direction + directionPoints(this.coord, this.destCoord) === 10
+      this.direction !== directionPoints(this.coord, this.destCoord)
         ? true
         : false;
-    if (isJourneyEnd) {
-      this.coord = this.destCoord;
+    if (this.isJourneyEnd) {
+      this.coord.x = this.destCoord.x;
+      this.coord.y = this.destCoord.y;
       this.canvas.render();
       window.cancelAnimationFrame(this.journeyAnimationId);
       return;
@@ -174,7 +180,7 @@ export class UserNode {
 }
 
 export class OneChonNode extends UserNode {
-  twoChonNodes?: UserNode[];
+  twoChonNodes: UserNode[] = [];
 
   constructor(
     id: number,

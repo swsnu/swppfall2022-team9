@@ -34,6 +34,12 @@ export class Canvas {
 
   private OPACITY_EXPANDED = 30;
 
+  private SHADOW_BLUR = 10;
+
+  private SHADOW_OFFSET_X = 0.13;
+
+  private SHADOW_OFFSET_Y = 0.13;
+
   private element: HTMLCanvasElement;
 
   private pinchZoomPrevDiff = 0;
@@ -61,13 +67,19 @@ export class Canvas {
 
   private centerNode?: UserNode;
 
-  private oneChonNodes?: OneChonNode[];
+  private oneChonNodes: OneChonNode[] = [];
+
+  private twoChonNodes: UserNode[] = [];
 
   private nodes?: UserNode[]; // For convenient node iteration
 
   private touchedNode?: UserNode;
 
+  private isOneChonNodesJourneyStarted = false;
+
   private isOneChonNodesJourneyFinished = false;
+
+  private isTwoChonNodesJourneyStarted = false;
 
   private isTwoChonNodesJourneyFinished = false;
 
@@ -382,7 +394,7 @@ export class Canvas {
     );
     if (targetOneChon) {
       if (targetOneChon.chons.length === 0) {
-        this.oneChonNodes = undefined;
+        this.oneChonNodes = [];
         return;
       }
       const oneChonCount = targetOneChon.chons.length;
@@ -412,7 +424,7 @@ export class Canvas {
     } else {
       const friendList = this.friendList;
       if (friendList.length === 0) {
-        this.oneChonNodes = undefined;
+        this.oneChonNodes = [];
         return;
       }
       const oneChonCount = friendList.length;
@@ -438,6 +450,7 @@ export class Canvas {
             this.render();
           };
           this.nodes?.push(twoChonNode);
+          this.twoChonNodes?.push(twoChonNode);
           return twoChonNode;
         });
 
@@ -492,7 +505,37 @@ export class Canvas {
 
   drawGraph() {
     if (this.centerNode) {
-      this.oneChonNodes?.forEach(oneChonNode => {
+      // Draw two-chon nodes and edges
+      this.twoChonNodes.forEach(twoChonNode => {
+        const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
+          twoChonNode.originCoord,
+          twoChonNode.destCoord,
+          NODE_RADIUS,
+          // NODE_RADIUS,
+          twoChonNode.radius,
+        );
+        this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+        this.drawUserNode(twoChonNode);
+      });
+      // Draw one-chon nodes and edges
+      this.oneChonNodes.forEach(oneChonNode => {
+        const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
+          this.centerNode!.destCoord,
+          oneChonNode.destCoord,
+          this.centerNode!.radius,
+          oneChonNode.radius,
+        );
+        this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
+        this.drawUserNode(oneChonNode);
+      });
+      // Draw center node
+      this.drawUserNode(this.centerNode);
+    }
+  }
+
+  drawAnimatedGraph() {
+    if (this.centerNode) {
+      this.oneChonNodes.forEach(oneChonNode => {
         const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
           this.centerNode!.coord,
           oneChonNode.coord,
@@ -500,49 +543,68 @@ export class Canvas {
           oneChonNode.radius,
         );
         this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
-
-        if (this.isOneChonNodesJourneyFinished) {
-          oneChonNode.twoChonNodes?.forEach(twoChonNode => {
-            const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
-              oneChonNode.coord,
-              twoChonNode.coord,
-              // oneChonNode.radius,
-              // twoChonNode.radius,
-              NODE_RADIUS,
-              NODE_RADIUS,
-            );
-            this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
-            this.drawUserNode(twoChonNode);
-          });
-        }
+        this.drawUserNode(oneChonNode);
+      });
+      if (this.isTwoChonNodesJourneyStarted) {
+        this.twoChonNodes.forEach(twoChonNode => {
+          const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
+            twoChonNode.originCoord,
+            twoChonNode.coord,
+            // oneChonNode.radius,
+            // twoChonNode.radius,
+            NODE_RADIUS,
+            NODE_RADIUS,
+          );
+          this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+          this.drawUserNode(twoChonNode);
+        });
+      }
         this.drawUserNode(oneChonNode);
       });
       this.drawUserNode(this.centerNode);
     }
   }
 
-  drawAnimatedGraph() {
-    if (this.centerNode) {
-      this.flag = true;
-      const oneChonNodes: OneChonNode[] = [];
-      const twoChonNodes: UserNode[] = [];
-      this.oneChonNodes?.forEach(oneChonNode => {
-        oneChonNode.journey();
-        // oneChonNodes.push(oneChonNode);
-        // oneChonNode.twoChonNodes?.forEach(twoChonNode => {
-        //   twoChonNodes.push(twoChonNode);
-        // });
-      });
-      // oneChonNodes.forEach(oneChonNode => oneChonNode.journey());
-      // this.isOneChonNodesJourneyFinished = true;
+  startOneChonJourney() {
+    if (this.oneChonNodes.length > 0) {
+      if (!this.isOneChonNodesJourneyStarted) {
+        this.isOneChonNodesJourneyStarted = true;
+        this.oneChonNodes.forEach(oneChonNode => {
+          oneChonNode.journey();
+        });
+      } else {
+        this.isOneChonNodesJourneyFinished = this.oneChonNodes.find(
+          oneChonNode => !oneChonNode.isJourneyEnd,
+        )
+          ? false
+          : true;
+        if (this.isOneChonNodesJourneyFinished) this.render();
+      }
+    }
+  }
+
+  startTwoChonJourney() {
+    if (this.twoChonNodes.length > 0) {
+      if (!this.isTwoChonNodesJourneyStarted) {
+        this.isTwoChonNodesJourneyStarted = true;
+        this.twoChonNodes.forEach(twoChonNode => {
+          twoChonNode.journey();
+        });
+      } else {
+        this.isTwoChonNodesJourneyFinished = this.twoChonNodes.find(
+          twoChonNode => !twoChonNode.isJourneyEnd,
+        )
+          ? false
+          : true;
+      }
     }
   }
 
   drawUserNode(userNode: UserNode) {
     const ctx = this.ctx;
     const scaledRadius = userNode.radius * this.panZoom.scale;
-    // const correctedPosition = getScreenPoint(userNode.destCoord, this.panZoom);
-    const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
+    // const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
+    const correctedPosition = getScreenPoint(userNode.destCoord, this.panZoom);
     const screenPosition = convertCartesianToScreen(
       this.element,
       correctedPosition,
@@ -574,8 +636,14 @@ export class Canvas {
       scaledRadius * 2,
       scaledRadius * 2,
     );
+
+    // Draw round border
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();
+    // If hover
     if (userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE) {
-      ctx.restore();
+      // Draw username text
       ctx.fillStyle = "black";
       ctx.font = `900 ${scaledRadius * 0.5}px monospace`;
       ctx.textAlign = "center";
@@ -585,10 +653,16 @@ export class Canvas {
         centerY + scaledRadius * 0.13,
         scaledRadius * 1.8,
       );
+      // Draw shadow
+      ctx.shadowColor = "black";
+      ctx.shadowOffsetX = userNode.radius * this.SHADOW_OFFSET_X;
+      ctx.shadowOffsetY = userNode.radius * this.SHADOW_OFFSET_Y;
+      ctx.shadowBlur = this.SHADOW_BLUR;
     }
 
     // Draw round border
     ctx.restore();
+    ctx.save();
     ctx.beginPath();
     ctx.lineWidth = // Set border line width
       userNode === this.centerNode ? scaledRadius * 0.1 : scaledRadius * 0.07;
@@ -629,10 +703,10 @@ export class Canvas {
 
   render() {
     this.clear();
-    if (!this.flag) {
-      this.drawAnimatedGraph();
-    } else {
-      this.drawGraph();
+    // if (!this.isOneChonNodesJourneyFinished) this.startOneChonJourney();
+    // else if (!this.isTwoChonNodesJourneyFinished) this.startTwoChonJourney();
+    // console.log(this.isTwoChonNodesJourneyFinished);
+    this.drawGraph();
     }
   }
 
