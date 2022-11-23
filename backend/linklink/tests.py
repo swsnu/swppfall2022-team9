@@ -1073,6 +1073,62 @@ class LinkLinkTestCase(TestCase):
             expected_json
         )
 
+
+    def test_post_new_friend_request_success(self):
+        target_url = "/api/friendRequest/"
+        # Initialize Connection
+        # john-james james-emily onechon
+        # Create new friendRequest to john->emily
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        # Save initial object count
+        friend_request_count = FriendRequest.objects.count()
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "getterId": 3
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(FriendRequest.objects.filter(id=friend_request_count+1
+            ).exists())
+        new_friend_request = \
+            FriendRequest.objects.get(id=friend_request_count+1)
+        self.assertEqual(new_friend_request.senderId, john_linklinkuser)
+        self.assertEqual(new_friend_request.getterId, emily_linklinkuser)
+        self.assertEqual(new_friend_request.status, "Pending")
+
 #--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------
