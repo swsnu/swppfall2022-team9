@@ -1768,6 +1768,45 @@ class LinkLinkTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
+
+    def test_400_post_new_friend_request(self):
+        target_url = "/api/friendRequest/"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                # "getterId": "3" # no getterId
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_400_put_friend_request(self):
+        target_url = "/api/friendRequest/1/"
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                # "status": "Accepted" # No status
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+
 #--------------------------------------------------------------------------
 #   Misc Tests
 #--------------------------------------------------------------------------
