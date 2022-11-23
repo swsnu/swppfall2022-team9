@@ -1,0 +1,28 @@
+{
+    "friendRequests": [
+        {
+            "id": 1,
+            "senderId": 1,
+            "getterId": 2,
+            "status": "Pending",
+            "senderImgUrl": "https://catimage.com",
+            "senderName": "CenaJohn"
+        },
+        {
+            "id": 3,
+            "senderId": 4,
+            "getterId": 1,
+            "status": "Pending",
+            "senderImgUrl": "https://catimage.com",
+            "senderName": "SmithWill"
+        },
+        {
+            "id": 4,
+            "senderId": 5,
+            "getterId": 1,
+            "status": "Pending",
+            "senderImgUrl": "https://catimage.com",
+            "senderName": "RockChris"
+        }
+    ]
+}
