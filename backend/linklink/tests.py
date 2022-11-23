@@ -3,6 +3,7 @@ test module for linklink app
 """
 
 from datetime import datetime, timedelta
+import inspect
 import json
 import os
 
@@ -452,7 +453,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_friend_general_success.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -472,7 +473,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_friend_no_friend_success.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -543,7 +544,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_friend_only_onechon_success.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -625,7 +626,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_put_my_profile_success.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -756,7 +757,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_my_profile_success.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -766,7 +767,7 @@ class LinkLinkTestCase(TestCase):
         )
 
 
-    def test_get_profile_success(self):
+    def test_get_other_profile_success(self):
         target_url = "/api/profile/2/"
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
@@ -816,7 +817,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_other_profile_success.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -873,7 +874,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_all_my_pending_friend_request_empty_sucess.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
@@ -949,7 +950,7 @@ class LinkLinkTestCase(TestCase):
         answer_json_path = os.path.join(
             self.linklink_path,
             "test_answers",
-            "test_get_all_my_pending_friend_request_general_sucess.json"
+            inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
             expected_json = json.load(json_file)
