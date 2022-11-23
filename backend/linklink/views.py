@@ -642,7 +642,7 @@ def friend_request(request):
         else:
             # Check whether two users are within twochon
             other_user = LinkLinkUser.objects.get(id=getter_id)
-            if not is_within_twochon(linklinkuser, other_user):
+            if not is_within_twochon(linklinkuser_sender, other_user):
                 not_within_twochon_message = \
                     "Two users are not within twochon."
                 return JsonResponse(
