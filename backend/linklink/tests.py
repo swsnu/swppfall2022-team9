@@ -959,6 +959,120 @@ class LinkLinkTestCase(TestCase):
             expected_json
         )
 
+
+    def test_get_specific_pending_friend_request_sucess(self):
+        target_url = "/api/friendRequest/?user1Id=1&user2Id=2"
+        # Initialize Connection
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Pending",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200) # Successful GET
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_specific_accepted_friend_request_sucess(self):
+        target_url = "/api/friendRequest/?user1Id=1&user2Id=2"
+        # Initialize Connection
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200) # Successful GET
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_get_specific_rejected_friend_request_sucess(self):
+        target_url = "/api/friendRequest/?user1Id=1&user2Id=2"
+        # Initialize Connection
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200) # Successful GET
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
 #--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------

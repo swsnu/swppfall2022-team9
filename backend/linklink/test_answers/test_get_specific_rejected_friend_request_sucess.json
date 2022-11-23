@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "senderId": 1,
+    "getterId": 2,
+    "status": "Rejected",
+    "senderImgUrl": "https://catimage.com",
+    "senderName": "CenaJohn"
+}
