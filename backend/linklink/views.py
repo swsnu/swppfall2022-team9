@@ -411,6 +411,16 @@ def friend(request):
             response_dict["friendList"].append(onechon_dict)
         return JsonResponse(response_dict) # implicit status code = 200
 
+
+@allowed_method_or_405(["GET"])
+@logged_in_or_401
+def friend_request_token(request):
+    if request.method == "GET": # pragma: no branch
+        response_dict = {}
+        linklinkuser = request.user.linklinkuser
+        response_dict["friendRequestToken"] = linklinkuser.friendRequestToken
+        return JsonResponse(response_dict) # implicit status code = 200
+
 #--------------------------------------------------------------------------
 #   Profile Related APIs
 #--------------------------------------------------------------------------
