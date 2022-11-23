@@ -574,7 +574,8 @@ def friend_request(request):
             # If read permission,
             # Find FriendRequest such that user1_id AND user2_id
             # Check read permission
-            if linklinkuser.id not in map(int, (user1_id, user2_id)):
+            if linklinkuser.id not in \
+                map(int, (user1_id, user2_id)): # pragma: no branch
                 no_read_permission_message = (
                     "No read permission for FriendRequest "
                     f"user1Id={user1_id}, user2Id={user2_id}."
@@ -615,7 +616,7 @@ def friend_request(request):
                 status=405,
                 data={"message":"invalid query param"}
             )
-    elif request.method == "POST":
+    elif request.method == "POST": # pragma: no branch
         # If there is no FriendRequest, Create FriendRequest to getterId
         try:
             req_data = json.loads(request.body.decode())
@@ -661,7 +662,7 @@ def friend_request(request):
 @allowed_method_or_405(["PUT"])
 @logged_in_or_401
 def friend_request_respond(request, friend_request_id):
-    if request.method == "PUT":
+    if request.method == "PUT":  # pragma: no branch
         # 1. Get FriendRequest=friendRequestId
         # 2. Check write permission of current user
         # 3. Change status of FriendRequest
@@ -727,7 +728,7 @@ def friend_request_respond(request, friend_request_id):
                 status=403,
                 data={"message": illegal_state_transition_message},
             )
-        elif state_transition_result == "No Change":
+        elif state_transition_result == "No change":
             return JsonResponse(
                 status=200,
                 data={
