@@ -609,6 +609,9 @@ def friend_request(request):
                     "senderId": friend_request_found.senderId.id,
                     "getterId": friend_request_found.getterId.id,
                     "status": friend_request_found.status,
+                    "senderImgUrl": \
+                        friend_request_found.senderId.profile.imgUrl,
+                    "senderName": str(friend_request_found.senderId),
                 }
             )
         else:
