@@ -1129,6 +1129,489 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(new_friend_request.getterId, emily_linklinkuser)
         self.assertEqual(new_friend_request.status, "Pending")
 
+
+    def test_put_friend_request_accepted_to_accepted_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Accepted -> Accepted
+        # "No Change" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Accepted")
+
+
+    def test_put_friend_request_accepted_to_pending_not_allowed(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Accepted -> Pending
+        # "Not Allowed" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Pending"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "State Transition: Accepted->Pending not allowed."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Accepted")
+
+
+    def test_put_friend_request_accepted_to_rejected_sender_success(self):
+        target_url = "/api/friendRequest/1/"
+        # john->james onechon
+        # Accepted -> Rejected
+        # "Both" Case, sender Reject
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, john_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, james_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Rejected")
+
+
+    def test_put_friend_request_accepted_to_rejected_getter_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Accepted -> Rejected
+        # "Both" Case, getter Reject
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Rejected")
+
+
+    def test_put_friend_request_pending_to_accepted_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Pending -> Accepted
+        # "Getter" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Accepted")
+
+
+    def test_put_friend_request_pending_to_pending_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Pending -> Pending
+        # "No Change" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Pending"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Pending")
+
+
+    def test_put_friend_request_pending_to_rejected_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Pending -> Rejected
+        # "Getter" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Rejected")
+
+
+    def test_put_friend_request_rejected_to_accepted_not_allowed(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Rejected -> Accepted
+        # "Not Allowed" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Rejected",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "State Transition: Rejected->Accepted not allowed."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Rejected")
+
+
+    def test_put_friend_request_rejected_to_pending_getter_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Rejected -> Pending
+        # "Both*" Case, getter sends new request
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Rejected",
+        )
+        # john and james need to be within twochon
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=emily_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=emily_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Pending"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        # sender getter should switch
+        self.assertEqual(friend_request_found.senderId, john_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, james_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Pending")
+
+
+    def test_put_friend_request_rejected_to_pending_sender_success(self):
+        target_url = "/api/friendRequest/1/"
+        # john->james onechon
+        # Rejected -> Pending
+        # "Both*" Case, sender sends new request
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        # john and james need to be within twochon
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=emily_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=emily_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Pending"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, john_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, james_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Pending")
+
+
+    def test_put_friend_request_rejected_to_rejected_success(self):
+        target_url = "/api/friendRequest/1/"
+        # james->john onechon
+        # Rejected -> Rejected
+        # "No Change" Case
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Rejected",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Rejected")
+
 #--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------
