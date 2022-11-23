@@ -8,6 +8,7 @@ export interface TwoChonUserCoord {
 }
 export interface OneChonUserCoord extends TwoChonUserCoord {
   twoChonCoords: TwoChonUserCoord[];
+  omitCount: number;
 }
 
 export type PanZoom = {

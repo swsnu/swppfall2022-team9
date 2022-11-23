@@ -48,6 +48,7 @@ export const getOneAndTwoChonCoordinates = (
     const curUserCoord: OneChonUserCoord = {
       userCoord: { x: 0, y: 0 },
       twoChonCoords: [],
+      omitCount: 0,
     };
     const angle = degree * i;
     const xCoord = edge * Math.cos(degToRad(angle));
@@ -58,7 +59,9 @@ export const getOneAndTwoChonCoordinates = (
 
     const max2Chon = Math.min(Math.floor(budget / margin) + 1, maxConnections);
     if (max2Chon < twoChonCount[i]) {
-      console.error("Number of 2-chons exceeded the maximum capacity.");
+      // console.error("Number of 2-chons exceeded the maximum capacity.");
+      curUserCoord.omitCount = twoChonCount[i] - max2Chon;
+      twoChonCount[i] = max2Chon;
     }
 
     if (twoChonCount[i] === 0) {
@@ -73,8 +76,8 @@ export const getOneAndTwoChonCoordinates = (
     } else {
       // check adjacent oneChons
       const adjacentIndices = [
-        i == 0 ? oneChonCount - 1 : i - 1,
-        i == oneChonCount - 1 ? 0 : i + 1,
+        i === 0 ? oneChonCount - 1 : i - 1,
+        i === oneChonCount - 1 ? 0 : i + 1,
       ];
 
       // check if they have at least two less than the max number of connections

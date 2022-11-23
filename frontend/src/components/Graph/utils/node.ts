@@ -11,7 +11,7 @@ import {
 export const NODE_RADIUS = 28;
 
 export class UserNode {
-  EXPAND_RATE = 1.4;
+  EXPAND_RATE = 1.2;
 
   EXPAND_SPEED = 0.8;
 
@@ -182,6 +182,8 @@ export class UserNode {
 export class OneChonNode extends UserNode {
   twoChonNodes: UserNode[] = [];
 
+  omitCount;
+
   constructor(
     id: number,
     imgUrl: string,
@@ -191,8 +193,10 @@ export class OneChonNode extends UserNode {
     canvas: Canvas,
     twoChonNodes: UserNode[],
     isNotFiltered = false,
+    omitCount = 0,
   ) {
     super(id, imgUrl, name, coord, destCoord, canvas, isNotFiltered);
     this.twoChonNodes = twoChonNodes;
+    this.omitCount = omitCount;
   }
 }
