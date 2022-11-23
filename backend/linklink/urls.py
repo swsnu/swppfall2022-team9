@@ -37,6 +37,11 @@ urlpatterns = [
         name='friend'
     ),
     path(
+        'user/friendRequestToken/',
+        views.friend_request_token,
+        name='friend_request_token'
+    ),
+    path(
         'profile/',
         views.my_profile,
         name='my_profile'
