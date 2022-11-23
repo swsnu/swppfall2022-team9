@@ -553,6 +553,18 @@ class LinkLinkTestCase(TestCase):
             expected_json
         )
 
+
+    def test_get_friend_request_token_success(self):
+        target_url = "/api/user/friendRequestToken/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        response_dict = json.loads(response.content.decode())
+        friend_request_token = response_dict["friendRequestToken"]
+        self.assertEqual(36, len(friend_request_token))
+
 #--------------------------------------------------------------------------
 #   Profile Related Tests
 #--------------------------------------------------------------------------
