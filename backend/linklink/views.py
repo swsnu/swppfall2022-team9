@@ -367,7 +367,7 @@ def verify(request, token):
 #   LinkLinkUser Related APIs
 #--------------------------------------------------------------------------
 
-@allowed_method_or_405(["GET", "POST", "DELETE"])
+@allowed_method_or_405(["GET"])
 @logged_in_or_401
 def friend(request):
     if request.method == "GET": # pragma: no branch
@@ -410,10 +410,6 @@ def friend(request):
             # Append constructed onechon_dict
             response_dict["friendList"].append(onechon_dict)
         return JsonResponse(response_dict) # implicit status code = 200
-    # elif request.method == "POST":
-    #     pass
-    # elif request.method == "DELETE":
-    #     pass
 
 #--------------------------------------------------------------------------
 #   Profile Related APIs
