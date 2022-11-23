@@ -161,11 +161,9 @@ export class Canvas {
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
-      if (
-        this.touchedNode &&
-        this.touchedNode !== touchedNode &&
-        !this.touchedNode.isNotFiltered
-      ) {
+      if (touchedNode === this.touchedNode) return;
+
+      if (this.touchedNode && !this.touchedNode.isNotFiltered) {
         window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
         this.touchedNode.expandAnimationId = 0;
         this.touchedNode.contract();
@@ -179,7 +177,6 @@ export class Canvas {
         window.cancelAnimationFrame(this.touchedNode.contractAnimationId);
         this.touchedNode.contractAnimationId = 0;
         touchedNode.expand();
-        console.log(touchedNode.direction);
       }
     } else {
       if (this.touchedNode && !this.touchedNode.contractAnimationId) {
@@ -432,15 +429,26 @@ export class Canvas {
         twoChonCount,
         this.EDGE_LENGTH,
       );
-
       this.oneChonNodes = friendList.map((oneChon, oneChonIdx) => {
-        const twoChonNodes = oneChon.chons.map((twoChon, twoChonIdx) => {
+        const omitCount = coords[oneChonIdx].omitCount;
+        const sortedChons = [...oneChon.chons].sort((a, b) => {
+          return friendList.find(friend => friend.id === a.id)
+            ? 1
+            : friendList.find(friend => friend.id === b.id)
+            ? -1
+            : 0;
+        });
+        const twoChonNodes = sortedChons.map((twoChon, twoChonIdx) => {
           const twoChonNode = new UserNode(
             twoChon.id,
             twoChon.imgUrl,
             twoChon.lastname + twoChon.firstname,
-            coords[oneChonIdx].userCoord,
-            coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord,
+            twoChonIdx < sortedChons.length - omitCount
+              ? coords[oneChonIdx].userCoord
+              : { x: -1, y: -1 },
+            twoChonIdx < sortedChons.length - omitCount
+              ? coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord
+              : { x: -1, y: -1 },
             this,
             twoChon.isNotFiltered,
           );
@@ -461,6 +469,7 @@ export class Canvas {
           this,
           twoChonNodes,
           oneChon.isNotFiltered,
+          omitCount,
         );
         oneChonNode.imgElement.onload = () => {
           this.render();
@@ -505,15 +514,18 @@ export class Canvas {
     if (this.centerNode) {
       // Draw two-chon nodes and edges
       this.twoChonNodes.forEach(twoChonNode => {
-        const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
-          twoChonNode.originCoord,
-          twoChonNode.destCoord,
-          NODE_RADIUS,
-          // NODE_RADIUS,
-          twoChonNode.radius,
-        );
-        this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
-        this.drawUserNode(twoChonNode);
+        if (twoChonNode.coord.x !== -1 && twoChonNode.coord.y != -1) {
+          // If not omitted
+          const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
+            twoChonNode.originCoord,
+            twoChonNode.destCoord,
+            NODE_RADIUS,
+            // NODE_RADIUS,
+            twoChonNode.radius,
+          );
+          this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
+          this.drawUserNode(twoChonNode);
+        }
       });
       // Draw one-chon nodes and edges
       this.oneChonNodes.forEach(oneChonNode => {
@@ -636,7 +648,6 @@ export class Canvas {
     // Draw round border
     ctx.restore();
     ctx.save();
-    ctx.beginPath();
     // If hover
     if (userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE) {
       // Draw username text
@@ -655,6 +666,7 @@ export class Canvas {
       ctx.shadowOffsetY = userNode.radius * this.SHADOW_OFFSET_Y;
       ctx.shadowBlur = this.SHADOW_BLUR;
     }
+    ctx.beginPath();
     ctx.lineWidth = // Set border line width
       userNode === this.centerNode ? scaledRadius * 0.1 : scaledRadius * 0.07;
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
@@ -662,6 +674,29 @@ export class Canvas {
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
+
+    // Draw omit count
+    if (userNode instanceof OneChonNode && userNode.omitCount) {
+      // Draw background box
+      this.roundRect(
+        centerX + scaledRadius * 0.1,
+        centerY + scaledRadius * 0.5,
+        scaledRadius * 1.2,
+        scaledRadius * 0.6,
+        10,
+      );
+      ctx.save();
+      // Draw omit count text
+      ctx.fillStyle = "white";
+      ctx.font = `900 ${scaledRadius * 0.5}px monospace`;
+      ctx.fillText(
+        `+${userNode.omitCount}`,
+        centerX + scaledRadius * 0.4,
+        centerY + scaledRadius * 0.95,
+        scaledRadius * 1.8,
+      );
+      ctx.restore();
+    }
   }
 
   drawEdge(edgeA: Coord, edgeB: Coord, chon: number) {
@@ -689,6 +724,29 @@ export class Canvas {
     ctx.lineTo(screenEdgeB.x, screenEdgeB.y);
     ctx.stroke();
     ctx.closePath();
+    ctx.restore();
+  }
+
+  roundRect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius: number,
+  ) {
+    const ctx = this.ctx;
+    if (width < 2 * radius) radius = width / 2;
+    if (height < 2 * radius) radius = height / 2;
+    ctx.save();
+    ctx.fillStyle = "#FF7C7C";
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + width, y, x + width, y + height, radius);
+    ctx.arcTo(x + width, y + height, x, y + height, radius);
+    ctx.arcTo(x, y + height, x, y, radius);
+    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.closePath();
+    ctx.fill();
     ctx.restore();
   }
 
