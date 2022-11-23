@@ -83,8 +83,6 @@ export class Canvas {
 
   private isTwoChonNodesJourneyFinished = false;
 
-  private flag = false;
-
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
     this.ctx = canvas.getContext("2d")!;
@@ -559,8 +557,6 @@ export class Canvas {
           this.drawUserNode(twoChonNode);
         });
       }
-        this.drawUserNode(oneChonNode);
-      });
       this.drawUserNode(this.centerNode);
     }
   }
@@ -659,11 +655,6 @@ export class Canvas {
       ctx.shadowOffsetY = userNode.radius * this.SHADOW_OFFSET_Y;
       ctx.shadowBlur = this.SHADOW_BLUR;
     }
-
-    // Draw round border
-    ctx.restore();
-    ctx.save();
-    ctx.beginPath();
     ctx.lineWidth = // Set border line width
       userNode === this.centerNode ? scaledRadius * 0.1 : scaledRadius * 0.07;
     ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
@@ -707,7 +698,6 @@ export class Canvas {
     // else if (!this.isTwoChonNodesJourneyFinished) this.startTwoChonJourney();
     // console.log(this.isTwoChonNodesJourneyFinished);
     this.drawGraph();
-    }
   }
 
   clear() {
