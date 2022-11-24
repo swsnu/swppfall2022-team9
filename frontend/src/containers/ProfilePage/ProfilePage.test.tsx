@@ -11,7 +11,7 @@ import {
   AlertContextProvider,
 } from "containers/Context/AlertContext/AlertContext";
 import { profileStub } from "server/stubs/profiles.stub";
-import { usersStub } from "server/stubs/users.stub";
+import { profilePageUsersStub } from "server/stubs/users.stub";
 import { Provider } from "react-redux";
 import store from "store";
 
@@ -165,7 +165,7 @@ describe("<ProfilePage/>", () => {
 
   it("renders profile page with data", async () => {
     renderProfilePage(
-      usersStub[0],
+      profilePageUsersStub[0],
       friendListStub,
       currentProfileStub,
       alertProviderProps,
@@ -174,7 +174,7 @@ describe("<ProfilePage/>", () => {
 
   it("tests useEffect branchign with different oneChon id", async () => {
     renderProfilePage(
-      usersStub[0],
+      profilePageUsersStub[0],
       friendListStub4,
       currentProfileStub,
       alertProviderProps,
@@ -183,7 +183,7 @@ describe("<ProfilePage/>", () => {
 
   it("tests onClickChangeProfile", async () => {
     renderProfilePage(
-      usersStub[0],
+      profilePageUsersStub[0],
       friendListStub,
       currentProfileStub,
       alertProviderProps,
@@ -194,7 +194,7 @@ describe("<ProfilePage/>", () => {
 
   it("tests onClickChatWithUser", async () => {
     renderProfilePage(
-      usersStub[1],
+      profilePageUsersStub[1],
       friendListStub,
       currentProfileStub,
       alertProviderProps,
@@ -205,7 +205,7 @@ describe("<ProfilePage/>", () => {
 
   it("tests onClickEvaluateQuality", async () => {
     renderProfilePage(
-      usersStub[1],
+      profilePageUsersStub[1],
       friendListStub,
       currentProfileStub,
       alertProviderProps,
@@ -219,7 +219,7 @@ describe("<ProfilePage/>", () => {
       unwrap: () => {},
     });
     renderProfilePage(
-      usersStub[1],
+      profilePageUsersStub[1],
       friendListStub2,
       currentProfileStub,
       alertProviderProps,
@@ -233,7 +233,7 @@ describe("<ProfilePage/>", () => {
       unwrap: () => Promise.reject({}),
     });
     renderProfilePage(
-      usersStub[1],
+      profilePageUsersStub[1],
       friendListStub2,
       currentProfileStub,
       alertProviderProps,
@@ -247,7 +247,7 @@ describe("<ProfilePage/>", () => {
       unwrap: () => ({ ...profileStub }),
     });
     renderProfilePage(
-      usersStub[0],
+      profilePageUsersStub[0],
       friendListStub3,
       currentProfileStub,
       alertProviderProps,
