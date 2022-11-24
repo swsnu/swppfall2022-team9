@@ -13,9 +13,13 @@ attrs==22.1.0
 backports-zoneinfo==0.2.1
     # via django
 certifi==2022.9.24
-    # via requests
+    # via
+    #   cloudinary
+    #   requests
 charset-normalizer==2.1.1
     # via requests
+cloudinary==1.30.0
+    # via -r requirements.in
 coverage==6.5.0
     # via -r requirements.in
 dill==0.3.6
@@ -57,6 +61,8 @@ python-decouple==3.6
     # via -r requirements.in
 requests==2.28.1
     # via -r requirements.in
+six==1.16.0
+    # via cloudinary
 sqlparse==0.4.3
     # via django
 tomli==2.0.1
@@ -70,6 +76,8 @@ typing-extensions==4.4.0
     #   astroid
     #   pylint
 urllib3==1.26.12
-    # via requests
+    # via
+    #   cloudinary
+    #   requests
 wrapt==1.14.1
     # via astroid
