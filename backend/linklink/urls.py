@@ -52,6 +52,11 @@ urlpatterns = [
         name='profile'
     ),
     path(
+        'profile/uploadImage/',
+        views.upload_image,
+        name='upload_image'
+    ),
+    path(
         'friendRequest/',
         views.friend_request,
         name='friend_request'
