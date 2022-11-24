@@ -7,6 +7,7 @@ import json
 from json.decoder import JSONDecodeError
 import os
 
+import cloudinary.uploader
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -544,6 +545,24 @@ def profile(request, user_id):
                     f"userId={user_id} not found."
                 }
             )
+
+
+@allowed_method_or_405(["POST"])
+@logged_in_or_401
+def upload_image(request):
+    if request.method == "POST": # pragma: no branch
+        try:
+            upload_result = \
+                cloudinary.uploader.upload(request.FILES["profileImage"])
+        except KeyError as e:
+            return HttpResponseBadRequest(e) # implicit status code = 400
+        response_dict = {
+            "imgUrl" : upload_result["secure_url"]
+        }
+        return JsonResponse(
+            status=200,
+            data=response_dict,
+        )
 
 #--------------------------------------------------------------------------
 #   FriendRequest Related APIs
