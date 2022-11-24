@@ -71,7 +71,6 @@ const ProfilePage: React.FC<Props> = () => {
   };
 
   const onClickAddFriend = async () => {
-    // if (userId && currentUser) {
     try {
       await dispatch(
         postFriendRequest({
@@ -84,7 +83,6 @@ const ProfilePage: React.FC<Props> = () => {
       console.log(err);
       alert.open({ message: "친구 요청에 실패했습니다" });
     }
-    // }
   };
 
   useEffect(() => {

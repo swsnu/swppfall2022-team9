@@ -61,6 +61,25 @@ export const usersStub: Array<User> = [
   },
 ];
 
+export const profilePageUsersStub: Array<User> = [
+  {
+    id: 1,
+    email: "swpp@snu.ac.kr",
+    username: "swpp",
+    firstname: "software",
+    lastname: "lover",
+    password: "iluvswpp",
+  },
+  {
+    id: 2,
+    email: "alan@turing.com",
+    username: "turing",
+    password: "iluvswpp",
+    firstname: "Alan",
+    lastname: "Turing",
+  },
+]
+
 export const makeStubFriendList = (
   oneChonNumber: number,
   twoChonNumber: number,
