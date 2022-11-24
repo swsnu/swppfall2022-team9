@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import inspect
 import json
 import os
+from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -871,6 +872,37 @@ class LinkLinkTestCase(TestCase):
             json.loads(response.content.decode()),
             error_message_dict
         )
+
+
+    def test_post_upload_profile_image_success(self):
+        target_url = "/api/profile/uploadImage/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # POST
+        default_user_image_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "default_user_image.png"
+        )
+        test_response_dict = {
+            "secure_url" : "https://testimageurl.com"
+        }
+        with patch(
+            "cloudinary.uploader.upload",
+            return_value=test_response_dict
+            ):
+            with open(default_user_image_path, "rb") as image:
+                response = self.client.post(
+                    target_url,
+                    {
+                        "profileImage": image
+                    },
+                    HTTP_X_CSRFTOKEN=self.csrftoken
+                )
+        self.assertEqual(response.status_code, 200)
+        response_dict = json.loads(response.content.decode())
+        cloudinary_url = response_dict["imgUrl"]
+        self.assertEqual(cloudinary_url, "https://testimageurl.com")
 
 #--------------------------------------------------------------------------
 #   FriendRequest Related Tests
@@ -1778,6 +1810,34 @@ class LinkLinkTestCase(TestCase):
             content_type="application/json",
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_400_post_upload_profile_image(self):
+        target_url = "/api/profile/uploadImage/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # POST
+        default_user_image_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            "default_user_image.png"
+        )
+        test_response_dict = {
+            "secure_url" : "https://testimageurl.com"
+        }
+        with patch(
+            "cloudinary.uploader.upload",
+            return_value=test_response_dict
+            ):
+            with open(default_user_image_path, "rb"):# as image:
+                response = self.client.post(
+                    target_url,
+                    {
+                        # "profileImage": image # no profileImage
+                    },
+                    HTTP_X_CSRFTOKEN=self.csrftoken
+                )
         self.assertEqual(response.status_code, 400)
 
 
