@@ -28,6 +28,7 @@ const AccountPage: React.FC = () => {
   };
   const onClickLogout = () => {
     dispatch(getSignOut());
+    navigate("/");
   };
 
   // TODO: delete account
