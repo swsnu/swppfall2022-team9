@@ -17,7 +17,7 @@ import {
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
 import { OneChonInfo } from "types/friend.types";
 import { ThemeColor } from "styles/common.styles";
-export class Canvas {
+export default class Canvas {
   private MAX_SCALE = 2;
 
   private MIN_SCALE = 0.6;
@@ -65,29 +65,33 @@ export class Canvas {
 
   private friendList: OneChonInfo[] = [];
 
-  private centerNode?: UserNode;
+  centerNode?: UserNode;
 
-  private oneChonNodes: OneChonNode[] = [];
+  oneChonNodes: OneChonNode[] = [];
 
-  private twoChonNodes: UserNode[] = [];
+  twoChonNodes: UserNode[] = [];
 
-  private nodes?: UserNode[]; // For convenient node iteration
+  nodes?: UserNode[]; // For convenient node iteration
 
-  private touchedNode?: UserNode;
+  touchedNode?: UserNode;
 
-  private isOneChonNodesJourneyStarted = false;
-
-  private isOneChonNodesJourneyFinished = false;
-
-  private isTwoChonNodesJourneyStarted = false;
-
-  private isTwoChonNodesJourneyFinished = false;
+  isOneChonJourneyFinished = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.element = canvas;
     this.ctx = canvas.getContext("2d")!;
 
     this.initialize();
+  }
+
+  reset() {
+    this.currentUser = undefined;
+    this.centerNode = undefined;
+    this.oneChonNodes = [];
+    this.twoChonNodes = [];
+    this.nodes = undefined;
+    this.touchedNode = undefined;
+    this.clear();
   }
 
   getContext() {
@@ -135,8 +139,7 @@ export class Canvas {
         )
       ) {
         this.setCenterNode(touchedNode.id);
-        this.setNodes(touchedNode.id);
-        this.render();
+        this.setFriendNodes(touchedNode.id);
       }
     }
 
@@ -161,27 +164,24 @@ export class Canvas {
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
-      if (touchedNode === this.touchedNode) return;
-
-      if (this.touchedNode && !this.touchedNode.isNotFiltered) {
+      if (this.touchedNode) {
+        if (touchedNode.id === this.touchedNode.id) {
+          return;
+        }
         window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
         this.touchedNode.expandAnimationId = 0;
         this.touchedNode.contract();
       }
 
       this.touchedNode = touchedNode;
-      if (
-        !this.touchedNode.expandAnimationId &&
-        !this.touchedNode.isNotFiltered // Only filtered nodes can expand and contract
-      ) {
+      if (!this.touchedNode.isNotFiltered) {
+        // Only filtered nodes can expand and contract
         window.cancelAnimationFrame(this.touchedNode.contractAnimationId);
-        this.touchedNode.contractAnimationId = 0;
         touchedNode.expand();
       }
     } else {
-      if (this.touchedNode && !this.touchedNode.contractAnimationId) {
+      if (this.touchedNode) {
         window.cancelAnimationFrame(this.touchedNode.expandAnimationId);
-        this.touchedNode.expandAnimationId = 0;
         this.touchedNode.contract();
         this.touchedNode = undefined;
       }
@@ -355,35 +355,31 @@ export class Canvas {
 
   setFriendList(friendList: OneChonInfo[]) {
     this.friendList = friendList;
-    this.setNodes(this.centerNode!.id);
+    this.setFriendNodes(this.centerNode!.id);
   }
 
   setCenterNode(userId: number) {
     const targetOneChon = this.friendList.find(
       oneChon => oneChon.id === userId,
     );
+    const currentUser = this.currentUser!;
     const centerNode = new UserNode(
       userId,
       targetOneChon
-        ? targetOneChon.imgUrl
-        : "https://play-lh.googleusercontent.com/38AGKCqmbjZ9OuWx4YjssAz3Y0DTWbiM5HB0ove1pNBq_o9mtWfGszjZNxZdwt_vgHo=w240-h480-rw",
-      targetOneChon
         ? targetOneChon.lastname + targetOneChon.firstname
-        : this.currentUser!.lastname + this.currentUser!.firstname,
+        : currentUser.lastname + currentUser.firstname,
       { x: 0, y: 0 },
       { x: 0, y: 0 },
       this,
+      targetOneChon ? targetOneChon.imgUrl : currentUser.imgUrl,
       false,
       this.CENTER_NODE_RADIUS,
     );
     this.centerNode = centerNode;
-    this.centerNode.imgElement.onload = () => {
-      this.render();
-    };
     this.nodes = [centerNode];
   }
 
-  setNodes(userId: number) {
+  setFriendNodes(userId: number) {
     const targetOneChon = this.friendList.find(
       oneChon => oneChon.id === userId,
     );
@@ -401,17 +397,14 @@ export class Canvas {
       this.oneChonNodes = targetOneChon.chons.map((oneChon, oneChonIdx) => {
         const oneChonNode = new OneChonNode(
           oneChon.id,
-          oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
           { x: 0, y: 0 },
           coords[oneChonIdx].userCoord,
           this,
           [],
+          oneChon.imgUrl,
           oneChon.isNotFiltered,
         );
-        oneChonNode.imgElement.onload = () => {
-          this.render();
-        };
         this.nodes?.push(oneChonNode);
         return oneChonNode;
       });
@@ -442,7 +435,6 @@ export class Canvas {
         const twoChonNodes = sortedChons.map((twoChon, twoChonIdx) => {
           const twoChonNode = new UserNode(
             twoChon.id,
-            twoChon.imgUrl,
             twoChon.lastname + twoChon.firstname,
             twoChonIdx < sortedChons.length - omitCount
               ? coords[oneChonIdx].userCoord
@@ -451,34 +443,30 @@ export class Canvas {
               ? coords[oneChonIdx].twoChonCoords[twoChonIdx].userCoord
               : { x: -1, y: -1 },
             this,
+            twoChon.imgUrl,
             twoChon.isNotFiltered,
           );
-          twoChonNode.imgElement.onload = () => {
-            this.render();
-          };
           this.nodes?.push(twoChonNode);
-          this.twoChonNodes?.push(twoChonNode);
+          this.twoChonNodes.push(twoChonNode);
           return twoChonNode;
         });
 
         const oneChonNode = new OneChonNode(
           oneChon.id,
-          oneChon.imgUrl,
           oneChon.lastname + oneChon.firstname,
           { x: 0, y: 0 },
           coords[oneChonIdx].userCoord,
           this,
           twoChonNodes,
+          oneChon.imgUrl,
           oneChon.isNotFiltered,
           omitCount,
         );
-        oneChonNode.imgElement.onload = () => {
-          this.render();
-        };
         this.nodes?.push(oneChonNode);
         return oneChonNode;
       });
     }
+    this.startNodeJourney();
   }
 
   getWidth() {
@@ -511,52 +499,31 @@ export class Canvas {
     this.ctx.scale(x, y);
   }
 
-  drawGraph() {
-    if (this.centerNode) {
-      // Draw two-chon nodes and edges
-      this.twoChonNodes.forEach(twoChonNode => {
-        if (twoChonNode.coord.x !== -1 && twoChonNode.coord.y != -1) {
-          // If not omitted
-          const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
-            twoChonNode.originCoord,
-            twoChonNode.destCoord,
-            NODE_RADIUS,
-            // NODE_RADIUS,
-            twoChonNode.radius,
-          );
-          this.drawEdge(edgeFromOneChonNode, edgeToTwoChon, 2); // Edge from 1-chon to 2-chon
-          this.drawUserNode(twoChonNode);
-        }
-      });
-      // Draw one-chon nodes and edges
-      this.oneChonNodes.forEach(oneChonNode => {
-        const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
-          this.centerNode!.destCoord,
-          oneChonNode.destCoord,
-          this.centerNode!.radius,
-          oneChonNode.radius,
+  async startNodeJourney() {
+    this.isOneChonJourneyFinished = false;
+    if (this.oneChonNodes.length > 0) {
+      const oneChonJourneys: Promise<void>[] = this.oneChonNodes.map(
+        async oneChonNode => {
+          await oneChonNode.journey();
+        },
+      );
+      await Promise.all(oneChonJourneys);
+      this.isOneChonJourneyFinished = true;
+
+      if (this.twoChonNodes.length > 0) {
+        const twoChonJourneys: Promise<void>[] = this.twoChonNodes.map(
+          async twoChonNode => {
+            await twoChonNode.journey();
+          },
         );
-        this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
-        this.drawUserNode(oneChonNode);
-      });
-      // Draw center node
-      this.drawUserNode(this.centerNode);
+        await Promise.all(twoChonJourneys);
+      }
     }
   }
 
-  drawAnimatedGraph() {
+  drawGraph() {
     if (this.centerNode) {
-      this.oneChonNodes.forEach(oneChonNode => {
-        const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
-          this.centerNode!.coord,
-          oneChonNode.coord,
-          this.centerNode!.radius,
-          oneChonNode.radius,
-        );
-        this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
-        this.drawUserNode(oneChonNode);
-      });
-      if (this.isTwoChonNodesJourneyStarted) {
+      if (this.isOneChonJourneyFinished) {
         this.twoChonNodes.forEach(twoChonNode => {
           const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
             twoChonNode.originCoord,
@@ -570,50 +537,24 @@ export class Canvas {
           this.drawUserNode(twoChonNode);
         });
       }
+      this.oneChonNodes.forEach(oneChonNode => {
+        const [edgeFromCenterNode, edgeToOneChon] = getEdgeCoords(
+          oneChonNode.originCoord,
+          oneChonNode.coord,
+          this.centerNode!.radius,
+          oneChonNode.radius,
+        );
+        this.drawEdge(edgeFromCenterNode, edgeToOneChon, 1); // Edge from current user to 1-chon
+        this.drawUserNode(oneChonNode);
+      });
       this.drawUserNode(this.centerNode);
-    }
-  }
-
-  startOneChonJourney() {
-    if (this.oneChonNodes.length > 0) {
-      if (!this.isOneChonNodesJourneyStarted) {
-        this.isOneChonNodesJourneyStarted = true;
-        this.oneChonNodes.forEach(oneChonNode => {
-          oneChonNode.journey();
-        });
-      } else {
-        this.isOneChonNodesJourneyFinished = this.oneChonNodes.find(
-          oneChonNode => !oneChonNode.isJourneyEnd,
-        )
-          ? false
-          : true;
-        if (this.isOneChonNodesJourneyFinished) this.render();
-      }
-    }
-  }
-
-  startTwoChonJourney() {
-    if (this.twoChonNodes.length > 0) {
-      if (!this.isTwoChonNodesJourneyStarted) {
-        this.isTwoChonNodesJourneyStarted = true;
-        this.twoChonNodes.forEach(twoChonNode => {
-          twoChonNode.journey();
-        });
-      } else {
-        this.isTwoChonNodesJourneyFinished = this.twoChonNodes.find(
-          twoChonNode => !twoChonNode.isJourneyEnd,
-        )
-          ? false
-          : true;
-      }
     }
   }
 
   drawUserNode(userNode: UserNode) {
     const ctx = this.ctx;
     const scaledRadius = userNode.radius * this.panZoom.scale;
-    // const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
-    const correctedPosition = getScreenPoint(userNode.destCoord, this.panZoom);
+    const correctedPosition = getScreenPoint(userNode.coord, this.panZoom);
     const screenPosition = convertCartesianToScreen(
       this.element,
       correctedPosition,
@@ -736,8 +677,8 @@ export class Canvas {
     radius: number,
   ) {
     const ctx = this.ctx;
-    if (width < 2 * radius) radius = width / 2;
-    if (height < 2 * radius) radius = height / 2;
+    // if (width < 2 * radius) radius = width / 2;
+    // if (height < 2 * radius) radius = height / 2;
     ctx.save();
     ctx.fillStyle = "#FF7C7C";
     ctx.beginPath();
@@ -753,9 +694,6 @@ export class Canvas {
 
   render() {
     this.clear();
-    // if (!this.isOneChonNodesJourneyFinished) this.startOneChonJourney();
-    // else if (!this.isTwoChonNodesJourneyFinished) this.startTwoChonJourney();
-    // console.log(this.isTwoChonNodesJourneyFinished);
     this.drawGraph();
   }
 

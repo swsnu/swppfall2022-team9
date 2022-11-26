@@ -1,5 +1,5 @@
 import { Coord } from "types/canvas.types";
-import { Canvas } from "./Canvas";
+import Canvas from "./Canvas";
 import {
   convertCartesianToScreen,
   directionPoints,
@@ -10,14 +10,17 @@ import {
 
 export const NODE_RADIUS = 28;
 
+export const DEFAULT_IMAGE_URL =
+  "https://res.cloudinary.com/duyixodey/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1669277869/wluz4fcvznfi5jt1vxys.png";
+
 export class UserNode {
   EXPAND_RATE = 1.2;
 
   EXPAND_SPEED = 0.8;
 
-  CONTRACT_SPEED = 0.5;
+  CONTRACT_SPEED = 0.8;
 
-  JOURNEY_SPEED = 0.015;
+  JOURNEY_SPEED = 0.02;
 
   id: number;
 
@@ -51,31 +54,32 @@ export class UserNode {
 
   journeySpeed: number;
 
-  isJourneyEnd = false;
-
   constructor(
     id: number,
-    imgUrl: string,
     name: string,
     coord: Coord,
     destCoord: Coord,
     canvas: Canvas,
+    imgUrl = DEFAULT_IMAGE_URL,
     isNotFiltered = false,
     radius = NODE_RADIUS,
   ) {
     this.id = id;
     this.imgElement = new Image();
-    this.imgElement.src = imgUrl;
+    this.imgElement.src = imgUrl === "" ? DEFAULT_IMAGE_URL : imgUrl;
+    this.imgElement.onload = () => {
+      canvas.render();
+    };
     this.name = name;
-    this.coord = coord;
+    this.coord = { ...coord };
     this.originCoord = { ...coord };
-    this.destCoord = destCoord;
+    this.destCoord = { ...destCoord };
     this.canvas = canvas;
     this.radius = radius;
     this.originalRadius = radius;
     this.isNotFiltered = isNotFiltered;
-    this.gradient = gradientPoints(coord, destCoord);
-    this.direction = directionPoints(coord, destCoord);
+    this.gradient = gradientPoints(this.originCoord, destCoord);
+    this.direction = directionPoints(this.originCoord, destCoord);
     this.journeySpeed = Math.abs(coord.x - destCoord.x)
       ? Math.abs(coord.x - destCoord.x) * this.JOURNEY_SPEED
       : Math.abs(coord.y - destCoord.y) * this.JOURNEY_SPEED;
@@ -110,58 +114,48 @@ export class UserNode {
     );
   }
 
-  journey() {
-    this.isJourneyEnd =
-      directionPoints(this.coord, this.destCoord) === 5 ||
-      this.direction !== directionPoints(this.coord, this.destCoord)
-        ? true
-        : false;
-    if (this.isJourneyEnd) {
-      this.coord.x = this.destCoord.x;
-      this.coord.y = this.destCoord.y;
+  async journey(): Promise<void> {
+    while (
+      !(
+        directionPoints(this.coord, this.destCoord) === 5 ||
+        this.direction !== directionPoints(this.coord, this.destCoord)
+      )
+    ) {
+      switch (this.direction) {
+        case 1:
+          this.coord.x -= this.journeySpeed;
+          this.coord.y -= this.gradient * this.journeySpeed;
+          break;
+        case 2:
+          this.coord.y += this.journeySpeed;
+          break;
+        case 3:
+          this.coord.x += this.journeySpeed;
+          this.coord.y += this.gradient * this.journeySpeed;
+          break;
+        case 4:
+          this.coord.x -= this.journeySpeed;
+          break;
+        // case 5:
+        //   break;
+        case 6:
+          this.coord.x += this.journeySpeed;
+          break;
+        case 7:
+          this.coord.x -= this.journeySpeed;
+          this.coord.y -= this.gradient * this.journeySpeed;
+          break;
+        case 8:
+          this.coord.y -= this.journeySpeed;
+          break;
+        case 9:
+          this.coord.x += this.journeySpeed;
+          this.coord.y += this.gradient * this.journeySpeed;
+          break;
+      }
       this.canvas.render();
-      window.cancelAnimationFrame(this.journeyAnimationId);
-      return;
+      await new Promise(requestAnimationFrame);
     }
-
-    switch (this.direction) {
-      case 1:
-        this.coord.x -= this.journeySpeed;
-        this.coord.y -= this.gradient * this.journeySpeed;
-        break;
-      case 2:
-        this.coord.y += this.journeySpeed;
-        break;
-      case 3:
-        this.coord.x += this.journeySpeed;
-        this.coord.y += this.gradient * this.journeySpeed;
-        break;
-      case 4:
-        this.coord.x -= this.journeySpeed;
-        break;
-      case 5:
-        // NA
-        break;
-      case 6:
-        this.coord.x += this.journeySpeed;
-        break;
-      case 7:
-        this.coord.x -= this.journeySpeed;
-        this.coord.y -= this.gradient * this.journeySpeed;
-        break;
-      case 8:
-        this.coord.y -= this.journeySpeed;
-        break;
-      case 9:
-        this.coord.x += this.journeySpeed;
-        this.coord.y += this.gradient * this.journeySpeed;
-        break;
-    }
-
-    this.canvas.render();
-    this.journeyAnimationId = window.requestAnimationFrame(
-      this.journey.bind(this),
-    );
   }
 
   isTouched(touchPoint: Coord) {
@@ -186,16 +180,17 @@ export class OneChonNode extends UserNode {
 
   constructor(
     id: number,
-    imgUrl: string,
     name: string,
     coord: Coord,
     destCoord: Coord,
     canvas: Canvas,
     twoChonNodes: UserNode[],
+    imgUrl = DEFAULT_IMAGE_URL,
     isNotFiltered = false,
     omitCount = 0,
+    radius = NODE_RADIUS,
   ) {
-    super(id, imgUrl, name, coord, destCoord, canvas, isNotFiltered);
+    super(id, name, coord, destCoord, canvas, imgUrl, isNotFiltered, radius);
     this.twoChonNodes = twoChonNodes;
     this.omitCount = omitCount;
   }

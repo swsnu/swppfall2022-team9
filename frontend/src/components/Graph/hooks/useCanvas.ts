@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useState } from "react";
-import { Canvas } from "../utils/Canvas";
+import Canvas from "../utils/Canvas";
 
 interface Params {
   divRef: RefObject<HTMLDivElement>;
