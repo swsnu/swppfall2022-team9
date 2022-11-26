@@ -71,7 +71,7 @@ export default class Canvas {
 
   twoChonNodes: UserNode[] = [];
 
-  nodes?: UserNode[]; // For convenient node iteration
+  nodes: UserNode[] = []; // For convenient node iteration
 
   touchedNode?: UserNode;
 
@@ -89,7 +89,7 @@ export default class Canvas {
     this.centerNode = undefined;
     this.oneChonNodes = [];
     this.twoChonNodes = [];
-    this.nodes = undefined;
+    this.nodes = [];
     this.touchedNode = undefined;
     this.clear();
   }
@@ -129,7 +129,7 @@ export default class Canvas {
     const point = this.getPointFromTouchyEvent(evt);
     const pointCoord = { x: point.offsetX, y: point.offsetY };
     this.panPoint.lastMousePos = { x: point.offsetX, y: point.offsetY };
-    const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
+    const touchedNode = this.nodes.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
       // TODO
       // Add node click action
@@ -162,7 +162,7 @@ export default class Canvas {
     evt.preventDefault();
     const point = this.getPointFromTouchyEvent(evt);
     const pointCoord = { x: point.offsetX, y: point.offsetY };
-    const touchedNode = this.nodes?.find(node => node.isTouched(pointCoord));
+    const touchedNode = this.nodes.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
       if (this.touchedNode) {
         if (touchedNode.id === this.touchedNode.id) {
@@ -354,6 +354,11 @@ export default class Canvas {
   }
 
   setFriendList(friendList: OneChonInfo[]) {
+    this.oneChonNodes = [];
+    this.twoChonNodes = [];
+    this.nodes = [this.centerNode!];
+    // this.touchedNode = undefined;
+    this.clear();
     this.friendList = friendList;
     this.setFriendNodes(this.centerNode!.id);
   }
@@ -405,7 +410,7 @@ export default class Canvas {
           oneChon.imgUrl,
           oneChon.isNotFiltered,
         );
-        this.nodes?.push(oneChonNode);
+        this.nodes.push(oneChonNode);
         return oneChonNode;
       });
       // No two-chons(my three-chons) in one-chon's graph
@@ -446,7 +451,7 @@ export default class Canvas {
             twoChon.imgUrl,
             twoChon.isNotFiltered,
           );
-          this.nodes?.push(twoChonNode);
+          this.nodes.push(twoChonNode);
           this.twoChonNodes.push(twoChonNode);
           return twoChonNode;
         });
@@ -462,7 +467,7 @@ export default class Canvas {
           oneChon.isNotFiltered,
           omitCount,
         );
-        this.nodes?.push(oneChonNode);
+        this.nodes.push(oneChonNode);
         return oneChonNode;
       });
     }
