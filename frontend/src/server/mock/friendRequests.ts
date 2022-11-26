@@ -14,6 +14,7 @@ import {
   PostFriendRequestDto,
   PutFriendRequestDto,
 } from "../dto/friendRequests/friendRequests.dto";
+import { DEFAULT_IMAGE_URL } from "../models/profile.model";
 // IMPORTANT: everything related to dto, models, stubs should be relative imports
 
 import { Application } from "express";
@@ -44,7 +45,8 @@ export default function applyFriendRequestApi(
           return {
             ...friendRequest,
             senderName: sender ? sender.lastname + sender.firstname : "",
-            senderImgUrl: "",
+            senderImgUrl:
+              sender && sender.imgUrl ? sender.imgUrl : DEFAULT_IMAGE_URL,
           };
         },
       );

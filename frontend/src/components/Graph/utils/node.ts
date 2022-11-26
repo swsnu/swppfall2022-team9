@@ -1,3 +1,4 @@
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import { Coord } from "types/canvas.types";
 import Canvas from "./Canvas";
 import {
@@ -9,9 +10,6 @@ import {
 } from "./math";
 
 export const NODE_RADIUS = 28;
-
-export const DEFAULT_IMAGE_URL =
-  "https://res.cloudinary.com/duyixodey/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1669277869/wluz4fcvznfi5jt1vxys.png";
 
 export class UserNode {
   EXPAND_RATE = 1.2;
