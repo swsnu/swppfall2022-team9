@@ -17,7 +17,7 @@ export interface Schema {
   users: Array<User>;
   friendRequests: Array<FriendRequest>;
   friendList: Array<OneChonInfo>;
-  profiles: Array<Profile>;
+  profiles: Array<Profile & { userId: number }>;
 }
 
 const server = jsonServer.create();
