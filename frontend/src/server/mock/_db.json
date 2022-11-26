@@ -6,7 +6,8 @@
       "username": "wotmd",
       "password": "wotmdpw",
       "lastname": "박",
-      "firstname": "재승"
+      "firstname": "재승",
+      "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669276138/uwwvmhpf2hgja3goadsd.jpg"
     },
     {
       "id": 2,
@@ -14,7 +15,8 @@
       "username": "skfk",
       "password": "skfkpw",
       "lastname": "권",
-      "firstname": "나라"
+      "firstname": "나라",
+      "imgUrl": "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3"
     },
     {
       "id": 3,
@@ -22,7 +24,8 @@
       "username": "dldb",
       "password": "dldbpw",
       "lastname": "아",
-      "firstname": "이유"
+      "firstname": "이유",
+      "imgUrl": "https://search.pstatic.net/common?type=b&size=144&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202206%2F20220608134249333.jpg"
     },
     {
       "id": 4,
@@ -30,7 +33,8 @@
       "username": "alsdk",
       "password": "alsdkpw",
       "lastname": "신",
-      "firstname": "민아"
+      "firstname": "민아",
+      "imgUrl": "https://search.pstatic.net/common?type=b&size=216&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202110%2F20211028162722613.jpg"
     },
     {
       "id": 5,
@@ -38,7 +42,8 @@
       "username": "flsk",
       "password": "flskpw",
       "lastname": "카",
-      "firstname": "리나"
+      "firstname": "리나",
+      "imgUrl": "https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/09/18/1e586277-48ba-4e8a-9b98-d8cdbe075d86.jpg"
     },
     {
       "id": 6,
@@ -46,7 +51,8 @@
       "username": "wl",
       "password": "wlpw",
       "lastname": "민",
-      "firstname": "지"
+      "firstname": "지",
+      "imgUrl": "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5353%2F2022%2F08%2F22%2F0000841048_001_20220822163803149.jpg&type=sc960_832"
     },
     {
       "id": 7,
@@ -54,7 +60,8 @@
       "username": "sk",
       "password": "skpw",
       "lastname": "유",
-      "firstname": "나"
+      "firstname": "나",
+      "imgUrl": "https://img.sbs.co.kr/newsnet/etv/upload/2022/07/22/30000778213_1280.jpg"
     },
     {
       "id": 13,
@@ -62,7 +69,8 @@
       "username": "alswjd",
       "password": "alswjdpw",
       "lastname": "이",
-      "firstname": "민정"
+      "firstname": "민정",
+      "imgUrl": "https://w.namu.la/s/146a3cab6b30fe866f15358611221d2a4de60eec333a51dbd89b4cf4363feadefdd37b2ae1c3061ea9a924f36e1733cfec44f6e086007b1fa61ce1b026de3959ad231492cbe9b37e9c7e6bc3dd2be99c1a864e0d44e3353b40e3b25a2c7659a35ed805e81886ad6f4fec6ae27ae2c3e7"
     }
   ],
   "friendRequests": [
