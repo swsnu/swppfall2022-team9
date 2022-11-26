@@ -5,6 +5,7 @@ import {
   FriendRequest,
   FriendRequestStatus,
 } from "server/models/friendRequests.model";
+import { usersStub } from "server/stubs/users.stub";
 import { renderWithProviders } from "test-utils/mocks";
 import Navbar from "./Navbar";
 
@@ -38,6 +39,10 @@ const renderNavbar = (
     </MemoryRouter>,
     {
       preloadedState: {
+        users: {
+          currentUser: usersStub[0],
+          friendList: [],
+        },
         friendRequests: {
           friendRequests: friendRequests,
           friendRequestToken: null,
@@ -76,19 +81,39 @@ describe("<Navbar/>", () => {
     renderNavbar([
       {
         id: 1,
-        senderId: 1,
-        getterId: 2,
+        senderId: 2,
+        getterId: 1,
         status: FriendRequestStatus.PENDING,
         senderImgUrl: "test",
         senderName: "test",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
+      {
+        id: 2,
+        senderId: 3,
+        getterId: 1,
+        status: FriendRequestStatus.PENDING,
+        senderImgUrl: "",
+        senderName: "test2",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 2,
+        senderId: 1,
+        getterId: 4,
+        status: FriendRequestStatus.PENDING,
+        senderImgUrl: "",
+        senderName: "test3",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
     ]);
     const notificationButton = screen.getByRole("notification");
     fireEvent.click(notificationButton);
-    const acceptButton = await waitFor(() => screen.getByText("수락"));
-    const rejectButton = await waitFor(() => screen.getByText("거절"));
+    const acceptButton = await waitFor(() => screen.getAllByText("수락")[0]);
+    const rejectButton = await waitFor(() => screen.getAllByText("거절")[0]);
     fireEvent.click(acceptButton);
     expect(mockDispatch).toHaveBeenCalled();
     fireEvent.click(rejectButton);

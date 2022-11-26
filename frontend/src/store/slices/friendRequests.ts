@@ -73,6 +73,9 @@ export const friendRequestsSlice = createSlice({
     setFriendRequestToken: (state, actions: PayloadAction<string>) => {
       state.friendRequestToken = actions.payload;
     },
+    resetFriendRequests: state => {
+      state.friendRequests = [];
+    },
   },
   extraReducers(builder) {
     builder.addCase(getFriendRequests.fulfilled, (state, action) => {

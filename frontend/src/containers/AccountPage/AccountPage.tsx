@@ -2,6 +2,7 @@ import useAlert from "hooks/useAlert";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
+import { friendRequestActions } from "store/slices/friendRequests";
 import { getSignOut } from "store/slices/users";
 import * as FormStyles from "styles/common.form.styles";
 
@@ -26,8 +27,9 @@ const AccountPage: React.FC = () => {
   const onClickChangePassword = () => {
     navigate("/account/password");
   };
-  const onClickLogout = () => {
-    dispatch(getSignOut());
+  const onClickLogout = async () => {
+    await dispatch(getSignOut());
+    dispatch(friendRequestActions.resetFriendRequests());
     navigate("/");
   };
 

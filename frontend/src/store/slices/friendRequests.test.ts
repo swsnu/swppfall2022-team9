@@ -77,4 +77,8 @@ describe("friend request reducer", () => {
   it("tests set friend request token", async () => {
     store.dispatch(friendRequestActions.setFriendRequestToken("test"));
   });
+
+  it("tests reset friend requests", async () => {
+    store.dispatch(friendRequestActions.resetFriendRequests());
+  });
 });
