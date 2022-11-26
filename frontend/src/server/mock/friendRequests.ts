@@ -90,6 +90,22 @@ export default function applyFriendRequestApi(
       .find({ id: friendRequest.id })
       .assign({ ...req.body })
       .write()) as FriendRequest;
+
+    if (req.body.status === FriendRequestStatus.ACCEPTED) {
+      const newFriendId = friendRequest.senderId;
+      const newFriend = db.get("users").find({ id: newFriendId }).value();
+      await db
+        .get("friendList")
+        .push({
+          id: newFriend.id,
+          lastname: newFriend.lastname,
+          firstname: newFriend.firstname,
+          imgUrl: newFriend.imgUrl ? newFriend.imgUrl : "",
+          chons: [],
+        })
+        .write();
+    }
+
     return res.status(200).json({ friendRequest: updatedFriendRequest });
   });
 }

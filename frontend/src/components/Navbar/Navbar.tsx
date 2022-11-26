@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { FriendRequestStatus } from "server/models/friendRequests.model";
 import useHandleClickOutside from "hooks/useHandleClickOutside";
 import { searchActions } from "store/slices/search";
+import { getFriendList } from "store/slices/users";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
@@ -39,6 +40,7 @@ const Navbar: React.FC<Props> = () => {
         status: FriendRequestStatus.ACCEPTED,
       }),
     );
+    dispatch(getFriendList());
   };
 
   const onRejectFriendRequest = (friendRequestId: number) => {
