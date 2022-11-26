@@ -13,12 +13,13 @@ import { FriendRequestStatus } from "server/models/friendRequests.model";
 import useHandleClickOutside from "hooks/useHandleClickOutside";
 import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wrapperRef = useRef<any>(null);
-
+  const currentUser = useAppSelector(state => state.users.currentUser);
   const friendRequests = useAppSelector(
     state => state.friendRequests.friendRequests,
   );
@@ -26,7 +27,6 @@ const Navbar: React.FC<Props> = () => {
     useState<boolean>(true);
 
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   const onClickBell = () => {
@@ -73,8 +73,10 @@ const Navbar: React.FC<Props> = () => {
   });
 
   useEffect(() => {
-    dispatch(getFriendRequests());
-  }, []);
+    if (currentUser) {
+      dispatch(getFriendRequests());
+    }
+  }, [currentUser]);
   return (
     <S.Container>
       <S.LogoContainer onClick={onClickLogo} role="logo">
@@ -106,26 +108,32 @@ const Navbar: React.FC<Props> = () => {
               <S.NotificationContents>
                 {friendRequests.map(request => {
                   return (
-                    <S.FriendRequestElement key={request.id}>
-                      <S.FriendRequestProfileImgContainer
-                        imgUrl={request.senderImgUrl}
-                      ></S.FriendRequestProfileImgContainer>
-                      <S.FriendRequestMessage>
-                        {request.senderName}가 친구를 맺고 싶어합니다!
-                      </S.FriendRequestMessage>
-                      <S.ActionButtons>
-                        <S.Accept
-                          onClick={() => onAcceptFriendRequest(request.id)}
-                        >
-                          수락
-                        </S.Accept>
-                        <S.Decline
-                          onClick={() => onRejectFriendRequest(request.id)}
-                        >
-                          거절
-                        </S.Decline>
-                      </S.ActionButtons>
-                    </S.FriendRequestElement>
+                    request.getterId === currentUser!.id && (
+                      <S.FriendRequestElement key={request.id}>
+                        <S.FriendRequestProfileImgContainer
+                          imgUrl={
+                            request.senderImgUrl === ""
+                              ? DEFAULT_IMAGE_URL
+                              : request.senderImgUrl
+                          }
+                        ></S.FriendRequestProfileImgContainer>
+                        <S.FriendRequestMessage>
+                          {request.senderName}가 친구를 맺고 싶어합니다!
+                        </S.FriendRequestMessage>
+                        <S.ActionButtons>
+                          <S.Accept
+                            onClick={() => onAcceptFriendRequest(request.id)}
+                          >
+                            수락
+                          </S.Accept>
+                          <S.Decline
+                            onClick={() => onRejectFriendRequest(request.id)}
+                          >
+                            거절
+                          </S.Decline>
+                        </S.ActionButtons>
+                      </S.FriendRequestElement>
+                    )
                   );
                 })}
               </S.NotificationContents>
