@@ -39,8 +39,7 @@ export const profileStub: Profile = {
   educations: educations,
   jobExperiences: jobExp,
   website: "https://www.naver.com",
-  imgUrl:
-    "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
+  imgUrl: "",
 };
 
 export const profileStub2: Profile = {

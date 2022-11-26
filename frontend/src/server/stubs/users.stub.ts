@@ -5,59 +5,71 @@ import { User } from "../models/users.model";
 export const usersStub: Array<User> = [
   {
     id: 0,
-    email: "swpp@snu.ac.kr",
-    username: "swpp",
-    firstname: "software",
-    lastname: "lover",
-    password: "iluvswpp",
+    email: "wotmd@snu.ac.kr",
+    username: "wotmd",
+    password: "wotmdpw",
+    lastname: "박",
+    firstname: "재승",
   },
   {
     id: 2,
-    email: "alan@turing.com",
-    username: "turing",
-    password: "iluvswpp",
-    firstname: "Alan",
-    lastname: "Turing",
+    email: "skfk@snu.ac.kr",
+    username: "skfk",
+    password: "skfkpw",
+    lastname: "권",
+    firstname: "나라",
+    imgUrl:
+      "https://w.namu.la/s/bf1f348b11726fc2cd015373f40ae5504ee4f190ebaf444fa43618adc1825e8c59dd256d9f77c14a8eace45649660a8b07bcf7a926bb8acdfce39909bad36c87eeda63354b81e8b22a5ba21aaf66c4993b22559bbb22dfba650a9fad03e2ee1604c43535690851f187c9b9db07c9d0a3",
   },
   {
     id: 3,
-    email: "edsger@dijkstra.com",
-    username: "dijkstra",
-    password: "iluvswpp",
-    firstname: "Edsger",
-    lastname: "Dijkstra",
+    email: "dldb@snu.ac.kr",
+    username: "dldb",
+    password: "dldbpw",
+    lastname: "아",
+    firstname: "이유",
+    imgUrl:
+      "https://search.pstatic.net/common?type=b&size=144&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202206%2F20220608134249333.jpg",
   },
   {
     id: 4,
-    email: "user1@gmail.com",
-    username: "user1",
-    password: "user1",
-    firstname: "user",
-    lastname: "one",
+    email: "alsdk@snu.ac.kr",
+    username: "alsdk",
+    password: "alsdkpw",
+    lastname: "신",
+    firstname: "민아",
+    imgUrl:
+      "https://search.pstatic.net/common?type=b&size=216&expire=1&refresh=true&quality=100&direct=true&src=http%3A%2F%2Fsstatic.naver.net%2Fpeople%2Fportrait%2F202110%2F20211028162722613.jpg",
   },
   {
     id: 5,
-    email: "user5@gmail.com",
-    username: "user5",
-    password: "user5",
-    firstname: "user",
-    lastname: "five",
+    email: "flsk@snu.ac.kr",
+    username: "flsk",
+    password: "flskpw",
+    lastname: "카",
+    firstname: "리나",
+    imgUrl:
+      "https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/09/18/1e586277-48ba-4e8a-9b98-d8cdbe075d86.jpg",
   },
   {
     id: 6,
-    email: "user6@gmail.com",
-    username: "user6",
-    password: "user6",
-    firstname: "user",
-    lastname: "six",
+    email: "wl@snu.ac.kr",
+    username: "wl",
+    password: "wlpw",
+    lastname: "민",
+    firstname: "지",
+    imgUrl:
+      "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5353%2F2022%2F08%2F22%2F0000841048_001_20220822163803149.jpg&type=sc960_832",
   },
   {
     id: 7,
-    email: "user7@gmail.com",
-    username: "user7",
-    password: "user7",
-    firstname: "user",
-    lastname: "seven",
+    email: "sk@snu.ac.kr",
+    username: "sk",
+    password: "skpw",
+    lastname: "유",
+    firstname: "나",
+    imgUrl:
+      "https://img.sbs.co.kr/newsnet/etv/upload/2022/07/22/30000778213_1280.jpg",
   },
 ];
 
@@ -78,7 +90,7 @@ export const profilePageUsersStub: Array<User> = [
     firstname: "Alan",
     lastname: "Turing",
   },
-]
+];
 
 export const makeStubFriendList = (
   oneChonNumber: number,
@@ -95,15 +107,15 @@ export const makeStubFriendList = (
     for (let j = 0; j < twoChonNumber; j++) {
       chons.push({
         id: id++,
-        lastname: "사",
-        firstname: `용자${id}`,
+        lastname: `[${id}]`,
+        firstname: `2촌`,
         imgUrl: twoChonImgUrl,
       });
     }
     stubFriendList.push({
       id: id++,
-      lastname: "사",
-      firstname: `용자${id}`,
+      lastname: `[${id}]`,
+      firstname: "1촌",
       imgUrl: oneChonImgUrl,
       chons: chons,
     });
