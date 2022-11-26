@@ -5,8 +5,8 @@ import { Profile } from "server/models/profile.model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { postFriendRequest } from "store/slices/friendRequests";
 import {
-  getFriendProfile,
   getFriendProfileWithoutStateUpdate,
+  getProfile,
 } from "store/slices/profile";
 import { getFriendList } from "store/slices/users";
 import { ThemeColor } from "styles/common.styles";
@@ -27,7 +27,7 @@ const ProfilePage: React.FC<Props> = () => {
 
   const getProfileData = async (id: number) => {
     try {
-      await dispatch(getFriendProfile(id)).unwrap();
+      await dispatch(getProfile(id)).unwrap();
     } catch (err) {
       alert.open({
         message: "존재하지 않는 유저입니다",

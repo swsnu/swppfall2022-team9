@@ -1,11 +1,10 @@
 import { AnyAction, configureStore, EnhancedStore } from "@reduxjs/toolkit";
 import { ThunkMiddleware } from "redux-thunk";
 import reducer, {
-  getMyProfile,
-  getFriendProfile,
   editMyProfile,
   ProfileState,
   getFriendProfileWithoutStateUpdate,
+  getProfile,
 } from "./profile";
 import { profileStub } from "server/stubs/profiles.stub";
 import { postCreateProfile } from "./profile";
@@ -39,18 +38,12 @@ describe("profile reducer", () => {
     expect(store.getState().profile.currentProfile).toEqual(null);
   });
 
-  it("tests getMyProfile", async () => {
+  it("tests getProfile", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
-    await store.dispatch(getMyProfile());
+    await store.dispatch(getProfile(1));
     expect(store.getState().profile.currentProfile).toEqual(profileStub);
   });
 
-  it("tests getFriendProfile", async () => {
-    jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
-    await store.dispatch(getFriendProfile(1));
-    expect(store.getState().profile.currentProfile).toEqual(profileStub);
-  });
-  
   it("tests getFriendProfileWithoutStateUpdate", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
     await store.dispatch(getFriendProfileWithoutStateUpdate(1));
