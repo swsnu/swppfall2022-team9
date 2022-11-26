@@ -4,12 +4,12 @@ import {
   EnhancedStore,
   ThunkMiddleware,
 } from "@reduxjs/toolkit";
+import { friendListStub } from "server/stubs/users.stub";
 import reducer, {
   searchActions,
   filterFriendList,
   SearchState,
 } from "./search";
-import { friendListStub2 } from "server/stubs/users.stub";
 
 const mockDispatch = jest.fn();
 
@@ -40,11 +40,11 @@ describe("profile reducer", () => {
   });
 
   it("tests valid search", async () => {
-    filterFriendList(friendListStub2, "신혜");
+    filterFriendList(friendListStub, "신혜");
   });
 
   it("tests twochon search", async () => {
-    filterFriendList(friendListStub2, "민아");
+    filterFriendList(friendListStub, "민아");
   });
 
   it("tests toggle search mode", async () => {

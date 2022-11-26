@@ -69,4 +69,43 @@ describe("<math.ts/>", () => {
     const res = MATH.getEdgeCoords(coordA, coordB, radius, radius);
     assert(res.length === 2);
   });
+  it("computes user node's forwarding direction with various coordinates", () => {
+    const originCoord: Coord = { x: 0, y: 0 };
+
+    const destCoord1: Coord = { x: -1, y: 1 };
+    const direction1 = MATH.directionPoints(originCoord, destCoord1);
+    expect(direction1).toBe(1);
+
+    const destCoord2: Coord = { x: 0, y: 1 };
+    const direction2 = MATH.directionPoints(originCoord, destCoord2);
+    expect(direction2).toBe(2);
+
+    const destCoord3: Coord = { x: 1, y: 1 };
+    const direction3 = MATH.directionPoints(originCoord, destCoord3);
+    expect(direction3).toBe(3);
+
+    const destCoord4: Coord = { x: -1, y: 0 };
+    const direction4 = MATH.directionPoints(originCoord, destCoord4);
+    expect(direction4).toBe(4);
+
+    const destCoord5: Coord = { x: 0, y: 0 };
+    const direction5 = MATH.directionPoints(originCoord, destCoord5);
+    expect(direction5).toBe(5);
+
+    const destCoord6: Coord = { x: 1, y: 0 };
+    const direction6 = MATH.directionPoints(originCoord, destCoord6);
+    expect(direction6).toBe(6);
+
+    const destCoord7: Coord = { x: -1, y: -1 };
+    const direction7 = MATH.directionPoints(originCoord, destCoord7);
+    expect(direction7).toBe(7);
+
+    const destCoord8: Coord = { x: 0, y: -1 };
+    const direction8 = MATH.directionPoints(originCoord, destCoord8);
+    expect(direction8).toBe(8);
+
+    const destCoord9: Coord = { x: 1, y: -1 };
+    const direction9 = MATH.directionPoints(originCoord, destCoord9);
+    expect(direction9).toBe(9);
+  });
 });
