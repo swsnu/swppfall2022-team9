@@ -8,7 +8,7 @@ import ExperienceInput, {
   ExperienceType,
 } from "./ExperienceInput/ExperienceInput";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getMyProfile, postCreateProfile } from "store/slices/profile";
+import { getProfile, postCreateProfile } from "store/slices/profile";
 import { useNavigate } from "react-router-dom";
 
 export const CreateProfileFormTitle = styled.div`
@@ -50,7 +50,7 @@ const ChangeProfilePage: React.FC = () => {
   // DESC: this is for getting already stored profile data in server
   const getCurrentUserProfile = async () => {
     try {
-      const response = await dispatch(getMyProfile()).unwrap();
+      const response = await dispatch(getProfile(currentUser!.id)).unwrap();
       setProfile(response);
     } catch (err) {
       // the user

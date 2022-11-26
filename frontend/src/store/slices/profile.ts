@@ -33,16 +33,8 @@ export const postCreateProfile = createAsyncThunk<
   return response.data;
 });
 
-export const getMyProfile = createAsyncThunk<GetProfileResDto, void>(
-  "profile/getMyProfile",
-  async () => {
-    const response = await axios.get<GetProfileResDto>("/api/profile/");
-    return response.data;
-  },
-);
-
-export const getFriendProfile = createAsyncThunk<GetProfileResDto, number>(
-  "profile/getFriendProfile",
+export const getProfile = createAsyncThunk<GetProfileResDto, number>(
+  "profile/getProfile",
   async (id: number) => {
     const response = await axios.get<GetProfileResDto>(`/api/profile/${id}/`);
     return response.data;
@@ -73,10 +65,7 @@ export const profileSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(getMyProfile.fulfilled, (state, action) => {
-      state.currentProfile = action.payload;
-    });
-    builder.addCase(getFriendProfile.fulfilled, (state, action) => {
+    builder.addCase(getProfile.fulfilled, (state, action) => {
       state.currentProfile = action.payload;
     });
     builder.addCase(editMyProfile.fulfilled, (state, action) => {
