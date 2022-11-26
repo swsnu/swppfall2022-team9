@@ -24,7 +24,7 @@ export default function applyUserApi(
     "/api/user/friend/",
     async (req, res) => {
       const friendList = db.get("friendList").value();
-      console.log(friendList);
+      // console.log(friendList);
       if (!friendList) {
         res.status(404).json({ friendList });
       } else {

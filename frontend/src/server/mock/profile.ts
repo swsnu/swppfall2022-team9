@@ -14,9 +14,10 @@ export default function applyProfileApi(
   server.post<unknown, unknown, PostCreateProfileDto>(
     "/api/profile/",
     async req => {
+      const userId = 1;
       await db
         .get("profiles")
-        .push({ ...req.body })
+        .push({ ...req.body, userId })
         .write();
     },
   );
@@ -24,7 +25,9 @@ export default function applyProfileApi(
   server.get<{ userId: number }, GetProfileResDto>(
     "/api/profile/:userId/",
     async (req, res) => {
-      const profile = db.get("profiles").findLast().value();
+      // const profile = db.get("profiles").findLast().value();
+      const userId = Number(req.params.userId);
+      const profile = db.get("profiles").find({ userId }).value();
       if (!profile) {
         res.status(404).json();
       } else {

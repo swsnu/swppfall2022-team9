@@ -16,8 +16,13 @@ export default function applyAuthApi(
   server: Application,
   db: low.LowdbSync<Schema>,
 ) {
+  server.get("/api/csrf_token/", async (req, res) => {
+    res.status(204).json({});
+  });
+
   server.get("/api/auth/session/", async (req, res) => {
-    const username = "swpp";
+    // Enable no login if the username exists in _db.json -> "users"
+    const username = "wotmd";
     const user = db.get("users").find({ username }).value();
     if (!user) {
       res.status(404).json(user);
@@ -31,7 +36,8 @@ export default function applyAuthApi(
     async (req, res) => {
       const body = req.body;
       const username = body.username;
-      const user = db.get("users").find({ username }).value();
+      const password = body.password;
+      const user = db.get("users").find({ username, password }).value();
       if (!user) {
         res.status(404).json(user);
       } else {
@@ -50,6 +56,13 @@ export default function applyAuthApi(
         .write();
       const registeredUser = db.get("users").find({ id: users.length }).value();
       return res.json(registeredUser);
+    },
+  );
+
+  server.get<unknown, unknown, unknown>(
+    "/api/auth/signout/",
+    async (req, res) => {
+      return res.status(204).json(null);
     },
   );
 
