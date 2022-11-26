@@ -364,6 +364,24 @@ def verify(request, token):
     #     pass
     return JsonResponse({"message":"Successfully verified"})
 
+
+@allowed_method_or_405(["GET"])
+def auto_signin(request):
+    if request.user.is_authenticated: # logged in
+        response_dict = {
+            "id": request.user.linklinkuser.id,
+            "email": request.user.linklinkuser.email_unique,
+            "username": request.user.username,
+            "firstname": request.user.first_name,
+            "lastname": request.user.last_name,
+        }
+        return JsonResponse(
+            status=200,
+            data=response_dict
+        )
+    else: # not logged in
+        return HttpResponse(status=401) # unauthorized
+
 #--------------------------------------------------------------------------
 #   LinkLinkUser Related APIs
 #--------------------------------------------------------------------------

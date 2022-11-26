@@ -32,6 +32,11 @@ urlpatterns = [
         name='verify'
     ),
     path(
+        'auth/session/',
+        views.auto_signin,
+        name='auto_signin'
+    ),
+    path(
         'user/friend/',
         views.friend,
         name='friend'
