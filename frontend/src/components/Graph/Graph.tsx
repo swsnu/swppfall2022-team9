@@ -19,14 +19,18 @@ const Graph: React.FC<Props> = () => {
   const searchWord = search.searchWord;
   const filteredFriendList = search.filteredFriendList;
   useEffect(() => {
-    if (currentUser && canvas) {
-      canvas.setCurrentUser(currentUser);
-      if (isSearchMode && searchWord !== "") {
-        canvas.setFriendList(filteredFriendList);
+    if (canvas) {
+      if (currentUser) {
+        canvas.setCurrentUser(currentUser);
+        if (isSearchMode && searchWord !== "") {
+          canvas.setFriendList(filteredFriendList);
+        } else {
+          canvas.setFriendList(friendList);
+        }
+        canvas.render();
       } else {
-        canvas.setFriendList(friendList);
+        canvas.reset();
       }
-      canvas.render();
     }
   }, [currentUser, friendList, isSearchMode, filteredFriendList, canvas]);
 

@@ -162,11 +162,11 @@ export function directionPoints(p1: Coord, p2: Coord): number {
   else if (signX === 0 && signY === 1) direction = 2;
   else if (signX === 1 && signY === 1) direction = 3;
   else if (signX === -1 && signY === 0) direction = 4;
-  else if (signX === 0 && signY === 0) direction = 5;
   else if (signX === 1 && signY === 0) direction = 6;
   else if (signX === -1 && signY === -1) direction = 7;
   else if (signX === 0 && signY === -1) direction = 8;
   else if (signX === 1 && signY === -1) direction = 9;
+  else direction = 5;
 
   return direction;
 }
