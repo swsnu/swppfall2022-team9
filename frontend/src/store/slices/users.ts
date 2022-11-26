@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { GetProfileResDto } from "server/dto/profile/profile.res.dto";
 import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
 import {
   GetFriendListResDto,
@@ -9,11 +10,6 @@ import {
 } from "server/dto/users/users.res.dto";
 import { User } from "server/models/users.model";
 import { OneChonInfo } from "types/friend.types";
-
-export const acceptedLoginInfo: PostSignInDto = {
-  username: "swppsnu",
-  password: "iluvswpp",
-};
 
 export type UserState = {
   currentUser: User | null;
@@ -26,24 +22,25 @@ const initialState: UserState = {
 };
 
 // DESC: this is for checking if user is logged in
-export const getSessionCookie = createAsyncThunk<void>(
+export const getSessionCookie = createAsyncThunk<PostSignInResDto>(
   "users/getSessionCookie",
-  //you can test with swpp@snu.ac.kr
-  async (_, { dispatch }) => {
-    const response = (await axios.get<PostSignInResDto>("/api/auth/session/"))
-      .data;
-    dispatch(userActions.setCurrentUser(response));
+  async () => {
+    const response = await axios.get<PostSignInResDto>("/api/auth/session/");
+    return response.data;
   },
 );
 
-export const postSignIn = createAsyncThunk<void, PostSignInDto>(
+export const postSignIn = createAsyncThunk<User, PostSignInDto>(
   "users/postSignIn",
-  //you can test with swpp@snu.ac.kr
-  async (body, { dispatch }) => {
-    const response = (
-      await axios.post<PostSignInResDto>("/api/auth/signin/", body)
-    ).data;
-    dispatch(userActions.setCurrentUser(response));
+  async body => {
+    const signInResponse = await axios.post<PostSignInResDto>(
+      "/api/auth/signin/",
+      body,
+    );
+    const profileResponse = await axios.get<GetProfileResDto>(
+      `/api/profile/${signInResponse.data.id}/`,
+    );
+    return { ...signInResponse.data, imgUrl: profileResponse.data.imgUrl };
   },
 );
 
@@ -56,10 +53,8 @@ export const postSignUp = createAsyncThunk<void, PostSignUpDto>(
 
 export const getSignOut = createAsyncThunk<void>(
   "users/getSignOut",
-  async (_, { dispatch }) => {
+  async () => {
     await axios.get(`/api/auth/signout/`);
-    dispatch(userActions.resetCurrentUser());
-    dispatch(userActions.resetFriendList());
   },
 );
 
@@ -70,31 +65,32 @@ export const verifyRegisterToken = createAsyncThunk<void, string>(
   },
 );
 
-export const getFriendList = createAsyncThunk<void>(
+export const getFriendList = createAsyncThunk<GetFriendListResDto>(
   "users/getFriendList",
-  async (_, { dispatch }) => {
-    const response = (await axios.get<GetFriendListResDto>(`/api/user/friend/`))
-      .data;
-    dispatch(userActions.setFriendList(response.friendList));
+  async () => {
+    const response = await axios.get<GetFriendListResDto>(`/api/user/friend/`);
+    return response.data;
   },
 );
 
 export const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {
-    setCurrentUser: (state, actions: PayloadAction<User>) => {
-      state.currentUser = actions.payload;
-    },
-    resetCurrentUser: state => {
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getSessionCookie.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(postSignIn.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(getSignOut.fulfilled, state => {
       state.currentUser = null;
-    },
-    setFriendList: (state, actions: PayloadAction<Array<OneChonInfo>>) => {
-      state.friendList = actions.payload;
-    },
-    resetFriendList: state => {
       state.friendList = [];
-    },
+    });
+    builder.addCase(getFriendList.fulfilled, (state, action) => {
+      state.friendList = action.payload.friendList;
+    });
   },
 });
 

@@ -9,6 +9,7 @@ import { ThunkMiddleware } from "redux-thunk";
 import { postSignUp, postSignIn, getSignOut } from "./users";
 import axios from "axios";
 import { usersStub } from "server/stubs/users.stub";
+import { profileStub } from "server/stubs/profiles.stub";
 
 const mockDispatch = jest.fn();
 
@@ -39,6 +40,7 @@ describe("users reducer", () => {
 
   it("tests postSignin", async () => {
     axios.post = jest.fn().mockResolvedValue({ data: usersStub[0] });
+    axios.get = jest.fn().mockResolvedValue({ data: profileStub });
     await store.dispatch(
       postSignIn({
         username: usersStub[0].username,
