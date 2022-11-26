@@ -384,6 +384,34 @@ class LinkLinkTestCase(TestCase):
             error_message_dict
         )
 
+
+    def test_auto_login_logged_in_success(self):
+        target_url = "/api/auth/session/"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        # Check response
+        expected_response_dict = {
+            "id": 1,
+            "email": "notiona@snu.ac.kr",
+            "username": "john",
+            "firstname": "John",
+            "lastname": "Cena",
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            expected_response_dict
+        )
+
+
+    def test_auto_login_anonymous_success(self):
+        target_url = "/api/auth/session/"
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 401)
+
 #--------------------------------------------------------------------------
 #   Friend (Onechon+Twochon) Related Tests
 #--------------------------------------------------------------------------
