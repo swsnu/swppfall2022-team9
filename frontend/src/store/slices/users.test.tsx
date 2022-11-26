@@ -77,7 +77,10 @@ describe("users reducer", () => {
   });
 
   it("tests verify get Session Cookie", async () => {
-    axios.post = jest.fn().mockResolvedValue(null);
+    axios.get = jest
+      .fn()
+      .mockResolvedValueOnce({ data: usersStub[0] })
+      .mockResolvedValueOnce({ data: profileStub });
     await store.dispatch(getSessionCookie());
   });
 

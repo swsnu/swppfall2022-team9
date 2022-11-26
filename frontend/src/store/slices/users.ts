@@ -25,8 +25,13 @@ const initialState: UserState = {
 export const getSessionCookie = createAsyncThunk<PostSignInResDto>(
   "users/getSessionCookie",
   async () => {
-    const response = await axios.get<PostSignInResDto>("/api/auth/session/");
-    return response.data;
+    const sessionResponse = await axios.get<PostSignInResDto>(
+      "/api/auth/session/",
+    );
+    const profileResponse = await axios.get<GetProfileResDto>(
+      `/api/profile/${sessionResponse.data.id}/`,
+    );
+    return { ...sessionResponse.data, imgUrl: profileResponse.data.imgUrl };
   },
 );
 
