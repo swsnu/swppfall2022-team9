@@ -6,7 +6,7 @@ import Graph from "./Graph";
 
 import { OneChonInfo } from "types/friend.types";
 
-import { usersStub, friendListStub2 } from "server/stubs/users.stub";
+import { friendListStub, usersStub } from "server/stubs/users.stub";
 
 const mockNavigate = jest.fn();
 
@@ -21,7 +21,12 @@ jest.mock("react-router", () => ({
   },
 }));
 
-const renderGraph = (user: User | null, friendList: OneChonInfo[]) => {
+const renderGraph = (
+  user: User | null,
+  friendList: OneChonInfo[],
+  isSearchMode = false,
+  searchWord = "",
+) => {
   return renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -33,6 +38,11 @@ const renderGraph = (user: User | null, friendList: OneChonInfo[]) => {
         users: {
           currentUser: user,
           friendList: friendList,
+        },
+        search: {
+          isSearchMode,
+          searchWord,
+          filteredFriendList: [],
         },
       },
     },
@@ -54,7 +64,17 @@ describe("<Graph/>", () => {
   });
 
   it("render graph canvas with twochons", async () => {
-    const renderedGraph = renderGraph(usersStub[0], friendListStub2);
+    const renderedGraph = renderGraph(usersStub[0], friendListStub);
+    renderedGraph.unmount();
+  });
+
+  it("render graph canvas in search mode", async () => {
+    const renderedGraph = renderGraph(
+      usersStub[0],
+      friendListStub,
+      true,
+      "keyword",
+    );
     renderedGraph.unmount();
   });
 
