@@ -54,7 +54,7 @@ const ChangeProfilePage: React.FC = () => {
       setProfile(response);
     } catch (err) {
       // the user
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -71,7 +71,7 @@ const ChangeProfilePage: React.FC = () => {
         navigate(`/profile/${currentUser.id}`);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -148,6 +148,16 @@ const ChangeProfilePage: React.FC = () => {
     }));
   };
 
+  const setImageFileCallBack = (file: FileUpload | [FileUpload]) => {
+    const singleFile = file as FileUpload;
+    // TODO: upload to cloudinary (we need REST API for uploading file)
+    const imageFileToUpload = singleFile.file;
+    // WARNING: this is just for demo purpose, we should send image to server
+    // and then set this image url
+    const imageUrl = URL.createObjectURL(imageFileToUpload);
+    setProfile(prev => ({ ...prev, imageUrl }));
+  };
+
   return (
     <FormStyles.Container>
       <FormStyles.FormContainer>
@@ -162,15 +172,10 @@ const ChangeProfilePage: React.FC = () => {
               style={{ marginLeft: 15, padding: "10px 15px" }}
               onClick={e => {
                 e.preventDefault();
-                setImageFile({ accept: "image/*", multiple: false }, file => {
-                  const singleFile = file as FileUpload;
-                  // TODO: upload to cloudinary (we need REST API for uploading file)
-                  const imageFileToUpload = singleFile.file;
-                  // WARNING: this is just for demo purpose, we should send image to server
-                  // and then set this image url
-                  const imageUrl = URL.createObjectURL(imageFileToUpload);
-                  setProfile(prev => ({ ...prev, imageUrl }));
-                });
+                setImageFile(
+                  { accept: "image/*", multiple: false },
+                  setImageFileCallBack,
+                );
               }}
             >
               이미지 업로드
