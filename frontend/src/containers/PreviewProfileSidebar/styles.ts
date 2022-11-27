@@ -2,22 +2,22 @@ import styled, { css, keyframes } from "styled-components";
 
 export const appearFromRight = keyframes`
   0% {
-    opacity: 0;
+    /* opacity: 0; */
     transform: translateX(-100%);
   }
   100% {
-    opacity: 1;
+    /* opacity: 1; */
     transform: translateX(0);
   }
 `;
 
 export const disappearToLeft = keyframes`
   0% {
-    opacity:1 ;
+    /* opacity:1 ; */
     transform: translateX(0);
   }
   100% {
-    opacity: 0;
+    /* opacity: 0; */
     transform: translateX(-100%);
   }
 `;
@@ -33,7 +33,7 @@ export const Container = styled.div<{ isOpen: boolean }>`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #d9d9d9;
+  background-color: #f2f2f2;
   ${props => AppearFromSideSettings(props.isOpen)}
 `;
 
