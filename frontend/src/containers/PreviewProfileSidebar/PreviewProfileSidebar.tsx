@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "store/hooks";
 import { ThemeColor } from "styles/common.styles";
 import * as S from "./styles";
@@ -7,19 +7,43 @@ const PreviewProfileSidebar: React.FC = () => {
   const previewProfile = useAppSelector(state => state.profile.previewProfile);
   const friendList = useAppSelector(state => state.users.friendList);
   const currentUser = useAppSelector(state => state.users.currentUser);
-  console.log(currentUser?.id, previewProfile?.id);
+  const findUserName = (id: number | undefined) => {
+    if (!id) {
+      return "";
+    }
+    if (currentUser && id === currentUser.id) {
+      return currentUser.firstname + currentUser.lastname;
+    }
+    const oneChon = friendList.find(friend => friend.id === id);
+    if (oneChon) {
+      return oneChon.lastname + oneChon.firstname;
+    }
+    let twoChonName = "";
+    friendList.forEach(friend => {
+      return friend.chons.forEach(twoChon => {
+        if (twoChon.id === id) {
+          console.log(twoChon.lastname + twoChon.firstname);
+          twoChonName = twoChon.lastname + twoChon.firstname;
+        }
+      });
+    });
+    return twoChonName;
+  };
   return (
     <S.Container isOpen={previewProfile !== null}>
       <S.Header>
         <S.ProfileImageContainer>
           <S.ProfileImage imgUrl={previewProfile?.imgUrl} />
         </S.ProfileImageContainer>
-        <S.SkillTagsContainer>
-          <S.SkillTagTitle>태그들: </S.SkillTagTitle>
-          {previewProfile?.skillTags.map(skillTag => (
-            <S.SkillTag key={skillTag.name}>{skillTag.name}</S.SkillTag>
-          ))}
-        </S.SkillTagsContainer>
+        <S.ProfileBasicInfo>
+          <S.ProfileName>{findUserName(previewProfile?.id)}</S.ProfileName>
+          <S.SkillTagsContainer>
+            <S.SkillTagTitle>태그들: </S.SkillTagTitle>
+            {previewProfile?.skillTags.map(skillTag => (
+              <S.SkillTag key={skillTag.name}>{skillTag.name}</S.SkillTag>
+            ))}
+          </S.SkillTagsContainer>
+        </S.ProfileBasicInfo>
       </S.Header>
       <S.IntroductionContainer>
         <S.Title>소개</S.Title>
