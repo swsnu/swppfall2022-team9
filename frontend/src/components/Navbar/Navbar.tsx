@@ -33,18 +33,18 @@ const Navbar: React.FC<Props> = () => {
     setIsClickedOutsideOfNotification(prev => !prev);
   };
 
-  const onAcceptFriendRequest = (friendRequestId: number) => {
-    dispatch(
+  const onAcceptFriendRequest = async (friendRequestId: number) => {
+    await dispatch(
       putFriendRequest({
         id: friendRequestId,
         status: FriendRequestStatus.ACCEPTED,
       }),
     );
-    dispatch(getFriendList());
+    await dispatch(getFriendList());
   };
 
-  const onRejectFriendRequest = (friendRequestId: number) => {
-    dispatch(
+  const onRejectFriendRequest = async (friendRequestId: number) => {
+    await dispatch(
       putFriendRequest({
         id: friendRequestId,
         status: FriendRequestStatus.REJECTED,
@@ -63,8 +63,8 @@ const Navbar: React.FC<Props> = () => {
     navigate("/chat");
   };
 
-  const onClickSearch = () => {
-    dispatch(searchActions.toggleSearchMode());
+  const onClickSearch = async () => {
+    await dispatch(searchActions.toggleSearchMode());
   };
 
   useHandleClickOutside({
@@ -97,7 +97,9 @@ const Navbar: React.FC<Props> = () => {
           role="notification"
         >
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
-          {friendRequests.length > 0 && <S.NavbarButtonRedMark />}
+          {friendRequests.filter(
+            request => request.getterId === currentUser?.id,
+          ).length > 0 && <S.NavbarButtonRedMark />}
           {!isClickedOutsideOfNotification && (
             <S.NotificationListPopupContainer
               onClick={e => {
