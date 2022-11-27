@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { profileActions } from "store/slices/profile";
 import { ThemeColor } from "styles/common.styles";
 import * as S from "./styles";
 
@@ -9,6 +11,8 @@ const PreviewProfileSidebar: React.FC = () => {
   const previewProfile = useAppSelector(state => state.profile.previewProfile);
   const friendList = useAppSelector(state => state.users.friendList);
   const currentUser = useAppSelector(state => state.users.currentUser);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [profile, setProfile] = useState<
     (Profile & { qualityTags: QualityTags | null; id: number }) | null
   >(null);
@@ -39,6 +43,10 @@ const PreviewProfileSidebar: React.FC = () => {
     });
     return twoChonName;
   };
+
+  const goToProfile = (id: number) => {
+    navigate("/profile/" + id);
+  };
   return (
     <S.Container isOpen={previewProfile !== null}>
       <S.Header>
@@ -60,7 +68,15 @@ const PreviewProfileSidebar: React.FC = () => {
         <S.Introduction>{profile?.introduction}</S.Introduction>
       </S.IntroductionContainer>
       <S.ActionButtonsContainer>
-        <S.ActionButton backgroundColor={ThemeColor}>
+        <S.ActionButton
+          backgroundColor={ThemeColor}
+          onClick={() => {
+            if (profile) {
+              goToProfile(profile.id);
+              dispatch(profileActions.setPreviewProfile(null));
+            }
+          }}
+        >
           프로필 보기
         </S.ActionButton>
 
