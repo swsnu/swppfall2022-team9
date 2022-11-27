@@ -1193,6 +1193,17 @@ class LinkLinkTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         self.assertEqual(response.status_code, 201)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
         self.assertTrue(FriendRequest.objects.filter(id=friend_request_count+1
             ).exists())
         new_friend_request = \
