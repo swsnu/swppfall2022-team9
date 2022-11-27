@@ -42,7 +42,7 @@ function useCanvas({ divRef, canvasRef }: Params) {
         dispatch(getProfile(id))
           .unwrap()
           .then(data => {
-            dispatch(profileActions.setPreviewProfile(data));
+            dispatch(profileActions.setPreviewProfile({ ...data, id }));
           });
       } else {
         dispatch(profileActions.setPreviewProfile(null));

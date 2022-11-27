@@ -59,6 +59,7 @@ const renderProfilePage = (
         profile: {
           currentProfile,
           previewProfile: null,
+          previewProfileId: null,
         },
         friendRequests: {
           friendRequestToken: null,
