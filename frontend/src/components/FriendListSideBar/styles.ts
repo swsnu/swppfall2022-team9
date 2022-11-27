@@ -5,6 +5,7 @@ export const Container = styled.div`
   min-width: 250px;
   max-width: 400px;
   background-color: ${themeBgColor};
+  position: relative;
 `;
 
 export const Header = styled.header`

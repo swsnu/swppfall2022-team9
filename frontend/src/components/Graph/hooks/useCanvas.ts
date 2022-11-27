@@ -1,4 +1,6 @@
 import { RefObject, useEffect, useState } from "react";
+import { useAppDispatch } from "store/hooks";
+import { getProfile, profileActions } from "store/slices/profile";
 import Canvas from "../utils/Canvas";
 
 interface Params {
@@ -8,6 +10,7 @@ interface Params {
 
 function useCanvas({ divRef, canvasRef }: Params) {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -34,10 +37,27 @@ function useCanvas({ divRef, canvasRef }: Params) {
       }
     };
 
+    const mouseDownSetPreviewProfile = (id: number | null) => {
+      if (id) {
+        dispatch(getProfile(id))
+          .unwrap()
+          .then(data => {
+            dispatch(profileActions.setPreviewProfile(data));
+          });
+      } else {
+        dispatch(profileActions.setPreviewProfile(null));
+      }
+    };
+
     onResize();
     window.addEventListener("resize", onResize);
+    canvas?.addEventListener("setPreviewProfile", mouseDownSetPreviewProfile);
     return () => {
       window.removeEventListener("resize", onResize);
+      canvas?.removeEventListener(
+        "setPreviewProfile",
+        mouseDownSetPreviewProfile,
+      );
     };
   }, [canvas, divRef]);
 
