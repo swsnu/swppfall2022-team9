@@ -15,10 +15,12 @@ import { QualityTags } from "server/models/qualityTags.model";
 
 export type ProfileState = {
   currentProfile: (Profile & { qualityTags: QualityTags | null }) | null;
+  previewProfile: (Profile & { qualityTags: QualityTags | null }) | null;
 };
 
 const initialState: ProfileState = {
   currentProfile: null,
+  previewProfile: null,
 };
 
 export const postCreateProfile = createAsyncThunk<
@@ -63,7 +65,11 @@ export const editMyProfile = createAsyncThunk<
 export const profileSlice = createSlice({
   name: "profile",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setPreviewProfile: (state, action) => {
+      state.previewProfile = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getProfile.fulfilled, (state, action) => {
       state.currentProfile = action.payload;

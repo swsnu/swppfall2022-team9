@@ -1,6 +1,6 @@
 import SearchBar from "components/SearchBar/SearchBar";
 import React, { useEffect, useRef } from "react";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import useCanvas from "./hooks/useCanvas";
 
 import * as S from "./styles";

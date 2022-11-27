@@ -2,6 +2,7 @@ import React from "react";
 import * as S from "./styles";
 import ChonListItem from "./ChonListItem/ChonListItem";
 import { useAppSelector } from "store/hooks";
+import PreviewProfileSidebar from "containers/PreviewProfileSidebar/PreviewProfileSidebar";
 
 interface Props {}
 
@@ -19,6 +20,7 @@ const FriendListSideBar: React.FC<Props> = () => {
 
   return (
     <S.Container>
+      <PreviewProfileSidebar />
       <S.Header>친구 목록</S.Header>
       {friendList.length > 0 &&
         friendList.map(user => (

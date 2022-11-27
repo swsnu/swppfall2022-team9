@@ -17,7 +17,8 @@ import {
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
 import { OneChonInfo } from "types/friend.types";
 import { ThemeColor } from "styles/common.styles";
-export default class Canvas {
+import EventDispatcher from "./eventDispatcher";
+export default class Canvas extends EventDispatcher {
   private MAX_SCALE = 2;
 
   private MIN_SCALE = 0.6;
@@ -78,6 +79,7 @@ export default class Canvas {
   isOneChonJourneyFinished = false;
 
   constructor(canvas: HTMLCanvasElement) {
+    super();
     this.element = canvas;
     this.ctx = canvas.getContext("2d")!;
 
@@ -133,6 +135,7 @@ export default class Canvas {
     if (touchedNode) {
       // TODO
       // Add node click action
+      this.emit("setPreviewProfile", touchedNode.id);
       if (
         this.oneChonNodes?.find(
           oneChonNode => oneChonNode.id === touchedNode.id,
@@ -141,6 +144,8 @@ export default class Canvas {
         this.setCenterNode(touchedNode.id);
         this.setFriendNodes(touchedNode.id);
       }
+    } else {
+      this.emit("setPreviewProfile", null);
     }
 
     if (window.TouchEvent && evt instanceof TouchEvent) {
