@@ -40,11 +40,18 @@ export const getFriendRequests = createAsyncThunk<GetFriendRequestsResDto>(
  * This is for Creating a friend request
  * (the current user sends a friend request to twoChon)
  */
-export const postFriendRequest = createAsyncThunk<void, PostFriendRequestDto>(
+export const postFriendRequest = createAsyncThunk<
+  PostFriendRequestResDto & { senderImgUrl: string; senderName: string },
+  PostFriendRequestDto & { senderImgUrl: string; senderName: string }
+>(
   "friendRequests/postFriendRequest",
-  async ({ senderId, getterId }) => {
-    const data: PostFriendRequestDto = { senderId, getterId };
-    await axios.post<PostFriendRequestResDto>("/api/friendRequest/", data);
+  async ({ getterId, senderImgUrl, senderName }) => {
+    const data: PostFriendRequestDto = { getterId };
+    const response = await axios.post<PostFriendRequestResDto>(
+      "/api/friendRequest/",
+      data,
+    );
+    return { ...response.data, senderImgUrl, senderName };
   },
 );
 
@@ -81,14 +88,14 @@ export const friendRequestsSlice = createSlice({
     builder.addCase(getFriendRequests.fulfilled, (state, action) => {
       state.friendRequests = action.payload.friendRequests;
     });
+    builder.addCase(postFriendRequest.fulfilled, (state, action) => {
+      state.friendRequests.push(action.payload);
+    });
     builder.addCase(putFriendRequest.fulfilled, (state, action) => {
-      // WARNING: This is not yet decided!
-      // The may change according to how the backend is implemented
-
       // DESC: A friend request can change to either 'ACCEPTED' or 'REJECTED'
       // Either way, the friend request should be deleted from the list
       state.friendRequests = state.friendRequests.filter(
-        friendRequest => friendRequest.id !== action.payload.friendRequest.id,
+        friendRequest => friendRequest.id !== action.payload.id,
       );
     });
   },
