@@ -25,7 +25,6 @@ export default function applyProfileApi(
   server.get<{ userId: number }, GetProfileResDto>(
     "/api/profile/:userId/",
     async (req, res) => {
-      // const profile = db.get("profiles").findLast().value();
       const userId = Number(req.params.userId);
       const profile = db.get("profiles").find({ userId }).value();
       if (!profile) {
