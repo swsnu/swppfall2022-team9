@@ -1,7 +1,10 @@
 import useAlert from "hooks/useAlert";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FriendRequestStatus } from "server/models/friendRequests.model";
+import {
+  FriendRequest,
+  FriendRequestStatus,
+} from "server/models/friendRequests.model";
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -11,6 +14,7 @@ import {
   putFriendRequest,
 } from "store/slices/friendRequests";
 import { profileActions } from "store/slices/profile";
+import { getFriendList } from "store/slices/users";
 import { ThemeColor } from "styles/common.styles";
 import * as S from "./styles";
 
@@ -20,9 +24,8 @@ const PreviewProfileSidebar: React.FC = () => {
   const currentUser = useAppSelector(state => state.users.currentUser);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [friendStatus, setFriendStatus] = useState<FriendRequestStatus | null>(
-    null,
-  );
+  const [existingFriendRequest, setExistingFriendRequest] =
+    useState<FriendRequest | null>(null);
   const alert = useAlert();
   const [profile, setProfile] = useState<
     (Profile & { qualityTags: QualityTags | null; id: number }) | null
@@ -33,11 +36,10 @@ const PreviewProfileSidebar: React.FC = () => {
       const friendRequest = await dispatch(
         getFriendRequestBetweenUsers({ user1Id, user2Id }),
       ).unwrap();
-      console.log(friendRequest.status);
-      setFriendStatus(friendRequest.status);
+      setExistingFriendRequest(friendRequest);
       return friendRequest;
     } catch (err) {
-      setFriendStatus(null);
+      setExistingFriendRequest(null);
     }
   };
 
@@ -74,6 +76,23 @@ const PreviewProfileSidebar: React.FC = () => {
 
   const goToProfile = (id: number) => {
     navigate("/profile/" + id);
+  };
+
+  const onDeleteFriend = async (friendRequestId: number) => {
+    try {
+      await dispatch(
+        putFriendRequest({
+          id: friendRequestId,
+          status: FriendRequestStatus.REJECTED,
+        }),
+      ).unwrap();
+      dispatch(profileActions.setPreviewProfile(null));
+      dispatch(getFriendList());
+    } catch (err) {
+      alert.open({
+        message: "친구 삭제에 실패했습니다",
+      });
+    }
   };
 
   const onClickAddFriend = async (userId: number) => {
@@ -130,7 +149,16 @@ const PreviewProfileSidebar: React.FC = () => {
             <S.ActionButton disabled={false}>
               친구 네트워크 확인하기
             </S.ActionButton>
-            <S.ActionButton disabled={false}>친구 끊기</S.ActionButton>
+            <S.ActionButton
+              disabled={false}
+              onClick={() => {
+                if (existingFriendRequest) {
+                  onDeleteFriend(existingFriendRequest.id);
+                }
+              }}
+            >
+              친구 끊기
+            </S.ActionButton>
           </>
         )}
         {profile &&
@@ -139,10 +167,13 @@ const PreviewProfileSidebar: React.FC = () => {
           profile.id !== currentUser.id && (
             <>
               <S.ActionButton
-                disabled={friendStatus === FriendRequestStatus.PENDING}
+                disabled={
+                  existingFriendRequest !== null &&
+                  existingFriendRequest.status === FriendRequestStatus.PENDING
+                }
                 onClick={() => {
-                  if (profile) {
-                    onClickAddFriend(profile.id);
+                  if (existingFriendRequest) {
+                    onClickAddFriend(existingFriendRequest.id);
                   }
                 }}
               >
