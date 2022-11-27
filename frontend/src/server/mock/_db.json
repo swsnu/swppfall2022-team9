@@ -302,7 +302,7 @@
     {
       "userId": 1,
       "skillTags": [{ "name": "Beautiful" }],
-      "education": [
+      "educations": [
         {
           "school": "snu",
           "major": "math",
@@ -310,7 +310,7 @@
           "dateEnd": "2017-12-17"
         }
       ],
-      "jobExperience": [
+      "jobExperiences": [
         {
           "company": "snu",
           "position": "professor",
@@ -323,9 +323,9 @@
       "introduction": "Korea no 1 student"
     },
     {
-      "userId": 13,
+      "userId": 8,
       "skillTags": [{ "name": "Beautiful" }],
-      "education": [
+      "educations": [
         {
           "school": "snu",
           "major": "math",
@@ -333,7 +333,53 @@
           "dateEnd": "2017-12-17"
         }
       ],
-      "jobExperience": [
+      "jobExperiences": [
+        {
+          "company": "snu",
+          "position": "professor",
+          "dateStart": "1998-12-17",
+          "dateEnd": "2017-12-17"
+        }
+      ],
+      "website": "https://naver.com",
+      "imgUrl": "https://ilyo.co.kr/contents/article/images/2017/0524/1495618073587544.jpg",
+      "introduction": "Korea no 1 actress"
+    },
+    {
+      "userId": 9,
+      "skillTags": [{ "name": "Beautiful" }],
+      "educations": [
+        {
+          "school": "snu",
+          "major": "math",
+          "dateStart": "1998-12-17",
+          "dateEnd": "2017-12-17"
+        }
+      ],
+      "jobExperiences": [
+        {
+          "company": "snu",
+          "position": "professor",
+          "dateStart": "1998-12-17",
+          "dateEnd": "2017-12-17"
+        }
+      ],
+      "website": "https://naver.com",
+      "imgUrl": "https://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2022/01/03/XlaLfTVZ5iIM637768407379571191.jpg",
+      "introduction": "Korea no 1 actress"
+    },
+    {
+      "userId": 13,
+      "skillTags": [{ "name": "Beautiful" }],
+      "educations": [
+        {
+          "school": "snu",
+          "major": "math",
+          "dateStart": "1998-12-17",
+          "dateEnd": "2017-12-17"
+        }
+      ],
+      "jobExperiences": [
         {
           "company": "snu",
           "position": "professor",
