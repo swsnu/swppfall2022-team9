@@ -11,8 +11,6 @@ export type GetFriendRequestElement = FriendRequest & {
   senderName: string;
 };
 
-export interface PutFriendRequestResDto {
-  friendRequest: FriendRequest;
-}
+export interface PostFriendRequestResDto extends FriendRequest {}
 
-export interface PostFriendRequestResDto {}
+export interface PutFriendRequestResDto extends FriendRequest {}
