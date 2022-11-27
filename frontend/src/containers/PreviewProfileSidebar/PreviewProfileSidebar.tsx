@@ -1,8 +1,15 @@
+import useAlert from "hooks/useAlert";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FriendRequestStatus } from "server/models/friendRequests.model";
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import {
+  getFriendRequestBetweenUsers,
+  postFriendRequest,
+  putFriendRequest,
+} from "store/slices/friendRequests";
 import { profileActions } from "store/slices/profile";
 import { ThemeColor } from "styles/common.styles";
 import * as S from "./styles";
@@ -13,14 +20,35 @@ const PreviewProfileSidebar: React.FC = () => {
   const currentUser = useAppSelector(state => state.users.currentUser);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [friendStatus, setFriendStatus] = useState<FriendRequestStatus | null>(
+    null,
+  );
+  const alert = useAlert();
   const [profile, setProfile] = useState<
     (Profile & { qualityTags: QualityTags | null; id: number }) | null
   >(null);
+
+  const getExistingFriendRequest = async (user1Id: number, user2Id: number) => {
+    try {
+      const friendRequest = await dispatch(
+        getFriendRequestBetweenUsers({ user1Id, user2Id }),
+      ).unwrap();
+      console.log(friendRequest.status);
+      setFriendStatus(friendRequest.status);
+      return friendRequest;
+    } catch (err) {
+      setFriendStatus(null);
+    }
+  };
+
   useEffect(() => {
     if (previewProfile) {
       setProfile(previewProfile);
     }
-  }, [previewProfile]);
+    if (previewProfile && currentUser) {
+      getExistingFriendRequest(previewProfile.id, currentUser.id);
+    }
+  }, [previewProfile, currentUser]);
 
   const findUserName = (id: number | undefined) => {
     if (!id) {
@@ -47,6 +75,22 @@ const PreviewProfileSidebar: React.FC = () => {
   const goToProfile = (id: number) => {
     navigate("/profile/" + id);
   };
+
+  const onClickAddFriend = async (userId: number) => {
+    try {
+      await dispatch(
+        postFriendRequest({
+          getterId: Number(userId),
+          senderImgUrl: currentUser!.imgUrl!,
+          senderName: currentUser!.lastname + currentUser!.firstname,
+        }),
+      ).unwrap();
+      alert.open({ message: "친구 요청을 보냈습니다" });
+    } catch (err) {
+      alert.open({ message: "친구 요청에 실패했습니다" });
+    }
+  };
+
   return (
     <S.Container isOpen={previewProfile !== null}>
       <S.Header>
@@ -69,6 +113,7 @@ const PreviewProfileSidebar: React.FC = () => {
       </S.IntroductionContainer>
       <S.ActionButtonsContainer>
         <S.ActionButton
+          disabled={false}
           backgroundColor={ThemeColor}
           onClick={() => {
             if (profile) {
@@ -82,8 +127,10 @@ const PreviewProfileSidebar: React.FC = () => {
 
         {friendList.findIndex(element => element.id === profile?.id) !== -1 && (
           <>
-            <S.ActionButton>친구 네트워크 확인하기</S.ActionButton>
-            <S.ActionButton>친구 끊기</S.ActionButton>
+            <S.ActionButton disabled={false}>
+              친구 네트워크 확인하기
+            </S.ActionButton>
+            <S.ActionButton disabled={false}>친구 끊기</S.ActionButton>
           </>
         )}
         {profile &&
@@ -91,7 +138,16 @@ const PreviewProfileSidebar: React.FC = () => {
           friendList.findIndex(element => element.id === profile.id) === -1 &&
           profile.id !== currentUser.id && (
             <>
-              <S.ActionButton>친구 추가하기</S.ActionButton>
+              <S.ActionButton
+                disabled={friendStatus === FriendRequestStatus.PENDING}
+                onClick={() => {
+                  if (profile) {
+                    onClickAddFriend(profile.id);
+                  }
+                }}
+              >
+                친구 추가하기
+              </S.ActionButton>
             </>
           )}
       </S.ActionButtonsContainer>
