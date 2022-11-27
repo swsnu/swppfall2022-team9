@@ -357,13 +357,15 @@ export default class Canvas {
     this.oneChonNodes = [];
     this.twoChonNodes = [];
     this.nodes = [this.centerNode!];
-    // this.touchedNode = undefined;
     this.clear();
     this.friendList = friendList;
     this.setFriendNodes(this.centerNode!.id);
   }
 
   setCenterNode(userId: number) {
+    this.centerNode = undefined;
+    this.nodes = [];
+    this.clear();
     const targetOneChon = this.friendList.find(
       oneChon => oneChon.id === userId,
     );
@@ -385,6 +387,9 @@ export default class Canvas {
   }
 
   setFriendNodes(userId: number) {
+    this.oneChonNodes = [];
+    this.twoChonNodes = [];
+    this.clear();
     const targetOneChon = this.friendList.find(
       oneChon => oneChon.id === userId,
     );

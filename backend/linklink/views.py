@@ -813,7 +813,7 @@ def friend_request_respond(request, friend_request_id):
         # Check Max Onechon Invariant
         if new_status == "Accepted":
             max_onechon_invariant(friend_request_found.senderId)
-            max_onechon_invariant(friend_request_found.senderId)
+            max_onechon_invariant(friend_request_found.getterId)
         # Change status of FriendRequest
         friend_request_found.status = new_status
         friend_request_found.save()
