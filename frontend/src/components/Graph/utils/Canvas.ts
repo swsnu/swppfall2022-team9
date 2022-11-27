@@ -136,14 +136,14 @@ export default class Canvas extends EventDispatcher {
       // TODO
       // Add node click action
       this.emit("setPreviewProfile", touchedNode.id);
-      if (
-        this.oneChonNodes?.find(
-          oneChonNode => oneChonNode.id === touchedNode.id,
-        )
-      ) {
-        this.setCenterNode(touchedNode.id);
-        this.setFriendNodes(touchedNode.id);
-      }
+      // if (
+      //   this.oneChonNodes?.find(
+      //     oneChonNode => oneChonNode.id === touchedNode.id,
+      //   )
+      // ) {
+      //   this.setCenterNode(touchedNode.id);
+      //   this.setFriendNodes(touchedNode.id);
+      // }
     } else {
       this.emit("setPreviewProfile", null);
     }
