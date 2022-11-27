@@ -34,6 +34,8 @@ jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
+window.scrollTo = jest.fn();
+
 const renderProfilePage = (
   currentUser: User | null,
   friendList: OneChonInfo[],

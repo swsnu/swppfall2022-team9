@@ -165,6 +165,7 @@ const ProfilePage: React.FC<Props> = () => {
   useEffect(() => {
     if (userId) {
       getProfileData(Number(userId));
+      window.scrollTo({ top: 0, left: 0 });
     }
   }, [userId]);
 
