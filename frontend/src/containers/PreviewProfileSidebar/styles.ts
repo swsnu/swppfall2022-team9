@@ -44,6 +44,11 @@ export const Header = styled.div`
   margin-bottom: 20px;
 `;
 
+export const ProfileBasicInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
 export const ProfileImageContainer = styled.div``;
 
 export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
@@ -56,13 +61,16 @@ export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
   border: 4px solid #000000;
 `;
 
-export const ProfileName = styled.div``;
+export const ProfileName = styled.div`
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
 
 export const SkillTagTitle = styled.span``;
 
 export const SkillTagsContainer = styled.div`
   display: flex;
-  margin-left: 10px;
+
   flex-wrap: wrap;
 `;
 
