@@ -110,7 +110,7 @@ const ProfilePage: React.FC<Props> = () => {
         setProfileUserName(viewingOneChon.lastname + viewingOneChon.firstname);
         setProfileUserFriends(viewingOneChon.chons);
       } else {
-        friendList.find(oneChon => {
+        for (const oneChon of friendList) {
           const viewingTwoChon = oneChon.chons.find(
             twoChon => twoChon.id === Number(userId),
           );
@@ -119,9 +119,9 @@ const ProfilePage: React.FC<Props> = () => {
               viewingTwoChon.lastname + viewingTwoChon.firstname,
             );
             setProfileUserFriends(undefined);
-            return true;
+            break;
           }
-        });
+        }
       }
     }
   }, [friendList, userId]);
