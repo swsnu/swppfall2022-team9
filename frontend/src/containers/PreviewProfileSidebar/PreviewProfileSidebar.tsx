@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Profile } from "server/models/profile.model";
+import { QualityTags } from "server/models/qualityTags.model";
 import { useAppSelector } from "store/hooks";
 import { ThemeColor } from "styles/common.styles";
 import * as S from "./styles";
@@ -7,6 +9,15 @@ const PreviewProfileSidebar: React.FC = () => {
   const previewProfile = useAppSelector(state => state.profile.previewProfile);
   const friendList = useAppSelector(state => state.users.friendList);
   const currentUser = useAppSelector(state => state.users.currentUser);
+  const [profile, setProfile] = useState<
+    (Profile & { qualityTags: QualityTags | null; id: number }) | null
+  >(null);
+  useEffect(() => {
+    if (previewProfile) {
+      setProfile(previewProfile);
+    }
+  }, [previewProfile]);
+
   const findUserName = (id: number | undefined) => {
     if (!id) {
       return "";
@@ -22,7 +33,6 @@ const PreviewProfileSidebar: React.FC = () => {
     friendList.forEach(friend => {
       return friend.chons.forEach(twoChon => {
         if (twoChon.id === id) {
-          console.log(twoChon.lastname + twoChon.firstname);
           twoChonName = twoChon.lastname + twoChon.firstname;
         }
       });
@@ -33,13 +43,13 @@ const PreviewProfileSidebar: React.FC = () => {
     <S.Container isOpen={previewProfile !== null}>
       <S.Header>
         <S.ProfileImageContainer>
-          <S.ProfileImage imgUrl={previewProfile?.imgUrl} />
+          <S.ProfileImage imgUrl={profile?.imgUrl} />
         </S.ProfileImageContainer>
         <S.ProfileBasicInfo>
-          <S.ProfileName>{findUserName(previewProfile?.id)}</S.ProfileName>
+          <S.ProfileName>{findUserName(profile?.id)}</S.ProfileName>
           <S.SkillTagsContainer>
             <S.SkillTagTitle>태그들: </S.SkillTagTitle>
-            {previewProfile?.skillTags.map(skillTag => (
+            {profile?.skillTags.map(skillTag => (
               <S.SkillTag key={skillTag.name}>{skillTag.name}</S.SkillTag>
             ))}
           </S.SkillTagsContainer>
@@ -47,25 +57,23 @@ const PreviewProfileSidebar: React.FC = () => {
       </S.Header>
       <S.IntroductionContainer>
         <S.Title>소개</S.Title>
-        <S.Introduction>{previewProfile?.introduction}</S.Introduction>
+        <S.Introduction>{profile?.introduction}</S.Introduction>
       </S.IntroductionContainer>
       <S.ActionButtonsContainer>
         <S.ActionButton backgroundColor={ThemeColor}>
           프로필 보기
         </S.ActionButton>
 
-        {friendList.findIndex(element => element.id === previewProfile?.id) !==
-          -1 && (
+        {friendList.findIndex(element => element.id === profile?.id) !== -1 && (
           <>
             <S.ActionButton>친구 네트워크 확인하기</S.ActionButton>
             <S.ActionButton>친구 끊기</S.ActionButton>
           </>
         )}
-        {previewProfile &&
+        {profile &&
           currentUser &&
-          friendList.findIndex(element => element.id === previewProfile.id) ===
-            -1 &&
-          previewProfile.id !== currentUser.id && (
+          friendList.findIndex(element => element.id === profile.id) === -1 &&
+          profile.id !== currentUser.id && (
             <>
               <S.ActionButton>친구 추가하기</S.ActionButton>
             </>
