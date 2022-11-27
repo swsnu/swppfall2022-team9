@@ -9,3 +9,16 @@ export const CanvasContainer = styled.div`
   flex: 1 0;
   overflow: hidden;
 `;
+
+export const ResetCanvasButton = styled.button`
+  display: flex;
+  background: none;
+  border: none;
+  align-items: center;
+  margin-top: 15px;
+  margin-left: 15px;
+  cursor: pointer;
+  position: absolute;
+  font-weight: bold;
+  font-size: 15px;
+`;

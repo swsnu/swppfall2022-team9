@@ -133,17 +133,7 @@ export default class Canvas extends EventDispatcher {
     this.panPoint.lastMousePos = { x: point.offsetX, y: point.offsetY };
     const touchedNode = this.nodes.find(node => node.isTouched(pointCoord));
     if (touchedNode) {
-      // TODO
-      // Add node click action
       this.emit("setPreviewProfile", touchedNode.id);
-      // if (
-      //   this.oneChonNodes?.find(
-      //     oneChonNode => oneChonNode.id === touchedNode.id,
-      //   )
-      // ) {
-      //   this.setCenterNode(touchedNode.id);
-      //   this.setFriendNodes(touchedNode.id);
-      // }
     } else {
       this.emit("setPreviewProfile", null);
     }
