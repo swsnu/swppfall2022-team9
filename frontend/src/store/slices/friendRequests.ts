@@ -26,15 +26,29 @@ const initialState: FriendRequestState = {
 /**
  * This gets all the new friend requests for the current user
  */
-export const getFriendRequests = createAsyncThunk<GetFriendRequestsResDto>(
-  "friendRequests/getFriendRequests",
-  async () => {
-    const response = await axios.get<GetFriendRequestsResDto>(
-      "/api/friendRequest/",
-    );
-    return response.data;
-  },
-);
+export const getFriendRequests = createAsyncThunk<
+  GetFriendRequestsResDto,
+  { user1Id: number; user2Id: number } | undefined
+>("friendRequests/getFriendRequests", async query => {
+  const response = await axios.get<GetFriendRequestsResDto>(
+    "/api/friendRequest/",
+    query ? { params: query } : undefined,
+  );
+  return response.data;
+});
+
+/**
+ * This gets a specific friendRequest between two users
+ */
+export const getFriendRequestBetweenUsers = createAsyncThunk<
+  FriendRequest,
+  { user1Id: number; user2Id: number }
+>("friendRequests/getFriendRequestBetweenUsers", async query => {
+  const response = await axios.get<FriendRequest>("/api/friendRequest/", {
+    params: query,
+  });
+  return response.data;
+});
 
 /**
  * This is for Creating a friend request

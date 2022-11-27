@@ -107,10 +107,14 @@ export const ActionButtonsContainer = styled.div`
   bottom: 70px;
 `;
 
-export const ActionButton = styled.button<{ backgroundColor?: string }>`
+export const ActionButton = styled.button<{
+  backgroundColor?: string;
+  disabled: boolean;
+}>`
   margin: 10px 30px;
   border-radius: 10px;
   padding: 8px 0;
+  opacity: ${props => (props.disabled ? 0.5 : 1)};
   color: black;
   border: none;
   font-weight: bold;
