@@ -60,6 +60,7 @@ export default function applyFriendRequestApi(
       const friendRequests = db.get("friendRequests").value();
       //we set id to be simply length because lowdb does not know
       const newFriendRequest: FriendRequest = {
+        senderId: 1,
         ...req.body,
         id: friendRequests.length,
         status: FriendRequestStatus.PENDING,
@@ -106,6 +107,6 @@ export default function applyFriendRequestApi(
         .write();
     }
 
-    return res.status(200).json({ friendRequest: updatedFriendRequest });
+    return res.status(200).json({ ...updatedFriendRequest });
   });
 }
