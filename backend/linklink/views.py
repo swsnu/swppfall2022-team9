@@ -698,12 +698,20 @@ def friend_request(request):
                     data={"message": not_within_twochon_message},
                 )
             # Create FriendRequest to getterId
-            FriendRequest.objects.create(
+            friend_request_created = FriendRequest.objects.create(
                 senderId=linklinkuser_sender,
                 getterId=linklinkuser_getter,
                 status="Pending",
             )
-            return HttpResponse(status=201)
+            return JsonResponse(
+                status=201,
+                data={
+                    "id": friend_request_created.id,
+                    "senderId": friend_request_created.senderId.id,
+                    "getterId": friend_request_created.getterId.id,
+                    "status": friend_request_created.status,
+                }
+            )
 
 
 @allowed_method_or_405(["PUT"])
