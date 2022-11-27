@@ -8,6 +8,7 @@ import {
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { canvasActions } from "store/slices/canvas";
 import {
   getFriendRequestBetweenUsers,
   postFriendRequest,
@@ -24,6 +25,10 @@ const PreviewProfileSidebar: React.FC = () => {
   const currentUser = useAppSelector(state => state.users.currentUser);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const oneChonIdToExpandNetwork = useAppSelector(
+    state => state.canvas.oneChonIdToExpandNetwork,
+  );
+
   const [existingFriendRequest, setExistingFriendRequest] =
     useState<FriendRequest | null>(null);
   const alert = useAlert();
@@ -110,6 +115,9 @@ const PreviewProfileSidebar: React.FC = () => {
     }
   };
 
+  const expandNetworkOnUser = (userId: number | null) => {
+    dispatch(canvasActions.setOneChonIdToExpandNetwork(userId));
+  };
   return (
     <S.Container isOpen={previewProfile !== null}>
       <S.Header>
@@ -146,8 +154,21 @@ const PreviewProfileSidebar: React.FC = () => {
 
         {friendList.findIndex(element => element.id === profile?.id) !== -1 && (
           <>
-            <S.ActionButton disabled={false}>
-              친구 네트워크 확인하기
+            <S.ActionButton
+              disabled={false}
+              onClick={() => {
+                if (profile) {
+                  if (!oneChonIdToExpandNetwork) {
+                    expandNetworkOnUser(profile.id);
+                  } else {
+                    expandNetworkOnUser(null);
+                  }
+                }
+              }}
+            >
+              {oneChonIdToExpandNetwork
+                ? "나의 네트워크로 돌아가기 "
+                : "친구 네트워크 확장하기"}
             </S.ActionButton>
             <S.ActionButton
               disabled={false}

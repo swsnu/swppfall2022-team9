@@ -121,4 +121,7 @@ export const ActionButton = styled.button<{
   background: none;
   cursor: pointer;
   background-color: ${props => props.backgroundColor || "white"};
+  :hover {
+    opacity: ${props => (!props.disabled ? 0.6 : 1)};
+  }
 `;

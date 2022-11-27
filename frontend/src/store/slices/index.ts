@@ -8,12 +8,14 @@ import { RootState } from "..";
 import friendRequestSlice from "./friendRequests";
 import profileSlice from "./profile";
 import searchSlice from "./search";
+import canvasSlice from "./canvas";
 
 const rootReducer = combineReducers({
   users: userSlice,
   friendRequests: friendRequestSlice,
   profile: profileSlice,
   search: searchSlice,
+  canvas: canvasSlice,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
