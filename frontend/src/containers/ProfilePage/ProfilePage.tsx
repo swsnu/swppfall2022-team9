@@ -57,6 +57,9 @@ const ProfilePage: React.FC<Props> = () => {
 
   const currentUser = useAppSelector(state => state.users.currentUser);
   const friendList = useAppSelector(state => state.users.friendList);
+  const friendRequests = useAppSelector(
+    state => state.friendRequests.friendRequests,
+  );
 
   const onClickChangeProfile = () => {
     navigate("/profile/change");
@@ -74,13 +77,13 @@ const ProfilePage: React.FC<Props> = () => {
     try {
       await dispatch(
         postFriendRequest({
-          senderId: currentUser!.id,
           getterId: Number(userId),
+          senderImgUrl: currentUser!.imgUrl!,
+          senderName: currentUser!.lastname + currentUser!.firstname,
         }),
       ).unwrap();
       alert.open({ message: "친구 요청을 보냈습니다" });
     } catch (err) {
-      console.log(err);
       alert.open({ message: "친구 요청에 실패했습니다" });
     }
   };
@@ -100,25 +103,25 @@ const ProfilePage: React.FC<Props> = () => {
 
   useEffect(() => {
     if (userId && friendList) {
-      // DESC: We need to get the friend list of the profile's owner (not the current user)
-      outerLoop: for (const oneChon of friendList) {
-        if (oneChon.id === Number(userId)) {
-          setProfileUserName(oneChon.lastname + oneChon.firstname);
-          // DESC: If we are viewing the profile of the current user's friend
-          // the friends should be the two chons
-          setProfileUserFriends(oneChon.chons);
-          break;
-        }
-        if (oneChon.chons.length > 0) {
-          for (const twoChon of oneChon.chons) {
-            if (twoChon.id === Number(userId)) {
-              setProfileUserName(twoChon.lastname + twoChon.firstname);
-              // DESC: the friends of two chon should be unviewable
-              setProfileUserFriends(undefined);
-              break outerLoop;
-            }
+      const viewingOneChon = friendList.find(
+        oneChon => oneChon.id === Number(userId),
+      );
+      if (viewingOneChon) {
+        setProfileUserName(viewingOneChon.lastname + viewingOneChon.firstname);
+        setProfileUserFriends(viewingOneChon.chons);
+      } else {
+        friendList.find(oneChon => {
+          const viewingTwoChon = oneChon.chons.find(
+            twoChon => twoChon.id === Number(userId),
+          );
+          if (viewingTwoChon) {
+            setProfileUserName(
+              viewingTwoChon.lastname + viewingTwoChon.firstname,
+            );
+            setProfileUserFriends(undefined);
+            return true;
           }
-        }
+        });
       }
     }
   }, [friendList, userId]);
@@ -208,8 +211,20 @@ const ProfilePage: React.FC<Props> = () => {
                 <S.ProfileActionButton
                   backgroundColor={"#dedede"}
                   onClick={onClickAddFriend}
+                  disabled={
+                    friendRequests.find(
+                      friendRequest =>
+                        friendRequest.getterId === Number(userId),
+                    )
+                      ? true
+                      : false
+                  }
                 >
-                  친구 추가하기
+                  {friendRequests.find(
+                    friendRequest => friendRequest.getterId === Number(userId),
+                  )
+                    ? "친구 요청 전송됨"
+                    : "친구 추가하기"}
                 </S.ProfileActionButton>
               )
             ) : null}
