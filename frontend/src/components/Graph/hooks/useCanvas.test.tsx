@@ -7,11 +7,13 @@ import { renderHook } from "@testing-library/react-hooks";
 // reference: https://kooku0.github.io/blog/%EC%99%B8%EB%B6%80-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%BD%94%EB%93%9C-%EC%A7%9C%EA%B8%B0/
 
 describe("useCanvas hook", () => {
+  let onSetViewProfileCallback: (id: number | null) => void;
   beforeEach(() => {
     // const mockCanvasElement = document.createElement("canvas");
     // const fakeCanvas = new Canvas(mockCanvasElement);
     jest.clearAllMocks();
     // (useCanvas as jest.Mock).mockReturnValue({} as Canvas);
+    onSetViewProfileCallback = jest.fn();
   });
 
   afterEach(() => {});
@@ -29,6 +31,7 @@ describe("useCanvas hook", () => {
       return useCanvas({
         divRef: containerRef,
         canvasRef: canvasRef,
+        onSetViewProfileCallback,
       });
     });
     result.current?.setSize(500, 500);
@@ -54,6 +57,7 @@ describe("useCanvas hook", () => {
       return useCanvas({
         divRef: containerRef,
         canvasRef: canvasRef,
+        onSetViewProfileCallback,
       });
     });
     result.current?.setWidth(500);
@@ -74,6 +78,7 @@ describe("useCanvas hook", () => {
       return useCanvas({
         divRef: containerRef,
         canvasRef: canvasRef,
+        onSetViewProfileCallback,
       });
     });
     waitFor(() => expect(result.current).toBe(null));
@@ -93,6 +98,7 @@ describe("useCanvas hook", () => {
       return useCanvas({
         divRef: containerRef,
         canvasRef: canvasRef,
+        onSetViewProfileCallback,
       });
     });
     result.current?.setSize(500, 500);

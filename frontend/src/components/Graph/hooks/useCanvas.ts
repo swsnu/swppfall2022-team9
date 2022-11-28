@@ -1,16 +1,14 @@
 import { RefObject, useEffect, useState } from "react";
-import { useAppDispatch } from "store/hooks";
-import { getProfile, profileActions } from "store/slices/profile";
 import Canvas from "../utils/Canvas";
 
 interface Params {
   divRef: RefObject<HTMLDivElement>;
   canvasRef: RefObject<HTMLCanvasElement>;
+  onSetViewProfileCallback: (id: number) => void;
 }
 
-function useCanvas({ divRef, canvasRef }: Params) {
+function useCanvas({ divRef, canvasRef, onSetViewProfileCallback }: Params) {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -37,26 +35,14 @@ function useCanvas({ divRef, canvasRef }: Params) {
       }
     };
 
-    const mouseDownSetPreviewProfile = (id: number | null) => {
-      if (id) {
-        dispatch(getProfile(id))
-          .unwrap()
-          .then(data => {
-            dispatch(profileActions.setPreviewProfile({ ...data, id }));
-          });
-      } else {
-        dispatch(profileActions.setPreviewProfile(null));
-      }
-    };
-
     onResize();
     window.addEventListener("resize", onResize);
-    canvas?.addEventListener("setPreviewProfile", mouseDownSetPreviewProfile);
+    canvas?.addEventListener("setPreviewProfile", onSetViewProfileCallback);
     return () => {
       window.removeEventListener("resize", onResize);
       canvas?.removeEventListener(
         "setPreviewProfile",
-        mouseDownSetPreviewProfile,
+        onSetViewProfileCallback,
       );
     };
   }, [canvas, divRef]);
