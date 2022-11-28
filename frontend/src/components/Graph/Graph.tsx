@@ -6,16 +6,32 @@ import useCanvas from "./hooks/useCanvas";
 
 import * as S from "./styles";
 import { canvasActions } from "store/slices/canvas";
+import { getProfile, profileActions } from "store/slices/profile";
 
 interface Props {}
 
 const Graph: React.FC<Props> = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
-  const canvas = useCanvas({ divRef: divRef, canvasRef: canvasRef });
+  const dispatch = useAppDispatch();
+  const onSetViewProfileCallback = (id: number | null) => {
+    if (id) {
+      dispatch(getProfile(id))
+        .unwrap()
+        .then(data => {
+          dispatch(profileActions.setPreviewProfile({ ...data, id }));
+        });
+    } else {
+      dispatch(profileActions.setPreviewProfile(null));
+    }
+  };
+  const canvas = useCanvas({
+    divRef: divRef,
+    canvasRef: canvasRef,
+    onSetViewProfileCallback,
+  });
   const users = useAppSelector(state => state.users);
   const search = useAppSelector(state => state.search);
-  const dispatch = useAppDispatch();
   const oneChonIdToExpandNetwork = useAppSelector(
     state => state.canvas.oneChonIdToExpandNetwork,
   );
