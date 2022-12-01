@@ -4,36 +4,37 @@ url module for linklink app
 
 from django.urls import path
 from linklink import views
+from linklink.views_linklink import views_auth
 
 urlpatterns = [
     path(
         'csrf_token/',
-        views.csrf_token,
+        views_auth.csrf_token,
         name='csrf_token'
     ),
     path(
         'auth/signup/',
-        views.signup,
+        views_auth.signup,
         name='signup'
     ),
     path(
         'auth/signin/',
-        views.signin,
+        views_auth.signin,
         name='signin'
     ),
     path(
         'auth/signout/',
-        views.signout,
+        views_auth.signout,
         name='signout'
     ),
     path(
         'auth/verify/<str:token>/',
-        views.verify,
+        views_auth.verify,
         name='verify'
     ),
     path(
         'auth/session/',
-        views.auto_signin,
+        views_auth.auto_signin,
         name='auto_signin'
     ),
     path(
