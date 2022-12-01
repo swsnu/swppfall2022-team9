@@ -4,7 +4,7 @@ url module for linklink app
 
 from django.urls import path
 from linklink import views
-from linklink.views_linklink import views_auth, views_linklinkuser
+from linklink.views_linklink import views_auth, views_linklinkuser, views_profile
 
 urlpatterns = [
     path(
@@ -49,17 +49,17 @@ urlpatterns = [
     ),
     path(
         'profile/',
-        views.my_profile,
+        views_profile.my_profile,
         name='my_profile'
     ),
     path(
         'profile/<int:user_id>/',
-        views.profile,
+        views_profile.profile,
         name='profile'
     ),
     path(
         'profile/uploadImage/',
-        views.upload_image,
+        views_profile.upload_image,
         name='upload_image'
     ),
     path(
