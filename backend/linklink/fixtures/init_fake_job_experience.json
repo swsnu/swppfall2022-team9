@@ -1,0 +1,197 @@
+[
+    {
+        "model": "linklink.jobexperience",
+        "pk": 1,
+        "fields": {
+            "profile": 1,
+            "company": "Google",
+            "position": "Intern",
+            "dateStart": "2019-04-14",
+            "dateEnd": "2019-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 2,
+        "fields": {
+            "profile": 2,
+            "company": "Meta",
+            "position": "CFO",
+            "dateStart": "2014-04-14",
+            "dateEnd": "2015-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 3,
+        "fields": {
+            "profile": 3,
+            "company": "Google",
+            "position": "Tech Lead",
+            "dateStart": "2015-04-14",
+            "dateEnd": "2018-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 4,
+        "fields": {
+            "profile": 4,
+            "company": "Amazon",
+            "position": "COO",
+            "dateStart": "2012-04-14",
+            "dateEnd": "2015-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 5,
+        "fields": {
+            "profile": 5,
+            "company": "Netflix",
+            "position": "CTO",
+            "dateStart": "2020-04-14",
+            "dateEnd": "2021-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 6,
+        "fields": {
+            "profile": 6,
+            "company": "Apple",
+            "position": "Machine Learning Engineer",
+            "dateStart": "2020-04-14",
+            "dateEnd": "2021-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 7,
+        "fields": {
+            "profile": 7,
+            "company": "Google",
+            "position": "Tech Lead",
+            "dateStart": "2018-04-14",
+            "dateEnd": "2019-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 8,
+        "fields": {
+            "profile": 8,
+            "company": "Meta",
+            "position": "Senior Engineer",
+            "dateStart": "2014-04-14",
+            "dateEnd": "2017-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 9,
+        "fields": {
+            "profile": 9,
+            "company": "Netflix",
+            "position": "Software Engineer",
+            "dateStart": "2019-04-14",
+            "dateEnd": "2021-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 10,
+        "fields": {
+            "profile": 10,
+            "company": "Amazon",
+            "position": "Frontend Developer",
+            "dateStart": "2013-04-14",
+            "dateEnd": "2018-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 11,
+        "fields": {
+            "profile": 11,
+            "company": "Google",
+            "position": "Product Manager",
+            "dateStart": "2013-04-14",
+            "dateEnd": "2018-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 12,
+        "fields": {
+            "profile": 12,
+            "company": "Apple",
+            "position": "Researcher",
+            "dateStart": "2013-04-14",
+            "dateEnd": "2015-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 13,
+        "fields": {
+            "profile": 13,
+            "company": "Meta",
+            "position": "CEO",
+            "dateStart": "2014-04-14",
+            "dateEnd": "2018-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 14,
+        "fields": {
+            "profile": 14,
+            "company": "Amazon",
+            "position": "AI Consultant",
+            "dateStart": "2020-04-14",
+            "dateEnd": "2022-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.jobexperience",
+        "pk": 15,
+        "fields": {
+            "profile": 15,
+            "company": "Google",
+            "position": "Product Owner",
+            "dateStart": "2020-04-14",
+            "dateEnd": "2021-09-25",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    }
+]
