@@ -3,7 +3,7 @@ url module for linklink app
 """
 
 from django.urls import path
-from linklink.views_linklink import (
+from linklink.views import (
     views_auth,
     views_linklinkuser,
     views_profile,
