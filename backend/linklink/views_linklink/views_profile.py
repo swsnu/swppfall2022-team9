@@ -20,7 +20,7 @@ from ..models import (
     JobExperience,
     Education,
 )
-from ..views import get_onechon_linklinkuser_list, profile_package_response_body
+from ..utils import get_onechon_linklinkuser_list, profile_package_response_body
 
 #--------------------------------------------------------------------------
 #   Profile Related APIs

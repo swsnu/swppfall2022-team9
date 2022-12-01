@@ -19,5 +19,6 @@ if __name__=="__main__": # pragma: no cover
             }
         }
         skill_tags_json_fixture.append(skill_tag_json)
-    with open("init_fake_skill_tags.json", "w") as json_file:
+    # pylint:disable=unspecified-encoding
+    with open("../fixtures/init_fake_skill_tags.json", "w") as json_file:
         json.dump(skill_tags_json_fixture, json_file, indent=4)

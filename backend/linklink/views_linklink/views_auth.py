@@ -25,7 +25,7 @@ from ..models import (
     Verification,
     Profile,
 )
-from ..views import send_register_email, is_expired
+from ..utils import send_register_email, is_expired
 
 #--------------------------------------------------------------------------
 #   Setting constants

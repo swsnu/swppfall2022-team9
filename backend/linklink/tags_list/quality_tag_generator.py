@@ -19,5 +19,6 @@ if __name__=="__main__": # pragma: no cover
             }
         }
         quality_tags_json_fixture.append(quality_tag_json)
+    # pylint:disable=unspecified-encoding
     with open("../fixtures/init_fake_quality_tags.json", "w") as json_file:
         json.dump(quality_tags_json_fixture, json_file, indent=4)
