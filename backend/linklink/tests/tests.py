@@ -14,7 +14,7 @@ from django.core import mail
 from django.test import TestCase, Client
 from django.utils import timezone
 
-from .models import (
+from ..models import (
     LinkLinkUser,
     FriendRequest,
     Verification,
@@ -481,7 +481,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -501,7 +501,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -572,7 +572,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -666,7 +666,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -797,7 +797,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -857,7 +857,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -909,7 +909,7 @@ class LinkLinkTestCase(TestCase):
         # POST
         default_user_image_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             "default_user_image.png"
         )
         test_response_dict = {
@@ -945,7 +945,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1021,7 +1021,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1059,7 +1059,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1097,7 +1097,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1135,7 +1135,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200) # Successful GET
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1195,7 +1195,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 201)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1239,7 +1239,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1321,7 +1321,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1363,7 +1363,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1405,7 +1405,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1447,7 +1447,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1489,7 +1489,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1583,7 +1583,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1638,7 +1638,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1680,7 +1680,7 @@ class LinkLinkTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         answer_json_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             inspect.stack()[0][3] + ".json" # current method name
         )
         with open(answer_json_path, "r", encoding="utf") as json_file:
@@ -1859,7 +1859,7 @@ class LinkLinkTestCase(TestCase):
         # POST
         default_user_image_path = os.path.join(
             self.linklink_path,
-            "test_answers",
+            "../test_answers",
             "default_user_image.png"
         )
         test_response_dict = {
