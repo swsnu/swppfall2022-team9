@@ -17,7 +17,7 @@ from ..models import (
     LinkLinkUser,
     FriendRequest,
 )
-from ..views import is_within_twochon
+from ..utils import is_within_twochon
 
 #--------------------------------------------------------------------------
 #   FriendRequest Related APIs

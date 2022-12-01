@@ -10,7 +10,7 @@ from ..decorators import allowed_method_or_405, logged_in_or_401
 from ..models import (
     FriendRequest,
 )
-from ..views import get_onechon_linklinkuser_list
+from ..utils import get_onechon_linklinkuser_list
 
 #--------------------------------------------------------------------------
 #   LinkLinkUser Related APIs

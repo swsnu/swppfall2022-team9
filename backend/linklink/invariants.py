@@ -24,7 +24,7 @@ def max_onechon_invariant(linklinkuser):
     # Get onechon of current user
     # pylint: disable=import-outside-toplevel
     # to avoid circular import
-    from .views import get_onechon_linklinkuser_list
+    from .utils import get_onechon_linklinkuser_list
     onechon_list = get_onechon_linklinkuser_list(
         all_accepted_friend_requests,
         linklinkuser

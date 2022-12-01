@@ -31,6 +31,9 @@ ignore-patterns=manage.py,
                 0015_remove_chatroom_chatlogs_remove_chatroom_users_and_more.py,
                 0016_remove_linklinkuser_imgurl_profile_imgurl.py,
                 0017_alter_profile_imgurl.py,
+                0018_friendrequest_unique_request_id.py,
+                0019_alter_friendrequest_unique_request_id.py,
+                0020_alter_friendrequest_unique_request_id.py,
 
 
 # Pickle collected data for later comparisons.
