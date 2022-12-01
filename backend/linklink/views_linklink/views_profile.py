@@ -1,5 +1,5 @@
 """
-profile related views module for linklink app
+Profile related views module for linklink app
 """
 
 import json

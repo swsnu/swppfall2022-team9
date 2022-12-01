@@ -1,5 +1,5 @@
 """
-auth related views module for linklink app
+Auth related views module for linklink app
 """
 
 from datetime import datetime, timedelta

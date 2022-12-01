@@ -1,5 +1,5 @@
 """
-linklinkuser related views module for linklink app
+Linklinkuser related views module for linklink app
 """
 
 from django.http import (
