@@ -4,7 +4,7 @@ url module for linklink app
 
 from django.urls import path
 from linklink import views
-from linklink.views_linklink import views_auth
+from linklink.views_linklink import views_auth, views_linklinkuser
 
 urlpatterns = [
     path(
@@ -39,12 +39,12 @@ urlpatterns = [
     ),
     path(
         'user/friend/',
-        views.friend,
+        views_linklinkuser.friend,
         name='friend'
     ),
     path(
         'user/friendRequestToken/',
-        views.friend_request_token,
+        views_linklinkuser.friend_request_token,
         name='friend_request_token'
     ),
     path(
