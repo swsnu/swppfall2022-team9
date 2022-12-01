@@ -1,0 +1,197 @@
+[
+    {
+        "model": "linklink.education",
+        "pk": 1,
+        "fields": {
+            "profile": 1,
+            "school": "서울대학교",
+            "major": "자유전공학부",
+            "dateStart": "2017-03-01",
+            "dateEnd": "2023-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 2,
+        "fields": {
+            "profile": 2,
+            "school": "서울대학교",
+            "major": "경영학과",
+            "dateStart": "2007-03-01",
+            "dateEnd": "2013-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 3,
+        "fields": {
+            "profile": 3,
+            "school": "서울대학교",
+            "major": "컴퓨터공학과",
+            "dateStart": "2010-03-01",
+            "dateEnd": "2015-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 4,
+        "fields": {
+            "profile": 4,
+            "school": "서울대학교",
+            "major": "자유전공학부",
+            "dateStart": "2006-03-01",
+            "dateEnd": "2012-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 5,
+        "fields": {
+            "profile": 5,
+            "school": "서울대학교",
+            "major": "경제학과",
+            "dateStart": "2019-03-01",
+            "dateEnd": "2024-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 6,
+        "fields": {
+            "profile": 6,
+            "school": "서울대학교",
+            "major": "시각디자인학과",
+            "dateStart": "2019-03-01",
+            "dateEnd": "2024-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 7,
+        "fields": {
+            "profile": 7,
+            "school": "연세대학교",
+            "major": "컴퓨터공학과",
+            "dateStart": "2017-03-01",
+            "dateEnd": "2023-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 8,
+        "fields": {
+            "profile": 8,
+            "school": "고려대학교",
+            "major": "경영학과",
+            "dateStart": "2007-03-01",
+            "dateEnd": "2013-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 9,
+        "fields": {
+            "profile": 9,
+            "school": "중앙대학교",
+            "major": "연극영화학과",
+            "dateStart": "2013-03-01",
+            "dateEnd": "2019-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 10,
+        "fields": {
+            "profile": 10,
+            "school": "서강대학교",
+            "major": "컴퓨터공학과",
+            "dateStart": "2007-03-01",
+            "dateEnd": "2013-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 11,
+        "fields": {
+            "profile": 11,
+            "school": "성균관대학교",
+            "major": "경제학과",
+            "dateStart": "2007-03-01",
+            "dateEnd": "2013-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 12,
+        "fields": {
+            "profile": 12,
+            "school": "한양대학교",
+            "major": "기계공학과",
+            "dateStart": "2006-03-01",
+            "dateEnd": "2012-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 13,
+        "fields": {
+            "profile": 13,
+            "school": "경희대학교",
+            "major": "컴퓨터공학과",
+            "dateStart": "2007-03-01",
+            "dateEnd": "2013-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 14,
+        "fields": {
+            "profile": 14,
+            "school": "고려대학교",
+            "major": "컴퓨터공학과",
+            "dateStart": "2013-03-01",
+            "dateEnd": "2020-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    },
+    {
+        "model": "linklink.education",
+        "pk": 15,
+        "fields": {
+            "profile": 15,
+            "school": "서울대학교",
+            "major": "자유전공학부",
+            "dateStart": "2012-03-01",
+            "dateEnd": "2019-08-20",
+            "createdAt": "2022-11-03T06:04:12.620Z",
+            "updatedAt": "2022-11-03T06:04:12.620Z"
+        }
+    }
+]
