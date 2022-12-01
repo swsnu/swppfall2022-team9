@@ -42,7 +42,7 @@ Used `Eslint` with `eslint-config-airbnb`
 Used `Pytest` and `Coverage`
 
 - `cd backend`
-- `coverage run --branch --source='./linklink' manage.py test`
+- `coverage run --branch --source='./linklink' manage.py test linklink/tests`
 
 Or type:
 - `yarn testb`
