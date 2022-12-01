@@ -5,10 +5,10 @@ based on tags_list/tags.py
 
 import json # pragma: no cover
 
-import tags_list.tags as tags # pragma: no cover
+from tags import SKILL_TAGS # pragma: no cover
 
 if __name__=="__main__": # pragma: no cover
-    skill_tags = tags.SKILL_TAGS
+    skill_tags = SKILL_TAGS
     skill_tags_json_fixture = []
     for idx, skill_tag in enumerate(skill_tags):
         skill_tag_json = {
