@@ -16,7 +16,7 @@
     "lintb": "cd backend && pylint --rcfile=pylintrc **/*.py",
     "backend": "python backend/manage.py runserver 8000",
     "testf": "cd frontend && yarn testf_",
-    "testb": "cd backend && coverage run --branch --source='./linklink' manage.py test",
+    "testb": "cd backend && coverage run --branch --source='./linklink' manage.py test linklink/tests",
     "loaddb": "cd backend && python manage.py loaddata */fixtures/*.json"
   }
 }
