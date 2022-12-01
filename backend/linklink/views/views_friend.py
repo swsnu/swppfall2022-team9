@@ -1,5 +1,5 @@
 """
-Linklinkuser related views module for linklink app
+Friend related views module for linklink app
 """
 
 from django.http import (
@@ -13,7 +13,7 @@ from ..models import (
 from ..utils import get_onechon_linklinkuser_list
 
 #--------------------------------------------------------------------------
-#   LinkLinkUser Related APIs
+#   Friend Related APIs
 #--------------------------------------------------------------------------
 
 @allowed_method_or_405(["GET"])
