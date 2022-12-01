@@ -3,8 +3,12 @@ url module for linklink app
 """
 
 from django.urls import path
-from linklink import views
-from linklink.views_linklink import views_auth, views_linklinkuser, views_profile
+from linklink.views_linklink import (
+    views_auth,
+    views_linklinkuser,
+    views_profile,
+    views_friend_request,
+)
 
 urlpatterns = [
     path(
@@ -64,12 +68,12 @@ urlpatterns = [
     ),
     path(
         'friendRequest/',
-        views.friend_request,
+        views_friend_request.friend_request,
         name='friend_request'
     ),
     path(
         'friendRequest/<int:friend_request_id>/',
-        views.friend_request_respond,
+        views_friend_request.friend_request_respond,
         name='friend_request_respond'
     ),
 ]
