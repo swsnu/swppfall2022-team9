@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
-export const NavbarHeight = 23;
-
 export const NavbarVerticalPadding = 12;
+
+export const NavbarContentHeight = 23;
+
+export const NavbarHeight = NavbarContentHeight + NavbarVerticalPadding * 2;
 
 export const Container = styled.div`
   display: flex;
-  height: ${NavbarHeight}px;
+  height: ${NavbarContentHeight}px;
   background-color: white;
   padding: ${NavbarVerticalPadding}px 20px;
   justify-content: space-between;

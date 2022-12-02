@@ -1,4 +1,7 @@
-import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
+import {
+  NavbarContentHeight,
+  NavbarVerticalPadding,
+} from "components/Navbar/styles";
 import { IoCloseOutline } from "react-icons/io5";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
@@ -7,7 +10,9 @@ export const FormContainerMarginTop = 150;
 export const FormInnerPadding = 40;
 export const Container = styled.div`
   /* width: 100%; */
-  min-height: calc(100vh - ${NavbarHeight}px - ${NavbarVerticalPadding * 2}px);
+  min-height: calc(
+    100vh - ${NavbarContentHeight}px - ${NavbarVerticalPadding * 2}px
+  );
   display: flex;
   align-items: center;
   flex-direction: column;
