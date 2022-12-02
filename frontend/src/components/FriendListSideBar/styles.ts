@@ -12,12 +12,10 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.header`
-  font-family: "Baloo Da 2", cursive;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
+  font-weight: bold;
+  font-size: 17px;
   line-height: 34px;
-  padding-left: 5px;
+  padding-left: 20px;
   padding-top: 5px;
 `;
 
