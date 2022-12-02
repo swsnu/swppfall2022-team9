@@ -5,10 +5,12 @@ import { useAppSelector } from "store/hooks";
 import PreviewProfileSidebar from "containers/PreviewProfileSidebar/PreviewProfileSidebar";
 import { AiOutlinePlus } from "react-icons/ai";
 import copy from 'copy-to-clipboard';
+import useAlert from "hooks/useAlert";
 
 interface Props { }
 
 const FriendListSideBar: React.FC<Props> = () => {
+  const alert = useAlert();
   const userState = useAppSelector(state => state.users);
   // const navigate = useNavigate();
 
@@ -38,6 +40,7 @@ const FriendListSideBar: React.FC<Props> = () => {
         ))}
       <S.InviteFriendButton onClick={() => {
         navigator.clipboard.writeText(process.env.REACT_APP_WEBSITE_URL! + '/invite')
+        alert.open({ message: "친구 초대 링크가 복사되었습니다. 상대방에게 전달해주세요!" })
       }}>
         <AiOutlinePlus />
         친구 초대하기
