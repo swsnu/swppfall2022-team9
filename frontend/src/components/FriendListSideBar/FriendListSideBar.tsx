@@ -3,8 +3,10 @@ import * as S from "./styles";
 import ChonListItem from "./ChonListItem/ChonListItem";
 import { useAppSelector } from "store/hooks";
 import PreviewProfileSidebar from "containers/PreviewProfileSidebar/PreviewProfileSidebar";
+import { AiOutlinePlus } from "react-icons/ai";
+import copy from 'copy-to-clipboard';
 
-interface Props {}
+interface Props { }
 
 const FriendListSideBar: React.FC<Props> = () => {
   const userState = useAppSelector(state => state.users);
@@ -34,7 +36,13 @@ const FriendListSideBar: React.FC<Props> = () => {
             isTwoChon={false}
           ></ChonListItem>
         ))}
-    </S.Container>
+      <S.InviteFriendButton onClick={() => {
+        navigator.clipboard.writeText(process.env.REACT_APP_WEBSITE_URL! + '/invite')
+      }}>
+        <AiOutlinePlus />
+        친구 초대하기
+      </S.InviteFriendButton>
+    </S.Container >
   );
 };
 

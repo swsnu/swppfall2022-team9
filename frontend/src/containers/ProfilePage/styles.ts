@@ -1,4 +1,7 @@
-import { NavbarVerticalPadding, NavbarHeight } from "components/Navbar/styles";
+import {
+  NavbarVerticalPadding,
+  NavbarContentHeight,
+} from "components/Navbar/styles";
 import styled from "styled-components";
 import { device } from "utils/cssMedia";
 
@@ -7,7 +10,9 @@ export const Container = styled.div`
   background-color: #f8f8f8;
   min-height: calc(
     100vh -
-      ${NavbarHeight + NavbarVerticalPadding * 2 + ProfilePagePaddingTop}px
+      ${NavbarContentHeight +
+      NavbarVerticalPadding * 2 +
+      ProfilePagePaddingTop}px
   );
   padding: 0 10px;
   padding-top: ${ProfilePagePaddingTop}px;
