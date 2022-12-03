@@ -195,7 +195,57 @@ class JobExperience(models.Model):
         return f"{self.company}-{self.position}"
 
 
-# --------------------------------------------------------------------------
+#--------------------------------------------------------------------------
+#   SkillTag, QualityTag Related Models
+#--------------------------------------------------------------------------
+
+class QualityTagRequest(models.Model):
+    """
+    QualityTagRequest model class
+    """
+    QUALITY_TAGS_LIST = tags.QUALITY_TAGS
+    name = models.CharField(
+        max_length=30,
+        choices=[
+            (quality_tag, quality_tag) for quality_tag in QUALITY_TAGS_LIST
+        ],
+    )
+    senderId = models.ForeignKey(
+        LinkLinkUser,
+        on_delete=models.CASCADE,
+        related_name="senderIdQualityTagRequest", # avoid fields.E304 error
+    )
+    getterId = models.ForeignKey(
+        LinkLinkUser,
+        on_delete=models.CASCADE,
+        related_name="getterIdQualityTagRequest", # avoid fields.E304 error
+    )
+    status = models.BooleanField(default=False)
+    unique_request_id = models.CharField(
+        max_length=100,
+        unique=True,
+        editable=False,
+    )
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return (
+            f"{self.senderId}->{self.getterId}, "
+            f"name: {self.name}, status:{self.status}"
+        )
+
+    def save(self, *args, **kwargs):
+        self.unique_request_id = "-".join([
+            str(self.senderId.id),
+            str(self.getterId.id),
+            self.name,
+        ])
+        # pylint: disable=super-with-arguments
+        super(QualityTagRequest, self).save(*args, **kwargs)
+
+
+#--------------------------------------------------------------------------
 #   Chat Related Models
 # --------------------------------------------------------------------------
 
