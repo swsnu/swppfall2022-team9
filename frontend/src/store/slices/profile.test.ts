@@ -7,7 +7,6 @@ import reducer, {
   getProfile,
 } from "./profile";
 import { profileStub } from "server/stubs/profiles.stub";
-import { postCreateProfile } from "./profile";
 import axios from "axios";
 
 const mockDispatch = jest.fn();
@@ -32,12 +31,6 @@ describe("profile reducer", () => {
     jest.clearAllMocks();
   });
 
-  it("tests postCreateProfile", async () => {
-    axios.post = jest.fn().mockResolvedValue(null);
-    await store.dispatch(postCreateProfile(profileStub));
-    expect(store.getState().profile.currentProfile).toEqual(null);
-  });
-
   it("tests getProfile", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: { ...profileStub } });
     await store.dispatch(getProfile(1));
@@ -55,8 +48,7 @@ describe("profile reducer", () => {
     jest.spyOn(axios, "put").mockResolvedValue({ data: editedProfile });
     await store.dispatch(
       editMyProfile({
-        profile: profileStub,
-        fieldsToUpdate: { introduction: "hello new intro" },
+        ...profileStub,
       }),
     );
   });
