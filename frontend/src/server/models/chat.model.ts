@@ -1,5 +1,6 @@
 export type ChatRoomInfo = {
   chatRoomName: string;
+  otherUserId: number;
   otherUserName: string;
   otherUserImgUrl: string;
   lastMessage: string;

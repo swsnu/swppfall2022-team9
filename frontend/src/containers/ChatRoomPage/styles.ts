@@ -52,7 +52,7 @@ export const Image = styled.div<{ imgUrl: string | undefined }>`
   border: ${props =>
     props.imgUrl ? "2px solid #000000" : "2px solid rgba(0, 0, 0, 0)"};
   width: 50px;
-  height: ${props => (props.imgUrl ? "50px" : "10px")};
+  height: ${props => (props.imgUrl ? "50px" : "0px")};
   padding: 2px;
 `;
 
