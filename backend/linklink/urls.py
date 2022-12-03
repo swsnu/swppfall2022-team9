@@ -26,8 +26,14 @@ urlpatterns = [
     ),
     path("profile/", views_profile.my_profile, name="my_profile"),
     path("profile/<int:user_id>/", views_profile.profile, name="profile"),
-    path("profile/uploadImage/", views_profile.upload_image, name="upload_image"),
-    path("friendRequest/", views_friend_request.friend_request, name="friend_request"),
+    path("profile/uploadImage/",
+        views_profile.upload_image,
+        name="upload_image"
+    ),
+    path("friendRequest/",
+        views_friend_request.friend_request,
+        name="friend_request"
+    ),
     path(
         "friendRequest/<int:friend_request_id>/",
         views_friend_request.friend_request_respond,
