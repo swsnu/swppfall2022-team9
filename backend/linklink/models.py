@@ -20,7 +20,10 @@ class LinkLinkUser(models.Model):
     LinkLinkUser model class that extends django's User
     """
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     friendRequestToken = models.UUIDField(
         default=uuid.uuid4, editable=False, unique=True
     )
@@ -89,7 +92,11 @@ class Verification(models.Model):
         ("Register", "Register"),
         ("Password", "Password"),
     ]
-    purpose = models.CharField(max_length=8, choices=PURPOSE, default="Register")
+    purpose = models.CharField(
+        max_length=8,
+        choices=PURPOSE,
+        default="Register"
+    )
 
     def __str__(self):
         return "_".join(
@@ -125,7 +132,10 @@ class QualityTag(models.Model):
     QUALITY_TAGS_LIST = tags.QUALITY_TAGS
     name = models.CharField(
         max_length=30,
-        choices=[(quality_tag, quality_tag) for quality_tag in QUALITY_TAGS_LIST],
+        choices=[
+            (quality_tag, quality_tag)
+            for quality_tag in QUALITY_TAGS_LIST
+        ],
     )
 
     def __str__(self):
@@ -191,18 +201,22 @@ class JobExperience(models.Model):
 
 
 class ChatRoom(models.Model):
+    """
+    ChatRoom model class
+    """
+
     name = models.CharField(max_length=128)
     online = models.ManyToManyField(to=LinkLinkUser, blank=True)
 
     def get_online_count(self):
         return self.online.count()
 
-    def join(self, linkLinkUser):
-        self.online.add(linkLinkUser)
+    def join(self, link_link_user):
+        self.online.add(link_link_user)
         self.save()
 
-    def leave(self, linkLinkUser):
-        self.online.remove(linkLinkUser)
+    def leave(self, link_link_user):
+        self.online.remove(link_link_user)
         self.save()
 
     def __str__(self):
@@ -210,6 +224,10 @@ class ChatRoom(models.Model):
 
 
 class Message(models.Model):
+    """
+    Message model class
+    """
+
     chatRoom = models.ForeignKey(
         ChatRoom, on_delete=models.CASCADE, related_name="messages"
     )
@@ -225,5 +243,6 @@ class Message(models.Model):
 
     def __str__(self):
         return (
-            f"From {self.sender} to {self.receiver}: {self.content} [{self.timeStamp}]"
+            f"From {self.sender} to {self.receiver}: \
+                {self.content} [{self.timeStamp}]"
         )
