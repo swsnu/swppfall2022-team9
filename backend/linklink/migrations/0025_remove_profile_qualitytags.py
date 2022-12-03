@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('linklink', '0021_alter_qualitytag_name_qualitytagrequest'),
+        ('linklink', '0024_alter_qualitytag_name_qualitytagrequest'),
     ]
 
     operations = [
