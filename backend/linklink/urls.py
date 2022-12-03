@@ -52,4 +52,9 @@ urlpatterns = [
         views_tags.quality_tag_list,
         name='quality_tags_list'
     ),
+    path(
+        'qualityTags/<int:user_id>/',
+        views_tags.quality_tag,
+        name='quality_tag',
+    ),
 ]
