@@ -9,6 +9,7 @@ import friendRequestSlice from "./friendRequests";
 import profileSlice from "./profile";
 import searchSlice from "./search";
 import canvasSlice from "./canvas";
+import chatSlice from "./chat";
 
 const rootReducer = combineReducers({
   users: userSlice,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   profile: profileSlice,
   search: searchSlice,
   canvas: canvasSlice,
+  chat: chatSlice,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
