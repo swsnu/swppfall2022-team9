@@ -22,6 +22,7 @@ from ..models import (
     Profile,
     Education,
     JobExperience,
+    QualityTagRequest,
 )
 
 
@@ -129,13 +130,13 @@ class LinkLinkProfileTestCase(TestCase):
             name="DevOps"
         )
         QualityTag.objects.create(
-            name="Sincere"
+            name="정직한"
         )
         QualityTag.objects.create(
-            name="Loyal"
+            name="유쾌한"
         )
         QualityTag.objects.create(
-            name="Intelligent"
+            name="논리적인"
         )
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
@@ -310,6 +311,7 @@ class LinkLinkProfileTestCase(TestCase):
         self.client.login(username="john", password="johnpassword")
         # Create Profile
         john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        james_linklinkuser = LinkLinkUser.objects.get(id=2)
         john_profile = Profile.objects.create(
             linklinkuser=john_linklinkuser,
             introduction="This is john",
@@ -318,8 +320,18 @@ class LinkLinkProfileTestCase(TestCase):
         )
         john_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
         john_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
-        john_profile.qualityTags.add(QualityTag.objects.get(name="Sincere"))
-        john_profile.qualityTags.add(QualityTag.objects.get(name="Loyal"))
+        QualityTagRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status=True,
+            name="정직한",
+        )
         Education.objects.create(
             profile=john_profile,
             school="SNU",
@@ -362,9 +374,15 @@ class LinkLinkProfileTestCase(TestCase):
         # Initialize Connection
         john_linklinkuser = LinkLinkUser.objects.get(pk=1)
         james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
         FriendRequest.objects.create(
             senderId=john_linklinkuser,
             getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=emily_linklinkuser,
             status="Accepted",
         )
         # Login John
@@ -378,8 +396,30 @@ class LinkLinkProfileTestCase(TestCase):
         )
         james_profile.skillTags.add(SkillTag.objects.get(name="Frontend"))
         james_profile.skillTags.add(SkillTag.objects.get(name="Backend"))
-        james_profile.qualityTags.add(QualityTag.objects.get(name="Sincere"))
-        james_profile.qualityTags.add(QualityTag.objects.get(name="Loyal"))
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="논리적인",
+        )
         Education.objects.create(
             profile=james_profile,
             school="SNU",
