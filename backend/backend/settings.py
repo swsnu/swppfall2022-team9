@@ -15,9 +15,9 @@ import cloudinary
 
 # Configure cloudinary
 cloudinary.config(
-  cloud_name = config("CLOUD_NAME"),
-  api_key = config("API_KEY"),
-  api_secret = config("API_SECRET")
+    cloud_name=config("CLOUD_NAME"),
+    api_key=config("API_KEY"),
+    api_secret=config("API_SECRET")
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,7 +33,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "localhost"]
+ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "localhost", "15.165.89.185"]
 
 
 # Application definition
