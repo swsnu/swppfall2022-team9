@@ -6,3 +6,6 @@ pylint-django
 coverage
 requests
 cloudinary
+channels
+channels_redis
+daphne
