@@ -10,6 +10,7 @@ export const usersStub: Array<User> = [
     password: "wotmdpw",
     lastname: "박",
     firstname: "재승",
+    imgUrl: ""
   },
   {
     id: 2,
@@ -81,6 +82,7 @@ export const profilePageUsersStub: Array<User> = [
     firstname: "software",
     lastname: "lover",
     password: "iluvswpp",
+    imgUrl: ""
   },
   {
     id: 2,
@@ -89,6 +91,7 @@ export const profilePageUsersStub: Array<User> = [
     password: "iluvswpp",
     firstname: "Alan",
     lastname: "Turing",
+    imgUrl: ""
   },
 ];
 

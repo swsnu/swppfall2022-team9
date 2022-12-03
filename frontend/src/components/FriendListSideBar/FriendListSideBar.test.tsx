@@ -26,6 +26,7 @@ const renderFriendListSideBar = () => {
             username: "jubby",
             firstname: "iluv",
             lastname: "swpp",
+            imgUrl: "",
           },
           friendList: [
             {

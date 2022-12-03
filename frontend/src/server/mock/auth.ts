@@ -52,7 +52,7 @@ export default function applyAuthApi(
       const users = db.get("users").value();
       await db
         .get("users")
-        .push({ ...req.body, id: users.length })
+        .push({ ...req.body, id: users.length, imgUrl: "" })
         .write();
       const registeredUser = db.get("users").find({ id: users.length }).value();
       return res.json(registeredUser);
