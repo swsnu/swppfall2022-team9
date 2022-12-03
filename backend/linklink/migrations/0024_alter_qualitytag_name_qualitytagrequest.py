@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('linklink', '0020_alter_friendrequest_unique_request_id'),
+        ('linklink', '0023_alter_qualitytag_name'),
     ]
 
     operations = [
