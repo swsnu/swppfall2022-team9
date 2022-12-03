@@ -8,8 +8,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669276138/uwwvmhpf2hgja3goadsd.jpg",
-            "skillTags": [1,2,3],
-            "qualityTags": [1,2,3,4]
+            "skillTags": [1,2,3]
         }
     },
     {
@@ -21,8 +20,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669881484/shinhye_park_qqrin4.jpg",
-            "skillTags": [2,3,4],
-            "qualityTags": [2,3,4,5]
+            "skillTags": [2,3,4]
         }
     },
     {
@@ -34,8 +32,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669881618/hyunjin_seo_o8r96j.jpg",
-            "skillTags": [3,4,5],
-            "qualityTags": [3,4,5,6]
+            "skillTags": [3,4,5]
         }
     },
     {
@@ -47,8 +44,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669881674/mina_shin_clifee.jpg",
-            "skillTags": [4,5,6],
-            "qualityTags": [4,5,6,7]
+            "skillTags": [4,5,6]
         }
     },
     {
@@ -60,8 +56,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669888080/yujin_ahn_t6dj5g.jpg",
-            "skillTags": [5,6,7],
-            "qualityTags": [5,6,7,8]
+            "skillTags": [5,6,7]
         }
     },
     {
@@ -73,8 +68,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669888124/wonyoung_jang_ghciz3.webp",
-            "skillTags": [6,7,8],
-            "qualityTags": [6,7,8,9]
+            "skillTags": [6,7,8]
         }
     },
     {
@@ -86,8 +80,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669889735/minju_kim_kjxldb.jpg",
-            "skillTags": [7,8,9],
-            "qualityTags": [7,8,9,10]
+            "skillTags": [7,8,9]
         }
     },
     {
@@ -99,8 +92,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669889891/minjung_lee_pgnw0e.jpg",
-            "skillTags": [8,9,10],
-            "qualityTags": [8,9,10,11]
+            "skillTags": [8,9,10]
         }
     },
     {
@@ -112,8 +104,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669889963/sohee_han_a5qhtx.jpg",
-            "skillTags": [9,10,11],
-            "qualityTags": [9,10,11,12]
+            "skillTags": [9,10,11]
         }
     },
     {
@@ -125,8 +116,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669890052/byunghun_lee_hrgjky.jpg",
-            "skillTags": [10,11,12],
-            "qualityTags": [10,11,12,13]
+            "skillTags": [10,11,12]
         }
     },
     {
@@ -138,8 +128,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669890191/jaesuk_yoo_glfakw.jpg",
-            "skillTags": [11,12,13],
-            "qualityTags": [11,12,13,14]
+            "skillTags": [11,12,13]
         }
     },
     {
@@ -151,8 +140,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669890242/myungsoo_park_budksv.jpg",
-            "skillTags": [12,13,1],
-            "qualityTags": [12,13,14,15]
+            "skillTags": [12,13,1]
         }
     },
     {
@@ -164,8 +152,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669890316/hyungdon_jung_tmgqhm.jpg",
-            "skillTags": [13,1,2],
-            "qualityTags": [13,14,15,16]
+            "skillTags": [13,1,2]
         }
     },
     {
@@ -177,8 +164,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669890353/haejin_yoo_soduk1.jpg",
-            "skillTags": [1,2,3],
-            "qualityTags": [14,15,16,17]
+            "skillTags": [1,2,3]
         }
     },
     {
@@ -190,8 +176,7 @@
             "createdAt": "2022-11-03T06:04:12.620Z",
             "updatedAt": "2022-11-03T06:04:12.620Z",
             "imgUrl": "https://res.cloudinary.com/duyixodey/image/upload/v1669890403/seungwon_cha_gstg2k.jpg",
-            "skillTags": [2,3,4],
-            "qualityTags": [15,16,17,18]
+            "skillTags": [2,3,4]
         }
     }
 ]
