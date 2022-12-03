@@ -231,7 +231,7 @@ class QualityTagRequest(models.Model):
     def __str__(self):
         return (
             f"{self.senderId}->{self.getterId}, "
-            f"name: {self.name}, status:{self.status}"
+            f"name:{self.name}, status:{self.status}"
         )
 
     def save(self, *args, **kwargs):

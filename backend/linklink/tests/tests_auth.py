@@ -21,6 +21,7 @@ from ..models import (
     Profile,
     Education,
     JobExperience,
+    QualityTagRequest,
 )
 
 
@@ -128,13 +129,13 @@ class LinkLinkAuthTestCase(TestCase):
             name="DevOps"
         )
         QualityTag.objects.create(
-            name="Sincere"
+            name="성실한"
         )
         QualityTag.objects.create(
-            name="Loyal"
+            name="정직한"
         )
         QualityTag.objects.create(
-            name="Intelligent"
+            name="논리적인"
         )
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
@@ -521,3 +522,14 @@ class LinkLinkAuthTestCase(TestCase):
             dateEnd="2022-02-28",
         )
         self.assertEqual(str(job_experience), "SWPP Lab-Intern")
+        quality_tag_request = QualityTagRequest.objects.create(
+            senderId=linklinkuser,
+            getterId=another_linklinkuser,
+            name="성실한",
+            status=True
+        )
+        self.assertEqual(
+            str(quality_tag_request),
+            "CenaJohn->GunnJames, name:성실한, status:True"
+        )
+

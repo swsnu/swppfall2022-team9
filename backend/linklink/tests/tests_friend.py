@@ -126,13 +126,13 @@ class LinkLinkFriendTestCase(TestCase):
             name="DevOps"
         )
         QualityTag.objects.create(
-            name="Sincere"
+            name="성실한"
         )
         QualityTag.objects.create(
-            name="Loyal"
+            name="정직한"
         )
         QualityTag.objects.create(
-            name="Intelligent"
+            name="논리적인"
         )
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
