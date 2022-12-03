@@ -1,4 +1,7 @@
-import { NavbarVerticalPadding, NavbarHeight } from "components/Navbar/styles";
+import {
+  NavbarVerticalPadding,
+  NavbarContentHeight,
+} from "components/Navbar/styles";
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { device } from "utils/cssMedia";
