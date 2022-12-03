@@ -13,6 +13,7 @@ from django.utils import timezone
 
 from .models import (
     FriendRequest,
+    QualityTagRequest,
 )
 
 #--------------------------------------------------------------------------
@@ -127,7 +128,12 @@ def profile_package_response_body(profile_found, is_me):
         response_dict["qualityTags"] = None # set as null
     else:
         response_dict["qualityTags"] = []
-        for quality_tag in profile_found.qualityTags.all():
+        linklinkuser = profile_found.linklinkuser
+        active_quality_tags = QualityTagRequest.objects.filter(
+            getterId=linklinkuser,
+            status=True,
+        )
+        for quality_tag in active_quality_tags:
             response_dict["qualityTags"].append(
                 {"name": quality_tag.name}
             )
