@@ -193,6 +193,7 @@ const ProfilePage: React.FC<Props> = () => {
           <S.ProfileActionButtonsContainer>
             {userId && currentUser && Number(userId) !== currentUser.id && (
               <S.ProfileActionButton
+                disabled={false}
                 backgroundColor={ThemeColor}
                 onClick={onClickChatWithUser}
               >
@@ -203,6 +204,7 @@ const ProfilePage: React.FC<Props> = () => {
               friendList.findIndex(element => element.id === Number(userId)) !==
               -1 ? (
                 <S.ProfileActionButton
+                  disabled={false}
                   backgroundColor={"#dedede"}
                   onClick={onClickEvaluateQuality}
                 >
@@ -232,6 +234,7 @@ const ProfilePage: React.FC<Props> = () => {
 
             {userId && currentUser && Number(userId) === currentUser.id && (
               <S.ProfileActionButton
+                disabled={false}
                 backgroundColor={ThemeColor}
                 onClick={onClickChangeProfile}
               >

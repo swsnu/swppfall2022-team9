@@ -42,7 +42,6 @@ const PreviewProfileSidebar: React.FC = () => {
         getFriendRequestBetweenUsers({ user1Id, user2Id }),
       ).unwrap();
       setExistingFriendRequest(friendRequest);
-      return friendRequest;
     } catch (err) {
       setExistingFriendRequest(null);
     }
@@ -62,7 +61,7 @@ const PreviewProfileSidebar: React.FC = () => {
       return "";
     }
     if (currentUser && id === currentUser.id) {
-      return currentUser.firstname + currentUser.lastname;
+      return currentUser.lastname + currentUser.firstname;
     }
     const oneChon = friendList.find(friend => friend.id === id);
     if (oneChon) {
@@ -168,7 +167,7 @@ const PreviewProfileSidebar: React.FC = () => {
             >
               {oneChonIdToExpandNetwork
                 ? "나의 네트워크로 돌아가기 "
-                : "친구 네트워크 확장하기"}
+                : "친구 네트워크 보기"}
             </S.ActionButton>
             <S.ActionButton
               disabled={false}
@@ -198,7 +197,9 @@ const PreviewProfileSidebar: React.FC = () => {
                   }
                 }}
               >
-                친구 추가하기
+                {existingFriendRequest?.status === FriendRequestStatus.PENDING
+                  ? "친구 요청 전송됨"
+                  : "친구 추가하기"}
               </S.ActionButton>
             </>
           )}

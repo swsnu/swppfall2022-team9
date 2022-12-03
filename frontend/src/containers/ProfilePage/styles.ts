@@ -1,7 +1,5 @@
-import {
-  NavbarVerticalPadding,
-  NavbarContentHeight,
-} from "components/Navbar/styles";
+import { NavbarVerticalPadding, NavbarHeight } from "components/Navbar/styles";
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { device } from "utils/cssMedia";
 
@@ -44,10 +42,13 @@ export const ProfileActionButtonsContainer = styled.div`
   justify-content: center;
 `;
 
-export const ProfileActionButton = styled.button<{ backgroundColor: string }>`
+export const ProfileActionButton = styled.button<{
+  backgroundColor: string;
+  disabled: boolean;
+}>`
   background: none;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
   border: none;
   margin: 5px 0;
   min-width: 130px;
@@ -57,8 +58,8 @@ export const ProfileActionButton = styled.button<{ backgroundColor: string }>`
   background-color: ${props => props.backgroundColor};
 `;
 
-export const ProfileImage = styled.div<{ imgUrl: string }>`
-  background-image: url(${props => props.imgUrl});
+export const ProfileImage = styled.div<{ imgUrl: string | undefined}>`
+  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   width: 160px;
   height: 160px;
   background-size: cover;
