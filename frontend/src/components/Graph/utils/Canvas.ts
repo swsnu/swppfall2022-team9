@@ -87,12 +87,18 @@ export default class Canvas extends EventDispatcher {
   }
 
   reset() {
-    this.currentUser = undefined;
+    this.scale(1, 1);
+    this.panZoom = {
+      scale: 1,
+      offset: { x: 0, y: 0 },
+    };
+
     this.centerNode = undefined;
     this.oneChonNodes = [];
     this.twoChonNodes = [];
     this.nodes = [];
     this.touchedNode = undefined;
+    this.isOneChonJourneyFinished = false;
     this.clear();
   }
 
