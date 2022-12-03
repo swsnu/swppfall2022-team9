@@ -2,7 +2,6 @@
 SkillTag, QualityTag related views module for linklink app
 """
 
-from django.db.models import Q
 from django.http import (
     JsonResponse
 )
