@@ -9,6 +9,7 @@ from linklink.views import (
     views_profile,
     views_friend_request,
     views_chat,
+    views_tags,
 )
 
 urlpatterns = [
@@ -41,4 +42,14 @@ urlpatterns = [
     ),
     path("chat/", views_chat.chat_list, name="chat_list"),
     path("chat/<str:chat_room_name>/", views_chat.chat, name="chat"),
+    path(
+        'skillTags/',
+        views_tags.skill_tag_list,
+        name='skill_tags_list'
+    ),
+    path(
+        'qualityTags/',
+        views_tags.quality_tag_list,
+        name='quality_tags_list'
+    ),
 ]
