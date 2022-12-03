@@ -85,6 +85,11 @@ const ChatRoomPage: React.FC<Props> = () => {
                 }
                 content={message.content}
                 timeStamp={message.timeStamp}
+                userId={
+                  message.senderId == currentUser.id
+                    ? undefined
+                    : currentChatRoomInfo.otherUserId
+                }
                 name={
                   message.senderId == currentUser.id
                     ? undefined
