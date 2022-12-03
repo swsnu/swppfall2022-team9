@@ -4,7 +4,6 @@ import ChonListItem from "./ChonListItem/ChonListItem";
 import { useAppSelector } from "store/hooks";
 import PreviewProfileSidebar from "containers/PreviewProfileSidebar/PreviewProfileSidebar";
 import { AiOutlinePlus } from "react-icons/ai";
-import copy from 'copy-to-clipboard';
 import useAlert from "hooks/useAlert";
 
 interface Props { }
