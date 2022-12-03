@@ -1,6 +1,6 @@
 import { Tag } from "./qualityTags.model";
 export const DEFAULT_IMAGE_URL =
-  "https://res.cloudinary.com/duyixodey/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1669277869/wluz4fcvznfi5jt1vxys.png";
+  "https://res.cloudinary.com/duyixodey/image/upload/ar_1:1,b_rgb:262c35,bo_1px_solid_rgb:000000,c_fill,g_auto,r_max,w_1000/v1669871693/wluz4fcvznfi5jt1vxys.png";
 
 export type SkillTag = Tag;
 
