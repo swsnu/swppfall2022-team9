@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import {
-  PostCreateProfileDto,
-  EditProfileDto,
-} from "server/dto/profile/profile.dto";
+import { EditProfileDto } from "server/dto/profile/profile.dto";
 import {
   EditProfileResDto,
   GetProfileResDto,
-  PostCreateProfileResDto,
 } from "server/dto/profile/profile.res.dto";
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
@@ -24,18 +20,6 @@ const initialState: ProfileState = {
   currentProfile: null,
   previewProfile: null,
 };
-
-export const postCreateProfile = createAsyncThunk<
-  PostCreateProfileResDto,
-  PostCreateProfileDto
->("profile/postCreateProfile", async profile => {
-  const body: PostCreateProfileDto = profile;
-  const response = await axios.post<PostCreateProfileResDto>(
-    "/api/profile/",
-    body,
-  );
-  return response.data;
-});
 
 export const getProfile = createAsyncThunk<GetProfileResDto, number>(
   "profile/getProfile",
@@ -55,11 +39,10 @@ export const getFriendProfileWithoutStateUpdate = createAsyncThunk<
 
 export const editMyProfile = createAsyncThunk<
   EditProfileResDto,
-  { profile: Profile; fieldsToUpdate: EditProfileDto }
->("profile/editMyProfile", async ({ profile, fieldsToUpdate }) => {
+  EditProfileDto
+>("profile/editMyProfile", async (profile: EditProfileDto) => {
   const response = await axios.put<EditProfileResDto>("/api/profile/", {
     ...profile,
-    ...fieldsToUpdate,
   });
   return response.data;
 });
