@@ -236,9 +236,7 @@ const SignUpPage: React.FC<Props> = () => {
               )}
             </S.InputContainer>
           </S.Label>
-          <S.Submit type="submit" onSubmit={onSubmit}>
-            가입하기
-          </S.Submit>
+          <S.Submit type="submit">가입하기</S.Submit>
         </S.Form>
       </S.FormContainer>
     </S.Container>

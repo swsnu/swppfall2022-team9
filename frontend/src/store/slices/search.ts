@@ -44,6 +44,11 @@ export const searchSlice = createSlice({
       state.searchWord = "";
       state.filteredFriendList = [];
     },
+    SearchModeOff: state => {
+      state.isSearchMode = false;
+      state.searchWord = "";
+      state.filteredFriendList = [];
+    },
     search: (state, actions: PayloadAction<SearchPayload>) => {
       state.searchWord = actions.payload.searchWord;
       state.filteredFriendList = filterFriendList(

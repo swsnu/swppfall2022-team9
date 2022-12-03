@@ -8,7 +8,7 @@ import ExperienceInput, {
   ExperienceType,
 } from "./ExperienceInput/ExperienceInput";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getProfile, postCreateProfile } from "store/slices/profile";
+import { editMyProfile, getProfile } from "store/slices/profile";
 import { useNavigate } from "react-router-dom";
 
 export const CreateProfileFormTitle = styled.div`
@@ -65,7 +65,7 @@ const ChangeProfilePage: React.FC = () => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      await dispatch(postCreateProfile(profile)).unwrap();
+      await dispatch(editMyProfile(profile)).unwrap();
       if (currentUser) {
         // DESC: we navigate to personal profile page after creation of profile
         navigate(`/profile/${currentUser.id}`);
