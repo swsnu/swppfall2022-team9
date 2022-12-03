@@ -18,7 +18,7 @@ export class UserNode {
 
   CONTRACT_SPEED = 0.8;
 
-  JOURNEY_SPEED = 0.02;
+  JOURNEY_SPEED = 0.06;
 
   id: number;
 
@@ -79,8 +79,9 @@ export class UserNode {
     this.gradient = gradientPoints(this.originCoord, destCoord);
     this.direction = directionPoints(this.originCoord, destCoord);
     this.journeySpeed = Math.abs(coord.x - destCoord.x)
-      ? Math.abs(coord.x - destCoord.x) * this.JOURNEY_SPEED
-      : Math.abs(coord.y - destCoord.y) * this.JOURNEY_SPEED;
+      ? (Math.abs(coord.x - destCoord.x) * this.JOURNEY_SPEED) / canvas.getDpr()
+      : (Math.abs(coord.y - destCoord.y) * this.JOURNEY_SPEED) /
+        canvas.getDpr();
   }
 
   expand() {

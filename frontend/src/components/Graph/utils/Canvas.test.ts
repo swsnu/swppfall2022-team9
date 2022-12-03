@@ -18,6 +18,8 @@ describe("Canvas", () => {
     canvas.setSize(800, 800);
     canvas.setCurrentUser(usersStub[0]);
     canvas.setFriendList(friendListStub);
+    canvas.setCenterNode(usersStub[0].id);
+    canvas.setFriendNodes(usersStub[0].id);
     canvas.nodes?.forEach(
       node => (node.journey = jest.fn().mockResolvedValue(true)),
     );
