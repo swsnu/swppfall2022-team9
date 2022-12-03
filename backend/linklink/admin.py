@@ -14,6 +14,7 @@ from .models import (
     JobExperience,
     ChatRoom,
     Message,
+    QualityTagRequest,
 )
 
 admin.site.register(LinkLinkUser)
@@ -26,3 +27,4 @@ admin.site.register(Education)
 admin.site.register(JobExperience)
 admin.site.register(ChatRoom)
 admin.site.register(Message)
+admin.site.register(QualityTagRequest)
