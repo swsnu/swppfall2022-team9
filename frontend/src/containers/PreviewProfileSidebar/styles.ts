@@ -1,3 +1,4 @@
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled, { css, keyframes } from "styled-components";
 
 export const appearFromRight = keyframes`
@@ -53,8 +54,7 @@ export const ProfileBasicInfo = styled.div`
 export const ProfileImageContainer = styled.div``;
 
 export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
-  background-image: ${props =>
-    props.imgUrl ? `url(${props.imgUrl})` : undefined};
+  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   width: 120px;
   height: 120px;
   background-size: cover;
@@ -120,9 +120,9 @@ export const ActionButton = styled.button<{
   border: none;
   font-weight: bold;
   background: none;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
   background-color: ${props => props.backgroundColor || "white"};
   :hover {
-    opacity: ${props => (!props.disabled ? 0.6 : 1)};
+    opacity: ${props => (props.disabled ? 0.6 : 0.5)};
   }
 `;
