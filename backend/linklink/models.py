@@ -10,22 +10,19 @@ from django.conf import settings
 from .tags_list import tags
 
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   LinkLinkUser Related Models
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
 
 class LinkLinkUser(models.Model):
     """
     LinkLinkUser model class that extends django's User
     """
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     friendRequestToken = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        unique=True
+        default=uuid.uuid4, editable=False, unique=True
     )
     emailValidated = models.BooleanField(default=False)
     email_unique = models.EmailField(unique=True)
@@ -38,15 +35,16 @@ class FriendRequest(models.Model):
     """
     FriendRequest model class with 3 status
     """
+
     senderId = models.ForeignKey(
         LinkLinkUser,
         on_delete=models.CASCADE,
-        related_name="senderIdFriendRequest", # avoid fields.E304 error
+        related_name="senderIdFriendRequest",  # avoid fields.E304 error
     )
     getterId = models.ForeignKey(
         LinkLinkUser,
         on_delete=models.CASCADE,
-        related_name="getterIdFriendRequest", # avoid fields.E304 error
+        related_name="getterIdFriendRequest",  # avoid fields.E304 error
     )
     FRIEND_REQUEST_STATUS = [
         ("Pending", "Pending"),
@@ -54,9 +52,7 @@ class FriendRequest(models.Model):
         ("Rejected", "Rejected"),
     ]
     status = models.CharField(
-        max_length=8,
-        choices=FRIEND_REQUEST_STATUS,
-        default="Pending"
+        max_length=8, choices=FRIEND_REQUEST_STATUS, default="Pending"
     )
     unique_request_id = models.CharField(
         max_length=100,
@@ -70,10 +66,12 @@ class FriendRequest(models.Model):
         return f"{self.senderId}->{self.getterId}, status:{self.status}"
 
     def save(self, *args, **kwargs):
-        self.unique_request_id = "-".join([
-            str(min(self.senderId.id, self.getterId.id)),
-            str(max(self.senderId.id, self.getterId.id))
-        ])
+        self.unique_request_id = "-".join(
+            [
+                str(min(self.senderId.id, self.getterId.id)),
+                str(max(self.senderId.id, self.getterId.id)),
+            ]
+        )
         # pylint: disable=super-with-arguments
         super(FriendRequest, self).save(*args, **kwargs)
 
@@ -82,46 +80,37 @@ class Verification(models.Model):
     """
     Verification model class
     """
+
     linklinkuser = models.ForeignKey(LinkLinkUser, on_delete=models.CASCADE)
-    token = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        unique=True
-    )
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     expiresAt = models.DateTimeField()
     PURPOSE = [
         ("Register", "Register"),
         ("Password", "Password"),
     ]
-    purpose = models.CharField(
-        max_length=8,
-        choices=PURPOSE,
-        default="Register"
-    )
+    purpose = models.CharField(max_length=8, choices=PURPOSE, default="Register")
 
     def __str__(self):
         return "_".join(
-            [
-                self.linklinkuser.user.username,
-                self.purpose,
-                str(self.token)
-            ]
+            [self.linklinkuser.user.username, self.purpose, str(self.token)]
         )
 
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   Profile Related Models
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
 
 class SkillTag(models.Model):
     """
     SkillTag model class
     """
+
     SKILL_TAGS_LIST = tags.SKILL_TAGS
     name = models.CharField(
         max_length=30,
-        choices=[ (skill_tag, skill_tag) for skill_tag in SKILL_TAGS_LIST],
+        choices=[(skill_tag, skill_tag) for skill_tag in SKILL_TAGS_LIST],
     )
 
     def __str__(self):
@@ -132,12 +121,11 @@ class QualityTag(models.Model):
     """
     QualityTag model class
     """
+
     QUALITY_TAGS_LIST = tags.QUALITY_TAGS
     name = models.CharField(
         max_length=30,
-        choices=[
-            (quality_tag, quality_tag) for quality_tag in QUALITY_TAGS_LIST
-        ],
+        choices=[(quality_tag, quality_tag) for quality_tag in QUALITY_TAGS_LIST],
     )
 
     def __str__(self):
@@ -148,9 +136,10 @@ class Profile(models.Model):
     """
     Profile model class
     """
+
     linklinkuser = models.OneToOneField(LinkLinkUser, on_delete=models.CASCADE)
     introduction = models.TextField()
-    imgUrl = models.CharField(max_length=400,blank=True)
+    imgUrl = models.CharField(max_length=400, blank=True)
     website = models.CharField(max_length=100, blank=True)
     skillTags = models.ManyToManyField(SkillTag)
     qualityTags = models.ManyToManyField(QualityTag)
@@ -166,6 +155,7 @@ class Education(models.Model):
     """
     Education model class
     """
+
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     school = models.CharField(max_length=50)
     major = models.CharField(max_length=50)
@@ -182,6 +172,7 @@ class JobExperience(models.Model):
     """
     JobExperience model class
     """
+
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     company = models.CharField(max_length=50)
     position = models.CharField(max_length=50)
@@ -194,6 +185,45 @@ class JobExperience(models.Model):
         return f"{self.company}-{self.position}"
 
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   Chat Related Models
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+
+class ChatRoom(models.Model):
+    name = models.CharField(max_length=128)
+    online = models.ManyToManyField(to=LinkLinkUser, blank=True)
+
+    def get_online_count(self):
+        return self.online.count()
+
+    def join(self, linkLinkUser):
+        self.online.add(linkLinkUser)
+        self.save()
+
+    def leave(self, linkLinkUser):
+        self.online.remove(linkLinkUser)
+        self.save()
+
+    def __str__(self):
+        return f"{self.name} ({self.get_online_count()})"
+
+
+class Message(models.Model):
+    chatRoom = models.ForeignKey(
+        ChatRoom, on_delete=models.CASCADE, related_name="messages"
+    )
+    sender = models.ForeignKey(
+        LinkLinkUser, on_delete=models.CASCADE, related_name="messages_from_me"
+    )
+    receiver = models.ForeignKey(
+        LinkLinkUser, on_delete=models.CASCADE, related_name="messages_to_me"
+    )
+    content = models.CharField(max_length=512)
+    timeStamp = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return (
+            f"From {self.sender} to {self.receiver}: {self.content} [{self.timeStamp}]"
+        )
