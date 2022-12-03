@@ -15,6 +15,7 @@ const ChatRoomPage: React.FC<Props> = () => {
   const currentChatRoomInfo = useAppSelector(
     state => state.chat.currentChatRoomInfo,
   );
+  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [messageLog, setMessageLog] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState<string>("");
   const messageRef = useRef<HTMLDivElement>(null);
@@ -25,9 +26,11 @@ const ChatRoomPage: React.FC<Props> = () => {
     {
       onOpen: () => {
         console.log("Connected!");
+        setIsConnected(true);
       },
       onClose: () => {
         console.log("Disconnected!");
+        setIsConnected(false);
       },
       onMessage: (e: MessageEvent) => {
         const data = JSON.parse(e.data);
@@ -109,11 +112,19 @@ const ChatRoomPage: React.FC<Props> = () => {
           type="text"
           autoFocus
           value={messageInput}
+          placeholder={
+            isConnected
+              ? "메시지를 입력하세요"
+              : "네트워크 연결이 종료되었습니다."
+          }
+          disabled={!isConnected}
           onChange={e => {
             setMessageInput(e.target.value);
           }}
         ></S.Input>
-        <S.Submit type="submit">전송</S.Submit>
+        <S.Submit type="submit" disabled={!isConnected}>
+          전송
+        </S.Submit>
       </S.Form>
     </S.Container>
   );
