@@ -31,10 +31,6 @@ export default class Canvas extends EventDispatcher {
 
   private EDGE_LENGTH = NODE_RADIUS;
 
-  private OPACITY_NOT_FILTERED = 10;
-
-  private OPACITY_EXPANDED = 30;
-
   private SHADOW_BLUR = 10;
 
   private SHADOW_OFFSET_X = 0.13;
@@ -351,7 +347,6 @@ export default class Canvas extends EventDispatcher {
 
   setCurrentUser(currentUser: User) {
     this.currentUser = currentUser;
-    this.setCenterNode(currentUser.id);
   }
 
   setFriendList(friendList: OneChonInfo[]) {
@@ -360,7 +355,6 @@ export default class Canvas extends EventDispatcher {
     this.nodes = [this.centerNode!];
     this.clear();
     this.friendList = friendList;
-    this.setFriendNodes(this.centerNode!.id);
   }
 
   setCenterNode(userId: number) {
@@ -477,7 +471,6 @@ export default class Canvas extends EventDispatcher {
         return oneChonNode;
       });
     }
-    this.startNodeJourney();
   }
 
   getWidth() {
@@ -532,6 +525,13 @@ export default class Canvas extends EventDispatcher {
     }
   }
 
+  drawInitialGraph(userId: number) {
+    this.reset();
+    this.setCenterNode(userId);
+    this.setFriendNodes(userId);
+    this.startNodeJourney();
+  }
+
   drawGraph() {
     if (this.centerNode) {
       if (this.isOneChonJourneyFinished) {
@@ -573,11 +573,6 @@ export default class Canvas extends EventDispatcher {
     );
     const centerX = screenPosition.x;
     const centerY = screenPosition.y;
-    const opacity = userNode.isNotFiltered
-      ? this.OPACITY_NOT_FILTERED
-      : userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE
-      ? this.OPACITY_EXPANDED
-      : 100;
 
     // User node clipped in circle
     ctx.save();
@@ -589,7 +584,7 @@ export default class Canvas extends EventDispatcher {
     ctx.closePath();
 
     // Draw user image
-    ctx.filter = `opacity(${opacity}%)`;
+    // ctx.filter = `opacity(${opacity * 100}%)`; -> not supported in Safari
     ctx.drawImage(
       userNode.imgElement,
       centerX - scaledRadius,
@@ -603,6 +598,16 @@ export default class Canvas extends EventDispatcher {
     ctx.save();
     // If hover
     if (userNode.radius === userNode.originalRadius * userNode.EXPAND_RATE) {
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, 0.8)`;
+      ctx.fill();
+      ctx.fillStyle = `rgba(252, 100, 255, 0.2)`;
+      ctx.fill();
+      ctx.closePath();
+      ctx.restore();
+      ctx.save();
+
       // Draw username text
       ctx.fillStyle = "black";
       ctx.font = `900 ${scaledRadius * 0.5}px monospace`;
