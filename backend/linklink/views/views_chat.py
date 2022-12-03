@@ -34,6 +34,7 @@ def chat_list(request):
                 )
 
                 otherUserId = userId2 if linklinkuser.id == userId1 else userId1
+                chat_room_dict["otherUserId"] = otherUserId
                 otherUser = LinkLinkUser.objects.get(id=otherUserId)
                 chat_room_dict["otherUserName"] = (
                     otherUser.user.last_name + otherUser.user.first_name
@@ -53,17 +54,29 @@ def chat(request, chat_room_name):
     if request.method == "GET":
         linklinkuser = request.user.linklinkuser
         userId1, userId2 = map(int, chat_room_name.split("__"))
-        chat_room = ChatRoom.objects.get(name=f"[{userId1}]__[{userId2}]")
-
+        try:
+            chat_room = ChatRoom.objects.get(name=f"[{userId1}]__[{userId2}]")
+        except ChatRoom.DoesNotExist:
+            return JsonResponse(
+                status=404,
+                data={
+                    "message": f"ChatRoom [{userId1}__[{userId2}] not found. Refresh may solve the race issue."
+                },
+            )
         response_dict = {}
         response_dict["chatRoomName"] = chat_room_name
         otherUserId = userId2 if linklinkuser.id == userId1 else userId1
         otherUser = LinkLinkUser.objects.get(id=otherUserId)
+        response_dict["otherUserId"] = otherUserId
         response_dict["otherUserName"] = (
             otherUser.user.last_name + otherUser.user.first_name
         )
         response_dict["otherUserImgUrl"] = otherUser.profile.imgUrl
-        lastMessage = chat_room.messages.all().order_by("-timeStamp")[0]
-        response_dict["lastMessage"] = lastMessage.content
-        response_dict["lastTimeStamp"] = lastMessage.timeStamp
+        if len(chat_room.messages.all()) > 0:
+            lastMessage = chat_room.messages.all().order_by("-timeStamp")[0]
+            response_dict["lastMessage"] = lastMessage.content
+            response_dict["lastTimeStamp"] = lastMessage.timeStamp
+        else:
+            response_dict["lastMessage"] = ""
+            response_dict["lastTimeStamp"] = ""
         return JsonResponse(status=200, data=response_dict)

@@ -1,6 +1,3 @@
-import json
-
-# from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.db import database_sync_to_async
 from linklink.models import ChatRoom, Message, LinkLinkUser
@@ -15,14 +12,13 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         chat_room_name = self.scope["url_route"]["kwargs"]["chat_room_name"]
-
         self.chat_room_name = chat_room_name
 
         # Join room group
         await self.channel_layer.group_add(self.chat_room_name, self.channel_name)
         await self.accept()
-
         self.chat_room = await self.get_chatroom()
+
         # Send last 50 messages
         last_50_messages = await self.get_last_50_messages()
         await self.send_json({"type": "last_50_messages", "messages": last_50_messages})
@@ -38,8 +34,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         chat_room, created = ChatRoom.objects.get_or_create(
             name=f"[{user_ids[0]}]__[{user_ids[1]}]"
         )
-        if created:
-            print(f"room {self.chat_room.name} has been created")
         return chat_room
 
     @database_sync_to_async
