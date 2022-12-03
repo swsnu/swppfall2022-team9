@@ -9,6 +9,7 @@ export const Container = styled.div`
 
   background-color: ${themeBgColor};
   position: relative;
+  overflow: auto;
 `;
 
 export const Header = styled.header`

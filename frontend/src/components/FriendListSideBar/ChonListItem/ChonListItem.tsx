@@ -12,7 +12,6 @@ const ChonListItem: React.FC<{
   twoChonList: TwoChonInfo[] | null;
   isTwoChon: boolean;
 }> = ({ userId, firstname, lastname, imgUrl, twoChonList, isTwoChon }) => {
-  // const size = Math.floor(Math.random() * 100) + 50;
   const [isClicked, setClicked] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -24,7 +23,7 @@ const ChonListItem: React.FC<{
     navigate(`/profile/${userId}`);
   };
   return (
-    <>
+    <div>
       <S.Container indent={isTwoChon}>
         <S.UserRowContainer role="NodeClick" onClick={onNodeClick}>
           <S.OneChonNode url={imgUrl}></S.OneChonNode>
@@ -39,7 +38,7 @@ const ChonListItem: React.FC<{
           </S.ExpandTwoChonButton>
         )}
       </S.Container>
-      {isClicked && !!twoChonList && (
+      {isClicked && twoChonList && (
         <div style={{ display: "flex", flexDirection: "column" }}>
           {twoChonList.map(twoChon => {
             return (
@@ -56,7 +55,7 @@ const ChonListItem: React.FC<{
           })}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -17,8 +17,10 @@ export const Container = styled.div`
 
 export const LogoContainer = styled.div`
   display: flex;
+  flex: 1 0;
   padding: 2px 0;
   cursor: pointer;
+  height: 100%;
 `;
 
 export const NavButtons = styled.div`
@@ -27,6 +29,7 @@ export const NavButtons = styled.div`
   border: none;
   margin: 0;
   padding: 0 5px;
+  width: 22px;
   position: relative;
 `;
 

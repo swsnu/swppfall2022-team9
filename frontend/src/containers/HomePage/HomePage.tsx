@@ -2,6 +2,8 @@ import FriendListSideBar from "components/FriendListSideBar/FriendListSideBar";
 import Graph from "components/Graph/Graph";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { profileActions } from "store/slices/profile";
+import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
 import * as S from "./styles";
 
@@ -14,6 +16,8 @@ const HomePage: React.FC<Props> = () => {
   useEffect(() => {
     if (currentUser) {
       dispatch(getFriendList());
+      dispatch(searchActions.SearchModeOff());
+      dispatch(profileActions.setPreviewProfile(null));
     }
   }, [currentUser]);
 

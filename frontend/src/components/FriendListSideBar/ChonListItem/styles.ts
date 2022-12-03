@@ -1,3 +1,4 @@
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { themeBgColor } from "../common.styles";
 
@@ -30,7 +31,7 @@ export const OneChonNode = styled.div<{ url: string }>`
   display: inline-block;
   width: 50px;
   height: 50px;
-  background-image: url(${props => props.url});
+  background-image: url(${props => props.url === "" ? DEFAULT_IMAGE_URL : props.url});
   background-position: 50%;
   background-size: cover;
   border-radius: 50%;
