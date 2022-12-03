@@ -80,7 +80,7 @@ const Navbar: React.FC<Props> = () => {
   return (
     <S.Container>
       <S.LogoContainer onClick={onClickLogo} role="logo">
-        <img src={logo} alt="logo" />
+        <img src={logo} alt="logo" style={{ width: "auto", height: "100%" }} />
       </S.LogoContainer>
       <S.NavButtonsContainer>
         <S.NavButtons>
