@@ -3,6 +3,7 @@ SkillTag, QualityTag test module for linklink app
 """
 
 from datetime import datetime, timedelta
+import inspect
 import json
 import os
 
@@ -14,8 +15,10 @@ from django.utils import timezone
 from ..models import (
     LinkLinkUser,
     Verification,
+    FriendRequest,
     SkillTag,
     QualityTag,
+    QualityTagRequest,
 )
 
 
@@ -123,13 +126,16 @@ class LinkLinkTagsTestCase(TestCase):
             name="DevOps"
         )
         QualityTag.objects.create(
-            name="Sincere"
+            name="성실한"
         )
         QualityTag.objects.create(
-            name="Loyal"
+            name="정직한"
         )
         QualityTag.objects.create(
-            name="Intelligent"
+            name="유쾌한"
+        )
+        QualityTag.objects.create(
+            name="논리적인"
         )
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
@@ -141,7 +147,7 @@ class LinkLinkTagsTestCase(TestCase):
 #   SkillTag, QualityTag related Related Tests
 #--------------------------------------------------------------------------
 
-    def test_get_skill_tags_success(self):
+    def test_get_all_skill_tags_success(self):
         target_url = "/api/skillTags/"
         # Login John
         self.client.login(username="john", password="johnpassword")
@@ -153,7 +159,7 @@ class LinkLinkTagsTestCase(TestCase):
         self.assertEqual(all_skill_tags, ["Frontend", "Backend", "DevOps"])
 
 
-    def test_get_quality_tags_success(self):
+    def test_get_all_quality_tags_success(self):
         target_url = "/api/qualityTags/"
         # Login John
         self.client.login(username="john", password="johnpassword")
@@ -162,4 +168,584 @@ class LinkLinkTagsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         response_dict = json.loads(response.content.decode())
         all_quality_tags = response_dict["qualityTags"]
-        self.assertEqual(all_quality_tags, ["Sincere", "Loyal", "Intelligent"])
+        self.assertEqual(all_quality_tags, ["성실한", "정직한", "유쾌한", "논리적인"])
+
+
+    def test_get_quality_tag_success(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "../test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+
+
+    def test_404_get_quality_tag(self):
+        target_url = "/api/qualityTags/1000/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_not_onechon_get_quality_tag(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 403)
+
+
+    def test_my_quality_tag_get_quality_tag(self):
+        # not allowed to get my profile's QualityTags
+        target_url = "/api/qualityTags/1/"
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 403)
+
+
+    def test_put_minus_quality_tag_success(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # PUT
+        request_body = {
+            "qualityTags": [
+                    {"name": "성실한"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "../test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # Check DB
+        related_quality_tag_requests = QualityTagRequest.objects.filter(
+            senderId=1,
+            getterId=2,
+            status=True,
+        )
+        self.assertEqual(len(related_quality_tag_requests), 1)
+        existing_true_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="성실한",
+        )
+        self.assertTrue(existing_true_quality_tag_request.status)
+        existing_false_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="정직한",
+        )
+        self.assertFalse(existing_false_quality_tag_request.status)
+
+
+    def test_put_add_quality_tag_success(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # PUT
+        request_body = {
+            "qualityTags": [
+                {"name": "정직한"},
+                {"name": "성실한"},
+                {"name": "논리적인"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "../test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # Check DB
+        related_quality_tag_requests = QualityTagRequest.objects.filter(
+            senderId=1,
+            getterId=2,
+            status=True,
+        )
+        self.assertEqual(len(related_quality_tag_requests), 3)
+        new_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="논리적인",
+        )
+        self.assertTrue(new_quality_tag_request.status)
+        existing_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="성실한",
+        )
+        self.assertTrue(existing_quality_tag_request.status)
+
+
+    def test_put_both_quality_tag_success(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # PUT
+        request_body = {
+            "qualityTags": [
+                    {"name": "정직한"},
+                    {"name": "논리적인"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "../test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # Check DB
+        related_quality_tag_requests = QualityTagRequest.objects.filter(
+            senderId=1,
+            getterId=2,
+            status=True,
+        )
+        self.assertEqual(len(related_quality_tag_requests), 2)
+        new_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="논리적인",
+        )
+        self.assertTrue(new_quality_tag_request.status)
+        existing_true_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="정직한",
+        )
+        self.assertTrue(existing_true_quality_tag_request.status)
+        existing_false_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="성실한",
+        )
+        self.assertFalse(existing_false_quality_tag_request.status)
+
+
+    def test_put_clear_quality_tag_success(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # PUT
+        request_body = {
+            "qualityTags": [
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "../test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # Check DB
+        related_quality_tag_requests = QualityTagRequest.objects.filter(
+            senderId=1,
+            getterId=2,
+            status=True,
+        )
+        self.assertEqual(len(related_quality_tag_requests), 0)
+        existing_false_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="성실한",
+        )
+        self.assertFalse(existing_false_quality_tag_request.status)
+
+
+    def test_put_new_quality_tag_success(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        # PUT
+        request_body = {
+            "qualityTags": [
+                {"name": "정직한"},
+                {"name": "성실한"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        answer_json_path = os.path.join(
+            self.linklink_path,
+            "../test_answers",
+            inspect.stack()[0][3] + ".json" # current method name
+        )
+        with open(answer_json_path, "r", encoding="utf") as json_file:
+            expected_json = json.load(json_file)
+        self.assertEqual( # Expected response assert
+            json.loads(response.content.decode()),
+            expected_json
+        )
+        # Check DB
+        related_quality_tag_requests = QualityTagRequest.objects.filter(
+            senderId=1,
+            getterId=2,
+            status=True,
+        )
+        self.assertEqual(len(related_quality_tag_requests), 2)
+        existing_true_quality_tag_request = QualityTagRequest.objects.get(
+            senderId=1,
+            getterId=2,
+            name="성실한",
+        )
+        self.assertTrue(existing_true_quality_tag_request.status)
+
+
+    def test_put_invalid_quality_tag(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # PUT
+        request_body = {
+            "qualityTags": [
+                {"name": "정직한"},
+                {"name": "성실한"},
+                {"name": "하이"} # invalid qualityTag
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+        error_message_dict = {
+            "message":
+            "Request includes invalid qualityTag: 하이"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_404_put_quality_tag(self):
+        target_url = "/api/qualityTags/1000/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        request_body = {
+            "qualityTags": [
+                {"name": "정직한"},
+                {"name": "성실한"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_not_onechon_put_quality_tag(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        request_body = {
+            "qualityTags": [
+                {"name": "정직한"},
+                {"name": "성실한"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+
+
+    def test_my_quality_tag_put_quality_tag(self):
+        # not allowed to put my profile
+        target_url = "/api/qualityTags/1/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        request_body = {
+            "qualityTags": [
+                {"name": "정직한"},
+                {"name": "성실한"},
+            ]
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+
+
+    def test_400_put_quality_tag(self):
+        target_url = "/api/qualityTags/2/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # Init QualityTagRequest
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=james_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="성실한",
+        )
+        QualityTagRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status=True,
+            name="정직한",
+        )
+        # PUT
+        request_body = {
+            # no qualityTags
+        }
+        response = self.client.put(
+            target_url,
+            request_body,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
