@@ -44,29 +44,29 @@ const Graph: React.FC<Props> = () => {
     if (canvas) {
       if (currentUser) {
         canvas.setCurrentUser(currentUser);
-        if (isSearchMode && searchWord !== "") {
-          canvas.setFriendList(filteredFriendList);
+        canvas.setFriendList(friendList);
+        // if (isSearchMode && searchWord !== "") {
+        //   canvas.setFriendList(filteredFriendList);
+        // } else {
+        //   canvas.setFriendList(friendList);
+        // }
+        if (oneChonIdToExpandNetwork) {
+          canvas.drawInitialGraph(oneChonIdToExpandNetwork);
         } else {
-          canvas.setFriendList(friendList);
+          canvas.drawInitialGraph(currentUser.id);
         }
-        canvas.render();
       } else {
         canvas.reset();
       }
     }
-  }, [currentUser, friendList, isSearchMode, filteredFriendList, canvas]);
-
-  useEffect(() => {
-    if (canvas && currentUser) {
-      if (oneChonIdToExpandNetwork) {
-        canvas.setCenterNode(oneChonIdToExpandNetwork);
-        canvas.setFriendNodes(oneChonIdToExpandNetwork);
-      } else {
-        canvas.setCenterNode(currentUser.id);
-        canvas.setFriendNodes(currentUser.id);
-      }
-    }
-  }, [canvas, oneChonIdToExpandNetwork, currentUser]);
+  }, [
+    currentUser,
+    friendList,
+    // isSearchMode,
+    // filteredFriendList,
+    oneChonIdToExpandNetwork,
+    canvas,
+  ]);
 
   return (
     <S.CanvasContainer ref={divRef}>
@@ -74,6 +74,7 @@ const Graph: React.FC<Props> = () => {
         <S.ResetCanvasButton
           onClick={() => {
             dispatch(canvasActions.setOneChonIdToExpandNetwork(null));
+            dispatch(profileActions.setPreviewProfile(null));
           }}
         >
           <BiLeftArrowAlt size={22} />
