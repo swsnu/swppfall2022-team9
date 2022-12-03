@@ -174,3 +174,19 @@ def is_within_twochon(linklinkuser1, linklinkuser2):
         )
         within_twochon_list.extend(twochon_list)
     return linklinkuser2 in within_twochon_list
+
+
+def is_onechon(linklinkuser1, linklinkuser2):
+    """
+    Helper function to determine whether two users are onechon.
+    """
+    # Get all Accepted FriendRequest
+    all_accepted_friend_requests = FriendRequest.objects.filter(
+        status="Accepted"
+    )
+    # Get onechon of linklinkuser1
+    onechon_list = get_onechon_linklinkuser_list(
+        all_accepted_friend_requests,
+        linklinkuser1
+    )
+    return linklinkuser2 in onechon_list
