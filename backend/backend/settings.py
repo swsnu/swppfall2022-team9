@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import os
 from pathlib import Path
 from decouple import config
 import cloudinary
@@ -59,6 +60,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "backend.urls"
+
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
 TEMPLATES = [
     {
