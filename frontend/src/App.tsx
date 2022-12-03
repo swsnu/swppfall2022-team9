@@ -16,6 +16,8 @@ import ProfilePage from "containers/ProfilePage/ProfilePage";
 import { useEffect } from "react";
 import { useAppDispatch } from "store/hooks";
 import { getSessionCookie } from "store/slices/users";
+import ChatRoomListPage from "containers/ChatRoomListPage/ChatRoomListPage";
+import ChatRoomPage from "containers/ChatRoomPage/ChatRoomPage";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -54,6 +56,8 @@ const App = () => {
             <Route path="password/:token" element={<ChangePasswordPage />} />
           </Route>
           <Route path="/verify/:token" element={<VerifyRegisterPage />} />
+          <Route path="/chat/" element={<ChatRoomListPage />} />
+          <Route path="/chat/:chatRoomName/" element={<ChatRoomPage />} />
           <Route
             path="*"
             element={

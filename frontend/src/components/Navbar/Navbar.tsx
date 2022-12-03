@@ -60,7 +60,7 @@ const Navbar: React.FC<Props> = () => {
   };
 
   const onClickChat = () => {
-    navigate("/chat");
+    navigate("/chat/");
   };
 
   const onClickSearch = async () => {

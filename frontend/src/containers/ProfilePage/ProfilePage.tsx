@@ -66,7 +66,10 @@ const ProfilePage: React.FC<Props> = () => {
   };
 
   const onClickChatWithUser = () => {
-    navigate(`/chat/${userId}`);
+    const user1Id = Math.min(Number(userId), currentUser!.id);
+    const user2Id = Math.max(Number(userId), currentUser!.id);
+    const chatRoomName = `${user1Id}__${user2Id}`;
+    navigate(`/chat/${chatRoomName}`);
   };
 
   const onClickEvaluateQuality = () => {
@@ -174,7 +177,7 @@ const ProfilePage: React.FC<Props> = () => {
       <S.InfoContainer>
         <S.ProfileHeader>
           <S.ProfileImageContainer>
-            <S.ProfileImage imgUrl={profile?.imgUrl ?? ""} />
+            <S.ProfileImage imgUrl={profile?.imgUrl} />
           </S.ProfileImageContainer>
           <S.BasicInfoContainer>
             <S.ProfileName>{profileUserName}</S.ProfileName>
