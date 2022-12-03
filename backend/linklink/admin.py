@@ -12,6 +12,8 @@ from .models import (
     QualityTag,
     Education,
     JobExperience,
+    ChatRoom,
+    Message,
 )
 
 admin.site.register(LinkLinkUser)
@@ -22,3 +24,5 @@ admin.site.register(SkillTag)
 admin.site.register(QualityTag)
 admin.site.register(Education)
 admin.site.register(JobExperience)
+admin.site.register(ChatRoom)
+admin.site.register(Message)
