@@ -7,6 +7,7 @@ import {
 import {
   friendRequestActions,
   FriendRequestState,
+  getFriendRequestBetweenUsers,
   getFriendRequests,
   postFriendRequest,
   putFriendRequest,
@@ -56,7 +57,31 @@ describe("friend request reducer", () => {
         ],
       },
     });
+    await store.dispatch(getFriendRequests({ user1Id: 1, user2Id: 2 }));
+  });
+
+  it("tests get friend requests without query", async () => {
+    axios.get = jest.fn().mockResolvedValue({
+      data: {
+        friendRequests: [
+          {
+            ...friendRequestsStub[0],
+            senderName: "test",
+            senderImgUrl: "test",
+          },
+        ],
+      },
+    });
     await store.dispatch(getFriendRequests());
+  });
+
+  it("tests get friend requests between users", async () => {
+    axios.get = jest.fn().mockResolvedValue({
+      data: friendRequestsStub[0],
+    });
+    await store.dispatch(
+      getFriendRequestBetweenUsers({ user1Id: 1, user2Id: 2 }),
+    );
   });
 
   it("tests post friend request", async () => {

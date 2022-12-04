@@ -5,6 +5,7 @@ import reducer, {
   ProfileState,
   getFriendProfileWithoutStateUpdate,
   getProfile,
+  profileActions,
 } from "./profile";
 import { profileStub } from "server/stubs/profiles.stub";
 import axios from "axios";
@@ -51,5 +52,9 @@ describe("profile reducer", () => {
         ...profileStub,
       }),
     );
+  });
+
+  it("tests setPreviewProfile", () => {
+    store.dispatch(profileActions.setPreviewProfile(null));
   });
 });
