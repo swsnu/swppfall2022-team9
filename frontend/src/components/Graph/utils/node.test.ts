@@ -67,7 +67,7 @@ describe("Node", () => {
       document.createElement("canvas"),
     );
     const canvas = new Canvas(canvasElement);
-    const userNode = new UserNode(
+    new UserNode(
       1,
       "name",
       { x: 0, y: 0 },
