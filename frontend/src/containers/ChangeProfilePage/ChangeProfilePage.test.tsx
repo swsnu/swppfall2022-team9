@@ -18,17 +18,12 @@ jest.mock("react-redux", () => ({
 }));
 
 const mockNavigate = jest.fn();
-const callBack = jest.fn();
 
 jest.mock("react-router", () => ({
   // 그래야 NavLink 같은 걸 쓸 수 있다.
   ...jest.requireActual("react-router"),
   useNavigate: () => mockNavigate,
 }));
-
-const mockFileUpload = jest.fn().mockImplementation(file => {
-  callBack(file);
-});
 
 // jest.mock("use-file-upload", () => ({
 //   ...jest.requireActual("use-file-upload"),

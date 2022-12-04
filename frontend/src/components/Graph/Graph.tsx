@@ -38,8 +38,8 @@ const Graph: React.FC<Props> = () => {
   const currentUser = users.currentUser;
   const friendList = users.friendList;
   const isSearchMode = search.isSearchMode;
-  const searchWord = search.searchWord;
-  const filteredFriendList = search.filteredFriendList;
+  // const searchWord = search.searchWord;
+  // const filteredFriendList = search.filteredFriendList;
   useEffect(() => {
     if (canvas) {
       if (currentUser) {
