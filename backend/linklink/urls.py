@@ -40,21 +40,26 @@ urlpatterns = [
         views_friend_request.friend_request_respond,
         name="friend_request_respond",
     ),
+    path(
+        "friendRequestToken",
+        views_friend_request.friend_request_token_send,
+        name="friend_request_token_send",
+    ),
     path("chat/", views_chat.chat_list, name="chat_list"),
     path("chat/<str:chat_room_name>/", views_chat.chat, name="chat"),
     path(
-        'skillTags/',
+        "skillTags/",
         views_tags.skill_tag_list,
-        name='skill_tags_list'
+        name="skill_tags_list"
     ),
     path(
-        'qualityTags/',
+        "qualityTags/",
         views_tags.quality_tag_list,
-        name='quality_tags_list'
+        name="quality_tags_list"
     ),
     path(
-        'qualityTags/<int:user_id>/',
+        "qualityTags/<int:user_id>/",
         views_tags.quality_tag,
-        name='quality_tag',
+        name="quality_tag",
     ),
 ]
