@@ -1,7 +1,7 @@
 import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
 import { ChatRoomListPagePaddingTop } from "containers/ChatRoomListPage/styles";
 import styled from "styled-components";
-import { CommonGreyColor, ThemeColor } from "styles/common.styles";
+import { ThemeColor } from "styles/common.styles";
 import { device } from "utils/cssMedia";
 
 export const Container = styled.div`
