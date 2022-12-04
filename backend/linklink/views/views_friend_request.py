@@ -5,8 +5,10 @@ FriendRequest related views module for linklink app
 import json
 from json.decoder import JSONDecodeError
 
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import (
+    HttpResponse,
     HttpResponseBadRequest,
     JsonResponse
 )
@@ -289,3 +291,41 @@ def friend_request_respond(request, friend_request_id):
                 "status": friend_request_found.status,
             }
         )
+
+
+@allowed_method_or_405(["PUT"])
+@logged_in_or_401
+def friend_request_token_send(request):
+    if request.method == "PUT": # pragma: no branch
+        # Check whether query params are requested
+        token = request.GET.get("token", None)
+        if token is not None:
+            try:
+                linklinkuser_found = LinkLinkUser.objects.get(
+                    friendRequestToken=token
+                )
+            except (LinkLinkUser.DoesNotExist, ValidationError):
+                return JsonResponse(
+                    status=404,
+                    data={"message": f"user not found for token: {token}"}
+                )
+            # If linklinkuser is found with token and it is not self,
+            # create Pending FriendRequest
+            # with sender=token owner, getter=current user
+            if linklinkuser_found.id == request.user.linklinkuser.id:
+                return JsonResponse(
+                    status=403,
+                    data={"message": "cannot send FriendRequest to self"}
+                )
+            else:
+                FriendRequest.objects.create(
+                    senderId=linklinkuser_found,
+                    getterId=request.user.linklinkuser,
+                    status="Pending",
+                )
+            return HttpResponse(status=200)
+        else:
+            return JsonResponse(
+                status=400,
+                data={"message": "token query not found in url"}
+            )

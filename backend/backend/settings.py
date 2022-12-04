@@ -66,7 +66,7 @@ ROOT_URLCONF = "backend.urls"
 
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+STATIC_ROOT = os.path.join(ROOT_DIR, ".static_root")
 
 TEMPLATES = [
     {

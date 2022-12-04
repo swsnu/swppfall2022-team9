@@ -34,8 +34,11 @@ ignore-patterns=manage.py,
                 0018_friendrequest_unique_request_id.py,
                 0019_alter_friendrequest_unique_request_id.py,
                 0020_alter_friendrequest_unique_request_id.py,
-                0021_alter_qualitytag_name_qualitytagrequest.py,
-                0022_remove_profile_qualitytags.py,
+                0021_chatroom_message.py,
+                0022_rename_timestamp_message_timestamp_and_more.py,
+                0023_alter_qualitytag_name.py,
+                0024_alter_qualitytag_name_qualitytagrequest.py,
+                0025_remove_profile_qualitytags.py,
 
 
 # Pickle collected data for later comparisons.
