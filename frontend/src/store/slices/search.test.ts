@@ -5,7 +5,7 @@ import {
   ThunkMiddleware,
 } from "@reduxjs/toolkit";
 import { friendListStub } from "server/stubs/users.stub";
-import reducer, {
+import searchReducer, {
   searchActions,
   filterFriendList,
   SearchState,
@@ -26,7 +26,7 @@ describe("profile reducer", () => {
   >;
   beforeAll(() => {
     store = configureStore({
-      reducer: { search: reducer },
+      reducer: { search: searchReducer },
     });
   });
   afterEach(() => {
@@ -51,6 +51,13 @@ describe("profile reducer", () => {
     store.dispatch(searchActions.toggleSearchMode());
     expect(store.getState().search.filteredFriendList).toEqual([]);
     expect(store.getState().search.isSearchMode).toEqual(true);
+    expect(store.getState().search.searchWord).toEqual("");
+  });
+
+  it("tests SearchModeOff", async () => {
+    store.dispatch(searchActions.SearchModeOff());
+    expect(store.getState().search.filteredFriendList).toEqual([]);
+    expect(store.getState().search.isSearchMode).toEqual(false);
     expect(store.getState().search.searchWord).toEqual("");
   });
 });
