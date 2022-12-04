@@ -299,33 +299,50 @@ def friend_request_token_send(request):
     if request.method == "PUT": # pragma: no branch
         # Check whether query params are requested
         token = request.GET.get("token", None)
-        if token is not None:
-            try:
-                linklinkuser_found = LinkLinkUser.objects.get(
-                    friendRequestToken=token
-                )
-            except (LinkLinkUser.DoesNotExist, ValidationError):
-                return JsonResponse(
-                    status=404,
-                    data={"message": f"user not found for token: {token}"}
-                )
-            # If linklinkuser is found with token and it is not self,
-            # create Pending FriendRequest
-            # with sender=token owner, getter=current user
-            if linklinkuser_found.id == request.user.linklinkuser.id:
-                return JsonResponse(
-                    status=403,
-                    data={"message": "cannot send FriendRequest to self"}
-                )
-            else:
-                FriendRequest.objects.create(
-                    senderId=linklinkuser_found,
-                    getterId=request.user.linklinkuser,
-                    status="Pending",
-                )
-            return HttpResponse(status=200)
-        else:
+        current_linklinkuser = request.user.linklinkuser
+        if token is None: # pragma: no branch
             return JsonResponse(
                 status=400,
                 data={"message": "token query not found in url"}
             )
+        try:
+            linklinkuser_found = LinkLinkUser.objects.get(
+                friendRequestToken=token
+            )
+        except (LinkLinkUser.DoesNotExist, ValidationError):
+            return JsonResponse(
+                status=404,
+                data={"message": f"user not found for token: {token}"}
+            )
+        # If linklinkuser is found with token and it is not self,
+        # create Pending FriendRequest
+        # with sender=token owner, getter=current user
+        if linklinkuser_found.id == current_linklinkuser.id:
+            return JsonResponse(
+                status=403,
+                data={"message": "cannot send FriendRequest to self"}
+            )
+        # Determine whether FriendRequest already exists
+        min_id=min(current_linklinkuser.id, linklinkuser_found.id)
+        max_id=max(current_linklinkuser.id, linklinkuser_found.id)
+        if FriendRequest.objects.filter(
+            unique_request_id=f"{min_id}-{max_id}").exists():
+            # FriendRequest already exists between the two users
+            # In this case, depending on current status, change state
+            # Accepted -> Accepted (should remain as Accepted)
+            # Pending -> Pending (should remain as Pending, set sender&getter)
+            # Rejected -> Pending (should now be Pending, set sender&getter)
+            friend_request_found = FriendRequest.objects.get(
+                unique_request_id=f"{min_id}-{max_id}")
+            if friend_request_found.status in ("Rejected", "Pending"):
+                friend_request_found.status = "Pending"
+                friend_request_found.senderId = linklinkuser_found
+                friend_request_found.getterId = current_linklinkuser
+                friend_request_found.save()
+        else:
+            FriendRequest.objects.create(
+                senderId=linklinkuser_found,
+                getterId=current_linklinkuser,
+                status="Pending",
+            )
+        return HttpResponse(status=200)
