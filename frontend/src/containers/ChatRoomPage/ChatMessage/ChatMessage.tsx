@@ -7,9 +7,9 @@ interface Props {
   isConsecutive: boolean;
   content: string;
   timeStamp: string;
-  imgUrl: string | undefined;
-  name: string | undefined;
-  userId: number | undefined;
+  imgUrl?: string;
+  name?: string;
+  userId?: number;
 }
 
 const ChatMessage = forwardRef<HTMLDivElement, Props>(
@@ -33,6 +33,7 @@ const ChatMessage = forwardRef<HTMLDivElement, Props>(
         <S.Image
           imgUrl={isConsecutive ? undefined : imgUrl}
           onClick={handleClick}
+          role="img"
         />
         <S.NameMessageContainer>
           {!isConsecutive && <S.Name>{name}</S.Name>}

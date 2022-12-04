@@ -15,7 +15,7 @@ const ChatRoomPage: React.FC<Props> = () => {
   const currentChatRoomInfo = useAppSelector(
     state => state.chat.currentChatRoomInfo,
   );
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(true);
   const [messageLog, setMessageLog] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState<string>("");
   const messageRef = useRef<HTMLDivElement>(null);
