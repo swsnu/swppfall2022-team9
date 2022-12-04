@@ -1,4 +1,4 @@
-import { chatRoomInfoListStub, messageLogStub } from "server/stubs/chat.stub";
+import { messageLogStub } from "server/stubs/chat.stub";
 import ChatMessage from "./ChatMessage";
 import { fireEvent, render, screen } from "@testing-library/react";
 

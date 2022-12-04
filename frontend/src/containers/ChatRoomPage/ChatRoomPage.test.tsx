@@ -7,7 +7,7 @@ import { User } from "server/models/users.model";
 import WS from "jest-websocket-mock";
 import { chatRoomInfoListStub, messageLogStub } from "server/stubs/chat.stub";
 import { usersStub } from "server/stubs/users.stub";
-import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 
 const mockDispatch = jest.fn();
 jest.mock("react-redux", () => ({
