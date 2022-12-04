@@ -122,7 +122,7 @@ const ChatRoomPage: React.FC<Props> = () => {
             setMessageInput(e.target.value);
           }}
         ></S.Input>
-        <S.Submit type="submit" disabled={!isConnected}>
+        <S.Submit type="submit" disabled={!isConnected || messageInput === ""}>
           전송
         </S.Submit>
       </S.Form>

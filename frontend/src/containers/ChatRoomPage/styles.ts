@@ -1,7 +1,7 @@
 import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
 import { ChatRoomListPagePaddingTop } from "containers/ChatRoomListPage/styles";
 import styled from "styled-components";
-import { ThemeColor } from "styles/common.styles";
+import { CommonGreyColor, ThemeColor } from "styles/common.styles";
 import { device } from "utils/cssMedia";
 
 export const Container = styled.div`
@@ -30,7 +30,7 @@ export const ListContainer = styled.div`
     rgba(121, 154, 237, 0.116) 100%
   );
   height: 75vh;
-  padding: 15px 10px;
+  padding: 10px 15px;
   overflow: auto;
 `;
 
@@ -45,14 +45,15 @@ export const ListItemContainer = styled.div<{
   margin-top: ${props => (props.isConsecutive ? "1px" : "7px")};
 `;
 
+const ChatRoomImgRadius = 45;
 export const Image = styled.div<{ imgUrl: string | undefined }>`
   background-image: url(${props => props.imgUrl});
   background-size: cover;
   border-radius: 50%;
   border: ${props =>
     props.imgUrl ? "2px solid #000000" : "2px solid rgba(0, 0, 0, 0)"};
-  width: 50px;
-  height: ${props => (props.imgUrl ? "50px" : "0px")};
+  width: ${ChatRoomImgRadius}px;
+  height: ${props => (props.imgUrl ? `${ChatRoomImgRadius}px` : "0px")};
   padding: 2px;
 `;
 
@@ -115,7 +116,12 @@ export const Input = styled.input`
   }
 `;
 
-export const Submit = styled.button<{ backgroundColor?: string }>`
+const SubmitButtonDisabledColor = "rgb(210, 210, 210)";
+const SubmitButtonHoverColor = "rgb(244, 206, 250)";
+export const Submit = styled.button<{
+  backgroundColor?: string;
+  disabled: boolean;
+}>`
   text-align: center;
   background: none;
   border: none;
@@ -125,6 +131,11 @@ export const Submit = styled.button<{ backgroundColor?: string }>`
   color: black;
   padding: 10px 0;
   border-radius: 10px;
-  background-color: ${props => props.backgroundColor || ThemeColor};
-  cursor: pointer;
+  opacity: ${props => props.disabled && 0.5};
+  background-color: ${props =>
+    props.disabled ? SubmitButtonDisabledColor : ThemeColor};
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  :hover {
+    background-color: ${props => !props.disabled && SubmitButtonHoverColor};
+  }
 `;
