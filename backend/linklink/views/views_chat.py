@@ -2,10 +2,7 @@
 Chat related views module for linklink app
 """
 
-import json
-from json.decoder import JSONDecodeError
-
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import JsonResponse
 
 from ..decorators import allowed_method_or_405, logged_in_or_401
 from ..models import LinkLinkUser, ChatRoom
@@ -20,7 +17,9 @@ from ..models import LinkLinkUser, ChatRoom
 def chat_list(request):
     if request.method == "GET":
         linklinkuser = request.user.linklinkuser
-        chat_room_list = ChatRoom.objects.filter(name__contains=f"[{linklinkuser.id}]")
+        chat_room_list = ChatRoom.objects.filter(
+            name__contains=f"[{linklinkuser.id}]"
+        )
         response_dict = {"chatRoomInfoList": []}
         for chat_room in chat_room_list:
             # Send chat rooms that contain at least one message
@@ -29,20 +28,27 @@ def chat_list(request):
                 chat_room_dict["chatRoomName"] = chat_room.name.replace(
                     "[", ""
                 ).replace("]", "")
-                userId1, userId2 = map(
-                    int, chat_room.name.replace("[", "").replace("]", "").split("__")
+                user_id_1, user_id_2 = map(
+                    int,
+                    chat_room.name.
+                    replace("[", "").
+                    replace("]", "").
+                    split("__")
                 )
 
-                otherUserId = userId2 if linklinkuser.id == userId1 else userId1
-                chat_room_dict["otherUserId"] = otherUserId
-                otherUser = LinkLinkUser.objects.get(id=otherUserId)
+                other_user_id = user_id_2 \
+                    if linklinkuser.id == user_id_1 \
+                    else user_id_1
+                chat_room_dict["otherUserId"] = other_user_id
+                other_user = LinkLinkUser.objects.get(id=other_user_id)
                 chat_room_dict["otherUserName"] = (
-                    otherUser.user.last_name + otherUser.user.first_name
+                    other_user.user.last_name + other_user.user.first_name
                 )
-                chat_room_dict["otherUserImgUrl"] = otherUser.profile.imgUrl
-                lastMessage = chat_room.messages.all().order_by("-timeStamp")[0]
-                chat_room_dict["lastMessage"] = lastMessage.content
-                chat_room_dict["lastTimeStamp"] = lastMessage.timeStamp
+                chat_room_dict["otherUserImgUrl"] = other_user.profile.imgUrl
+                last_message = \
+                    chat_room.messages.all().order_by("-timeStamp")[0]
+                chat_room_dict["lastMessage"] = last_message.content
+                chat_room_dict["lastTimeStamp"] = last_message.timeStamp
 
                 response_dict["chatRoomInfoList"].append(chat_room_dict)
         return JsonResponse(status=200, data=response_dict)
@@ -53,29 +59,33 @@ def chat_list(request):
 def chat(request, chat_room_name):
     if request.method == "GET":
         linklinkuser = request.user.linklinkuser
-        userId1, userId2 = map(int, chat_room_name.split("__"))
+        user_id_1, user_id_2 = map(int, chat_room_name.split("__"))
         try:
-            chat_room = ChatRoom.objects.get(name=f"[{userId1}]__[{userId2}]")
+            chat_room = ChatRoom.objects.get(
+                name=f"[{user_id_1}]__[{user_id_2}]"
+            )
         except ChatRoom.DoesNotExist:
             return JsonResponse(
                 status=404,
                 data={
-                    "message": f"ChatRoom [{userId1}__[{userId2}] not found. Refresh may solve the race issue."
+                    "message":
+                    f"ChatRoom [{user_id_1}__[{user_id_2}] not found. \
+                    Refresh may solve the race issue."
                 },
             )
         response_dict = {}
         response_dict["chatRoomName"] = chat_room_name
-        otherUserId = userId2 if linklinkuser.id == userId1 else userId1
-        otherUser = LinkLinkUser.objects.get(id=otherUserId)
-        response_dict["otherUserId"] = otherUserId
+        other_user_id = user_id_2 if linklinkuser.id == user_id_1 else user_id_1
+        other_user = LinkLinkUser.objects.get(id=other_user_id)
+        response_dict["otherUserId"] = other_user_id
         response_dict["otherUserName"] = (
-            otherUser.user.last_name + otherUser.user.first_name
+            other_user.user.last_name + other_user.user.first_name
         )
-        response_dict["otherUserImgUrl"] = otherUser.profile.imgUrl
+        response_dict["otherUserImgUrl"] = other_user.profile.imgUrl
         if len(chat_room.messages.all()) > 0:
-            lastMessage = chat_room.messages.all().order_by("-timeStamp")[0]
-            response_dict["lastMessage"] = lastMessage.content
-            response_dict["lastTimeStamp"] = lastMessage.timeStamp
+            last_message = chat_room.messages.all().order_by("-timeStamp")[0]
+            response_dict["lastMessage"] = last_message.content
+            response_dict["lastTimeStamp"] = last_message.timeStamp
         else:
             response_dict["lastMessage"] = ""
             response_dict["lastTimeStamp"] = ""
