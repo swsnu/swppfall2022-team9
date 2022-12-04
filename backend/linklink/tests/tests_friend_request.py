@@ -903,6 +903,169 @@ class LinkLinkFriendRequestTestCase(TestCase):
         self.assertEqual(friend_request_found.getterId, john_linklinkuser)
         self.assertEqual(friend_request_found.status, "Rejected")
 
+
+    def test_friend_request_token_add_pending_request_success(self):
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        james_token = james_linklinkuser.friendRequestToken
+        target_url = f"/api/friendRequestToken/?token={james_token}"
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # FriendRequest DB Object Check
+        friend_request_found = FriendRequest.objects.get(id=1)
+        self.assertEqual(friend_request_found.senderId, james_linklinkuser)
+        self.assertEqual(friend_request_found.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_found.status, "Pending")
+
+
+    def test_friend_request_token_no_token_query(self):
+        target_url = "/api/friendRequestToken/?"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+        error_message_dict = {
+            "message":
+            "token query not found in url"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_friend_request_token_invalid_token(self):
+        target_url = "/api/friendRequestToken/?token=asdf"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message":
+            "user not found for token: asdf"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_friend_request_token_to_self(self):
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        john_token = john_linklinkuser.friendRequestToken
+        target_url = f"/api/friendRequestToken/?token={john_token}"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "cannot send FriendRequest to self"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_friend_request_token_already_exists_as_accepted(self):
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        james_token = james_linklinkuser.friendRequestToken
+        target_url = f"/api/friendRequestToken/?token={james_token}"
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # Init FriendRequest
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check DB
+        friend_request_found = FriendRequest.objects.get(pk=1)
+        self.assertEqual(friend_request_found.status, "Accepted")
+        self.assertEqual(str(friend_request_found.senderId), "CenaJohn")
+        self.assertEqual(str(friend_request_found.getterId), "GunnJames")
+
+
+    def test_friend_request_token_already_exists_as_pending(self):
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        james_token = james_linklinkuser.friendRequestToken
+        target_url = f"/api/friendRequestToken/?token={james_token}"
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # Init FriendRequest
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Pending",
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check DB
+        friend_request_found = FriendRequest.objects.get(pk=1)
+        self.assertEqual(friend_request_found.status, "Pending")
+        # sender getter should be switched
+        self.assertEqual(str(friend_request_found.senderId), "GunnJames")
+        self.assertEqual(str(friend_request_found.getterId), "CenaJohn")
+
+
+    def test_friend_request_token_already_exists_as_rejected(self):
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        james_token = james_linklinkuser.friendRequestToken
+        target_url = f"/api/friendRequestToken/?token={james_token}"
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # Init FriendRequest
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check DB
+        friend_request_found = FriendRequest.objects.get(pk=1)
+        # status should change to Pending
+        self.assertEqual(friend_request_found.status, "Pending")
+        # sender getter should be switched
+        self.assertEqual(str(friend_request_found.senderId), "GunnJames")
+        self.assertEqual(str(friend_request_found.getterId), "CenaJohn")
+
 #--------------------------------------------------------------------------
 #   400 Checking Tests
 #--------------------------------------------------------------------------

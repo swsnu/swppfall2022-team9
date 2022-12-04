@@ -41,7 +41,7 @@ urlpatterns = [
         name="friend_request_respond",
     ),
     path(
-        "friendRequestToken",
+        "friendRequestToken/",
         views_friend_request.friend_request_token_send,
         name="friend_request_token_send",
     ),
