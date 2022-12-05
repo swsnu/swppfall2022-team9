@@ -15,7 +15,7 @@ import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 
-interface Props {}
+interface Props { }
 const Navbar: React.FC<Props> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wrapperRef = useRef<any>(null);
@@ -98,7 +98,7 @@ const Navbar: React.FC<Props> = () => {
         >
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
           {friendRequests.filter(
-            request => request.getterId === currentUser?.id,
+            request => request.getterId === currentUser?.id && request.status === FriendRequestStatus.PENDING,
           ).length > 0 && <S.NavbarButtonRedMark />}
           {!isClickedOutsideOfNotification && (
             <S.NotificationListPopupContainer
@@ -120,7 +120,7 @@ const Navbar: React.FC<Props> = () => {
                           }
                         ></S.FriendRequestProfileImgContainer>
                         <S.FriendRequestMessage>
-                          {request.senderName}가 친구를 맺고 싶어합니다!
+                          {request.senderName}님께서 친구를 맺고 싶어합니다!
                         </S.FriendRequestMessage>
                         <S.ActionButtons>
                           <S.Accept
