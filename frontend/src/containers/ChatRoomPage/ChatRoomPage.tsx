@@ -7,7 +7,9 @@ import { compareTimeStampWtihinDay } from "utils/timeStamp";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getCurrentChatRoomInfo } from "store/slices/chat";
-interface Props {}
+interface Props { }
+
+const isDevMode = process.env.NODE_ENV === "development";
 
 const ChatRoomPage: React.FC<Props> = () => {
   const { chatRoomName } = useParams();
@@ -20,9 +22,9 @@ const ChatRoomPage: React.FC<Props> = () => {
   const [messageInput, setMessageInput] = useState<string>("");
   const messageRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-
+  const serverIP = isDevMode ? "127.0.0.1" : "15.165.89.185"
   const { sendJsonMessage } = useWebSocket(
-    currentUser ? `ws://127.0.0.1:8000/${chatRoomName}/` : null,
+    currentUser ? `ws://${serverIP}:8000/${chatRoomName}/` : null,
     {
       onOpen: () => {
         console.log("Connected!");
