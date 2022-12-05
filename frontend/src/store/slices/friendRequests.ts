@@ -102,12 +102,12 @@ export const getFriendRequestToken =
 /**
  * This is for creating friend request with friend request token invite
  */
-export const getFriendRequestTokenCreateFriendRequest = createAsyncThunk<
-  void,
-  string
->("friendRequest/getFriendRequestTokenCreateFriendRequest", async token => {
-  await axios.get(`/api/friendRequestToken/?token=${token}/`);
-});
+export const putFriendRequestToken = createAsyncThunk<void, string>(
+  "friendRequest/putFriendRequestToken",
+  async token => {
+    await axios.put(`/api/friendRequestToken/?token=${token}/`);
+  },
+);
 
 /**
  * This is friend request slice
