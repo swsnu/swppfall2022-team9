@@ -35,7 +35,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0",
-                 "localhost", "15.165.89.185", "hoshiwoobo.shop"]
+                 "localhost", "15.165.89.185", "hoshiwoobo.shop", "linklinkchon.netlify.app"]
 
 
 # Application definition
