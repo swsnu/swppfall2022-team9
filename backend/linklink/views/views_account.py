@@ -20,7 +20,7 @@ from ..decorators import allowed_method_or_405, logged_in_or_401
 @allowed_method_or_405(["GET"])
 @logged_in_or_401
 def account_info(request):
-    if request.method == "GET":
+    if request.method == "GET": # pragma: no branch
         response_dict = {}
         response_dict["lastname"] = request.user.last_name
         response_dict["firstname"] = request.user.first_name
@@ -34,7 +34,7 @@ def account_info(request):
 @allowed_method_or_405(["PUT"])
 @logged_in_or_401
 def password_reset(request):
-    if request.method == "PUT":
+    if request.method == "PUT": # pragma: no branch
         try:
             req_data = json.loads(request.body.decode())
             new_password = req_data["newPassword"]
