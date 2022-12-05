@@ -10,6 +10,7 @@ from linklink.views import (
     views_friend_request,
     views_chat,
     views_tags,
+    views_account,
 )
 
 urlpatterns = [
@@ -61,5 +62,15 @@ urlpatterns = [
         "qualityTags/<int:user_id>/",
         views_tags.quality_tag,
         name="quality_tag",
+    ),
+    path(
+        "account/",
+        views_account.account_info,
+        name="account_info"
+    ),
+    path(
+        "account/password/",
+        views_account.password_reset,
+        name="password_reset"
     ),
 ]
