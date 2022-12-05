@@ -14,6 +14,7 @@ import { OneChonInfo } from "types/friend.types";
 export type UserState = {
   currentUser: User | null;
   friendList: OneChonInfo[];
+  sessionError?: string;
 };
 
 const initialState: UserState = {
@@ -85,6 +86,9 @@ export const userSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getSessionCookie.fulfilled, (state, action) => {
       state.currentUser = action.payload;
+    });
+    builder.addCase(getSessionCookie.rejected, (state, action) => {
+      state.sessionError = "session error";
     });
     builder.addCase(postSignIn.fulfilled, (state, action) => {
       state.currentUser = action.payload;

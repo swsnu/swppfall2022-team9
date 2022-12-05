@@ -26,6 +26,7 @@ const FriendListSideBar: React.FC<Props> = () => {
   const generateInviteUrl = async () => {
     try {
       const friendRequestToken = (await dispatch(getFriendRequestToken()).unwrap()).friendRequestToken
+      //.replaceAll("-", "");
       navigator.clipboard.writeText(process.env.REACT_APP_WEBSITE_URL! + `?invite=${friendRequestToken}`)
       alert.open({ message: "친구 초대 링크가 복사되었습니다. 상대방에게 전달해주세요!" })
     } catch (err) {
