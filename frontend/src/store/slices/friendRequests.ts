@@ -105,7 +105,7 @@ export const getFriendRequestToken =
 export const putFriendRequestToken = createAsyncThunk<void, string>(
   "friendRequest/putFriendRequestToken",
   async token => {
-    await axios.put(`/api/friendRequestToken/?token=${token}/`);
+    await axios.put(`/api/friendRequestToken/?token=${token}`);
   },
 );
 
