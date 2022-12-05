@@ -87,7 +87,7 @@ export const userSlice = createSlice({
     builder.addCase(getSessionCookie.fulfilled, (state, action) => {
       state.currentUser = action.payload;
     });
-    builder.addCase(getSessionCookie.rejected, (state, action) => {
+    builder.addCase(getSessionCookie.rejected, state => {
       state.sessionError = "session error";
     });
     builder.addCase(postSignIn.fulfilled, (state, action) => {
