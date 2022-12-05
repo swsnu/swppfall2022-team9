@@ -37,6 +37,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0",
                  "localhost", "15.165.89.185", "hoshiwoobo.shop", "linklinkchon.netlify.app"]
 
+CSRF_TRUSTED_ORIGINS = ['https://linklinkchon.netlify.app']
 
 # Application definition
 
