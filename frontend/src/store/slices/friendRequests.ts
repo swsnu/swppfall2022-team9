@@ -6,6 +6,7 @@ import {
 } from "server/dto/friendRequests/friendRequests.dto";
 import {
   GetFriendRequestsResDto,
+  GetFriendRequestTokenResDto,
   PostFriendRequestResDto,
   PutFriendRequestResDto,
 } from "server/dto/friendRequests/friendRequests.res.dto";
@@ -82,6 +83,30 @@ export const putFriendRequest = createAsyncThunk<
     data,
   );
   return response.data;
+});
+
+/**
+ * This is for getting a friend request token
+ */
+export const getFriendRequestToken =
+  createAsyncThunk<GetFriendRequestTokenResDto>(
+    "friendRequest/getFriendRequestToken",
+    async () => {
+      const response = await axios.get<GetFriendRequestTokenResDto>(
+        "/api/user/friendRequestToken/",
+      );
+      return response.data;
+    },
+  );
+
+/**
+ * This is for creating friend request with friend request token invite
+ */
+export const getFriendRequestTokenCreateFriendRequest = createAsyncThunk<
+  void,
+  string
+>("friendRequest/getFriendRequestTokenCreateFriendRequest", async token => {
+  await axios.get(`/api/friendRequestToken/?token=${token}/`);
 });
 
 /**
