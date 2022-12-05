@@ -23,9 +23,9 @@ const ChatRoomPage: React.FC<Props> = () => {
   const messageRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const wsScheme = isDevMode ? "ws" : "wss";
-  const serverIP = isDevMode ? "127.0.0.1" : "15.165.89.185"
+  const serverAddress = isDevMode ? "127.0.0.1:8000" : "hoshiwoobo.shop:8001"
   const { sendJsonMessage } = useWebSocket(
-    currentUser ? `${wsScheme}://${serverIP}:8000/ws/${chatRoomName}/` : null,
+    currentUser ? `${wsScheme}://${serverAddress}/ws/${chatRoomName}/` : null,
     {
       onOpen: () => {
         console.log("Connected!");
