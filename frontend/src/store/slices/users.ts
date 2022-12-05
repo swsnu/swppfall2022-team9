@@ -85,6 +85,7 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getSessionCookie.fulfilled, (state, action) => {
+      state.sessionError = undefined;
       state.currentUser = action.payload;
     });
     builder.addCase(getSessionCookie.rejected, state => {
