@@ -1,1 +1,3 @@
 /api/*  https://hoshiwoobo.shop/api/:splat  200
+
+/*  /index.html  200
