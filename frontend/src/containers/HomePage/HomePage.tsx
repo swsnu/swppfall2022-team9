@@ -26,7 +26,6 @@ const HomePage: React.FC<Props> = () => {
   }, [searchParams])
 
   useEffect(() => {
-    alert.open({ message: 'hi' })
     if (sessionError !== undefined) {
       if (friendInviteToken) {
         localStorage.setItem('inviteToken', friendInviteToken)

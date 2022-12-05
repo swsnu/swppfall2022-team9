@@ -11,10 +11,11 @@ export const AlertBackground = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
+  /* padding: 0 20px; */
 `;
 
 export const AlertContainer = styled.div`
+  margin: 0 20px;
   background-color: white;
   padding: 15px;
   display: flex;
