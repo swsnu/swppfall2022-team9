@@ -105,7 +105,7 @@ export const ActionButtonsContainer = styled.div`
   width: 100%;
   justify-content: center;
   flex-direction: column;
-  bottom: 70px;
+  bottom: 25px;
 `;
 
 export const ActionButton = styled.button<{

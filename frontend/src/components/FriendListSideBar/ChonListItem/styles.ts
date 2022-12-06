@@ -42,11 +42,12 @@ export const OneChonNode = styled.div<{ url: string }>`
 export const Username = styled.div`
   display: inline-block;
   width: 100px;
-  padding: 0 5px 0 5px;
+  padding: 5px;
+  padding-left: 10px;
   font-family: "Arial";
   font-style: normal;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 17px;
   background-position: 50% 50%;
   background-size: cover;
   text-align: center;

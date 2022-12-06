@@ -1,34 +1,29 @@
-import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
+import { NavbarHeight } from "components/Navbar/styles";
 import { ChatRoomListPagePaddingTop } from "containers/ChatRoomListPage/styles";
 import styled from "styled-components";
-import { ThemeColor } from "styles/common.styles";
-import { device } from "utils/cssMedia";
+import { CommonGreyColor, ThemeColor } from "styles/common.styles";
 
 export const Container = styled.div`
   background-color: #f8f8f8;
-  min-height: calc(
-    100vh -
-      ${NavbarHeight + NavbarVerticalPadding * 2 + ChatRoomListPagePaddingTop}px
-  );
-  padding: 20px;
-  padding-top: ${ChatRoomListPagePaddingTop / 3}px;
-  @media ${device.laptop} {
-    flex-direction: row;
-  }
+  min-height: calc(100vh - ${NavbarHeight + ChatRoomListPagePaddingTop}px);
+  padding: ${ChatRoomListPagePaddingTop / 2}px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const Title = styled.div`
   font-size: 30px;
   font-weight: bold;
-  margin-bottom: 10px;
 `;
 
 export const ListContainer = styled.div`
-  background: linear-gradient(
+  /* background: linear-gradient(
     180deg,
     rgba(252, 100, 255, 0.2) 0%,
     rgba(121, 154, 237, 0.116) 100%
-  );
+  ); */
+  background-color: white;
   height: 75vh;
   padding: 10px 15px;
   overflow: auto;
@@ -83,8 +78,15 @@ export const MessageContent = styled.div<{ from: string }>`
   max-width: 60vw;
   padding: 7px 10px;
   border-radius: 10px;
+  /* background-color: ${props =>
+    props.from === "me" ? "rgb(251, 229, 77)" : "white"}; */ // yellow
+  /* background-color: ${props =>
+    props.from === "me" ? "rgb(243, 243, 243)" : "white"}; */ // gray
   background-color: ${props =>
-    props.from === "me" ? "rgb(251, 229, 77)" : "white"};
+    props.from === "me" ? ThemeColor : "white"};
+  border: ${props =>
+    props.from === "me" ? "1px solid rgba(0, 0, 0, 0)" : "1.5px solid #AAAAAA"};
+
   overflow-wrap: break-word;
   cursor: text;
   align-self: flex-start;
@@ -100,7 +102,6 @@ export const TimeStamp = styled.div`
 export const Form = styled.form`
   display: flex;
   align-items: center;
-  margin-top: 7px;
 `;
 
 export const Input = styled.input`
