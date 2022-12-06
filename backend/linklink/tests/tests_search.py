@@ -292,7 +292,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                     "imgUrl": "https://catimage.com",
                     "isTwoChon": False,
                     "chons": [],
-                    "isSearched": True,
+                    "isNotSearched": False,
                 },
                 {
                     "id": 4,
@@ -301,7 +301,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                     "imgUrl": "https://catimage.com",
                     "isTwoChon": False,
                     "chons": [],
-                    "isSearched": False,
+                    "isNotSearched": True,
                 },
             ]
         }
@@ -328,7 +328,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                             "chons": [],
                         }
                     ],
-                    "isSearched": True,
+                    "isNotSearched": False,
                 },
                 {
                     "id": 4,
@@ -346,7 +346,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                             "chons": [],
                         }
                     ],
-                    "isSearched": False,
+                    "isNotSearched": True,
                 },
             ]
         }
@@ -373,7 +373,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                             "chons": [],
                         }
                     ],
-                    "isSearched": True,
+                    "isNotSearched": False,
                 },
                 {
                     "id": 4,
@@ -391,7 +391,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                             "chons": [],
                         }
                     ],
-                    "isSearched": True,
+                    "isNotSearched": False,
                 },
             ]
         }
