@@ -7,7 +7,6 @@ import {
 import { friendListStub } from "server/stubs/users.stub";
 import searchReducer, {
   searchActions,
-  filterFriendList,
   SearchState,
 } from "./search";
 
@@ -37,14 +36,6 @@ describe("profile reducer", () => {
     expect(store.getState().search.filteredFriendList).toEqual([]);
     expect(store.getState().search.isSearchMode).toEqual(false);
     expect(store.getState().search.searchWord).toEqual("");
-  });
-
-  it("tests valid search", async () => {
-    filterFriendList(friendListStub, "신혜");
-  });
-
-  it("tests twochon search", async () => {
-    filterFriendList(friendListStub, "민아");
   });
 
   it("tests toggle search mode", async () => {

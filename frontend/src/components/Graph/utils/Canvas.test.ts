@@ -27,7 +27,7 @@ describe("Canvas", () => {
     canvas.render();
 
     // Hover center node
-    canvas.centerNode!.isNotFiltered = true;
+    canvas.centerNode!.isNotSearched = true;
     fireEvent(
       canvasElement,
       new FakeMouseEvent("mousemove", {
@@ -35,7 +35,7 @@ describe("Canvas", () => {
         offsetY: canvasElement.height / 2,
       }),
     );
-    canvas.centerNode!.isNotFiltered = false;
+    canvas.centerNode!.isNotSearched = false;
     canvas.touchedNode = undefined;
     fireEvent(
       canvasElement,

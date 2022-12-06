@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
+import { GetFilteredFriendListResDto } from "server/dto/search/search.res.dto";
 import { OneChonInfo } from "types/friend.types";
 
 export type SearchState = {
@@ -8,37 +10,28 @@ export type SearchState = {
   filteredFriendList: OneChonInfo[];
 };
 
-export type SearchPayload = {
-  searchWord: string;
-  friendList: OneChonInfo[];
-};
-
 const initialState: SearchState = {
   isSearchMode: false,
   searchWord: "",
   filteredFriendList: [],
 };
 
-export const filterFriendList = (
-  friendList: OneChonInfo[],
-  searchWord: string,
-): OneChonInfo[] => {
-  return friendList.map(oneChon => {
-    const filteredTwoChons = oneChon.chons.map(twoChon => {
-      return (twoChon.lastname + twoChon.firstname).includes(searchWord)
-        ? { ...twoChon }
-        : { ...twoChon, isNotFiltered: true };
-    });
-    return (oneChon.lastname + oneChon.firstname).includes(searchWord)
-      ? { ...oneChon, chons: filteredTwoChons }
-      : { ...oneChon, chons: filteredTwoChons, isNotFiltered: true };
-  });
-};
+export const getFilteredFriendList = createAsyncThunk<
+  GetFilteredFriendListResDto,
+  string
+>("search/getFilteredFriendList", async searchWord => {
+  const response = await axios.get(`/api/searchFriends/${searchWord}/`);
+  console.log(response.data);
+  return response.data;
+});
 
 export const searchSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
+    setSearchWord: (state, action: PayloadAction<string>) => {
+      state.searchWord = action.payload;
+    },
     toggleSearchMode: state => {
       state.isSearchMode = !state.isSearchMode;
       state.searchWord = "";
@@ -49,13 +42,11 @@ export const searchSlice = createSlice({
       state.searchWord = "";
       state.filteredFriendList = [];
     },
-    search: (state, actions: PayloadAction<SearchPayload>) => {
-      state.searchWord = actions.payload.searchWord;
-      state.filteredFriendList = filterFriendList(
-        actions.payload.friendList,
-        actions.payload.searchWord,
-      );
-    },
+  },
+  extraReducers: builder => {
+    builder.addCase(getFilteredFriendList.fulfilled, (state, action) => {
+      state.filteredFriendList = action.payload.friendList;
+    });
   },
 });
 

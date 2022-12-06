@@ -192,9 +192,7 @@ const PreviewProfileSidebar: React.FC = () => {
                   existingFriendRequest.status === FriendRequestStatus.PENDING
                 }
                 onClick={() => {
-                  if (existingFriendRequest) {
-                    onClickAddFriend(existingFriendRequest.id);
-                  }
+                  onClickAddFriend(profile.id);
                 }}
               >
                 {existingFriendRequest?.status === FriendRequestStatus.PENDING
