@@ -31,7 +31,8 @@ def skill_tag_list(request):
         response_dict = {"skillTags": []}
         all_skill_tags = SkillTag.objects.all()
         response_dict["skillTags"] = [
-            skill_tag.name for skill_tag in all_skill_tags
+            {"name": skill_tag.name}
+            for skill_tag in all_skill_tags
         ]
         return JsonResponse(response_dict) # implicit status code = 200
 
@@ -43,7 +44,8 @@ def quality_tag_list(request):
         response_dict = {"qualityTags": []}
         all_quality_tags = QualityTag.objects.all()
         response_dict["qualityTags"] = [
-            quality_tag.name for quality_tag in all_quality_tags
+            {"name": quality_tag.name}
+            for quality_tag in all_quality_tags
         ]
         return JsonResponse(response_dict) # implicit status code = 200
 

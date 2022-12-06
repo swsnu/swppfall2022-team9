@@ -5,9 +5,11 @@ import { EditProfileDto } from "server/dto/profile/profile.dto";
 import {
   EditProfileResDto,
   GetProfileResDto,
+  UploadImageResDto,
 } from "server/dto/profile/profile.res.dto";
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
+import { FileUpload } from "use-file-upload";
 
 export type ProfileState = {
   currentProfile: (Profile & { qualityTags: QualityTags | null }) | null;
@@ -47,6 +49,19 @@ export const editMyProfile = createAsyncThunk<
   return response.data;
 });
 
+export const uploadImage = createAsyncThunk<UploadImageResDto, FileUpload>(
+  "profile/uploadImage",
+  async (file: FileUpload) => {
+    const formData = new FormData();
+    formData.append("profileImage", file.file);
+    const response = await axios.post<UploadImageResDto>(
+      "/api/profile/uploadImage/",
+      formData,
+    );
+    return response.data;
+  },
+);
+
 export const profileSlice = createSlice({
   name: "profile",
   initialState: initialState,
@@ -61,6 +76,9 @@ export const profileSlice = createSlice({
     });
     builder.addCase(editMyProfile.fulfilled, (state, action) => {
       state.currentProfile = action.payload;
+    });
+    builder.addCase(uploadImage.fulfilled, (state, action) => {
+      state.currentProfile!.imgUrl = action.payload.imgUrl;
     });
   },
 });

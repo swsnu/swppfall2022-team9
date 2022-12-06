@@ -42,12 +42,12 @@ const ChangePasswordPage: React.FC = () => {
         message: "입력하신 새 비밀번호가 서로 일치하지 않습니다.",
       });
     } else {
-      const result = await dispatch(
-        putPassword({
-          newPassword: passwordInfo.password,
-        }),
-      );
-      if (result.type === `${putPassword.typePrefix}/fulfilled`) {
+      try {
+        await dispatch(
+          putPassword({
+            newPassword: passwordInfo.password,
+          }),
+        );
         alert.open({
           message: `비밀번호가 변경되었습니다.`,
           buttons: [
@@ -60,7 +60,7 @@ const ChangePasswordPage: React.FC = () => {
             },
           ],
         });
-      } else {
+      } catch (err) {
         alert.open({
           message: "비밀번호 변경에 실패하였습니다.",
         });

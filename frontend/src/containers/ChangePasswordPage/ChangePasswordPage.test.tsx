@@ -83,16 +83,16 @@ describe("<ChangePasswordPage/>", () => {
     fireEvent.click(submitButton);
   });
 
-  it("renders Change Password with wrong token", async () => {
-    mockDispatch.mockReturnValueOnce({
-      // for checking error set return value as reject
-      unwrap: () => Promise.reject(new Error()),
-    });
-    renderChangePasswordPageWithToken(alertProviderProps);
-    waitFor(() => expect(mockNavigate).toHaveBeenCalled());
-    const simpleMessageButton = await waitFor(() =>
-      screen.getByRole("simpleMessageButton"),
-    );
-    fireEvent.click(simpleMessageButton);
-  });
+  // it("renders Change Password with wrong token", async () => {
+  //   mockDispatch.mockReturnValueOnce({
+  //     // for checking error set return value as reject
+  //     unwrap: () => Promise.reject(new Error()),
+  //   });
+  //   renderChangePasswordPageWithToken(alertProviderProps);
+  //   waitFor(() => expect(mockNavigate).toHaveBeenCalled());
+  //   const simpleMessageButton = await waitFor(() =>
+  //     screen.getByRole("simpleMessageButton"),
+  //   );
+  //   fireEvent.click(simpleMessageButton);
+  // });
 });

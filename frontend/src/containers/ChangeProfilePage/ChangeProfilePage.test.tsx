@@ -117,11 +117,11 @@ describe("<ChangeProfilePage/>", () => {
     const dateEnd = screen.getAllByRole("endDate")[1];
     fireEvent.change(dateStart, { target: { value: "2020-10-25" } });
     fireEvent.change(dateEnd, { target: { value: "2021-10-25" } });
-    const inputSchool = screen.getAllByRole("textbox")[3];
-    const inputMajor = screen.getAllByRole("textbox")[4];
+    const inputSchool = screen.getAllByRole("textbox")[0];
+    const inputMajor = screen.getAllByRole("textbox")[1];
     fireEvent.change(inputSchool, { target: { value: "snu" } });
     fireEvent.change(inputMajor, { target: { value: "cse" } });
-    const addButton = screen.getAllByText("추가")[2];
+    const addButton = screen.getAllByText("추가")[1];
     fireEvent.click(addButton);
     const cancelButton = screen.getAllByRole("cancel")[5];
     fireEvent.click(cancelButton);

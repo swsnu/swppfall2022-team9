@@ -8,8 +8,17 @@ import ExperienceInput, {
   ExperienceType,
 } from "./ExperienceInput/ExperienceInput";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { editMyProfile, getProfile } from "store/slices/profile";
+import { editMyProfile, getProfile, uploadImage } from "store/slices/profile";
 import { useNavigate } from "react-router-dom";
+import useAlert from "hooks/useAlert";
+import Select from "react-select";
+import { CommonGreyColor, ThemeColor } from "styles/common.styles";
+import { getAllSkillTags } from "store/slices/skillTags";
+
+type SelectOption = {
+  value: string;
+  label: string;
+};
 
 export const CreateProfileFormTitle = styled.div`
   display: flex;
@@ -27,7 +36,7 @@ const ChangeProfilePage: React.FC = () => {
   // reference: https://github.com/Marvinified/use-file-upload
   // This part might be tricky when creating test code
   // you could mock useFileUpload hook just as we mock useDispatch
-  const [, setImageFile] = useFileUpload();
+  const [imageFile, setImageFile] = useFileUpload();
 
   // profile state
   const [profile, setProfile] = useState<Profile>({
@@ -36,15 +45,17 @@ const ChangeProfilePage: React.FC = () => {
     educations: [],
     jobExperiences: [],
     website: "",
-    imgUrl:
-      "https://www.smlounge.co.kr/upload/woman/article/202112/thumb/49686-473794-sampleM.jpg",
+    imgUrl: "",
   });
-  const [skillInput, setSkillInput] = useState<string>("");
+  const [selectedSkillOption, setSelectedSkillOption] =
+    useState<SelectOption | null>(null);
+  const [selectableSkills, setSelectableSkills] = useState<Array<SelectOption>>(
+    [],
+  );
 
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
-
+  const alert = useAlert();
   const currentUser = useAppSelector(state => state.users.currentUser);
 
   // DESC: this is for getting already stored profile data in server
@@ -54,33 +65,75 @@ const ChangeProfilePage: React.FC = () => {
       setProfile(response);
     } catch (err) {
       // the user
-      // console.log(err);
+      console.log(err);
+      alert.open({
+        message: "오류가 발생했습니다.",
+        buttons: [
+          {
+            label: "홈페이지로 돌아가기",
+            onClick: () => {
+              alert.close();
+              navigate("/");
+            },
+          },
+        ],
+      });
+    }
+  };
+
+  const getSelectableSkillTags = async () => {
+    try {
+      const data = await dispatch(getAllSkillTags()).unwrap();
+      const skillTags: Array<SelectOption> = data.skillTags.map(tag => ({
+        value: tag.name,
+        label: tag.name,
+      }));
+      setSelectableSkills(skillTags);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   useEffect(() => {
-    getCurrentUserProfile();
-  }, []);
+    if (currentUser) {
+      getCurrentUserProfile();
+      getSelectableSkillTags();
+    }
+  }, [currentUser]);
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
       await dispatch(editMyProfile(profile)).unwrap();
+      if (imageFile) {
+        alert.open({
+          message: "처리 중입니다...",
+          buttons: [],
+        });
+        await dispatch(uploadImage(imageFile as FileUpload)).unwrap();
+        alert.close();
+      }
       if (currentUser) {
         // DESC: we navigate to personal profile page after creation of profile
         navigate(`/profile/${currentUser.id}`);
+        window.location.reload();
       }
     } catch (err) {
       // console.log(err);
     }
   };
 
-  const onAddSkillTag = (tagValue: string) => {
-    setProfile(prev => ({
-      ...prev,
-      skillTags: [...prev.skillTags, { name: tagValue }],
-    }));
-    setSkillInput("");
+  const onAddSkillTag = (tagToAdd: SelectOption | null) => {
+    if (
+      tagToAdd &&
+      !profile.skillTags.find(tag => tag.name === tagToAdd.value)
+    ) {
+      setProfile(prev => ({
+        ...prev,
+        skillTags: [...prev.skillTags, { name: tagToAdd.value }],
+      }));
+      setSelectedSkillOption(null);
+    }
   };
 
   const onDeleteSkillTag = (tagValue: string) => {
@@ -154,8 +207,8 @@ const ChangeProfilePage: React.FC = () => {
     const imageFileToUpload = singleFile.file;
     // WARNING: this is just for demo purpose, we should send image to server
     // and then set this image url
-    const imageUrl = URL.createObjectURL(imageFileToUpload);
-    setProfile(prev => ({ ...prev, imageUrl }));
+    const imgUrl = URL.createObjectURL(imageFileToUpload);
+    setProfile(prev => ({ ...prev, imgUrl }));
   };
 
   return (
@@ -210,17 +263,63 @@ const ChangeProfilePage: React.FC = () => {
           </FormStyles.ExtraContainer>
 
           <FormStyles.InputContainer>
-            <FormStyles.Input
-              value={skillInput}
-              onChange={e => {
-                e.preventDefault();
-                setSkillInput(e.target.value);
+            <Select
+              styles={{
+                option: (_, state) => ({
+                  backgroundColor: state.isSelected
+                    ? ThemeColor
+                    : state.isFocused
+                    ? CommonGreyColor
+                    : "transparent",
+                  color: "black",
+                  padding: 10,
+                }),
+
+                input: provided => ({
+                  ...provided,
+                  width: "100%",
+                  borer: "none",
+                  ":focus": {
+                    border: "none",
+                  },
+                  ":active": {
+                    border: "none",
+                  },
+                }),
+                container: provided => ({
+                  ...provided,
+                  width: "100%",
+                  outline: "none",
+                  ":focus": {
+                    border: "none",
+                  },
+                  ":active": {
+                    border: "none",
+                  },
+                }),
+                control: () => ({
+                  display: "flex",
+                  borderColor: CommonGreyColor,
+                  border: `1px solid #8b8b8b`,
+                }),
+                menu: provided => ({
+                  ...provided,
+                  boxShadow: "none",
+                  border: "1px solid #8b8b8b",
+                }),
               }}
+              defaultValue={selectedSkillOption}
+              value={selectedSkillOption}
+              onChange={setSelectedSkillOption}
+              options={selectableSkills}
+              placeholder="키워드를 선택해주세요"
+              isSearchable
+              isClearable
             />
             <FormStyles.InputModifyButton
               type="button"
               onClick={() => {
-                onAddSkillTag(skillInput);
+                onAddSkillTag(selectedSkillOption);
               }}
             >
               추가

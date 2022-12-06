@@ -1,10 +1,12 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import AuthenticatedChangePasswordPage from "./AuthenticatedChangePasswordPage";
 import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import { renderWithProviders } from "test-utils/mocks";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-const renderAuthenticatedChangePasswordPage = (alertProviderProps?: AlertContextProps) => {
+const renderAuthenticatedChangePasswordPage = (
+  alertProviderProps?: AlertContextProps,
+) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -13,8 +15,8 @@ const renderAuthenticatedChangePasswordPage = (alertProviderProps?: AlertContext
     </MemoryRouter>,
     { preloadedState: {} },
     alertProviderProps,
-  )
-}
+  );
+};
 
 const mockDispatch = jest.fn();
 

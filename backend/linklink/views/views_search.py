@@ -2,21 +2,12 @@
 Search related views module for linklink app
 """
 
-import json
-from json.decoder import JSONDecodeError
-
 from django.http import (
-    HttpResponseBadRequest,
     JsonResponse
 )
 
 from ..decorators import allowed_method_or_405, logged_in_or_401
 from ..models import (
-    LinkLinkUser,
-    Profile,
-    SkillTag,
-    JobExperience,
-    Education,
     FriendRequest
 )
 from ..utils import get_onechon_linklinkuser_list, get_filtered_linklinkuser_list
@@ -89,8 +80,9 @@ def search_friends(request, search_keys):
                 twochon_dict["chons"] = []
                 # Append constructed twochon_dict
                 onechon_dict["chons"].append(twochon_dict)
-            
-            if len(onechon_dict["chons"]) != 0 or onechon_dict["isNotSearched"] == False:
+
+            if len(onechon_dict["chons"]) != 0 or \
+                not onechon_dict["isNotSearched"]:
                 response_dict["friendList"].append(onechon_dict)
 
         return JsonResponse(response_dict)  # implicit status code = 200

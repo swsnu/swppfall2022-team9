@@ -1,12 +1,7 @@
-import { screen, render, fireEvent, waitFor } from "@testing-library/react";
-import {
-  AlertContextProps,
-  AlertContextProvider,
-} from "containers/Context/AlertContext/AlertContext";
-import { Provider } from "react-redux";
+import { screen, fireEvent } from "@testing-library/react";
+import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { usersStub } from "server/stubs/users.stub";
-import store from "store";
 import { renderWithProviders } from "test-utils/mocks";
 import AccountPage from "./AccountPage";
 

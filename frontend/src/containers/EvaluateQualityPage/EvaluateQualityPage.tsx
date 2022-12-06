@@ -19,23 +19,14 @@ type SelectOption = {
   label: string;
 };
 
-// WARNING: This is stub data! If backend has implemented, remove this!
-const options = [
-  { value: "Sincere", label: "Sincere" },
-  { value: "Honest", label: "Honest" },
-  { value: "Understanding", label: "Understanding" },
-  { value: "Loyal", label: "Loyal" },
-  { value: "Truthful", label: "Truthful" },
-  { value: "Dependable", label: "Dependable" },
-];
-
 const EvaluateQualityPage: React.FC<Props> = () => {
   const { userId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [profileUserName, setProfileUserName] = useState<string>("");
-  const [selectableQualities, setSelectableQualities] =
-    useState<Array<SelectOption>>(options);
+  const [selectableQualities, setSelectableQualities] = useState<
+    Array<SelectOption>
+  >([]);
   const [assignedQualities, setAssignedQualities] = useState<
     Array<SelectOption>
   >([]);

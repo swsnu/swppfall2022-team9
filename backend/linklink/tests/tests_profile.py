@@ -493,6 +493,13 @@ class LinkLinkProfileTestCase(TestCase):
 
     def test_post_upload_profile_image_success(self):
         target_url = "/api/profile/uploadImage/"
+        john_linklinkuser = LinkLinkUser.objects.get(id=1)
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            website="johnwebsite.com",
+            imgUrl="https://catimage.com",
+        )
         # Login John
         self.client.login(username="john", password="johnpassword")
         # POST

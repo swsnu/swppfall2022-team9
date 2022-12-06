@@ -1,5 +1,4 @@
-import useAlert from "hooks/useAlert";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { friendRequestActions } from "store/slices/friendRequests";
@@ -73,7 +72,7 @@ const AccountPage: React.FC = () => {
             <FormStyles.InputContainer>
               <FormStyles.Input
                 role="lastname"
-                value={currentUser? currentUser.lastname: ""}
+                value={currentUser ? currentUser.lastname : ""}
                 disabled={true}
               />
             </FormStyles.InputContainer>
@@ -83,7 +82,7 @@ const AccountPage: React.FC = () => {
             <FormStyles.InputContainer>
               <FormStyles.Input
                 role="firstname"
-                value={currentUser? currentUser.firstname: ""}
+                value={currentUser ? currentUser.firstname : ""}
                 disabled={true}
               />
             </FormStyles.InputContainer>
@@ -93,7 +92,7 @@ const AccountPage: React.FC = () => {
             <FormStyles.InputContainer>
               <FormStyles.Input
                 role="email"
-                value={currentUser? currentUser.email: ""}
+                value={currentUser ? currentUser.email : ""}
                 disabled={true}
               />
             </FormStyles.InputContainer>
