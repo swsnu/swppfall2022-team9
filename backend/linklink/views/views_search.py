@@ -63,9 +63,9 @@ def search_friends(request, search_keys):
             onechon_dict["imgUrl"] = onechon_linklinkuser.profile.imgUrl
             onechon_dict["isTwoChon"] = False
             onechon_dict["chons"] = []
-            onechon_dict["isSearched"] = False
+            onechon_dict["isNotSearched"] = False
             if onechon_linklinkuser in filtered_onechon_list:
-                onechon_dict["isSearched"] = True
+                onechon_dict["isNotSearched"] = True
 
             twochon_list = get_onechon_linklinkuser_list(
                 all_accepted_friend_requests,
