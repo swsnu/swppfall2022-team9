@@ -98,7 +98,7 @@ const ProfilePage: React.FC<Props> = () => {
       dispatch(getFriendList());
       if (currentUser.id === Number(userId)) {
         // DESC: If we are viewing my profile, the name should be the name of current user
-        setProfileUserName(currentUser.firstname + currentUser.lastname);
+        setProfileUserName(currentUser.lastname + currentUser.firstname);
         setProfileUserFriends(friendList);
       }
     }
