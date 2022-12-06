@@ -3,12 +3,14 @@ import * as FormStyles from "styles/common.form.styles";
 import Select from "react-select";
 import { CommonGreyColor, ThemeColor } from "styles/common.styles";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   getAllQualityTags,
   getUserQualityTags,
   putUserQualityTags,
 } from "store/slices/qualityTags";
+import { getFriendList } from "store/slices/users";
+import useAlert from "hooks/useAlert";
 
 interface Props {}
 
@@ -30,9 +32,8 @@ const options = [
 const EvaluateQualityPage: React.FC<Props> = () => {
   const { userId } = useParams();
   const dispatch = useAppDispatch();
-  // REMEMBER: remove the below line if navigate is implemented
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const navigate = useNavigate();
+  const [profileUserName, setProfileUserName] = useState<string>("");
   const [selectableQualities, setSelectableQualities] =
     useState<Array<SelectOption>>(options);
   const [assignedQualities, setAssignedQualities] = useState<
@@ -42,6 +43,9 @@ const EvaluateQualityPage: React.FC<Props> = () => {
     value: string;
     label: string;
   } | null>(null);
+
+  const friendList = useAppSelector(state => state.users.friendList);
+  const alert = useAlert();
 
   const getSelectableQualityTags = async () => {
     try {
@@ -70,21 +74,33 @@ const EvaluateQualityPage: React.FC<Props> = () => {
         }));
       setAssignedQualities(qualityTagsAssignedToUser);
     } catch (err) {
-      // TODO: When error happens the user should be redirected to the main page
-      // For now, the navigate is turned off for test purposes,
-      // If backend is well prepared please uncomment the below line
-      // navigate("/");
-      console.log(err);
+      navigate("/");
     }
   };
 
   useEffect(() => {
     if (userId) {
       getSelectableQualityTags();
-      // REMEMBER: When error happens the user should be redirected to the main page
       getQualityTagsCurrentUserHasAssignedToUser(Number(userId));
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (friendList.length > 0) {
+      if (userId) {
+        const viewingOneChon = friendList.find(
+          oneChon => oneChon.id === Number(userId),
+        );
+        if (viewingOneChon) {
+          setProfileUserName(
+            viewingOneChon.lastname + viewingOneChon.firstname,
+          );
+        }
+      }
+    } else {
+      dispatch(getFriendList());
+    }
+  }, [friendList, userId]);
 
   const onAddQuality = (qualityToAdd: SelectOption | null) => {
     if (qualityToAdd && !assignedQualities.includes(qualityToAdd)) {
@@ -107,6 +123,18 @@ const EvaluateQualityPage: React.FC<Props> = () => {
         qualityTags: assignedQualities.map(tag => ({ name: tag.value })),
       }),
     );
+    alert.open({
+      message: `평가를 완료하였습니다.`,
+      buttons: [
+        {
+          label: "프로필로 돌아가기",
+          onClick: () => {
+            alert.close();
+            navigate(`/profile/${userId}`);
+          },
+        },
+      ],
+    });
   };
 
   return (
@@ -114,12 +142,12 @@ const EvaluateQualityPage: React.FC<Props> = () => {
       <FormStyles.FormContainer>
         <FormStyles.Header>
           <FormStyles.HeaderText>
-            동료로서 차동주님은 어떤가요?
+            동료로서 {profileUserName} 님은 어떤가요?
           </FormStyles.HeaderText>
         </FormStyles.Header>
         <FormStyles.Form onSubmit={onSubmit}>
           <FormStyles.Label>
-            차동주님에게 어울리는 키워드를 몇 개 골라주세요
+            {profileUserName} 님에게 어울리는 키워드를 몇 개 골라주세요
           </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.BubblesContainer>
