@@ -3,6 +3,7 @@ import {
   NavbarVerticalPadding,
 } from "components/Navbar/styles";
 import { IoCloseOutline } from "react-icons/io5";
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
@@ -202,7 +203,7 @@ export const BubbleText = styled.div`
 export const Image = styled.div<{ imgUrl: string }>`
   width: 90px;
   height: 90px;
-  background-image: url(${props => props.imgUrl});
+  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   border: 2px solid black;
   border-radius: 50%;
   background-position: 50%;
