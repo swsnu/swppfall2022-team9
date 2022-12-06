@@ -3,7 +3,7 @@ import useAlert from "hooks/useAlert";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
-import { postPassword } from "store/slices/account";
+import { putPassword } from "store/slices/account";
 import { verifyRegisterToken } from "store/slices/users";
 import * as FormStyles from "styles/common.form.styles";
 
@@ -45,7 +45,7 @@ const ChangePasswordPage: React.FC = () => {
       alert.open({ message: "입력한 비밀번호가 서로 다릅니다!" });
     }
     // TODO change password dispatch implementation catch error!
-    dispatch(postPassword({ password: passwordInfo.password }));
+    dispatch(putPassword({ newPassword: passwordInfo.password }));
   };
 
   const goToForgotAccount = () => {

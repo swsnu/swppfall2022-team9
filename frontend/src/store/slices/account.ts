@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
-  PostPasswordDto,
+  PutPasswordDto,
   PostPasswordUnauthenticatedDto,
 } from "server/dto/account/account.dto";
-import { PostPasswordResDto } from "server/dto/account/account.res.dto";
+import { PutPasswordResDto } from "server/dto/account/account.res.dto";
 
 // we do not need anything for account slice
 
@@ -12,10 +12,10 @@ export interface AccountState {}
 const initialState: AccountState = {};
 
 export const postPasswordUnauthenticated = createAsyncThunk<
-  PostPasswordResDto,
+  PutPasswordResDto,
   PostPasswordUnauthenticatedDto
->("account/postPasswordUnauthenticated", async ({ token, password }) => {
-  const body: PostPasswordUnauthenticatedDto = { token, password };
+>("account/postPasswordUnauthenticated", async ({ token, newPassword }) => {
+  const body: PostPasswordUnauthenticatedDto = { token, newPassword };
   const response = (
     await axios.post<PostPasswordUnauthenticatedDto>(
       "/api/account/password/token/",
@@ -26,13 +26,13 @@ export const postPasswordUnauthenticated = createAsyncThunk<
   return response;
 });
 
-export const postPassword = createAsyncThunk<
-  PostPasswordResDto,
-  PostPasswordDto
->("account/postPasswordUnauthenticated", async ({ password }) => {
-  const body: PostPasswordDto = { password };
+export const putPassword = createAsyncThunk<
+  PutPasswordResDto,
+  PutPasswordDto
+>("account/postPassword", async ({ newPassword }) => {
+  const body: PutPasswordDto = { newPassword };
   const response = (
-    await axios.post<PostPasswordResDto>("/api/account/password/", body)
+    await axios.put<PutPasswordResDto>("/api/account/password/", body)
   ).data;
   // there is a return here since we should use unwrap for checking wheter the token is correct
   return response;
