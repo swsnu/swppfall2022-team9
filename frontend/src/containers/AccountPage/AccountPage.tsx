@@ -69,11 +69,7 @@ const AccountPage: React.FC = () => {
           <FormStyles.Label>
             <FormStyles.LabelText>성</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input
-                role="lastname"
-                disabled={true}
-                value={accountInfo.lastname}
-              />
+              <FormStyles.Input role="lastname" value={accountInfo.lastname} />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
@@ -81,7 +77,6 @@ const AccountPage: React.FC = () => {
             <FormStyles.InputContainer>
               <FormStyles.Input
                 role="firstname"
-                disabled={true}
                 value={accountInfo.firstname}
               />
             </FormStyles.InputContainer>
@@ -89,11 +84,7 @@ const AccountPage: React.FC = () => {
           <FormStyles.Label>
             <FormStyles.LabelText>이메일</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input
-                role="email"
-                disabled={true}
-                value={accountInfo.lastname}
-              />
+              <FormStyles.Input role="email" value={accountInfo.lastname} />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
@@ -128,7 +119,7 @@ const AccountPage: React.FC = () => {
           <FormStyles.Submit backgroundColor="#D9D9D9" onClick={onClickLogout}>
             로그아웃
           </FormStyles.Submit>
-          <FormStyles.Submit
+          {/* <FormStyles.Submit
             backgroundColor="transparent"
             style={{
               fontSize: 12,
@@ -138,7 +129,7 @@ const AccountPage: React.FC = () => {
             onClick={onClickDeleteAccount}
           >
             계정삭제
-          </FormStyles.Submit>
+          </FormStyles.Submit> */}
         </FormStyles.Form>
       </FormStyles.FormContainer>
     </FormStyles.Container>

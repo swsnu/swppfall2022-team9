@@ -23,7 +23,9 @@ export const getAllQualityTags = createAsyncThunk<
   GetAllQualityTagsResDto,
   void
 >("qualities/getAllQualityTags", async () => {
-  const response = await axios.get<GetAllQualityTagsResDto>("/api/qualities/");
+  const response = await axios.get<GetAllQualityTagsResDto>(
+    "/api/qualityTags/",
+  );
   return response.data;
 });
 
@@ -32,7 +34,7 @@ export const getUserQualityTags = createAsyncThunk<
   number
 >("qualities/getUserQualityTags", async (id: number) => {
   const response = await axios.get<GetUserQualityTagsResDto>(
-    `/api/qualities/${id}/`,
+    `/api/qualityTags/${id}/`,
   );
   return response.data;
 });
@@ -43,7 +45,7 @@ export const putUserQualityTags = createAsyncThunk<
 >("qualities/getFriendProfile", async ({ qualityTags, id }) => {
   const data: PutUserQualityTagsDto = { qualityTags };
   const response = await axios.put<PutUserQualityTagsResDto>(
-    `/api/qualities/${id}/`,
+    `/api/qualityTags/${id}/`,
     data,
   );
   return response.data;

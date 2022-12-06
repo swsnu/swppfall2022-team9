@@ -44,7 +44,6 @@ const Graph: React.FC<Props> = () => {
     if (canvas) {
       if (currentUser) {
         canvas.setCurrentUser(currentUser);
-
         if (isSearchMode) {
           if (searchWord !== "") {
             canvas.setFriendList(filteredFriendList);
@@ -62,19 +61,29 @@ const Graph: React.FC<Props> = () => {
             canvas.drawInitialGraph(currentUser.id);
           }
         }
-      } else {
-        canvas.reset();
       }
     }
   }, [
-    currentUser,
     canvas,
+    currentUser,
     friendList,
     filteredFriendList,
     oneChonIdToExpandNetwork,
     isSearchMode,
     searchWord,
   ]);
+
+  useEffect(() => {
+    if (canvas) {
+      if (currentUser) {
+        canvas.setCurrentUser(currentUser);
+        canvas.setFriendList(friendList);
+        canvas.drawInitialGraph(currentUser.id);
+      } else {
+        canvas.reset();
+      }
+    }
+  }, [canvas, currentUser, friendList]);
 
   return (
     <S.CanvasContainer ref={divRef}>
