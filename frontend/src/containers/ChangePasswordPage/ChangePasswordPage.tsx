@@ -35,17 +35,37 @@ const ChangePasswordPage: React.FC = () => {
     }
   }, [token]);
 
-  const onSubmit = (e: React.SyntheticEvent) => {
-    // TODO change password dispatch implementation
+  const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (!passwordInfo.password && !passwordInfo.passwordCheck) {
-      return;
-    }
     if (passwordInfo.password !== passwordInfo.passwordCheck) {
-      alert.open({ message: "입력한 비밀번호가 서로 다릅니다!" });
+      alert.open({
+        message: "입력하신 새 비밀번호가 서로 일치하지 않습니다.",
+      });
+    } else {
+      const result = await dispatch(
+        putPassword({
+          newPassword: passwordInfo.password,
+        }),
+      );
+      if (result.type === `${putPassword.typePrefix}/fulfilled`) {
+        alert.open({
+          message: `비밀번호가 변경되었습니다.`,
+          buttons: [
+            {
+              label: "확인",
+              onClick: () => {
+                alert.close();
+                navigate("/");
+              },
+            },
+          ],
+        });
+      } else {
+        alert.open({
+          message: "비밀번호 변경에 실패하였습니다.",
+        });
+      }
     }
-    // TODO change password dispatch implementation catch error!
-    dispatch(putPassword({ newPassword: passwordInfo.password }));
   };
 
   const goToForgotAccount = () => {
