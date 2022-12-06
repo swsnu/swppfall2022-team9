@@ -14,7 +14,9 @@ from django.utils import timezone
 from .models import (
     FriendRequest,
     QualityTagRequest,
+    Profile
 )
+from .tags_list import tags
 
 #--------------------------------------------------------------------------
 #   Setting constants
@@ -196,3 +198,64 @@ def is_onechon(linklinkuser1, linklinkuser2):
         linklinkuser1
     )
     return linklinkuser2 in onechon_list
+
+def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
+    """
+    Helper function to filter user list with given keys
+
+    Args:
+    linklinkuser_list: linklink user list
+    search_keys: search keywords/tags
+    Return:
+    List[LinkLinkUser]
+    """
+    # Note, there is no duplicate user in linklinkuser_list
+    linklinkuser_list_return = []
+    for search_key in search_keys:
+        for linklinkuser in linklinkuser_list:
+            # exact match: Korean name
+            if linklinkuser.user.last_name+\
+                linklinkuser.user.first_name == search_key:
+                linklinkuser_list_return.append(linklinkuser)
+            else:
+                # get profile of the user for further search
+                profile_found = \
+                    Profile.objects.get(linklinkuser=linklinkuser)
+
+                skill_tags = [skill_tag.name.lower() for skill_tag \
+                    in profile_found.skillTags.all()]
+                edu_tags = [edu_tag["school"].lower() for edu_tag in \
+                    profile_found.education_set.values("school")]
+                job_tags = [job_tag["company"].lower() for job_tag in \
+                    profile_found.jobexperience_set.values("company")]
+                searchable_tags = [searchable_tag.lower() for searchable_tag \
+                    in tags.SEARCHABLE_KEYWORDS]
+
+                # exact match: job, school, skillTags
+                if search_key in job_tags or search_key in edu_tags \
+                    or search_key in skill_tags:
+                    linklinkuser_list_return.append(linklinkuser)
+
+                # searchable keys: skillTags
+                elif search_key in searchable_tags:
+                    new_search_keys = tags.SEARCHABLE_KEYWORDS[search_key]
+                    new_search_keys = [new_search_key.lower() for \
+                        new_search_key in new_search_keys]
+                    for new_search_key in new_search_keys:
+                        if new_search_key in skill_tags:
+                            linklinkuser_list_return.append(linklinkuser)
+                        break
+                # exact match: qualityTags
+                else:
+                    quality_tags = QualityTagRequest.objects.filter(
+                        getterId=linklinkuser,
+                        status=True
+                    )
+                    quality_tags = [quality_tag.name.lower() for \
+                        quality_tag in quality_tags]
+                    for quality_tag in quality_tags:
+                        if search_key == quality_tag:
+                            linklinkuser_list_return.append(linklinkuser)
+                            break
+
+    return linklinkuser_list_return
