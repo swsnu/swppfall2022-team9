@@ -53,8 +53,6 @@ def search_friends(request, search_keys):
 
         response_dict = {"friendList": []}  # Nested dict
         for onechon_linklinkuser in onechon_list:
-            
-
             # construct onechon_dict
             onechon_dict = {}
             onechon_dict["id"] = onechon_linklinkuser.id
@@ -91,6 +89,8 @@ def search_friends(request, search_keys):
                 twochon_dict["chons"] = []
                 # Append constructed twochon_dict
                 onechon_dict["chons"].append(twochon_dict)
-            response_dict["friendList"].append(onechon_dict)
+            
+            if len(onechon_dict["chons"]) != 0 or onechon_dict["isNotSearched"] == False:
+                response_dict["friendList"].append(onechon_dict)
 
         return JsonResponse(response_dict)  # implicit status code = 200

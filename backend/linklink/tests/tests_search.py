@@ -293,16 +293,7 @@ class LinkLinkUserSearchTestCase(TestCase):
                     "isTwoChon": False,
                     "chons": [],
                     "isNotSearched": False,
-                },
-                {
-                    "id": 4,
-                    "firstname": "Will",
-                    "lastname": "Smith",
-                    "imgUrl": "https://catimage.com",
-                    "isTwoChon": False,
-                    "chons": [],
-                    "isNotSearched": True,
-                },
+                }
             ]
         }
         self.assertEqual(response_dict, response_answer)
