@@ -83,7 +83,7 @@ const ChatRoomPage: React.FC<Props> = () => {
                 key={idx}
                 isConsecutive={
                   idx > 0 &&
-                  messageLog[idx].senderId == messageLog[idx - 1].senderId &&
+                  messageLog[idx].senderId === messageLog[idx - 1].senderId &&
                   compareTimeStampWtihinDay(
                     messageLog[idx].timeStamp,
                     messageLog[idx - 1].timeStamp,

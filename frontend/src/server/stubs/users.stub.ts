@@ -109,14 +109,14 @@ export const makeFriendListStub = (
     const chons: TwoChonInfo[] = [];
     for (let j = 0; j < twoChonNumber; j++) {
       chons.push({
-        id: id++,
+        id: ++id,
         lastname: `[${id}]`,
         firstname: `2촌`,
         imgUrl: twoChonImgUrl,
       });
     }
     stubFriendList.push({
-      id: id++,
+      id: ++id,
       lastname: `[${id}]`,
       firstname: "1촌",
       imgUrl: oneChonImgUrl,

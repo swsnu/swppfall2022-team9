@@ -1,3 +1,4 @@
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
@@ -18,6 +19,7 @@ export const ListContainer = styled.div`
   background-color: white;
   min-height: 700px;
   position: relative;
+  height: 94%;
 `;
 
 export const FriendEmptyOrErrorContainer = styled.div`
@@ -43,9 +45,11 @@ export const ListItemContainer = styled.div`
 `;
 
 export const ImageContainer = styled.div<{ imgUrl: string }>`
-  background-image: url(${props => props.imgUrl});
+  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   width: 50px;
   height: 50px;
+  min-width: 50px;
+  min-height: 50px;
   background-size: cover;
   border-radius: 50%;
   border: 2px solid #000000;

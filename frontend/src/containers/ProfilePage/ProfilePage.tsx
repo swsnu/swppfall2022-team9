@@ -96,13 +96,20 @@ const ProfilePage: React.FC<Props> = () => {
       // DESC: We need to get the friend list of the current user
       // to get the friend list info of the user we are viewing
       dispatch(getFriendList());
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      // DESC: We need to get the friend list of the current user
+      // to get the friend list info of the user we are viewing
       if (currentUser.id === Number(userId)) {
         // DESC: If we are viewing my profile, the name should be the name of current user
         setProfileUserName(currentUser.lastname + currentUser.firstname);
         setProfileUserFriends(friendList);
       }
     }
-  }, [currentUser]);
+  }, [friendList]);
 
   useEffect(() => {
     if (userId && friendList) {
@@ -188,7 +195,7 @@ const ProfilePage: React.FC<Props> = () => {
             </S.SkillTagsContainer>
             <S.WebsiteContainer>
               <S.WebsiteTitle>Website:</S.WebsiteTitle>
-              <S.WebsiteLink href={profile?.website}>
+              <S.WebsiteLink href={`//${profile?.website}`}>
                 {profile?.website}
               </S.WebsiteLink>
             </S.WebsiteContainer>

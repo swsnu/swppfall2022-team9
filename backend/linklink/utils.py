@@ -214,8 +214,9 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
     for search_key in search_keys:
         for linklinkuser in linklinkuser_list:
             # exact match: Korean name
-            if linklinkuser.user.last_name+\
-                linklinkuser.user.first_name == search_key:
+            if search_key in \
+                linklinkuser.user.last_name + \
+                linklinkuser.user.first_name:
                 linklinkuser_list_return.append(linklinkuser)
             else:
                 # get profile of the user for further search
@@ -228,8 +229,6 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                     profile_found.education_set.values("school")]
                 job_tags = [job_tag["company"].lower() for job_tag in \
                     profile_found.jobexperience_set.values("company")]
-                searchable_tags = [searchable_tag.lower() for searchable_tag \
-                    in tags.SEARCHABLE_KEYWORDS]
 
                 # exact match: job, school, skillTags
                 if search_key in job_tags or search_key in edu_tags \
@@ -237,7 +236,7 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                     linklinkuser_list_return.append(linklinkuser)
 
                 # searchable keys: skillTags
-                elif search_key in searchable_tags:
+                elif search_key in tags.SEARCHABLE_KEYWORDS:
                     new_search_keys = tags.SEARCHABLE_KEYWORDS[search_key]
                     new_search_keys = [new_search_key.lower() for \
                         new_search_key in new_search_keys]

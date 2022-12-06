@@ -1,5 +1,6 @@
 import { NavbarHeight } from "components/Navbar/styles";
 import { ChatRoomListPagePaddingTop } from "containers/ChatRoomListPage/styles";
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
@@ -42,13 +43,13 @@ export const ListItemContainer = styled.div<{
 
 const ChatRoomImgRadius = 45;
 export const Image = styled.div<{ imgUrl: string | undefined }>`
-  background-image: url(${props => props.imgUrl});
+  background-image: url(${props => props.imgUrl === undefined ? "" : props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   background-size: cover;
   border-radius: 50%;
   border: ${props =>
-    props.imgUrl ? "2px solid #000000" : "2px solid rgba(0, 0, 0, 0)"};
+    (props.imgUrl || props.imgUrl === "") ? "2px solid #000000" : "2px solid rgba(0, 0, 0, 0)"};
   width: ${ChatRoomImgRadius}px;
-  height: ${props => (props.imgUrl ? `${ChatRoomImgRadius}px` : "0px")};
+  height: ${props => (props.imgUrl || props.imgUrl === "") ? `${ChatRoomImgRadius}px` : "0px"};
   padding: 2px;
 `;
 

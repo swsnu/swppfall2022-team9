@@ -1,4 +1,5 @@
 import { NavbarHeight, NavbarVerticalPadding } from "components/Navbar/styles";
+import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { device } from "utils/cssMedia";
 
@@ -52,7 +53,7 @@ export const ChatRoomEmptyContainer = styled.div`
 `;
 
 export const ImageContainer = styled.div<{ imgUrl: string }>`
-  background-image: url(${props => props.imgUrl});
+  background-image: url(${props => props.imgUrl ? props.imgUrl : DEFAULT_IMAGE_URL});
   height: 50px;
   background-size: cover;
   border-radius: 50%;
