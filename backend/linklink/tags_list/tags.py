@@ -185,13 +185,13 @@ SEARCHABLE_KEYWORDS = {
     "프런트": ["Frontend"],
     "웹": ["Frontend"],
     "웹 개발": ["Frontend"],
-    "Web": ["Frontend"],
-    "Web Development": ["Frontend"],
+    "web": ["Frontend"],
+    "web development": ["Frontend"],
 
     "개발": ["Frontend", "Backend", "Software Engineering"],
     "개발자": ["Frontend", "Backend", "Software Engineering"],
 
-    "Coding": ["Frontend",
+    "coding": ["Frontend",
                "Backend",
                "Software Engineering",
                "Deep Learning",
@@ -202,46 +202,53 @@ SEARCHABLE_KEYWORDS = {
     "백": ["Backend"],
     "백엔드": ["Backend"],
     "서버": ["Backend", "DevOps", "Software Engineering"],
-    "Server": ["Backend", "DevOps", "Software Engineering"],
+    "server": ["Backend", "DevOps", "Software Engineering"],
 
     "소프트웨어 공학": ["Software Engineering"],
     "소프트웨어": ["Software Engineering"],
 
     "딥러닝": ["Deep Learning", "Machine Learning"],
+    "딥 러닝": ["Deep Learning", "Machine Learning"],
     "deep": ["Deep Learning", "Machine Learning"],
+
     "머신러닝": ["Deep Learning", "Machine Learning"],
-    "ML": ["Deep Learning", "Machine Learning"],
-    "Data Science": ["Deep Learning", "Machine Learning"],
+    "머신 러닝": ["Deep Learning", "Machine Learning"],
+    "ml": ["Deep Learning", "Machine Learning"],
+
+    "data science": ["Deep Learning", "Machine Learning"],
     "데이터": ["Deep Learning", "Machine Learning"],
     "데이터 사이언스": ["Deep Learning", "Machine Learning"],
     "데이터 과학": ["Deep Learning", "Machine Learning"],
 
     "데브옵스": ["DevOps"],
-    "Development": ["DevOps"],
+    "development": ["DevOps"],
 
     "금융공학": ["Financial Engineering"],
+    "금융 공학": ["Financial Engineering"],
     "금융": ["Financial Engineering"],
     "증권": ["Financial Engineering"],
-    "Finance": ["Financial Engineering"],
+    "finance": ["Financial Engineering"],
 
     "컨설팅": ["Consulting"],
     "전략": ["Consulting"],
-    "Strategy": ["Consulting"],
-    "Strategies": ["Consulting"],
-    "Consultant": ["Consulting"],
+    "strategy": ["Consulting"],
+    "strategies": ["Consulting"],
+    "consultant": ["Consulting"],
 
     "인사관리": ["Human Resources"],
+    "인사 관리": ["Human Resources"],
     "인사": ["Human Resources"],
-    "HR": ["Human Resources"],
-    "Manager": ["Human Resources"],
+    "hr": ["Human Resources"],
+    "manager": ["Human Resources"],
     "매니저": ["Human Resources"],
 
     "창업": ["Entrepreneurship"],
     "스타트업": ["Entrepreneurship"],
-    "Startup": ["Entrepreneurship"],
-    "Startups": ["Entrepreneurship"],
+    "startup": ["Entrepreneurship"],
+    "startups": ["Entrepreneurship"],
 
     "블록체인": ["Blockchain"],
+    "블록 체인": ["Blockchain"],
     "회계": ["Accounting"],
     "경영": ["Accounting", "Entrepreneurship"]
 }

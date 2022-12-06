@@ -36,6 +36,10 @@ const FriendListSideBar: React.FC<Props> = () => {
     <S.Container>
       <PreviewProfileSidebar />
       <S.Header>친구 목록</S.Header>
+      <S.InviteFriendButton onClick={generateInviteUrl}>
+        <AiOutlinePlus />
+        친구 초대하기
+      </S.InviteFriendButton>
       {friendList.length > 0 &&
         friendList.map(user => (
           <ChonListItem
@@ -48,10 +52,6 @@ const FriendListSideBar: React.FC<Props> = () => {
             isTwoChon={false}
           ></ChonListItem>
         ))}
-      <S.InviteFriendButton onClick={generateInviteUrl}>
-        <AiOutlinePlus />
-        친구 초대하기
-      </S.InviteFriendButton>
     </S.Container>
   );
 };

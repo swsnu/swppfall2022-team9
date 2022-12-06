@@ -15,19 +15,17 @@ const ForgotAccountPage: React.FC = () => {
     ForgotAccountType.USERNAME,
   );
 
-  const alert = useAlert();
-
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     //TODO: implement forgot account logic (use redux account reducer)
     switch (forgotAccountType) {
       case ForgotAccountType.USERNAME:
         //TODO implement this with dispatch
-        setUsernameResult("hunkim98");
+        // setUsernameResult("TODO");
         break;
       case ForgotAccountType.PASSWORD:
         //TODO implement this with dispatch
-        alert.open({ message: "인증 이메일이 보내졌습니다." });
+        // alert.open({ message: "인증 이메일이 보내졌습니다." });
         break;
     }
   };
@@ -109,6 +107,7 @@ const ForgotAccountPage: React.FC = () => {
                 role="forgotAccountInput"
                 value={inputValue(forgotAccountType)}
                 onChange={handleInputChange}
+                placeholder={'구현 예정 ㅜㅜ'}
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>

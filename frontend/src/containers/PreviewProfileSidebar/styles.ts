@@ -1,21 +1,21 @@
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled, { css, keyframes } from "styled-components";
 
-export const appearFromRight = keyframes`
+export const appearFromLeft = keyframes`
   0% {
     /* opacity: 0; */
     transform: translateX(-100%);
   }
   100% {
     /* opacity: 1; */
-    transform: translateX(0);
+    transform: translateX(0%);
   }
 `;
 
 export const disappearToLeft = keyframes`
   0% {
     /* opacity:1 ; */
-    transform: translateX(0);
+    transform: translateX(0%);
   }
   100% {
     /* opacity: 0; */
@@ -24,10 +24,10 @@ export const disappearToLeft = keyframes`
 `;
 
 export const AppearFromSideSettings = (isVisible: boolean) => css`
-  transition: visibility 0.5s linear;
+  transition: visibility 0.3s linear;
   visibility: ${isVisible ? "visible" : "hidden"};
   /* z-index: 15; */
-  animation: ${isVisible ? appearFromRight : disappearToLeft} 0.5s ease-out;
+  animation: ${isVisible ? appearFromLeft : disappearToLeft} 0.3s ease-out;
 `;
 
 export const Container = styled.div<{ isOpen: boolean }>`
@@ -54,7 +54,7 @@ export const ProfileBasicInfo = styled.div`
 export const ProfileImageContainer = styled.div``;
 
 export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
-  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
+  background-image: url(${props => props.imgUrl ? props.imgUrl : DEFAULT_IMAGE_URL});
   width: 120px;
   height: 120px;
   background-size: cover;

@@ -8,8 +8,11 @@ export const Container = styled.div`
   height: calc(100% - ${NavbarHeight}px);
 
   background-color: ${themeBgColor};
-  position: relative;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 `;
 
 export const Header = styled.header`
@@ -18,21 +21,20 @@ export const Header = styled.header`
   line-height: 34px;
   padding-left: 20px;
   padding-top: 5px;
+  transform: translateX(-150%)
 `;
 
 export const InviteFriendButton = styled.button`
   display: flex;
   justify-content: center;
-  position: absolute;
   background: none;
   border: none;
   font-weight: bold;
   width: 70%;
   padding: 10px 0px;
+  margin: 10px 0;
   bottom: 30px;
-  left: 50%;
   border-radius: 10px;
-  transform: translateX(-50%);
   background-color: #d9d9d9;
   cursor: pointer;
   :hover {
