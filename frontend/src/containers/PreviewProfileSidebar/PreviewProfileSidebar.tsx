@@ -192,13 +192,18 @@ const PreviewProfileSidebar: React.FC = () => {
               <S.ActionButton
                 disabled={
                   existingFriendRequest !== null &&
-                  existingFriendRequest.status === FriendRequestStatus.PENDING
+                  (existingFriendRequest.status ===
+                    FriendRequestStatus.PENDING ||
+                    existingFriendRequest.status ===
+                      FriendRequestStatus.REJECTED)
                 }
                 onClick={() => {
                   onClickAddFriend(profile.id);
                 }}
               >
-                {existingFriendRequest?.status === FriendRequestStatus.PENDING
+                {existingFriendRequest?.status ===
+                  FriendRequestStatus.PENDING ||
+                existingFriendRequest?.status === FriendRequestStatus.REJECTED
                   ? "친구 요청 전송됨"
                   : "친구 추가하기"}
               </S.ActionButton>
