@@ -179,7 +179,7 @@ SKILL_TAGS = [
 ]
 
 SEARCHABLE_KEYWORDS = {
-    "프론트엔트": ["Frontend"],
+    "프론트엔드": ["Frontend"],
     "프런트엔드": ["Frontend"],
     "프론트": ["Frontend"],
     "프런트": ["Frontend"],
@@ -208,6 +208,7 @@ SEARCHABLE_KEYWORDS = {
     "소프트웨어": ["Software Engineering"],
 
     "딥러닝": ["Deep Learning", "Machine Learning"],
+    "deep": ["Deep Learning", "Machine Learning"],
     "머신러닝": ["Deep Learning", "Machine Learning"],
     "ML": ["Deep Learning", "Machine Learning"],
     "Data Science": ["Deep Learning", "Machine Learning"],
