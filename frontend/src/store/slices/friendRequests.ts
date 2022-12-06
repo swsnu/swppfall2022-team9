@@ -43,7 +43,7 @@ export const getFriendRequests = createAsyncThunk<
  */
 export const getFriendRequestBetweenUsers = createAsyncThunk<
   FriendRequest,
-  { user1Id: number; user2Id: number }
+  { friendId1: number; friendId2: number }
 >("friendRequests/getFriendRequestBetweenUsers", async query => {
   const response = await axios.get<FriendRequest>("/api/friendRequest/", {
     params: query,
