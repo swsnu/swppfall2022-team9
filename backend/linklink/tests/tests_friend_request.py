@@ -1066,6 +1066,1001 @@ class LinkLinkFriendRequestTestCase(TestCase):
         self.assertEqual(str(friend_request_found.senderId), "GunnJames")
         self.assertEqual(str(friend_request_found.getterId), "CenaJohn")
 
+
+    def test_get_specific_friend_request_only_user_1_query(self):
+        target_url = "/api/friendRequest/?user1Id=1"
+        # Initialize Connection
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 405)
+        error_message_dict = {
+            "message": "invalid query param"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_get_specific_friend_request_no_read_permission(self):
+        target_url = "/api/friendRequest/?user1Id=2&user2Id=3"
+        # Initialize Connection
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message": (
+                "No read permission for FriendRequest "
+                "user1Id=2, user2Id=3."
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_get_specific_friend_request_does_not_exist(self):
+        target_url = "/api/friendRequest/?user1Id=1&user2Id=2"
+        # user is in (1, 2) but FriendRequest does not exist
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # GET
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message": (
+                "FriendRequest user1Id=1, "
+                "user2Id=2 not found."
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_post_friend_request_already_exists_as_accepted(self):
+        target_url = "/api/friendRequest/"
+        # Initialize Connection
+        # john-james james-emily onechon, john-emily onechon
+        # Create new friendRequest to john->emily
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        # Save initial object count
+        friend_request_count = FriendRequest.objects.count()
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "getterId": 3
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            (
+                "FriendRequest already exists between "
+                "user1Id=CenaJohn, user2Id=BluntEmily."
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # DB check to see no change
+        self.assertTrue(FriendRequest.objects.filter(
+            id=friend_request_count).exists()
+        )
+        new_friend_request = \
+            FriendRequest.objects.get(id=friend_request_count)
+        self.assertEqual(new_friend_request.senderId, emily_linklinkuser)
+        self.assertEqual(new_friend_request.getterId, john_linklinkuser)
+        self.assertEqual(new_friend_request.status, "Accepted")
+
+
+    def test_post_friend_request_already_exists_as_pending(self):
+        target_url = "/api/friendRequest/"
+        # Initialize Connection
+        # john-james james-emily onechon, john-emily onechon
+        # Create new friendRequest to john->emily
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Pending",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        # Save initial object count
+        friend_request_count = FriendRequest.objects.count()
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "getterId": 3
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            (
+                "FriendRequest already exists between "
+                "user1Id=CenaJohn, user2Id=BluntEmily."
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # DB check to see no change
+        self.assertTrue(FriendRequest.objects.filter(
+            id=friend_request_count).exists()
+        )
+        new_friend_request = \
+            FriendRequest.objects.get(id=friend_request_count)
+        self.assertEqual(new_friend_request.senderId, emily_linklinkuser)
+        self.assertEqual(new_friend_request.getterId, john_linklinkuser)
+        self.assertEqual(new_friend_request.status, "Pending")
+
+
+    def test_post_friend_request_already_exists_as_rejected(self):
+        target_url = "/api/friendRequest/"
+        # Initialize Connection
+        # john-james james-emily onechon, john-emily onechon
+        # Create new friendRequest to john->emily
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Rejected",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        # Save initial object count
+        friend_request_count = FriendRequest.objects.count()
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "getterId": 3
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            (
+                "FriendRequest already exists between "
+                "user1Id=CenaJohn, user2Id=BluntEmily."
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # DB check to see no change
+        self.assertTrue(FriendRequest.objects.filter(
+            id=friend_request_count).exists()
+        )
+        new_friend_request = \
+            FriendRequest.objects.get(id=friend_request_count)
+        self.assertEqual(new_friend_request.senderId, emily_linklinkuser)
+        self.assertEqual(new_friend_request.getterId, john_linklinkuser)
+        self.assertEqual(new_friend_request.status, "Rejected")
+
+
+    def test_post_friend_request_not_within_twochon(self):
+        target_url = "/api/friendRequest/"
+        # Initialize Connection
+        # john-james onechon,
+        # Create new friendRequest to john->emily
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        Profile.objects.create(
+            linklinkuser=john_linklinkuser,
+            introduction="This is john",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=james_linklinkuser,
+            introduction="This is james",
+            imgUrl="https://catimage.com",
+        )
+        Profile.objects.create(
+            linklinkuser=emily_linklinkuser,
+            introduction="This is emily",
+            imgUrl="https://catimage.com",
+        )
+        # Save initial object count
+        friend_request_count = FriendRequest.objects.count()
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "getterId": 3
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message": "Two users are not within twochon."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # DB check to see no new FriendRequest
+        self.assertFalse(FriendRequest.objects.filter(
+            id=friend_request_count+1).exists()
+        )
+
+
+    def test_put_friend_request_not_found(self):
+        target_url = "/api/friendRequest/1/"
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message": "FriendRequest id=1 not found."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_getter_p_2_a_no_permission_for_sender(self):
+        target_url = "/api/friendRequest/1/"
+        # Pending -> Accepted
+        # "Getter" Case
+        # john is sender
+        # john(sender) cannot edit Pending -> Accepted
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "Current user has no write permission for FriendRequest id=1."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_getter_p_2_a_no_permission_for_anyone(self):
+        target_url = "/api/friendRequest/1/"
+        # Pending -> Accepted
+        # "Getter" Case
+        # john is anyone
+        # john(anyone) cannot edit Pending -> Accepted
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "Current user has no write permission for FriendRequest id=1."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_getter_p_2_r_no_permission_for_sender(self):
+        target_url = "/api/friendRequest/1/"
+        # Pending -> Rejected
+        # "Getter" Case
+        # john is sender
+        # john(sender) cannot edit Pending -> Rejected
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "Current user has no write permission for FriendRequest id=1."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_getter_p_2_r_no_permission_for_anyone(self):
+        target_url = "/api/friendRequest/1/"
+        # Pending -> Rejected
+        # "Getter" Case
+        # john is anyone
+        # john(anyone) cannot edit Pending -> Rejected
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "Current user has no write permission for FriendRequest id=1."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_both_a_2_r_no_permission_for_anyone(self):
+        target_url = "/api/friendRequest/1/"
+        # Accepted -> Rejected
+        # "Both" Case
+        # john is anyone
+        # john(anyone) cannot edit Accepted -> Rejected
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Rejected"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "Current user has no write permission for FriendRequest id=1."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_both_r_2_p_no_permission_for_anyone(self):
+        target_url = "/api/friendRequest/1/"
+        # Rejected -> Pending
+        # "Both*" Case
+        # john is anyone
+        # john(anyone) cannot edit Rejected -> Pending
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        FriendRequest.objects.create(
+            senderId=emily_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Pending"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message":
+            "Current user has no write permission for FriendRequest id=1."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_both_r_2_p_not_within_twochon(self):
+        target_url = "/api/friendRequest/1/"
+        # Rejected -> Pending
+        # "Both*" Case
+        # john is sender, but is not within twochon with james anymore
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Rejected",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Pending"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message": "Two users are not within twochon."
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_put_friend_request_p_2_a_max_onechon_invariant_getter(self):
+        target_url = "/api/friendRequest/11/"
+        # Pending -> Accepted
+        # john already has 10 onechons, trys to get one more
+        # should cause max onechon invariant to fail
+        # Create 7 more users
+        user_6 = User.objects.create_user(
+            username="user_6",
+            password="user_6password",
+            first_name="user_6",
+            last_name="user_6_last_name"
+        )
+        user_7 = User.objects.create_user(
+            username="user_7",
+            password="user_7password",
+            first_name="user_7",
+            last_name="user_7_last_name"
+        )
+        user_8 = User.objects.create_user(
+            username="user_8",
+            password="user_8password",
+            first_name="user_8",
+            last_name="user_8_last_name"
+        )
+        user_9 = User.objects.create_user(
+            username="user_9",
+            password="user_9password",
+            first_name="user_9",
+            last_name="Smith"
+        )
+        user_10 = User.objects.create_user(
+            username="user_10",
+            password="user_10password",
+            first_name="user_10",
+            last_name="user_10_last_name"
+        )
+        user_11 = User.objects.create_user(
+            username="user_11",
+            password="user_11password",
+            first_name="user_11",
+            last_name="user_11_last_name"
+        )
+        user_12 = User.objects.create_user(
+            username="user_12",
+            password="user_12password",
+            first_name="user_12",
+            last_name="user_12_last_name"
+        )
+        user_6_linklinkuser = LinkLinkUser.objects.create(
+            user=user_6,
+            emailValidated=False,
+            email_unique="invalid_but_unique6@snu.ac.kr",
+        )
+        user_7_linklinkuser = LinkLinkUser.objects.create(
+            user=user_7,
+            emailValidated=False,
+            email_unique="invalid_but_unique7@snu.ac.kr",
+        )
+        user_8_linklinkuser = LinkLinkUser.objects.create(
+            user=user_8,
+            emailValidated=False,
+            email_unique="invalid_but_unique8@snu.ac.kr",
+        )
+        user_9_linklinkuser = LinkLinkUser.objects.create(
+            user=user_9,
+            emailValidated=False,
+            email_unique="invalid_but_unique9@snu.ac.kr",
+        )
+        user_10_linklinkuser = LinkLinkUser.objects.create(
+            user=user_10,
+            emailValidated=False,
+            email_unique="invalid_but_unique10@snu.ac.kr",
+        )
+        user_11_linklinkuser = LinkLinkUser.objects.create(
+            user=user_11,
+            emailValidated=False,
+            email_unique="invalid_but_unique11@snu.ac.kr",
+        )
+        user_12_linklinkuser = LinkLinkUser.objects.create(
+            user=user_12,
+            emailValidated=False,
+            email_unique="invalid_but_unique12@snu.ac.kr",
+        )
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        will_linklinkuser = LinkLinkUser.objects.get(pk=4)
+        chris_linklinkuser = LinkLinkUser.objects.get(pk=5)
+        # Init 10 onechon connections for john
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=emily_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=will_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=chris_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=user_6_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_7_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_8_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_9_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_10_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=user_11_linklinkuser,
+            status="Accepted",
+        )
+        # Init one Pending request
+        FriendRequest.objects.create(
+            senderId=user_12_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Pending",
+        )
+        # Login John
+        response = self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        friend_request_new = FriendRequest.objects.get(pk=11)
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message": (
+                "Onechon Invariant Failed for CenaJohn. "
+                "Onechon list length: 10 "
+                "Onechon list of CenaJohn:"
+                "[<LinkLinkUser: GunnJames>, "
+                "<LinkLinkUser: BluntEmily>, <LinkLinkUser: SmithWill>, "
+                "<LinkLinkUser: RockChris>, <LinkLinkUser: "
+                "user_6_last_nameuser_6>, "
+                "<LinkLinkUser: user_7_last_nameuser_7>, "
+                "<LinkLinkUser: user_8_last_nameuser_8>, <LinkLinkUser: "
+                "Smithuser_9>, <LinkLinkUser: user_10_last_nameuser_10>, "
+                "<LinkLinkUser: user_11_last_nameuser_11>]"
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # DB check to check new FriendRequest
+        self.assertTrue(FriendRequest.objects.filter(id=11).exists())
+        self.assertEqual(friend_request_new.senderId, user_12_linklinkuser)
+        self.assertEqual(friend_request_new.getterId, john_linklinkuser)
+        self.assertEqual(friend_request_new.status, "Pending")
+
+
+    def test_put_friend_request_p_2_a_max_onechon_invariant_sender(self):
+        target_url = "/api/friendRequest/11/"
+        # Pending -> Accepted
+        # john already has 10 onechons, trys to get one more
+        # should cause max onechon invariant to fail
+        # Create 7 more users
+        user_6 = User.objects.create_user(
+            username="user_6",
+            password="user_6password",
+            first_name="user_6",
+            last_name="user_6_last_name"
+        )
+        user_7 = User.objects.create_user(
+            username="user_7",
+            password="user_7password",
+            first_name="user_7",
+            last_name="user_7_last_name"
+        )
+        user_8 = User.objects.create_user(
+            username="user_8",
+            password="user_8password",
+            first_name="user_8",
+            last_name="user_8_last_name"
+        )
+        user_9 = User.objects.create_user(
+            username="user_9",
+            password="user_9password",
+            first_name="user_9",
+            last_name="Smith"
+        )
+        user_10 = User.objects.create_user(
+            username="user_10",
+            password="user_10password",
+            first_name="user_10",
+            last_name="user_10_last_name"
+        )
+        user_11 = User.objects.create_user(
+            username="user_11",
+            password="user_11password",
+            first_name="user_11",
+            last_name="user_11_last_name"
+        )
+        user_12 = User.objects.create_user(
+            username="user_12",
+            password="user_12password",
+            first_name="user_12",
+            last_name="user_12_last_name"
+        )
+        user_6_linklinkuser = LinkLinkUser.objects.create(
+            user=user_6,
+            emailValidated=False,
+            email_unique="invalid_but_unique6@snu.ac.kr",
+        )
+        user_7_linklinkuser = LinkLinkUser.objects.create(
+            user=user_7,
+            emailValidated=False,
+            email_unique="invalid_but_unique7@snu.ac.kr",
+        )
+        user_8_linklinkuser = LinkLinkUser.objects.create(
+            user=user_8,
+            emailValidated=False,
+            email_unique="invalid_but_unique8@snu.ac.kr",
+        )
+        user_9_linklinkuser = LinkLinkUser.objects.create(
+            user=user_9,
+            emailValidated=False,
+            email_unique="invalid_but_unique9@snu.ac.kr",
+        )
+        user_10_linklinkuser = LinkLinkUser.objects.create(
+            user=user_10,
+            emailValidated=False,
+            email_unique="invalid_but_unique10@snu.ac.kr",
+        )
+        user_11_linklinkuser = LinkLinkUser.objects.create(
+            user=user_11,
+            emailValidated=False,
+            email_unique="invalid_but_unique11@snu.ac.kr",
+        )
+        user_12_linklinkuser = LinkLinkUser.objects.create(
+            user=user_12,
+            emailValidated=False,
+            email_unique="invalid_but_unique12@snu.ac.kr",
+        )
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        james_linklinkuser = LinkLinkUser.objects.get(pk=2)
+        emily_linklinkuser = LinkLinkUser.objects.get(pk=3)
+        will_linklinkuser = LinkLinkUser.objects.get(pk=4)
+        chris_linklinkuser = LinkLinkUser.objects.get(pk=5)
+        # Init 10 onechon connections for john
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=james_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=emily_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=will_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=chris_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=user_6_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_7_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_8_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_9_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=user_10_linklinkuser,
+            getterId=john_linklinkuser,
+            status="Accepted",
+        )
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=user_11_linklinkuser,
+            status="Accepted",
+        )
+        # Init one Pending request
+        FriendRequest.objects.create(
+            senderId=john_linklinkuser,
+            getterId=user_12_linklinkuser,
+            status="Pending",
+        )
+        # Login user_12
+        response = self.client.login(
+            username="user_12",
+            password="user_12password"
+        )
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "status": "Accepted"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        friend_request_new = FriendRequest.objects.get(pk=11)
+        self.assertEqual(response.status_code, 403)
+        error_message_dict = {
+            "message": (
+                "Onechon Invariant Failed for CenaJohn. "
+                "Onechon list length: 10 "
+                "Onechon list of CenaJohn:"
+                "[<LinkLinkUser: GunnJames>, "
+                "<LinkLinkUser: BluntEmily>, <LinkLinkUser: SmithWill>, "
+                "<LinkLinkUser: RockChris>, <LinkLinkUser: "
+                "user_6_last_nameuser_6>, "
+                "<LinkLinkUser: user_7_last_nameuser_7>, "
+                "<LinkLinkUser: user_8_last_nameuser_8>, <LinkLinkUser: "
+                "Smithuser_9>, <LinkLinkUser: user_10_last_nameuser_10>, "
+                "<LinkLinkUser: user_11_last_nameuser_11>]"
+            )
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+        # DB check to check new FriendRequest
+        self.assertTrue(FriendRequest.objects.filter(id=11).exists())
+        self.assertEqual(friend_request_new.senderId, john_linklinkuser)
+        self.assertEqual(friend_request_new.getterId, user_12_linklinkuser)
+        self.assertEqual(friend_request_new.status, "Pending")
+
 #--------------------------------------------------------------------------
 #   400 Checking Tests
 #--------------------------------------------------------------------------

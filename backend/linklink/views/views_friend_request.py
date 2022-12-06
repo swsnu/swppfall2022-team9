@@ -242,7 +242,7 @@ def friend_request_respond(request, friend_request_id):
                     status=403,
                     data={"message": no_write_permission_message}
                 )
-        elif state_transition_result == "Both":
+        elif state_transition_result == "Both": # pragma: no branch
             sender_or_getter = (
                 friend_request_found.senderId.id,
                 friend_request_found.getterId.id
@@ -277,8 +277,37 @@ def friend_request_respond(request, friend_request_id):
                     friend_request_found.getterId = other_user
         # Check Max Onechon Invariant
         if new_status == "Accepted":
-            max_onechon_invariant(friend_request_found.senderId)
-            max_onechon_invariant(friend_request_found.getterId)
+            max_onechon_violated, onechon_list = max_onechon_invariant(
+                friend_request_found.senderId, friend_request_found
+            )
+            if max_onechon_violated: # pragma: no branch
+                max_onechon_error_message = (
+                    "Onechon Invariant Failed for "
+                    f"{friend_request_found.senderId}. "
+                    f"Onechon list length: {len(onechon_list)} "
+                    f"Onechon list of {friend_request_found.senderId}:"
+                    f"{onechon_list}"
+                )
+                return JsonResponse(
+                    status=403,
+                    data={"message":max_onechon_error_message}
+                )
+            max_onechon_violated, onechon_list = max_onechon_invariant(
+                friend_request_found.getterId, friend_request_found
+            )
+            if max_onechon_violated: # pragma: no branch
+                max_onechon_error_message = (
+                    "Onechon Invariant Failed for "
+                    f"{friend_request_found.getterId}. "
+                    f"Onechon list length: {len(onechon_list)} "
+                    f"Onechon list of {friend_request_found.getterId}:"
+                    f"{onechon_list}"
+                )
+                return JsonResponse(
+                    status=403,
+                    data={"message":max_onechon_error_message}
+                )
+
         # Change status of FriendRequest
         friend_request_found.status = new_status
         friend_request_found.save()
