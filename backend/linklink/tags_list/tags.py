@@ -5,7 +5,7 @@ keeps a list of quality tags & skill tags
 will be imported into models to initialize QualityTag and SkillTag
 """
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   Quality Tags
 #
 #   Source:
@@ -22,7 +22,7 @@ will be imported into models to initialize QualityTag and SkillTag
 #
 #   Changes:
 #   The below good words are translated into Korean (2022.12.01)
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 QUALITY_TAGS = [
     # Korean good words
@@ -154,11 +154,11 @@ QUALITY_TAGS = [
     # "Tolerant",
 ]
 
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   Skill Tags
 #
 #   Source: Manually Written
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 SKILL_TAGS = [
     # CS related skills
@@ -177,3 +177,70 @@ SKILL_TAGS = [
     "Blockchain",
     "Accounting",
 ]
+
+SEARCHABLE_KEYWORDS = {
+    "프론트엔트": ["Frontend"],
+    "프런트엔드": ["Frontend"],
+    "프론트": ["Frontend"],
+    "프런트": ["Frontend"],
+    "웹": ["Frontend"],
+    "웹 개발": ["Frontend"],
+    "Web": ["Frontend"],
+    "Web Development": ["Frontend"],
+
+    "개발": ["Frontend", "Backend", "Software Engineering"],
+    "개발자": ["Frontend", "Backend", "Software Engineering"],
+
+    "Coding": ["Frontend",
+               "Backend",
+               "Software Engineering",
+               "Deep Learning",
+               "Machine Learning",
+               "DevOps",
+               "MLOps"],
+
+    "백": ["Backend"],
+    "백엔드": ["Backend"],
+    "서버": ["Backend", "DevOps", "Software Engineering"],
+    "Server": ["Backend", "DevOps", "Software Engineering"],
+
+    "소프트웨어 공학": ["Software Engineering"],
+    "소프트웨어": ["Software Engineering"],
+
+    "딥러닝": ["Deep Learning", "Machine Learning"],
+    "머신러닝": ["Deep Learning", "Machine Learning"],
+    "ML": ["Deep Learning", "Machine Learning"],
+    "Data Science": ["Deep Learning", "Machine Learning"],
+    "데이터": ["Deep Learning", "Machine Learning"],
+    "데이터 사이언스": ["Deep Learning", "Machine Learning"],
+    "데이터 과학": ["Deep Learning", "Machine Learning"],
+
+    "데브옵스": ["DevOps"],
+    "Development": ["DevOps"],
+
+    "금융공학": ["Financial Engineering"],
+    "금융": ["Financial Engineering"],
+    "증권": ["Financial Engineering"],
+    "Finance": ["Financial Engineering"],
+
+    "컨설팅": ["Consulting"],
+    "전략": ["Consulting"],
+    "Strategy": ["Consulting"],
+    "Strategies": ["Consulting"],
+    "Consultant": ["Consulting"],
+
+    "인사관리": ["Human Resources"],
+    "인사": ["Human Resources"],
+    "HR": ["Human Resources"],
+    "Manager": ["Human Resources"],
+    "매니저": ["Human Resources"],
+
+    "창업": ["Entrepreneurship"],
+    "스타트업": ["Entrepreneurship"],
+    "Startup": ["Entrepreneurship"],
+    "Startups": ["Entrepreneurship"],
+
+    "블록체인": ["Blockchain"],
+    "회계": ["Accounting"],
+    "경영": ["Accounting", "Entrepreneurship"]
+}

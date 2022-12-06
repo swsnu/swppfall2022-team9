@@ -11,6 +11,7 @@ from linklink.views import (
     views_chat,
     views_tags,
     views_account,
+    views_search,
 )
 
 urlpatterns = [
@@ -72,5 +73,10 @@ urlpatterns = [
         "account/password/",
         views_account.password_reset,
         name="password_reset"
+    ),
+    path(
+        "searchFriends/<str:search_keys>/",
+        views_search.search_friends,
+        name="search_friends"
     ),
 ]
