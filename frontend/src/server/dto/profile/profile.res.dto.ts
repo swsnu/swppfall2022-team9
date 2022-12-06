@@ -5,4 +5,6 @@ export type GetProfileResDto = Profile & { qualityTags: QualityTags | null };
 
 export type EditProfileResDto = Profile & { qualityTags: QualityTags | null };
 
+export type UploadImageResDto = { imgUrl: string };
+
 export interface PostCreateProfileResDto {}

@@ -67,6 +67,8 @@ export class UserNode {
     this.imgElement.src = imgUrl === "" ? DEFAULT_IMAGE_URL : imgUrl;
     this.imgElement.onload = () => {
       canvas.render();
+      // canvas.loadedImgCount++
+      // if (canvas.loadedImgCount === canvas.totalImgCount)
     };
     this.name = name;
     this.coord = { ...coord };

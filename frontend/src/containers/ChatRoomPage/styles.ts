@@ -1,7 +1,7 @@
 import { NavbarHeight } from "components/Navbar/styles";
 import { ChatRoomListPagePaddingTop } from "containers/ChatRoomListPage/styles";
 import styled from "styled-components";
-import { CommonGreyColor, ThemeColor } from "styles/common.styles";
+import { ThemeColor } from "styles/common.styles";
 
 export const Container = styled.div`
   background-color: #f8f8f8;
@@ -82,8 +82,7 @@ export const MessageContent = styled.div<{ from: string }>`
     props.from === "me" ? "rgb(251, 229, 77)" : "white"}; */ // yellow
   /* background-color: ${props =>
     props.from === "me" ? "rgb(243, 243, 243)" : "white"}; */ // gray
-  background-color: ${props =>
-    props.from === "me" ? ThemeColor : "white"};
+  background-color: ${props => (props.from === "me" ? ThemeColor : "white")};
   border: ${props =>
     props.from === "me" ? "1px solid rgba(0, 0, 0, 0)" : "1.5px solid #AAAAAA"};
 

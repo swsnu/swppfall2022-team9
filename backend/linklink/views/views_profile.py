@@ -156,8 +156,15 @@ def upload_image(request):
                 cloudinary.uploader.upload(request.FILES["profileImage"])
         except KeyError as e:
             return HttpResponseBadRequest(e) # implicit status code = 400
+
+        cloudinary_img_url = upload_result["secure_url"]
+        profile_found = \
+            Profile.objects.get(linklinkuser=request.user.linklinkuser)
+        profile_found.imgUrl = cloudinary_img_url
+        profile_found.save()
+
         response_dict = {
-            "imgUrl" : upload_result["secure_url"]
+            "imgUrl" : cloudinary_img_url
         }
         return JsonResponse(
             status=200,

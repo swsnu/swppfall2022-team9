@@ -4,7 +4,7 @@ Account related views module for linklink app
 
 import json
 from json.decoder import JSONDecodeError
-
+from django.contrib.auth import login
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
@@ -43,4 +43,5 @@ def password_reset(request):
         user = request.user
         user.set_password(new_password)
         user.save()
+        login(request, user)
         return HttpResponse(status=200)

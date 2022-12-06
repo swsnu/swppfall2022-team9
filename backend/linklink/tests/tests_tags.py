@@ -156,7 +156,11 @@ class LinkLinkTagsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         response_dict = json.loads(response.content.decode())
         all_skill_tags = response_dict["skillTags"]
-        self.assertEqual(all_skill_tags, ["Frontend", "Backend", "DevOps"])
+        self.assertEqual(all_skill_tags, [
+            {"name": "Frontend"},
+            {"name": "Backend"},
+            {"name": "DevOps"}
+        ])
 
 
     def test_get_all_quality_tags_success(self):
@@ -168,7 +172,12 @@ class LinkLinkTagsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         response_dict = json.loads(response.content.decode())
         all_quality_tags = response_dict["qualityTags"]
-        self.assertEqual(all_quality_tags, ["성실한", "정직한", "유쾌한", "논리적인"])
+        self.assertEqual(all_quality_tags, [
+            {"name": "성실한"},
+            {"name": "정직한"},
+            {"name": "유쾌한"},
+            {"name": "논리적인"}
+        ])
 
 
     def test_get_quality_tag_success(self):

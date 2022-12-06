@@ -62,6 +62,10 @@ export default class Canvas extends EventDispatcher {
 
   private friendList: OneChonInfo[] = [];
 
+  // loadedImgCount = 0
+  
+  // totalImgCount = 0
+
   centerNode?: UserNode;
 
   oneChonNodes: OneChonNode[] = [];
@@ -592,6 +596,7 @@ export default class Canvas extends EventDispatcher {
       scaledRadius * 2,
       scaledRadius * 2,
     );
+    
 
     // For not searched one-chon
     if (userNode.isNotSearched) {

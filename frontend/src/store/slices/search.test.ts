@@ -4,11 +4,7 @@ import {
   EnhancedStore,
   ThunkMiddleware,
 } from "@reduxjs/toolkit";
-import { friendListStub } from "server/stubs/users.stub";
-import searchReducer, {
-  searchActions,
-  SearchState,
-} from "./search";
+import searchReducer, { searchActions, SearchState } from "./search";
 
 const mockDispatch = jest.fn();
 

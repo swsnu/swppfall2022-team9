@@ -3,7 +3,6 @@ Search test module for linklink app
 """
 
 from datetime import datetime, timedelta
-import inspect
 import json
 import os
 
@@ -26,6 +25,9 @@ from ..models import (
 
 
 class LinkLinkUserSearchTestCase(TestCase):
+    """
+    Test for linklinkuser search
+    """
     def setUp(self):
         john = User.objects.create_user(
             username="john",
@@ -87,22 +89,36 @@ class LinkLinkUserSearchTestCase(TestCase):
             emailValidated=False,
             email_unique="invalid_but_unique4@snu.ac.kr",
         )
-        expire_time = datetime.now() + timedelta(days=settings.EMAIL_EXPIRE_DAYS)
-        expire_time = expire_time.astimezone(timezone.get_default_timezone())
+        expire_time = datetime.now() + timedelta(
+            days=settings.EMAIL_EXPIRE_DAYS
+        )
+        expire_time = expire_time.astimezone(
+            timezone.get_default_timezone()
+            )
         Verification.objects.create(
-            linklinkuser=john_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=john_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
         Verification.objects.create(
-            linklinkuser=james_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=james_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
         Verification.objects.create(
-            linklinkuser=emily_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=emily_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
         Verification.objects.create(
-            linklinkuser=will_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=will_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
         Verification.objects.create(
-            linklinkuser=chris_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=chris_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
         SkillTag.objects.create(name="Frontend")
         QualityTag.objects.create(name="성실한")
@@ -110,7 +126,8 @@ class LinkLinkUserSearchTestCase(TestCase):
 
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
-        self.csrftoken = self.client.get("/api/csrf_token/").cookies["csrftoken"].value
+        self.csrftoken = \
+            self.client.get("/api/csrf_token/").cookies["csrftoken"].value
         self.linklink_path = os.path.dirname(os.path.realpath(__file__))
 
     def test_search_friends(self):
