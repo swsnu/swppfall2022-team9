@@ -9,7 +9,6 @@ import {
   putFriendRequestToken,
 } from "store/slices/friendRequests";
 import { profileActions } from "store/slices/profile";
-import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
 import * as S from "./styles";
 
@@ -32,7 +31,7 @@ const HomePage: React.FC<Props> = () => {
       if (friendInviteToken) {
         localStorage.setItem("inviteToken", friendInviteToken);
         alert.open({
-          message: "초대 링크는 로그인 이후에 사용할 수 있습니다",
+          message: "친구 소개로 오셨군요!\n먼저 회원가입을 진행해주세요.",
           buttons: [
             {
               label: "회원가입하기",
@@ -51,7 +50,7 @@ const HomePage: React.FC<Props> = () => {
     if (currentUser) {
       const localStorageFriendInviteToken = localStorage.getItem("inviteToken");
       dispatch(getFriendList());
-      dispatch(searchActions.SearchModeOff());
+      // dispatch(searchActions.SearchModeOff());
       dispatch(profileActions.setPreviewProfile(null));
       if (localStorageFriendInviteToken) {
         dispatch(putFriendRequestToken(localStorageFriendInviteToken));
