@@ -7,32 +7,30 @@ import { AiOutlinePlus } from "react-icons/ai";
 import useAlert from "hooks/useAlert";
 import { getFriendRequestToken } from "store/slices/friendRequests";
 
-interface Props { }
+interface Props {}
 
 const FriendListSideBar: React.FC<Props> = () => {
   const alert = useAlert();
   const dispatch = useAppDispatch();
   const userState = useAppSelector(state => state.users);
-  // const navigate = useNavigate();
-
-  // if (userState.currentUser === null) {
-  //   navigate("/signup");
-  // }
-
-  // const curUserId = userState.currentUser!.id;
-  // curUserID getChonLIst()
   const friendList = userState.friendList;
 
   const generateInviteUrl = async () => {
     try {
-      const friendRequestToken = (await dispatch(getFriendRequestToken()).unwrap()).friendRequestToken
+      const friendRequestToken = (
+        await dispatch(getFriendRequestToken()).unwrap()
+      ).friendRequestToken;
       //.replaceAll("-", "");
-      navigator.clipboard.writeText(process.env.REACT_APP_WEBSITE_URL! + `?invite=${friendRequestToken}`)
-      alert.open({ message: "친구 초대 링크가 복사되었습니다. 상대방에게 전달해주세요!" })
+      navigator.clipboard.writeText(
+        process.env.REACT_APP_WEBSITE_URL! + `?invite=${friendRequestToken}`,
+      );
+      alert.open({
+        message: "친구 초대 링크가 복사되었습니다. 상대방에게 전달해주세요!",
+      });
     } catch (err) {
-      alert.open({ message: "친구 초대 링크를 생성하지 못했습니다" })
+      alert.open({ message: "친구 초대 링크를 생성하지 못했습니다" });
     }
-  }
+  };
 
   return (
     <S.Container>
@@ -54,7 +52,7 @@ const FriendListSideBar: React.FC<Props> = () => {
         <AiOutlinePlus />
         친구 초대하기
       </S.InviteFriendButton>
-    </S.Container >
+    </S.Container>
   );
 };
 

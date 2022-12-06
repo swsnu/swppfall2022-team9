@@ -108,10 +108,16 @@ export const FriendRequestActionButton = styled.button`
 
 export const Accept = styled(FriendRequestActionButton)`
   background-color: ${ThemeColor};
+  :hover {
+    background-color: ${"#EED1EF"};
+  }
 `;
 
 export const Decline = styled(FriendRequestActionButton)`
-  opacity: 0.5;
+  background-color: ${"#E9E9E9"};
+  :hover {
+    background-color: ${"#D9D9D9"};
+  }
 `;
 
 export const NavbarButtonRedMark = styled.div`

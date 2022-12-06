@@ -21,6 +21,8 @@ export const Header = styled.header`
 `;
 
 export const InviteFriendButton = styled.button`
+  display: flex;
+  justify-content: center;
   position: absolute;
   background: none;
   border: none;
