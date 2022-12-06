@@ -8,7 +8,7 @@ import {
   getFriendRequests,
   putFriendRequest,
 } from "store/slices/friendRequests";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FriendRequestStatus } from "server/models/friendRequests.model";
 import useHandleClickOutside from "hooks/useHandleClickOutside";
 import { searchActions } from "store/slices/search";
@@ -28,6 +28,7 @@ const Navbar: React.FC<Props> = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onClickBell = () => {
     setIsClickedOutsideOfNotification(prev => !prev);
@@ -65,6 +66,7 @@ const Navbar: React.FC<Props> = () => {
 
   const onClickSearch = async () => {
     dispatch(searchActions.toggleSearchMode());
+    if (location.pathname !== "/") navigate("/");
   };
 
   useHandleClickOutside({
