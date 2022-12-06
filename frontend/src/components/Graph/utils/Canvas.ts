@@ -599,7 +599,7 @@ export default class Canvas extends EventDispatcher {
       ctx.save();
       ctx.beginPath();
       ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, 0.5)`;
+      ctx.fillStyle = `rgba(255, 255, 255, 0.7)`;
       ctx.fill();
       ctx.closePath();
     }
