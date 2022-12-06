@@ -36,7 +36,7 @@ describe("profile reducer", () => {
       .fn()
       .mockResolvedValue({ data: { qualityTags: qualityTagStub } });
     await store.dispatch(getAllQualityTags());
-    expect(store.getState().quality.skillTagsList).toEqual(qualityTagStub);
+    expect(store.getState().quality.qualityTagsList).toEqual(qualityTagStub);
   });
 
   it("tests getUserQualityTags", async () => {
