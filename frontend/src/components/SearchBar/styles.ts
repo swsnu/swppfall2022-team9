@@ -15,6 +15,11 @@ export const Container = styled.div`
   align-items: center;
 `;
 
+export const Form = styled.form`
+  display: flex;
+  width: 100%;
+`
+
 export const Input = styled.input`
   border: none;
   padding: 0 4px;

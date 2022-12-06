@@ -171,7 +171,7 @@ export default class Canvas extends EventDispatcher {
       }
 
       this.touchedNode = touchedNode;
-      if (!this.touchedNode.isNotFiltered) {
+      if (!this.touchedNode.isNotSearched) {
         // Only filtered nodes can expand and contract
         window.cancelAnimationFrame(this.touchedNode.contractAnimationId);
         touchedNode.expand();
@@ -408,7 +408,7 @@ export default class Canvas extends EventDispatcher {
           this,
           [],
           oneChon.imgUrl,
-          oneChon.isNotFiltered,
+          oneChon.isNotSearched,
         );
         this.nodes.push(oneChonNode);
         return oneChonNode;
@@ -449,7 +449,7 @@ export default class Canvas extends EventDispatcher {
               : { x: -1, y: -1 },
             this,
             twoChon.imgUrl,
-            twoChon.isNotFiltered,
+            twoChon.isNotSearched,
           );
           this.nodes.push(twoChonNode);
           this.twoChonNodes.push(twoChonNode);
@@ -464,7 +464,7 @@ export default class Canvas extends EventDispatcher {
           this,
           twoChonNodes,
           oneChon.imgUrl,
-          oneChon.isNotFiltered,
+          oneChon.isNotSearched,
           omitCount,
         );
         this.nodes.push(oneChonNode);
@@ -592,6 +592,17 @@ export default class Canvas extends EventDispatcher {
       scaledRadius * 2,
       scaledRadius * 2,
     );
+
+    // For not searched one-chon
+    if (userNode.isNotSearched) {
+      ctx.restore();
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, 0.5)`;
+      ctx.fill();
+      ctx.closePath();
+    }
 
     // Draw round border
     ctx.restore();

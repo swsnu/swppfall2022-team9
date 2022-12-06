@@ -38,22 +38,29 @@ const Graph: React.FC<Props> = () => {
   const currentUser = users.currentUser;
   const friendList = users.friendList;
   const isSearchMode = search.isSearchMode;
-  // const searchWord = search.searchWord;
-  // const filteredFriendList = search.filteredFriendList;
+  const searchWord = search.searchWord;
+  const filteredFriendList = search.filteredFriendList;
   useEffect(() => {
     if (canvas) {
       if (currentUser) {
         canvas.setCurrentUser(currentUser);
-        canvas.setFriendList(friendList);
-        // if (isSearchMode && searchWord !== "") {
-        //   canvas.setFriendList(filteredFriendList);
-        // } else {
-        //   canvas.setFriendList(friendList);
-        // }
-        if (oneChonIdToExpandNetwork) {
-          canvas.drawInitialGraph(oneChonIdToExpandNetwork);
+
+        if (isSearchMode) {
+          if (searchWord !== "") {
+            canvas.setFriendList(filteredFriendList);
+            if (oneChonIdToExpandNetwork) {
+              canvas.drawInitialGraph(oneChonIdToExpandNetwork);
+            } else {
+              canvas.drawInitialGraph(currentUser.id);
+            }
+          }
         } else {
-          canvas.drawInitialGraph(currentUser.id);
+          canvas.setFriendList(friendList);
+          if (oneChonIdToExpandNetwork) {
+            canvas.drawInitialGraph(oneChonIdToExpandNetwork);
+          } else {
+            canvas.drawInitialGraph(currentUser.id);
+          }
         }
       } else {
         canvas.reset();
@@ -61,11 +68,12 @@ const Graph: React.FC<Props> = () => {
     }
   }, [
     currentUser,
-    friendList,
-    // isSearchMode,
-    // filteredFriendList,
-    oneChonIdToExpandNetwork,
     canvas,
+    friendList,
+    filteredFriendList,
+    oneChonIdToExpandNetwork,
+    isSearchMode,
+    searchWord,
   ]);
 
   return (

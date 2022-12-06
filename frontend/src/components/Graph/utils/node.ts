@@ -38,7 +38,7 @@ export class UserNode {
 
   canvas: Canvas;
 
-  isNotFiltered: boolean; // true if does not contain search keyword
+  isNotSearched: boolean; // true if does not contain search keyword
 
   gradient: number;
 
@@ -59,7 +59,7 @@ export class UserNode {
     destCoord: Coord,
     canvas: Canvas,
     imgUrl = DEFAULT_IMAGE_URL,
-    isNotFiltered = false,
+    isNotSearched = false,
     radius = NODE_RADIUS,
   ) {
     this.id = id;
@@ -75,7 +75,7 @@ export class UserNode {
     this.canvas = canvas;
     this.radius = radius;
     this.originalRadius = radius;
-    this.isNotFiltered = isNotFiltered;
+    this.isNotSearched = isNotSearched;
     this.gradient = gradientPoints(this.originCoord, destCoord);
     this.direction = directionPoints(this.originCoord, destCoord);
     this.journeySpeed = Math.abs(coord.x - destCoord.x)
@@ -185,11 +185,11 @@ export class OneChonNode extends UserNode {
     canvas: Canvas,
     twoChonNodes: UserNode[],
     imgUrl = DEFAULT_IMAGE_URL,
-    isNotFiltered = false,
+    isNotSearched = false,
     omitCount = 0,
     radius = NODE_RADIUS,
   ) {
-    super(id, name, coord, destCoord, canvas, imgUrl, isNotFiltered, radius);
+    super(id, name, coord, destCoord, canvas, imgUrl, isNotSearched, radius);
     this.twoChonNodes = twoChonNodes;
     this.omitCount = omitCount;
   }
