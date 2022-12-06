@@ -1,1 +1,1 @@
-export interface PostPasswordResDto {}
+export interface PutPasswordResDto {}

@@ -3,6 +3,7 @@ import EvaluateQualityPage from "./EvaluateQualityPage";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import { fireEvent, screen, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 
 const mockNavigate = jest.fn();
 
@@ -81,7 +82,7 @@ describe("<EvaluateQualityPage/>", () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({}),
     });
-    render(
+    renderWithProviders(
       <MemoryRouter>
         <Routes>
           <Route path="/" element={<EvaluateQualityPage />} />

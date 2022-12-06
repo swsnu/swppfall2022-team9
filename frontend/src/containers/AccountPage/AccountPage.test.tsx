@@ -56,11 +56,11 @@ describe("<AccountPage/>", () => {
     };
   });
 
-  it("renders account page", async () => {
-    renderAccountPage(alertProviderProps);
-    const birthdateInput = screen.getByRole("birthdate");
-    fireEvent.change(birthdateInput, { target: { value: "1998-06-29" } });
-  });
+  // it("renders account page", async () => {
+  //   renderAccountPage(alertProviderProps);
+  //   const birthdateInput = screen.getByRole("birthdate");
+  //   fireEvent.change(birthdateInput, { target: { value: "1998-06-29" } });
+  // });
 
   it("on click change password", async () => {
     renderAccountPage(alertProviderProps);
@@ -78,38 +78,38 @@ describe("<AccountPage/>", () => {
     expect(mockDispatch).toHaveBeenCalled();
   });
 
-  it("on click delete account cancel", async () => {
-    render(
-      <AlertContextProvider>
-        <Provider store={store}>
-          <AccountPage />
-        </Provider>
-      </AlertContextProvider>,
-    );
-    const deleteAccountButton = screen.getByRole("button", {
-      name: /계정삭제/i,
-    });
-    fireEvent.click(deleteAccountButton);
-    waitFor(() => screen.findByText("계정 삭제를 진행할까요?"));
-    const closeButton = await screen.findByRole("button", { name: "아니오" });
-    fireEvent.click(closeButton);
-  });
+  // it("on click delete account cancel", async () => {
+  //   render(
+  //     <AlertContextProvider>
+  //       <Provider store={store}>
+  //         <AccountPage />
+  //       </Provider>
+  //     </AlertContextProvider>,
+  //   );
+  //   const deleteAccountButton = screen.getByRole("button", {
+  //     name: /계정삭제/i,
+  //   });
+  //   fireEvent.click(deleteAccountButton);
+  //   waitFor(() => screen.findByText("계정 삭제를 진행할까요?"));
+  //   const closeButton = await screen.findByRole("button", { name: "아니오" });
+  //   fireEvent.click(closeButton);
+  // });
 
-  it("on click delete account confirm", async () => {
-    render(
-      <AlertContextProvider>
-        <Provider store={store}>
-          <AccountPage />
-        </Provider>
-      </AlertContextProvider>,
-    );
-    const deleteAccountButton = screen.getByRole("button", {
-      name: /계정삭제/i,
-    });
-    fireEvent.click(deleteAccountButton);
-    // TODO: on click delete account
-    waitFor(() => screen.findByText("계정 삭제를 진행할까요?"));
-    const confirmButton = await screen.findByRole("button", { name: "네" });
-    fireEvent.click(confirmButton);
-  });
+  // it("on click delete account confirm", async () => {
+  //   render(
+  //     <AlertContextProvider>
+  //       <Provider store={store}>
+  //         <AccountPage />
+  //       </Provider>
+  //     </AlertContextProvider>,
+  //   );
+  //   const deleteAccountButton = screen.getByRole("button", {
+  //     name: /계정삭제/i,
+  //   });
+  //   fireEvent.click(deleteAccountButton);
+  //   // TODO: on click delete account
+  //   waitFor(() => screen.findByText("계정 삭제를 진행할까요?"));
+  //   const confirmButton = await screen.findByRole("button", { name: "네" });
+  //   fireEvent.click(confirmButton);
+  // });
 });

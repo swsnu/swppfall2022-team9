@@ -1,26 +1,28 @@
 import useAlert from "hooks/useAlert";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { friendRequestActions } from "store/slices/friendRequests";
 import { getSignOut } from "store/slices/users";
 import * as FormStyles from "styles/common.form.styles";
 
 const AccountPage: React.FC = () => {
-  const [accountInfo, setAccountInfo] = useState<{
-    firstname: string;
-    lastname: string;
-    email: string;
-    birthdate: string;
-  }>({
-    firstname: "",
-    lastname: "",
-    email: "",
-    birthdate: new Date().toISOString().slice(0, 10),
-  });
+  // const [accountInfo, setAccountInfo] = useState<{
+  //   firstname: string;
+  //   lastname: string;
+  //   email: string;
+  //   birthdate: string;
+  // }>({
+  //   firstname: "",
+  //   lastname: "",
+  //   email: "",
+  //   birthdate: new Date().toISOString().slice(0, 10),
+  // });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const alert = useAlert();
+  const users = useAppSelector(state => state.users);
+  const currentUser = users.currentUser;
+  // const alert = useAlert();
 
   // TODO: connect with redux (fill in the blank inputs)
 
@@ -33,26 +35,26 @@ const AccountPage: React.FC = () => {
     navigate("/");
   };
 
-  // TODO: delete account
-  const onClickDeleteAccount = () => {
-    alert.open({
-      message: "계정 삭제를 진행할까요?",
-      buttons: [
-        {
-          label: "네",
-          onClick: () => {
-            //TODO dispatch
-          },
-        },
-        {
-          label: "아니오",
-          onClick: () => {
-            alert.close();
-          },
-        },
-      ],
-    });
-  };
+  // // TODO: delete account
+  // const onClickDeleteAccount = () => {
+  //   alert.open({
+  //     message: "계정 삭제를 진행할까요?",
+  //     buttons: [
+  //       {
+  //         label: "네",
+  //         onClick: () => {
+  //           //TODO dispatch
+  //         },
+  //       },
+  //       {
+  //         label: "아니오",
+  //         onClick: () => {
+  //           alert.close();
+  //         },
+  //       },
+  //     ],
+  //   });
+  // };
 
   return (
     <FormStyles.Container>
@@ -69,7 +71,11 @@ const AccountPage: React.FC = () => {
           <FormStyles.Label>
             <FormStyles.LabelText>성</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input role="lastname" value={accountInfo.lastname} />
+              <FormStyles.Input
+                role="lastname"
+                value={currentUser? currentUser.lastname: ""}
+                disabled={true}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
@@ -77,17 +83,22 @@ const AccountPage: React.FC = () => {
             <FormStyles.InputContainer>
               <FormStyles.Input
                 role="firstname"
-                value={accountInfo.firstname}
+                value={currentUser? currentUser.firstname: ""}
+                disabled={true}
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>
           <FormStyles.Label>
             <FormStyles.LabelText>이메일</FormStyles.LabelText>
             <FormStyles.InputContainer>
-              <FormStyles.Input role="email" value={accountInfo.lastname} />
+              <FormStyles.Input
+                role="email"
+                value={currentUser? currentUser.email: ""}
+                disabled={true}
+              />
             </FormStyles.InputContainer>
           </FormStyles.Label>
-          <FormStyles.Label>
+          {/* <FormStyles.Label>
             <FormStyles.LabelText>생년월일</FormStyles.LabelText>
             <FormStyles.InputContainer>
               <FormStyles.Input
@@ -103,7 +114,7 @@ const AccountPage: React.FC = () => {
                 }}
               />
             </FormStyles.InputContainer>
-          </FormStyles.Label>
+          </FormStyles.Label> */}
           <FormStyles.Label>
             <FormStyles.LabelText>비밀번호</FormStyles.LabelText>
             <FormStyles.InputContainer>

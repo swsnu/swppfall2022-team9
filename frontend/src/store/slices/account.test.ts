@@ -7,7 +7,7 @@ import {
 import accountReducer, {
   AccountState,
   postPasswordUnauthenticated,
-  postPassword,
+  putPassword,
 } from "./account";
 import axios from "axios";
 
@@ -35,13 +35,13 @@ describe("friend request reducer", () => {
       data: {},
     });
     await store.dispatch(
-      postPasswordUnauthenticated({ token: "test", password: "test" }),
+      postPasswordUnauthenticated({ token: "test", newPassword: "test" }),
     );
   });
 
   it("tests authenticated post password", async () => {
     axios.post = jest.fn().mockResolvedValue({});
-    await store.dispatch(postPassword({ password: "test" }));
+    await store.dispatch(putPassword({ newPassword: "test" }));
   });
 
   // TODO: create more test for account slice
