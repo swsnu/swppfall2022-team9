@@ -11,12 +11,12 @@ import { PutUserQualityTagsDto } from "server/dto/qualityTags/qualityTags.dto";
 
 export type QualityTagsState = {
   currentUserQualityTags: QualityTags | null;
-  skillTagsList: QualityTags | null;
+  qualityTagsList: QualityTags | null;
 };
 
 const initialState: QualityTagsState = {
   currentUserQualityTags: null,
-  skillTagsList: null,
+  qualityTagsList: null,
 };
 
 export const getAllQualityTags = createAsyncThunk<
@@ -57,7 +57,7 @@ export const qualityTagsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getAllQualityTags.fulfilled, (state, action) => {
-      state.skillTagsList = action.payload.qualityTags;
+      state.qualityTagsList = action.payload.qualityTags;
     });
     builder.addCase(getUserQualityTags.fulfilled, (state, action) => {
       state.currentUserQualityTags = action.payload.qualityTags;
