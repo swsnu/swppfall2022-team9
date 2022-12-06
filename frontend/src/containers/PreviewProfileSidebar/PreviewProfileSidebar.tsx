@@ -39,7 +39,7 @@ const PreviewProfileSidebar: React.FC = () => {
   const getExistingFriendRequest = async (user1Id: number, user2Id: number) => {
     try {
       const friendRequest = await dispatch(
-        getFriendRequestBetweenUsers({ user1Id, user2Id }),
+        getFriendRequestBetweenUsers({ friendId1: user1Id, friendId2: user2Id }),
       ).unwrap();
       setExistingFriendRequest(friendRequest);
     } catch (err) {
@@ -102,15 +102,34 @@ const PreviewProfileSidebar: React.FC = () => {
   const onClickAddFriend = async (userId: number) => {
     try {
       await dispatch(
-        postFriendRequest({
-          getterId: Number(userId),
-          senderImgUrl: currentUser!.imgUrl!,
-          senderName: currentUser!.lastname + currentUser!.firstname,
-        }),
-      ).unwrap();
-      alert.open({ message: "친구 요청을 보냈습니다" });
+        getFriendRequestBetweenUsers({
+          friendId1: currentUser!.id,
+          friendId2: Number(userId),
+        })
+      );
+      alert.open({ message: "이미 친구 요청을 보냈습니다."});    
+
     } catch (err) {
-      alert.open({ message: "친구 요청에 실패했습니다" });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const errCode = err.message.split(" ").pop();
+      console.log(errCode);
+      if (errCode === "404") {
+        try {
+          await dispatch(
+            postFriendRequest({
+              getterId: Number(userId),
+              senderImgUrl: currentUser!.imgUrl!,
+              senderName: currentUser!.lastname + currentUser!.firstname,
+            }),
+          ).unwrap();
+          alert.open({ message: "친구 요청을 보냈습니다" });
+        } catch (e) {
+          alert.open({ message: "친구 요청에 실패했습니다" });
+        }
+      } else {
+        alert.open({ message: "서버 오류가 발생하였습니다."});
+      }
     }
   };
 

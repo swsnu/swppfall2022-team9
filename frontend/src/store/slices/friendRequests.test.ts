@@ -80,7 +80,7 @@ describe("friend request reducer", () => {
       data: friendRequestsStub[0],
     });
     await store.dispatch(
-      getFriendRequestBetweenUsers({ user1Id: 1, user2Id: 2 }),
+      getFriendRequestBetweenUsers({ friendId1: 1, friendId2: 2 }),
     );
   });
 
