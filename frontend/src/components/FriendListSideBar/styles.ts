@@ -4,7 +4,8 @@ import { ThemeColor } from "styles/common.styles";
 import { themeBgColor } from "./common.styles";
 
 export const Container = styled.div`
-  min-width: 250px;
+  min-width: 310px;
+  width: 310px;
   max-width: 400px;
   height: calc(100% - ${NavbarHeight}px);
 
