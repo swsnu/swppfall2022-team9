@@ -193,12 +193,14 @@ const ProfilePage: React.FC<Props> = () => {
                 return <S.SkillTag key={tag.name}>#{tag.name}</S.SkillTag>;
               })}
             </S.SkillTagsContainer>
-            <S.WebsiteContainer>
-              <S.WebsiteTitle>Website:</S.WebsiteTitle>
-              <S.WebsiteLink href={`//${profile?.website}`}>
-                {profile?.website}
-              </S.WebsiteLink>
-            </S.WebsiteContainer>
+            {profile?.website && (
+              <S.WebsiteContainer>
+                <S.WebsiteTitle>Website:</S.WebsiteTitle>
+                <S.WebsiteLink href={`//${profile?.website}`}>
+                  {profile?.website}
+                </S.WebsiteLink>
+              </S.WebsiteContainer>
+            )}
           </S.BasicInfoContainer>
           <S.ProfileActionButtonsContainer>
             {userId && currentUser && Number(userId) !== currentUser.id && (
@@ -261,7 +263,13 @@ const ProfilePage: React.FC<Props> = () => {
           profileUserName={profileUserName}
           qualityTags={profile?.qualityTags}
         />
-        <S.OtherTagsContainer>
+        <S.OtherTagsContainer
+          style={{
+            borderTop: `1px solid #d9d9d9`,
+            marginTop: 30,
+            paddingTop: 30,
+          }}
+        >
           <S.Title>교육 이력</S.Title>
           <S.TagBubblesContainer>
             {profile?.educations.map(tag => {
@@ -281,7 +289,7 @@ const ProfilePage: React.FC<Props> = () => {
             })}
           </S.TagBubblesContainer>
         </S.OtherTagsContainer>
-        <S.OtherTagsContainer>
+        <S.OtherTagsContainer style={{ marginBottom: 30 }}>
           <S.Title>경력</S.Title>
           <S.TagBubblesContainer>
             {profile?.jobExperiences.map(tag => {

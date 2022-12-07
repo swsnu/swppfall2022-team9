@@ -4,17 +4,29 @@ import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
-export const Container = styled.div`
+export const BackgroundContainer = styled.div`
+  width: 100%;
   background-color: #f8f8f8;
-  min-height: calc(100vh - ${NavbarHeight + ChatRoomListPagePaddingTop}px);
+  display: flex;
+  justify-content: center;
+
+  min-height: calc(100vh - ${NavbarHeight}px);
+`;
+export const Container = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  max-width: 700px;
+  /* min-height: calc(100vh - ${NavbarHeight +
+  ChatRoomListPagePaddingTop}px); */
   padding: ${ChatRoomListPagePaddingTop / 2}px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 `;
 
 export const Title = styled.div`
-  font-size: 30px;
+  font-size: 20px;
+  margin-bottom: 10px;
   font-weight: bold;
 `;
 
@@ -27,6 +39,7 @@ export const ListContainer = styled.div`
   background-color: white;
   height: 75vh;
   padding: 10px 15px;
+  margin-bottom: 10px;
   overflow: auto;
 `;
 
@@ -43,13 +56,21 @@ export const ListItemContainer = styled.div<{
 
 const ChatRoomImgRadius = 45;
 export const Image = styled.div<{ imgUrl: string | undefined }>`
-  background-image: url(${props => props.imgUrl === undefined ? "" : props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
+  background-image: url(${props =>
+    props.imgUrl === undefined
+      ? ""
+      : props.imgUrl === ""
+      ? DEFAULT_IMAGE_URL
+      : props.imgUrl});
   background-size: cover;
   border-radius: 50%;
   border: ${props =>
-    (props.imgUrl || props.imgUrl === "") ? "2px solid #000000" : "2px solid rgba(0, 0, 0, 0)"};
+    props.imgUrl || props.imgUrl === ""
+      ? "2px solid #000000"
+      : "2px solid rgba(0, 0, 0, 0)"};
   width: ${ChatRoomImgRadius}px;
-  height: ${props => (props.imgUrl || props.imgUrl === "") ? `${ChatRoomImgRadius}px` : "0px"};
+  height: ${props =>
+    props.imgUrl || props.imgUrl === "" ? `${ChatRoomImgRadius}px` : "0px"};
   padding: 2px;
 `;
 

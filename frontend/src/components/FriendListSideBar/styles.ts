@@ -1,5 +1,6 @@
 import { NavbarHeight } from "components/Navbar/styles";
 import styled from "styled-components";
+import { ThemeColor } from "styles/common.styles";
 import { themeBgColor } from "./common.styles";
 
 export const Container = styled.div`
@@ -20,8 +21,8 @@ export const Header = styled.header`
   font-size: 17px;
   line-height: 34px;
   padding-left: 20px;
-  padding-top: 5px;
-  transform: translateX(-150%)
+  padding-top: 15px;
+  transform: translateX(-150%);
 `;
 
 export const InviteFriendButton = styled.button`
@@ -30,14 +31,16 @@ export const InviteFriendButton = styled.button`
   background: none;
   border: none;
   font-weight: bold;
-  width: 70%;
+  width: calc(100% - 40px);
   padding: 10px 0px;
   margin: 10px 0;
   bottom: 30px;
   border-radius: 10px;
-  background-color: #d9d9d9;
+  background-color: ${ThemeColor};
+  opacity: 1;
   cursor: pointer;
+  transition: opacity 0.2s;
   :hover {
-    background-color: #c9c9c9;
+    opacity: 0.6;
   }
 `;

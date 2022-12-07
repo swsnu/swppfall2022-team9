@@ -2,7 +2,10 @@ import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 import { Title } from "../styles";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  border-top: 1px solid #d9d9d9;
+  padding-top: 20px;
+`;
 
 export const ContainerTitle = styled(Title)``;
 
@@ -23,6 +26,7 @@ export const NetworkSkillItem = styled.div`
 export const NetworkSkillName = styled.div`
   margin-right: 5px;
   max-width: 90px;
+  font-size: 11px;
   word-break: keep-all;
   align-self: center;
   font-weight: bold;
@@ -30,6 +34,7 @@ export const NetworkSkillName = styled.div`
 
 export const NetworkSkillAmount = styled.div`
   padding: 5px 10px;
+  padding-left: 5px;
 `;
 
 export const NetworkSkillGraphContainer = styled.div`
@@ -42,5 +47,4 @@ export const NetworkSkillGraph = styled.div<{
   width: ${props => props.fillAmount * 100}%;
   height: 15px;
   background-color: ${ThemeColor};
-  border: 1px solid black;
 `;

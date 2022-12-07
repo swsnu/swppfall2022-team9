@@ -4,8 +4,18 @@ import styled from "styled-components";
 import { device } from "utils/cssMedia";
 
 export const ChatRoomListPagePaddingTop = 40;
-export const Container = styled.div`
+export const BackgroundContainer = styled.div`
+  width: 100%;
   background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+
+  min-height: calc(100vh - ${NavbarHeight}px);
+`;
+export const Container = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  max-width: 700px;
   min-height: calc(
     100vh -
       ${NavbarHeight + NavbarVerticalPadding * 2 + ChatRoomListPagePaddingTop}px
@@ -18,7 +28,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
 `;
@@ -53,7 +63,8 @@ export const ChatRoomEmptyContainer = styled.div`
 `;
 
 export const ImageContainer = styled.div<{ imgUrl: string }>`
-  background-image: url(${props => props.imgUrl ? props.imgUrl : DEFAULT_IMAGE_URL});
+  background-image: url(${props =>
+    props.imgUrl ? props.imgUrl : DEFAULT_IMAGE_URL});
   height: 50px;
   background-size: cover;
   border-radius: 50%;

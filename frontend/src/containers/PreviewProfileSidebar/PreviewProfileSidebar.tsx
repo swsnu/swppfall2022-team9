@@ -129,9 +129,8 @@ const PreviewProfileSidebar: React.FC = () => {
         <S.ProfileBasicInfo>
           <S.ProfileName>{findUserName(profile?.id)}</S.ProfileName>
           <S.SkillTagsContainer>
-            <S.SkillTagTitle>태그들: </S.SkillTagTitle>
             {profile?.skillTags.map(skillTag => (
-              <S.SkillTag key={skillTag.name}>{skillTag.name}</S.SkillTag>
+              <S.SkillTag key={skillTag.name}>#{skillTag.name}</S.SkillTag>
             ))}
           </S.SkillTagsContainer>
         </S.ProfileBasicInfo>

@@ -26,7 +26,7 @@ export const FriendEmptyOrErrorContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 29px;
   word-break: keep-all;
   text-align: center;
@@ -45,7 +45,8 @@ export const ListItemContainer = styled.div`
 `;
 
 export const ImageContainer = styled.div<{ imgUrl: string }>`
-  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
+  background-image: url(${props =>
+    props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   width: 50px;
   height: 50px;
   min-width: 50px;
@@ -80,6 +81,7 @@ export const TagsContainer = styled.div`
 export const Tag = styled.div`
   background-color: #d9d9d9;
   margin: 2px 2px;
+  font-size: 11px;
   white-space: nowrap;
   display: inline-block;
   padding: 5px 10px;
@@ -91,7 +93,7 @@ export const Tag = styled.div`
 export const FriendActionButton = styled.button`
   width: 90px;
   min-width: 90px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 17px;
   word-break: keep-all;
   border-radius: 5px;
@@ -100,7 +102,7 @@ export const FriendActionButton = styled.button`
   cursor: pointer;
   background-color: ${ThemeColor};
   font-weight: bold;
-  padding: 10px 5px;
+  padding: 8px 5px;
 `;
 
 export const TagText = styled.div``;
