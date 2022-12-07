@@ -156,7 +156,7 @@ EMAIL_HOST_USER = "linklinkchon@gmail.com"
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 # Homepage Base Url
-HOMEPAGE_URL = "http://127.0.0.1:3000/"
+HOMEPAGE_URL = config("HOMEPAGE_URL")
 
 # Email Verification Expire Days
 EMAIL_EXPIRE_DAYS = 1
