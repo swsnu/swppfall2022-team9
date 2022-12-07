@@ -7,7 +7,7 @@ import { compareTimeStampWtihinDay } from "utils/timeStamp";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getCurrentChatRoomInfo } from "store/slices/chat";
-interface Props { }
+interface Props {}
 
 const isDevMode = process.env.NODE_ENV === "development";
 
@@ -23,7 +23,7 @@ const ChatRoomPage: React.FC<Props> = () => {
   const messageRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const wsScheme = isDevMode ? "ws" : "wss";
-  const serverAddress = isDevMode ? "127.0.0.1:8000" : "hoshiwoobo.shop:8001"
+  const serverAddress = isDevMode ? "127.0.0.1:8000" : "hoshiwoobo.shop:8001";
   const { sendJsonMessage } = useWebSocket(
     currentUser ? `${wsScheme}://${serverAddress}/ws/${chatRoomName}/` : null,
     {
@@ -71,65 +71,70 @@ const ChatRoomPage: React.FC<Props> = () => {
   }, []);
 
   return (
-    <S.Container>
-      <S.Title>{`${currentChatRoomInfo?.otherUserName} 님과의 채팅`}</S.Title>
-      <S.ListContainer>
-        {currentUser &&
-          currentChatRoomInfo &&
-          messageLog.map((message, idx) => {
-            return (
-              <ChatMessage
-                ref={messageRef}
-                key={idx}
-                isConsecutive={
-                  idx > 0 &&
-                  messageLog[idx].senderId === messageLog[idx - 1].senderId &&
-                  compareTimeStampWtihinDay(
-                    messageLog[idx].timeStamp,
-                    messageLog[idx - 1].timeStamp,
-                  )
-                }
-                content={message.content}
-                timeStamp={message.timeStamp}
-                userId={
-                  message.senderId == currentUser.id
-                    ? undefined
-                    : currentChatRoomInfo.otherUserId
-                }
-                name={
-                  message.senderId == currentUser.id
-                    ? undefined
-                    : currentChatRoomInfo.otherUserName
-                }
-                imgUrl={
-                  message.senderId == currentUser.id
-                    ? undefined
-                    : currentChatRoomInfo.otherUserImgUrl
-                }
-              />
-            );
-          })}
-      </S.ListContainer>
-      <S.Form onSubmit={handleSubmit}>
-        <S.Input
-          type="text"
-          autoFocus
-          value={messageInput}
-          placeholder={
-            isConnected
-              ? "메시지를 입력하세요"
-              : "네트워크 연결이 종료되었습니다."
-          }
-          disabled={!isConnected}
-          onChange={e => {
-            setMessageInput(e.target.value);
-          }}
-        ></S.Input>
-        <S.Submit type="submit" disabled={!isConnected || messageInput === ""}>
-          전송
-        </S.Submit>
-      </S.Form>
-    </S.Container>
+    <S.BackgroundContainer>
+      <S.Container>
+        <S.Title>{`${currentChatRoomInfo?.otherUserName} 님과의 채팅`}</S.Title>
+        <S.ListContainer>
+          {currentUser &&
+            currentChatRoomInfo &&
+            messageLog.map((message, idx) => {
+              return (
+                <ChatMessage
+                  ref={messageRef}
+                  key={idx}
+                  isConsecutive={
+                    idx > 0 &&
+                    messageLog[idx].senderId === messageLog[idx - 1].senderId &&
+                    compareTimeStampWtihinDay(
+                      messageLog[idx].timeStamp,
+                      messageLog[idx - 1].timeStamp,
+                    )
+                  }
+                  content={message.content}
+                  timeStamp={message.timeStamp}
+                  userId={
+                    message.senderId == currentUser.id
+                      ? undefined
+                      : currentChatRoomInfo.otherUserId
+                  }
+                  name={
+                    message.senderId == currentUser.id
+                      ? undefined
+                      : currentChatRoomInfo.otherUserName
+                  }
+                  imgUrl={
+                    message.senderId == currentUser.id
+                      ? undefined
+                      : currentChatRoomInfo.otherUserImgUrl
+                  }
+                />
+              );
+            })}
+        </S.ListContainer>
+        <S.Form onSubmit={handleSubmit}>
+          <S.Input
+            type="text"
+            autoFocus
+            value={messageInput}
+            placeholder={
+              isConnected
+                ? "메시지를 입력하세요"
+                : "네트워크 연결이 종료되었습니다."
+            }
+            disabled={!isConnected}
+            onChange={e => {
+              setMessageInput(e.target.value);
+            }}
+          ></S.Input>
+          <S.Submit
+            type="submit"
+            disabled={!isConnected || messageInput === ""}
+          >
+            전송
+          </S.Submit>
+        </S.Form>
+      </S.Container>
+    </S.BackgroundContainer>
   );
 };
 

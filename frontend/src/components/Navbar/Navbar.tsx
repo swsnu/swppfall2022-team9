@@ -14,6 +14,7 @@ import useHandleClickOutside from "hooks/useHandleClickOutside";
 import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
+import useAlert from "hooks/useAlert";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
@@ -26,6 +27,8 @@ const Navbar: React.FC<Props> = () => {
   const [isClickedOutsideOfNotification, setIsClickedOutsideOfNotification] =
     useState<boolean>(true);
 
+  const alert = useAlert();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,13 +38,33 @@ const Navbar: React.FC<Props> = () => {
   };
 
   const onAcceptFriendRequest = async (friendRequestId: number) => {
-    await dispatch(
+    const acceptedFriendRequest = await dispatch(
       putFriendRequest({
         id: friendRequestId,
         status: FriendRequestStatus.ACCEPTED,
       }),
-    );
+    ).unwrap();
     await dispatch(getFriendList());
+
+    const friendId =
+      acceptedFriendRequest.senderId === currentUser?.id
+        ? acceptedFriendRequest.getterId
+        : acceptedFriendRequest.senderId;
+
+    setIsClickedOutsideOfNotification(true);
+    alert.open({
+      message:
+        "새로운 친구가 추가되었습니다. 친구의 성격에 대해서 기록하러 갈까요?",
+      buttons: [
+        {
+          label: "네",
+          onClick: () => {
+            navigate(`/evaluate/${friendId}`);
+            alert.close();
+          },
+        },
+      ],
+    });
   };
 
   const onRejectFriendRequest = async (friendRequestId: number) => {

@@ -50,10 +50,10 @@ const NetworkAnalysis: React.FC<Props> = ({
             return (
               <S.NetworkSkillItem key={skill}>
                 <S.NetworkSkillNameCountContainer>
-                  <S.NetworkSkillName>{skill}</S.NetworkSkillName>
                   <S.NetworkSkillAmount>
                     {profileAnalysis[skill]}
                   </S.NetworkSkillAmount>
+                  <S.NetworkSkillName>{skill}</S.NetworkSkillName>
                 </S.NetworkSkillNameCountContainer>
                 <S.NetworkSkillGraphContainer>
                   <S.NetworkSkillGraph

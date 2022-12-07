@@ -3,22 +3,22 @@ import styled, { css, keyframes } from "styled-components";
 
 export const appearFromLeft = keyframes`
   0% {
-    /* opacity: 0; */
+    opacity: 0;
     transform: translateX(-100%);
   }
   100% {
-    /* opacity: 1; */
+    opacity: 1;
     transform: translateX(0%);
   }
 `;
 
 export const disappearToLeft = keyframes`
   0% {
-    /* opacity:1 ; */
+    opacity:1 ;
     transform: translateX(0%);
   }
   100% {
-    /* opacity: 0; */
+    opacity: 0;
     transform: translateX(-100%);
   }
 `;
@@ -42,7 +42,7 @@ export const Container = styled.div<{ isOpen: boolean }>`
 export const Header = styled.div`
   display: flex;
   align-items: center;
-  padding: 20px 10px;
+  padding: 20px 20px;
   margin-bottom: 20px;
 `;
 
@@ -54,7 +54,8 @@ export const ProfileBasicInfo = styled.div`
 export const ProfileImageContainer = styled.div``;
 
 export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
-  background-image: url(${props => props.imgUrl ? props.imgUrl : DEFAULT_IMAGE_URL});
+  background-image: url(${props =>
+    props.imgUrl ? props.imgUrl : DEFAULT_IMAGE_URL});
   width: 120px;
   height: 120px;
   background-size: cover;
@@ -64,14 +65,18 @@ export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
 
 export const ProfileName = styled.div`
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `;
 
-export const SkillTagTitle = styled.span``;
+// export const SkillTagTitle = styled.span`
+//   margin-bottom: 8px;
+//   margin-right: 5px;
+//   font-size: 12px;
+// `;
 
 export const SkillTagsContainer = styled.div`
   display: flex;
-
+  align-items: center;
   flex-wrap: wrap;
 `;
 
@@ -80,15 +85,16 @@ export const SkillTag = styled.div`
   white-space: nowrap;
   display: inline-block;
   margin-right: 5px;
+  font-size: 11px;
   padding: 5px 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-radius: 15px;
   mask-image: linear-gradient(90deg, #000, 100%, transparent);
   -webkit-mask-image: linear-gradient(90deg, #000, 100%, transparent);
 `;
 
 export const IntroductionContainer = styled.div`
-  padding: 0 10px;
+  padding: 0 20px;
 `;
 
 export const Introduction = styled.div``;
@@ -112,7 +118,7 @@ export const ActionButton = styled.button<{
   backgroundColor?: string;
   disabled: boolean;
 }>`
-  margin: 10px 30px;
+  margin: 10px 20px;
   border-radius: 10px;
   padding: 8px 0;
   opacity: ${props => (props.disabled ? 0.5 : 1)};

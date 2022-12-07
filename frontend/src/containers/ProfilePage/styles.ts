@@ -27,6 +27,10 @@ export const Container = styled.div`
 export const InfoContainer = styled.div`
   flex: 1 0;
   padding: 0 15px;
+  margin-bottom: 40px;
+  @media ${device.laptop} {
+    margin-bottom: 0px;
+  }
 `;
 
 export const BasicInfoContainer = styled.div`
@@ -61,8 +65,9 @@ export const ProfileActionButton = styled.button<{
   background-color: ${props => props.backgroundColor};
 `;
 
-export const ProfileImage = styled.div<{ imgUrl: string | undefined}>`
-  background-image: url(${props => props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
+export const ProfileImage = styled.div<{ imgUrl: string | undefined }>`
+  background-image: url(${props =>
+    props.imgUrl === "" ? DEFAULT_IMAGE_URL : props.imgUrl});
   width: 160px;
   height: 160px;
   background-size: cover;
@@ -93,7 +98,8 @@ export const SkillTag = styled.div`
   display: inline-block;
   margin-right: 5px;
   padding: 5px 10px;
-  margin-bottom: 10px;
+  font-size: 12px;
+  margin-bottom: 5px;
   border-radius: 15px;
   mask-image: linear-gradient(90deg, #000, 100%, transparent);
   -webkit-mask-image: linear-gradient(90deg, #000, 100%, transparent);
@@ -126,13 +132,16 @@ export const Title = styled.div`
 `;
 
 export const IntroductionContainer = styled.div`
-  margin-bottom: 35px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
 `;
 
 export const Introduction = styled.div``;
 
 export const OtherTagsContainer = styled.div`
-  margin-bottom: 35px;
+  margin-bottom: 20px;
+  /* border-top: 1px solid #d9d9d9; */
+  padding-top: 20px;
 `;
 
 export const TagBubblesContainer = styled.div`

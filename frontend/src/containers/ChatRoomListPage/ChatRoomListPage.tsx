@@ -15,20 +15,22 @@ const ChatRoomListPage: React.FC<Props> = () => {
   }, []);
 
   return (
-    <S.Container>
-      <S.Title>채팅 목록</S.Title>
-      <S.ListContainer>
-        {chatRoomInfoList.length === 0 ? (
-          <S.ChatRoomEmptyContainer>
-            아직 진행 중인 채팅이 없습니다
-          </S.ChatRoomEmptyContainer>
-        ) : (
-          chatRoomInfoList.map((chatRoomInfo, index) => {
-            return <ChatRoomItem key={index} chatRoomInfo={chatRoomInfo} />;
-          })
-        )}
-      </S.ListContainer>
-    </S.Container>
+    <S.BackgroundContainer>
+      <S.Container>
+        <S.Title>채팅 목록</S.Title>
+        <S.ListContainer>
+          {chatRoomInfoList.length === 0 ? (
+            <S.ChatRoomEmptyContainer>
+              아직 진행 중인 채팅이 없습니다
+            </S.ChatRoomEmptyContainer>
+          ) : (
+            chatRoomInfoList.map((chatRoomInfo, index) => {
+              return <ChatRoomItem key={index} chatRoomInfo={chatRoomInfo} />;
+            })
+          )}
+        </S.ListContainer>
+      </S.Container>
+    </S.BackgroundContainer>
   );
 };
 

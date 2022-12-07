@@ -21,6 +21,8 @@ const ProfileFriendItem: React.FC<Props> = ({
 }) => {
   const navigate = useNavigate();
 
+  const currentUser = useAppSelector(state => state.users.currentUser);
+
   const friendList = useAppSelector(state => state.users.friendList);
 
   const onClickFriend = (e: React.SyntheticEvent) => {
@@ -30,8 +32,13 @@ const ProfileFriendItem: React.FC<Props> = ({
 
   const onAskFriendForIntroduction = (e: React.SyntheticEvent) => {
     // we send a query to chat room for introduction
+    if (!currentUser) return;
+    const chatRoomName =
+      currentUser.id < currentProfileUserId
+        ? `${currentUser.id}__${currentProfileUserId}`
+        : `${currentProfileUserId}__${currentUser.id}`;
     e.stopPropagation();
-    navigate(`/chat/${currentProfileUserId}?name=${profileUserFriend.name}`);
+    navigate(`/chat/${chatRoomName}?name=${profileUserFriend.name}`);
   };
 
   return (
