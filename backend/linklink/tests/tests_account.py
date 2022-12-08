@@ -162,6 +162,76 @@ class LinkLinkAccountTestCase(TestCase):
         )
 
 
+    def test_put_account_info_success(self):
+        target_url = "/api/account/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "lastname": "Cenaa",
+                "firstname": "Johnn",
+                "email": "invalid_but_unique777@snu.ac.kr"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200) # Successful GET
+        john_user = User.objects.get(pk=1)
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        self.assertEqual(john_user.last_name, "Cenaa")
+        self.assertEqual(john_user.first_name, "Johnn")
+        self.assertEqual(
+            john_linklinkuser.email_unique,
+            "invalid_but_unique777@snu.ac.kr"
+        )
+
+
+    def test_400_put_account_info(self):
+        target_url = "/api/account/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                # "lastname": "Cenaa", # no lastname
+                "firstname": "Johnn",
+                "email": "invalid_but_unique777@snu.ac.kr"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_400_put_account_info_duplicate_email(self):
+        target_url = "/api/account/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "lastname": "Cenaa",
+                "firstname": "Johnn",
+                "email": "invalid_but_unique1@snu.ac.kr" # duplicate
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+        error_message_dict = {
+            "message":
+            "email invalid_but_unique1@snu.ac.kr already exists in DB"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
     def test_reset_password_success(self):
         target_url = "/api/account/password/"
         # Login John
