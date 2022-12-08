@@ -17,7 +17,7 @@ export const Container = styled.div`
 
 export const LogoContainer = styled.div`
   display: flex;
-  flex: 1 0;
+  width: max-content;
   padding: 2px 0;
   cursor: pointer;
   height: 100%;
