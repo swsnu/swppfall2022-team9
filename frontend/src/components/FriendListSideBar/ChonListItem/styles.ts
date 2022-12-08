@@ -41,6 +41,7 @@ export const UserImageContainer = styled.div<{ url: string }>`
   background-size: cover;
   border-radius: 50%;
   border: 2px solid #000000;
+  cursor: pointer;
 `;
 
 export const Username = styled.div`
