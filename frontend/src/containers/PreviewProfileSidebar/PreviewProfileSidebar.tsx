@@ -25,13 +25,13 @@ const PreviewProfileSidebar: React.FC = () => {
   const currentUser = useAppSelector(state => state.users.currentUser);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const alert = useAlert();
   const oneChonIdToExpandNetwork = useAppSelector(
     state => state.canvas.oneChonIdToExpandNetwork,
   );
 
   const [existingFriendRequest, setExistingFriendRequest] =
     useState<FriendRequest | null>(null);
-  const alert = useAlert();
   const [profile, setProfile] = useState<
     (Profile & { qualityTags: QualityTags | null; id: number }) | null
   >(null);
@@ -86,20 +86,31 @@ const PreviewProfileSidebar: React.FC = () => {
   };
 
   const onDeleteFriend = async (friendRequestId: number) => {
-    try {
-      await dispatch(
-        putFriendRequest({
-          id: friendRequestId,
-          status: FriendRequestStatus.REJECTED,
-        }),
-      ).unwrap();
-      dispatch(profileActions.setPreviewProfile(null));
-      dispatch(getFriendList());
-    } catch (err) {
-      alert.open({
-        message: "친구 삭제에 실패했습니다",
-      });
-    }
+    alert.open({
+      message: "정말로 친구를 끊으시겠습니까?",
+      buttons: [
+        {
+          label: "예",
+          onClick: async () => {
+            try {
+              await dispatch(
+                putFriendRequest({
+                  id: friendRequestId,
+                  status: FriendRequestStatus.REJECTED,
+                }),
+              ).unwrap();
+              dispatch(profileActions.setPreviewProfile(null));
+              dispatch(getFriendList());
+              alert.close();
+            } catch (err) {
+              alert.open({
+                message: "친구 삭제에 실패했습니다",
+              });
+            }
+          },
+        },
+      ],
+    });
   };
 
   const onClickAddFriend = async (userId: number) => {
