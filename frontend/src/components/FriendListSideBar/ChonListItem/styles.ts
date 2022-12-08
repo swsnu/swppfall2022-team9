@@ -2,20 +2,26 @@ import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { themeBgColor } from "../common.styles";
 
-export const Container = styled.div<{ indent: boolean }>`
-  min-width: 250px;
+export const Container = styled.div`
+  width: 100%;
+  background-color: ${themeBgColor};
+`;
+
+export const OneChonContainer = styled.div<{ indent: boolean }>`
+  min-width: 150px;
   background-color: ${themeBgColor};
   display: flex;
-  align-items: center;
-  padding-left: ${props => (props.indent ? "40px" : "10px")};
+  padding-left: ${props => (props.indent ? "50px" : "10px")};
   padding-top: 5px;
   padding-bottom: 3px;
   padding-right: 5px;
+  align-items: center;
   justify-content: "space-between";
 `;
 
 export const UserRowContainer = styled.div`
-  min-width: 250px;
+  min-width: 150px;
+  width: 100%;
   background-color: ${themeBgColor};
   display: flex;
   align-items: center;
@@ -23,11 +29,10 @@ export const UserRowContainer = styled.div`
   padding-top: 5px;
   padding-bottom: 3px;
   padding-right: 5px;
-  padding-left: 10px;
-  justify-content: "flex-start";
+  padding-left: 5px;
 `;
 
-export const OneChonNode = styled.div<{ url: string }>`
+export const UserImageContainer = styled.div<{ url: string }>`
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -36,7 +41,6 @@ export const OneChonNode = styled.div<{ url: string }>`
   background-size: cover;
   border-radius: 50%;
   border: 2px solid #000000;
-  display: flex;
 `;
 
 export const Username = styled.div`
@@ -50,8 +54,6 @@ export const Username = styled.div`
   font-size: 17px;
   background-position: 50% 50%;
   background-size: cover;
-  text-align: center;
-  display: flex;
 `;
 
 export const ExpandTwoChonButton = styled.button`

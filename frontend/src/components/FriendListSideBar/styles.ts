@@ -4,26 +4,22 @@ import { ThemeColor } from "styles/common.styles";
 import { themeBgColor } from "./common.styles";
 
 export const Container = styled.div`
-  min-width: 310px;
   width: 310px;
-  max-width: 400px;
+  min-width: 310px;
   height: calc(100% - ${NavbarHeight}px);
-
   background-color: ${themeBgColor};
-  overflow: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   position: relative;
 `;
 
 export const Header = styled.header`
   font-weight: bold;
-  font-size: 17px;
+  font-size: 20px;
   line-height: 34px;
-  padding-left: 20px;
-  padding-top: 15px;
-  transform: translateX(-150%);
+  padding-top: 10px;
+  padding-left: 17px;
+  align-self: flex-start;
 `;
 
 export const InviteFriendButton = styled.button`
@@ -44,4 +40,12 @@ export const InviteFriendButton = styled.button`
   :hover {
     opacity: 0.6;
   }
+  align-self: center;
 `;
+
+export const FriendListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: 86%;
+`
