@@ -9,6 +9,7 @@ import {
   putFriendRequestToken,
 } from "store/slices/friendRequests";
 import { profileActions } from "store/slices/profile";
+import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
 import * as S from "./styles";
 
@@ -47,17 +48,18 @@ const HomePage: React.FC<Props> = () => {
   }, [sessionError, friendInviteToken]);
 
   useEffect(() => {
+    dispatch(profileActions.setPreviewProfile(null));
     if (currentUser) {
       const localStorageFriendInviteToken = localStorage.getItem("inviteToken");
       dispatch(getFriendList());
-      // dispatch(searchActions.SearchModeOff());
-      dispatch(profileActions.setPreviewProfile(null));
       if (localStorageFriendInviteToken) {
         dispatch(putFriendRequestToken(localStorageFriendInviteToken));
         dispatch(getFriendRequests());
         localStorage.removeItem("inviteToken");
         return;
       }
+    } else {
+      dispatch(searchActions.SearchModeOff());
     }
   }, [currentUser]);
 

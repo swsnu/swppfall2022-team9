@@ -13,10 +13,10 @@ const SearchBar: React.FC<Props> = () => {
   return (
     <S.Container>
       <S.Form
-        onSubmit={e => {
+        onSubmit={async e => {
           e.preventDefault();
           dispatch(searchActions.setSearchWord(searchWord));
-          dispatch(getFilteredFriendList(searchWord));
+          await dispatch(getFilteredFriendList(searchWord));
         }}
       >
         <BsSearch

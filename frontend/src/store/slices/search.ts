@@ -33,8 +33,13 @@ export const searchSlice = createSlice({
     },
     toggleSearchMode: state => {
       state.isSearchMode = !state.isSearchMode;
-      state.searchWord = "";
-      state.filteredFriendList = [];
+      if (!state.isSearchMode) {
+        state.searchWord = "";
+        state.filteredFriendList = [];
+      }
+    },
+    SearchModeOn: state => {
+      state.isSearchMode = true;
     },
     SearchModeOff: state => {
       state.isSearchMode = false;

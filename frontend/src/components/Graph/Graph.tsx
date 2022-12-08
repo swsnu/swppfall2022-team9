@@ -14,9 +14,9 @@ const Graph: React.FC<Props> = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const onSetViewProfileCallback = (id: number | null) => {
+  const onSetViewProfileCallback = async (id: number | null) => {
     if (id) {
-      dispatch(getProfile(id))
+      await dispatch(getProfile(id))
         .unwrap()
         .then(data => {
           dispatch(profileActions.setPreviewProfile({ ...data, id }));
@@ -40,27 +40,22 @@ const Graph: React.FC<Props> = () => {
   const isSearchMode = search.isSearchMode;
   const searchWord = search.searchWord;
   const filteredFriendList = search.filteredFriendList;
+
   useEffect(() => {
     if (canvas) {
       if (currentUser) {
         canvas.setCurrentUser(currentUser);
-        if (isSearchMode) {
-          if (searchWord !== "") {
-            canvas.setFriendList(filteredFriendList);
-            if (oneChonIdToExpandNetwork) {
-              canvas.drawInitialGraph(oneChonIdToExpandNetwork);
-            } else {
-              canvas.drawInitialGraph(currentUser.id);
-            }
-          }
+        canvas.setFriendList(friendList);
+
+        if (searchWord !== "") canvas.setFriendList(filteredFriendList);
+
+        if (oneChonIdToExpandNetwork) {
+          canvas.renderGraph(oneChonIdToExpandNetwork);
         } else {
-          canvas.setFriendList(friendList);
-          if (oneChonIdToExpandNetwork) {
-            canvas.drawInitialGraph(oneChonIdToExpandNetwork);
-          } else {
-            canvas.drawInitialGraph(currentUser.id);
-          }
+          canvas.renderGraph(currentUser.id);
         }
+      } else {
+        canvas.reset();
       }
     }
   }, [
@@ -69,21 +64,7 @@ const Graph: React.FC<Props> = () => {
     friendList,
     filteredFriendList,
     oneChonIdToExpandNetwork,
-    isSearchMode,
-    searchWord,
   ]);
-
-  useEffect(() => {
-    if (canvas) {
-      if (currentUser) {
-        canvas.setCurrentUser(currentUser);
-        canvas.setFriendList(friendList);
-        canvas.drawInitialGraph(currentUser.id);
-      } else {
-        canvas.reset();
-      }
-    }
-  }, [canvas, currentUser, friendList]);
 
   return (
     <S.CanvasContainer ref={divRef}>
