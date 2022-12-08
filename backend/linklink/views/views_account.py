@@ -4,12 +4,14 @@ Account related views module for linklink app
 
 import json
 from json.decoder import JSONDecodeError
+
 from django.contrib.auth import login
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
     JsonResponse,
 )
+from django.db import IntegrityError
 
 from ..decorators import allowed_method_or_405, logged_in_or_401
 
@@ -17,10 +19,10 @@ from ..decorators import allowed_method_or_405, logged_in_or_401
 #   Account Related APIs
 #--------------------------------------------------------------------------
 
-@allowed_method_or_405(["GET"])
+@allowed_method_or_405(["GET", "PUT"])
 @logged_in_or_401
 def account_info(request):
-    if request.method == "GET": # pragma: no branch
+    if request.method == "GET":
         response_dict = {}
         response_dict["lastname"] = request.user.last_name
         response_dict["firstname"] = request.user.first_name
@@ -28,6 +30,31 @@ def account_info(request):
         return JsonResponse(
             status=200,
             data=response_dict
+        )
+    elif request.method == "PUT": # pragma: no branch
+        try:
+            req_data = json.loads(request.body.decode())
+            last_name = req_data["lastname"]
+            first_name = req_data["firstname"]
+            email = req_data["email"]
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest(e) # implicit status code = 400
+        current_user = request.user
+        current_linklinkuser = request.user.linklinkuser
+        current_user.last_name = last_name
+        current_user.first_name = first_name
+        current_linklinkuser.email_unique = email
+        try:
+            current_linklinkuser.save()
+        except IntegrityError:
+            return JsonResponse(
+                status=400,
+                data={"message": f"email {email} already exists in DB"}
+            )
+        current_user.save()
+        return JsonResponse(
+            status=200,
+            data=req_data
         )
 
 
