@@ -40,6 +40,7 @@ const FriendListSideBar: React.FC<Props> = () => {
         <AiOutlinePlus />
         친구 초대하기
       </S.InviteFriendButton>
+      <S.FriendListContainer>
       {friendList.length > 0 &&
         friendList.map(user => (
           <ChonListItem
@@ -52,6 +53,7 @@ const FriendListSideBar: React.FC<Props> = () => {
             isTwoChon={false}
           ></ChonListItem>
         ))}
+      </S.FriendListContainer>
     </S.Container>
   );
 };

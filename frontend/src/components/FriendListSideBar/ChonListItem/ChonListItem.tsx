@@ -23,21 +23,21 @@ const ChonListItem: React.FC<{
     navigate(`/profile/${userId}`);
   };
   return (
-    <div>
-      <S.Container indent={isTwoChon}>
+    <S.Container>
+      <S.OneChonContainer indent={isTwoChon}>
         <S.UserRowContainer role="NodeClick" onClick={onNodeClick}>
-          <S.OneChonNode url={imgUrl}></S.OneChonNode>
+          <S.UserImageContainer url={imgUrl}></S.UserImageContainer>
           <S.Username>
             {lastname}
             {firstname}
           </S.Username>
         </S.UserRowContainer>
-        {!isTwoChon && (
+        {!isTwoChon && 
           <S.ExpandTwoChonButton onClick={onToggleButtonClick}>
             {isClicked ? <IoChevronDown /> : <IoChevronUp />}
           </S.ExpandTwoChonButton>
-        )}
-      </S.Container>
+        }
+      </S.OneChonContainer>
       {isClicked && twoChonList && (
         <div style={{ display: "flex", flexDirection: "column" }}>
           {twoChonList.map(twoChon => {
@@ -54,8 +54,8 @@ const ChonListItem: React.FC<{
             );
           })}
         </div>
-      )}
-    </div>
+      )} 
+    </S.Container>
   );
 };
 
