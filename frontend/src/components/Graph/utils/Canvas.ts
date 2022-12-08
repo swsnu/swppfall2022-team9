@@ -63,7 +63,7 @@ export default class Canvas extends EventDispatcher {
   private friendList: OneChonInfo[] = [];
 
   // loadedImgCount = 0
-  
+
   // totalImgCount = 0
 
   centerNode?: UserNode;
@@ -357,7 +357,6 @@ export default class Canvas extends EventDispatcher {
     this.oneChonNodes = [];
     this.twoChonNodes = [];
     this.nodes = [this.centerNode!];
-    this.clear();
     this.friendList = friendList;
   }
 
@@ -529,7 +528,7 @@ export default class Canvas extends EventDispatcher {
     }
   }
 
-  drawInitialGraph(userId: number) {
+  renderGraph(userId: number) {
     this.reset();
     this.setCenterNode(userId);
     this.setFriendNodes(userId);
@@ -587,16 +586,19 @@ export default class Canvas extends EventDispatcher {
     ctx.clip();
     ctx.closePath();
 
-    // Draw user image
     // ctx.filter = `opacity(${opacity * 100}%)`; -> not supported in Safari
-    ctx.drawImage(
-      userNode.imgElement,
-      centerX - scaledRadius,
-      centerY - scaledRadius,
-      scaledRadius * 2,
-      scaledRadius * 2,
-    );
-    
+
+    // Draw user image
+    // only if the image is successfully loaded
+    if (userNode.imgElement.complete && userNode.imgElement.naturalHeight) {
+      ctx.drawImage(
+        userNode.imgElement,
+        centerX - scaledRadius,
+        centerY - scaledRadius,
+        scaledRadius * 2,
+        scaledRadius * 2,
+      );
+    }
 
     // For not searched one-chon
     if (userNode.isNotSearched) {
