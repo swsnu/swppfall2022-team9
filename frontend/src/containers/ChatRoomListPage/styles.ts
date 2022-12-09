@@ -27,6 +27,16 @@ export const Container = styled.div`
   }
 `;
 
+export const NotificationRedMark = styled.div`
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  margin-left: 20px;
+  border-radius: 50%;
+  top: 0;
+  right: 5px;
+`;
+
 export const Title = styled.div`
   font-size: 20px;
   font-weight: bold;
@@ -42,6 +52,7 @@ export const ListContainer = styled.div`
 export const ListItemContainer = styled.div`
   display: flex;
   padding: 10px 15px;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   :hover {
@@ -82,6 +93,8 @@ export const Name = styled.div`
 
 export const LastMessage = styled.div`
   width: 100%;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 `;
 

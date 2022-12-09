@@ -4,6 +4,7 @@ export type ChatRoomInfo = {
   otherUserName: string;
   otherUserImgUrl: string;
   lastMessage: string;
+  isRead: boolean;
   lastTimeStamp: string;
 };
 

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { GetChatRoomInfoDto } from "server/dto/chat/chat.dto";
 import {
@@ -38,10 +38,37 @@ export const getCurrentChatRoomInfo = createAsyncThunk<
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
-  reducers: {},
+  reducers: {
+    moveChatRoomToUp(
+      state,
+      action: PayloadAction<{ senderId: number; content: string }>,
+    ) {
+      const chatRoomToMoveUp = state.chatRoomInfoList.find(
+        chatRoom => chatRoom.otherUserId === action.payload.senderId,
+      );
+
+      if (chatRoomToMoveUp === undefined) return;
+      chatRoomToMoveUp.lastMessage = action.payload.content;
+      chatRoomToMoveUp.isRead = false;
+      state.chatRoomInfoList = state.chatRoomInfoList.filter(chatRoom => {
+        return chatRoom.otherUserId !== action.payload.senderId;
+      });
+      state.chatRoomInfoList.unshift(chatRoomToMoveUp);
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getChatRoomInfoList.fulfilled, (state, action) => {
-      state.chatRoomInfoList = action.payload.chatRoomInfoList;
+      const chatRoomWithNewMessage = action.payload.chatRoomInfoList.filter(
+        room => !room.isRead,
+      );
+      console.log(chatRoomWithNewMessage);
+      const chatRoomWithNoNewMessage = action.payload.chatRoomInfoList.filter(
+        room => room.isRead,
+      );
+      console.log(chatRoomWithNoNewMessage, "no");
+      state.chatRoomInfoList = chatRoomWithNewMessage.concat(
+        chatRoomWithNoNewMessage,
+      );
     });
     builder.addCase(getCurrentChatRoomInfo.fulfilled, (state, action) => {
       state.currentChatRoomInfo = action.payload;

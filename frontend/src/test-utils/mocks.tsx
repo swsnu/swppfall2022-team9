@@ -43,7 +43,9 @@ export function renderWithProviders(
             : alertProviderProps
         }
       >
-        <NotificationContext.Provider value={{ unreadMessageCount: 0 }}>
+        <NotificationContext.Provider
+          value={{ unreadMessageCount: 0, newMessage: null }}
+        >
           {ui}
         </NotificationContext.Provider>
       </AlertContext.Provider>,
