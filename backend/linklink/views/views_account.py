@@ -45,7 +45,7 @@ def account_info(request):
         current_user.first_name = first_name
         current_user.save()
         # For email, differ behavior depending on whether email is new
-        old_email = current_linklinkuser.unique_email
+        old_email = current_linklinkuser.email_unique
         if old_email != email: # pragma: no branch
             current_linklinkuser.email_unique = email
             try:
