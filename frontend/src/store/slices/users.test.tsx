@@ -76,6 +76,13 @@ describe("users reducer", () => {
     await store.dispatch(verifyRegisterToken("token"));
   });
 
+  it("tests verify get Session Cookie rejected", async () => {
+    axios.get = jest
+      .fn()
+      .mockRejectedValue({});
+    await store.dispatch(getSessionCookie());
+  });
+
   it("tests verify get Session Cookie", async () => {
     axios.get = jest
       .fn()

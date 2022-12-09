@@ -7,6 +7,7 @@ import {
 import accountReducer, {
   AccountState,
   postPasswordUnauthenticated,
+  putAccount,
   putPassword,
 } from "./account";
 import axios from "axios";
@@ -44,5 +45,14 @@ describe("friend request reducer", () => {
     await store.dispatch(putPassword({ newPassword: "test" }));
   });
 
-  // TODO: create more test for account slice
+  it("tests put password", async () => {
+    axios.put = jest.fn().mockResolvedValue({});
+    await store.dispatch(putPassword({ newPassword: "test" }));
+  });
+
+  it("tests put account", async () => {
+    axios.put = jest.fn().mockResolvedValue({});
+    await store.dispatch(putAccount({ lastname: "hi", firstname: "hi", email: "hi" }));
+  });
+
 });

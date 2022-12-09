@@ -6,7 +6,9 @@ import reducer, {
   getFriendProfileWithoutStateUpdate,
   getProfile,
   profileActions,
+  uploadImage
 } from "./profile";
+import { FileUpload } from "use-file-upload";
 import { profileStub } from "server/stubs/profiles.stub";
 import axios from "axios";
 
@@ -55,6 +57,12 @@ describe("profile reducer", () => {
   });
 
   it("tests setPreviewProfile", () => {
+    store.dispatch(profileActions.setPreviewProfile(null));
+  });
+
+  it("tests uploadImage", () => {
+    jest.spyOn(axios, "post").mockResolvedValue({data: {imgUrl: "url"}})
+    store.dispatch(uploadImage({} as FileUpload))
     store.dispatch(profileActions.setPreviewProfile(null));
   });
 });
