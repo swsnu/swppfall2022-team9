@@ -276,9 +276,7 @@ class LinkLinkAuthTestCase(TestCase):
         # Check response
         self.assertEqual(response.status_code, 403)
         error_message_dict = {
-            "message": ("Account john exists, but is not validated. "
-                "A validation email has been "
-                "resent to notiona@snu.ac.kr.")
+            "email": "notiona@snu.ac.kr"
             }
         self.assertDictEqual(
             json.loads(response.content.decode()),
@@ -314,9 +312,7 @@ class LinkLinkAuthTestCase(TestCase):
         # Check response
         self.assertEqual(response.status_code, 403)
         error_message_dict = {
-            "message": ("Account john exists, but is not validated. "
-                "A validation email has been "
-                "resent to notiona@snu.ac.kr.")
+            "email": "notiona@snu.ac.kr"
             }
         self.assertDictEqual(
             json.loads(response.content.decode()),

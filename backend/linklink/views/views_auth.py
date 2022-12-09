@@ -120,12 +120,13 @@ def signin(request):
     # Validate whether username + password exists
     user = authenticate(username=username, password=password)
     if user is not None:
+        email = user.linklinkuser.email_unique
         # If emailValidated, login
         if user.linklinkuser.emailValidated:
             login(request, user)
             response_dict = {
                 "id": user.linklinkuser.id,
-                "email": user.linklinkuser.email_unique,
+                "email": email,
                 "username": user.username,
                 "firstname": user.first_name,
                 "lastname": user.last_name,
@@ -150,17 +151,12 @@ def signin(request):
                 verification_found.save()
             # Resend register email
             send_register_email(
-                user.linklinkuser.email_unique,
+                email,
                 str(verification_found.token)
-            )
-            resent_email_message = (
-                f"Account {username} exists, but is not validated. "
-                "A validation email has been resent to "
-                f"{user.linklinkuser.email_unique}."
             )
             return JsonResponse(
                 status=403,
-                data={"message": resent_email_message}
+                data={"email": email}
             )
     else: # login failed: incorrect info
         return JsonResponse(
