@@ -11,6 +11,8 @@ import {
   getFriendRequests,
   postFriendRequest,
   putFriendRequest,
+  getFriendRequestToken,
+  putFriendRequestToken,
 } from "./friendRequests";
 import friendRequestReducer from "./friendRequests";
 import axios from "axios";
@@ -107,5 +109,15 @@ describe("friend request reducer", () => {
 
   it("tests reset friend requests", async () => {
     store.dispatch(friendRequestActions.resetFriendRequests());
+  });
+
+  it("tests get friend request token", async () => {
+    axios.get = jest.fn().mockResolvedValue({data: {}});
+    await store.dispatch(getFriendRequestToken());
+  });
+
+  it("tests put friend request token", async () => {
+    axios.put = jest.fn().mockResolvedValue({data: {}});
+    await store.dispatch(putFriendRequestToken("hi"));
   });
 });

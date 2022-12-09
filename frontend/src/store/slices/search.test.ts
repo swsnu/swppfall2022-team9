@@ -4,7 +4,9 @@ import {
   EnhancedStore,
   ThunkMiddleware,
 } from "@reduxjs/toolkit";
-import searchReducer, { searchActions, SearchState } from "./search";
+import axios from "axios";
+import { usersStub } from "server/stubs/users.stub";
+import searchReducer, { searchActions, SearchState, getFilteredFriendList } from "./search";
 
 const mockDispatch = jest.fn();
 
@@ -46,5 +48,22 @@ describe("profile reducer", () => {
     expect(store.getState().search.filteredFriendList).toEqual([]);
     expect(store.getState().search.isSearchMode).toEqual(false);
     expect(store.getState().search.searchWord).toEqual("");
+  });
+
+  it("tests setSearchWord", async () => {
+    store.dispatch(searchActions.setSearchWord("hi"));
+    expect(store.getState().search.filteredFriendList).toEqual([]);
+    expect(store.getState().search.isSearchMode).toEqual(false);
+    expect(store.getState().search.searchWord).toEqual("hi");
+  });
+
+  it("tests getFilteredFriendList", async () => {
+    axios.get = jest.fn().mockResolvedValue({ data: {friendList: usersStub} })
+    await store.dispatch(
+      getFilteredFriendList("hi")
+    )
+    expect(store.getState().search.filteredFriendList).toEqual(usersStub);
+    expect(store.getState().search.isSearchMode).toEqual(false);
+    expect(store.getState().search.searchWord).toEqual("hi");
   });
 });
