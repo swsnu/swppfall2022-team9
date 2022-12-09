@@ -3,11 +3,8 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { renderWithProviders } from "test-utils/mocks";
 import FriendListSideBar from "./FriendListSideBar";
 import {
-  waitFor,
   screen,
   fireEvent,
-  render,
-  act,
 } from "@testing-library/react";
 
 const mockNavigate = jest.fn();

@@ -76,38 +76,15 @@ describe("<AccountPage/>", () => {
     expect(mockDispatch).toHaveBeenCalled();
   });
 
-  // it("on click delete account cancel", async () => {
-  //   render(
-  //     <AlertContextProvider>
-  //       <Provider store={store}>
-  //         <AccountPage />
-  //       </Provider>
-  //     </AlertContextProvider>,
-  //   );
-  //   const deleteAccountButton = screen.getByRole("button", {
-  //     name: /계정삭제/i,
-  //   });
-  //   fireEvent.click(deleteAccountButton);
-  //   waitFor(() => screen.findByText("계정 삭제를 진행할까요?"));
-  //   const closeButton = await screen.findByRole("button", { name: "아니오" });
-  //   fireEvent.click(closeButton);
-  // });
-
-  // it("on click delete account confirm", async () => {
-  //   render(
-  //     <AlertContextProvider>
-  //       <Provider store={store}>
-  //         <AccountPage />
-  //       </Provider>
-  //     </AlertContextProvider>,
-  //   );
-  //   const deleteAccountButton = screen.getByRole("button", {
-  //     name: /계정삭제/i,
-  //   });
-  //   fireEvent.click(deleteAccountButton);
-  //   // TODO: on click delete account
-  //   waitFor(() => screen.findByText("계정 삭제를 진행할까요?"));
-  //   const confirmButton = await screen.findByRole("button", { name: "네" });
-  //   fireEvent.click(confirmButton);
-  // });
+  it("tests value change", async () => {
+    renderAccountPage(alertProviderProps);
+    const lastname = screen.getByRole("lastname");
+    fireEvent.change(lastname, {target: {value: "hi"}});
+    const firstname = screen.getByRole("firstname");
+    fireEvent.change(firstname, {target: {value: "hi"}});
+    const email = screen.getByRole("email");
+    fireEvent.change(email, {target: {value: "hi"}});
+  
+  
+  });
 });

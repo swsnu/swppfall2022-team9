@@ -1,6 +1,5 @@
 import { renderWithProviders } from "test-utils/mocks";
 import {
-  waitFor,
   screen,
   fireEvent,
   render,
@@ -14,7 +13,6 @@ import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
 import {
   AlertContextProps,
-  AlertContextProvider,
 } from "containers/Context/AlertContext/AlertContext";
 import { profileStub } from "server/stubs/profiles.stub";
 import { friendListStub, usersStub } from "server/stubs/users.stub";

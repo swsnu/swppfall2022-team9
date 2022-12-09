@@ -72,11 +72,6 @@ const renderPreviewProfileSidebar = (
   );
 };
 
-const currentProfileStub = {
-    ...profileStub,
-    qualityTags: [{ name: "t1" }, { name: "t2" }, { name: "t1" }],
-};
-
 describe("<PreviewProfileSidebar/>", () => {
     let alertProviderProps: AlertContextProps;
     beforeEach(() => {

@@ -3,6 +3,7 @@ import AuthenticatedChangePasswordPage from "./AuthenticatedChangePasswordPage";
 import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import { renderWithProviders } from "test-utils/mocks";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import axios from "axios";
 
 const renderAuthenticatedChangePasswordPage = (
   alertProviderProps?: AlertContextProps,
@@ -50,6 +51,23 @@ describe("<AuthenticatedChangePasswordPage/>", () => {
     fireEvent.change(passwordInput, { target: { value: "test" } });
     const passwordCheckInput = screen.getByRole("passwordCheckInput");
     fireEvent.change(passwordCheckInput, { target: { value: "test" } });
+    fireEvent.click(submitButton);
+  });
+
+  it("renders AuthenticatedChangePasswordPage change password", async () => {
+    mockDispatch.mockReturnValue(
+      {unwrap: () => {}}
+    )
+    axios.post = jest.fn().mockResolvedValue({});
+    renderAuthenticatedChangePasswordPage();
+    const submitButton = screen.getByRole("submit");
+    const currentPasswordInput = screen.getByRole("currentPasswordInput");
+    fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+    const passwordInput = screen.getByRole("passwordInput");
+    fireEvent.change(passwordInput, { target: { value: "test" } });
+    const passwordCheckInput = screen.getByRole("passwordCheckInput");
+    fireEvent.change(passwordCheckInput, { target: { value: "test1" } });
+    
     fireEvent.click(submitButton);
   });
 });
