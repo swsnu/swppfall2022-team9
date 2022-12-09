@@ -1,6 +1,8 @@
 import { renderWithProviders } from "test-utils/mocks";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import EvaluateQualityPage from "./EvaluateQualityPage";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
+import { friendListStub, usersStub } from "server/stubs/users.stub";
 
 const mockNavigate = jest.fn();
 
@@ -16,16 +18,21 @@ jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
-const renderEvaluateQualityPage = () => {
+const renderEvaluateQualityPage = (userId: number) => {
   return renderWithProviders(
     <MemoryRouter>
       <Routes>
         <Route path="/:userId" element={<EvaluateQualityPage />} />
-        <Route path="*" element={<Navigate to="/1" />} />
+        <Route path="*" element={<Navigate to={`/${userId}`} />} />
       </Routes>
     </MemoryRouter>,
     {
-      preloadedState: {},
+      preloadedState: {
+        users: {
+          currentUser: usersStub[0],
+          friendList: friendListStub
+        }
+      },
     },
   );
 };
@@ -39,7 +46,7 @@ describe("<EvaluateQualityPage/>", () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({}),
     });
-    renderEvaluateQualityPage();
+    renderEvaluateQualityPage(1);
   });
 
   it("tests dispatch", async () => {
@@ -48,32 +55,8 @@ describe("<EvaluateQualityPage/>", () => {
         qualityTags: [{ name: "tag" }, { name: "tag2" }],
       }),
     });
-    renderEvaluateQualityPage();
+    renderEvaluateQualityPage(1);
   });
-
-  // it("tests add and submit button and delete", async () => {
-  //   mockDispatch
-  //     .mockReturnValueOnce({
-  //       unwrap: () => ({}),
-  //     })
-  //     .mockReturnValueOnce({
-  //       unwrap: () => ({ qualityTags: [{ name: "tag" }, { name: "tag2" }] }),
-  //     });
-  //   renderEvaluateQualityPage();
-  //   const input = screen.getByRole("combobox");
-  //   fireEvent.change(input, { target: { value: "성실한" } });
-  //   const select = screen.getByText("성실한");
-  //   fireEvent.click(select);
-
-  //   const button = screen.getAllByRole("button");
-  //   fireEvent.click(button[0]);
-
-  //   const close = await waitFor(() => screen.getAllByRole("close-icon")[0]);
-  //   fireEvent.click(close);
-
-  //   const submit = screen.getByText("제출");
-  //   await waitFor(() => fireEvent.click(submit));
-  // });
 
   it("tests no-userId", async () => {
     mockDispatch.mockReturnValue({
@@ -88,36 +71,41 @@ describe("<EvaluateQualityPage/>", () => {
     );
   });
 
-  // it("tests duplicate tag", async () => {
-  //   mockDispatch.mockReturnValue({
-  //     unwrap: () => ({}),
-  //   });
-  //   renderEvaluateQualityPage();
-  //   const input = screen.getByRole("combobox");
-  //   fireEvent.change(input, { target: { value: "성실한" } });
-  //   const select = screen.getByText("성실한");
-  //   fireEvent.click(select);
+  it("tests add and submit button and delete", async () => {
+    mockDispatch
+      .mockReturnValueOnce({
+        unwrap: () => ({}),
+      })
+      .mockReturnValueOnce({
+        unwrap: () => ({ qualityTags: [{ name: "tag" }, { name: "tag2" }] }),
+      });
+    renderEvaluateQualityPage(8);
 
-  //   const button = screen.getAllByRole("button");
-  //   fireEvent.click(button[0]);
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "성실한" } });
+    const select = screen.getByDisplayValue("성실한");
+    await waitFor(() => fireEvent.click(select));
 
-  //   fireEvent.change(input, { target: { value: "성실한" } });
-  //   const select2 = screen.getAllByText("성실한")[1];
-  //   fireEvent.click(select2);
-  //   fireEvent.click(button[0]);
-  // });
+    const add = screen.getByText("추가");
+    await waitFor(() => fireEvent.click(add));
 
-  // it("tests onFocus", async () => {
-  //   mockDispatch.mockReturnValue({
-  //     unwrap: () => ({}),
-  //   });
-  //   renderEvaluateQualityPage();
-  //   const input = screen.getByRole("combobox");
-  //   fireEvent.change(input, { target: { value: "정" } });
-  //   userEvent.hover(screen.getByText("정직한"));
-  //   fireEvent.click(screen.getByText("정직한"));
-  //   await waitFor(() => screen.getByText("정직한"));
-  //   // this renders honest option
-  //   fireEvent.change(input, { target: { value: "정" } });
-  // });
+    const submit = screen.getByText("제출");
+    await waitFor(() => fireEvent.click(submit));
+  });
+
+  it("tests qualitytags assigned", async () => {
+    mockDispatch
+      .mockReturnValue({
+        unwrap: () => ({ qualityTags: [{ name: "tag" }, { name: "tag2" }] }),
+      })
+    renderEvaluateQualityPage(1);
+    
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "성실한" } });
+    const select = screen.getByDisplayValue("성실한");
+    await waitFor(() => fireEvent.click(select));
+
+    const add = screen.getByText("추가");
+    await waitFor(() => fireEvent.click(add));
+  });
 });
