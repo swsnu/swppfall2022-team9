@@ -63,7 +63,7 @@ class LinkLinkAccountTestCase(TestCase):
         )
         john_linklinkuser = LinkLinkUser.objects.create(
             user=john,
-            emailValidated=False,
+            emailValidated=True,
             email_unique="notiona@snu.ac.kr",
         )
         james_linklinkuser = LinkLinkUser.objects.create(
@@ -186,6 +186,36 @@ class LinkLinkAccountTestCase(TestCase):
             john_linklinkuser.email_unique,
             "invalid_but_unique777@snu.ac.kr"
         )
+        # check DB to see emailValidated=False
+        self.assertFalse(john_linklinkuser.emailValidated)
+
+
+    def test_put_account_info_same_email_success(self):
+        target_url = "/api/account/"
+        # Login John
+        self.client.login(username="john", password="johnpassword")
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "lastname": "Cenaa",
+                "firstname": "Johnn",
+                "email": "notiona@snu.ac.kr"
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200) # Successful GET
+        john_user = User.objects.get(pk=1)
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        self.assertEqual(john_user.last_name, "Cenaa")
+        self.assertEqual(john_user.first_name, "Johnn")
+        self.assertEqual(
+            john_linklinkuser.email_unique,
+            "notiona@snu.ac.kr"
+        )
+        # check DB to see emailValidated=True, as email has not changed
+        self.assertTrue(john_linklinkuser.emailValidated)
 
 
     def test_400_put_account_info(self):
