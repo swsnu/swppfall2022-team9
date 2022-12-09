@@ -218,3 +218,29 @@ def auto_signin(request):
         )
     else: # not logged in
         return HttpResponse(status=401) # unauthorized
+
+@allowed_method_or_405(["POST"])
+def check_email_unique(request):
+    try:
+        req_data = json.loads(request.body.decode())
+        email = req_data["email"]
+    except (KeyError, JSONDecodeError) as e:
+        return HttpResponseBadRequest(e) # implicit status code = 400
+    try:
+        LinkLinkUser.objects.get(email_unique=email)
+    except LinkLinkUser.DoesNotExist:
+        return HttpResponse(status=200)
+    return HttpResponse(status=409) # conflict
+
+@allowed_method_or_405(["POST"])
+def check_username_unique(request):
+    try:
+        req_data = json.loads(request.body.decode())
+        username = req_data["username"]
+    except (KeyError, JSONDecodeError) as e:
+        return HttpResponseBadRequest(e) # implicit status code = 400
+    try:
+        User.objects.get(username=username)
+    except User.DoesNotExist:
+        return HttpResponse(status=200)
+    return HttpResponse(status=409) # conflict
