@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { friendRequestActions } from "store/slices/friendRequests";
 import { getSignOut } from "store/slices/users";
+import { putAccount } from "store/slices/account";
 import * as FormStyles from "styles/common.form.styles";
+import useAlert from "hooks/useAlert";
 
 const AccountPage: React.FC = () => {
-  // const [accountInfo, setAccountInfo] = useState<{
-  //   firstname: string;
-  //   lastname: string;
-  //   email: string;
-  //   birthdate: string;
-  // }>({
-  //   firstname: "",
-  //   lastname: "",
-  //   email: "",
-  //   birthdate: new Date().toISOString().slice(0, 10),
-  // });
+  const alert = useAlert();
+  const [accountInfo, setAccountInfo] = useState<{
+    firstname: string;
+    lastname: string;
+    email: string;
+  }>({
+    firstname: "",
+    lastname: "",
+    email: "",
+  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const users = useAppSelector(state => state.users);
@@ -33,6 +34,23 @@ const AccountPage: React.FC = () => {
     dispatch(friendRequestActions.resetFriendRequests());
     navigate("/");
   };
+  
+  // TODO: add casess
+  const onClickSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      await dispatch(putAccount({
+        lastname: accountInfo.lastname,
+        firstname: accountInfo.firstname,
+        email: accountInfo.email,
+      }))
+      alert.open({
+        message: "계정 정보가 업데이트 되었습니다."
+      })
+    } catch (err) {
+      alert.open({ message: "계정 정보 업데이트에 실패하였습니다."})
+    }
+  }
 
   // // TODO: delete account
   // const onClickDeleteAccount = () => {
@@ -62,10 +80,7 @@ const AccountPage: React.FC = () => {
           <FormStyles.HeaderText>개인 정보</FormStyles.HeaderText>
         </FormStyles.Header>
         <FormStyles.Form
-          onSubmit={e => {
-            // prevent refresh
-            e.preventDefault();
-          }}
+          onSubmit={onClickSubmit}
         >
           <FormStyles.Label>
             <FormStyles.LabelText>성</FormStyles.LabelText>
@@ -73,7 +88,12 @@ const AccountPage: React.FC = () => {
               <FormStyles.Input
                 role="lastname"
                 value={currentUser ? currentUser.lastname : ""}
-                disabled={true}
+                onChange={e => {
+                  setAccountInfo(prev => ({
+                    ...prev,
+                    lastname: e.target.value,
+                  }));
+                }}
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>
@@ -83,7 +103,12 @@ const AccountPage: React.FC = () => {
               <FormStyles.Input
                 role="firstname"
                 value={currentUser ? currentUser.firstname : ""}
-                disabled={true}
+                onChange={e => {
+                  setAccountInfo(prev => ({
+                    ...prev,
+                    firstname: e.target.value,
+                  }));
+                }}
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>
@@ -93,7 +118,12 @@ const AccountPage: React.FC = () => {
               <FormStyles.Input
                 role="email"
                 value={currentUser ? currentUser.email : ""}
-                disabled={true}
+                onChange={e => {
+                  setAccountInfo(prev => ({
+                    ...prev,
+                    email: e.target.value,
+                  }));
+                }}
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>

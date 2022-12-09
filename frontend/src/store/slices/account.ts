@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   PutPasswordDto,
   PostPasswordUnauthenticatedDto,
+  PutAccountDto,
 } from "server/dto/account/account.dto";
 import { PutPasswordResDto } from "server/dto/account/account.res.dto";
 
@@ -26,19 +27,25 @@ export const postPasswordUnauthenticated = createAsyncThunk<
   return response;
 });
 
-export const putPassword = createAsyncThunk<
-  PutPasswordResDto,
-  PutPasswordDto
->("account/postPassword", async ({ newPassword }) => {
-  const body: PutPasswordDto = { newPassword };
-  const response = (
-    await axios.put<PutPasswordResDto>("/api/account/password/", body)
-  ).data;
-  // there is a return here since we should use unwrap for checking wheter the token is correct
-  return response;
-});
+export const putPassword = createAsyncThunk<PutPasswordResDto, PutPasswordDto>(
+  "account/postPassword",
+  async ({ newPassword }) => {
+    const body: PutPasswordDto = { newPassword };
+    const response = (
+      await axios.put<PutPasswordResDto>("/api/account/password/", body)
+    ).data;
+    // there is a return here since we should use unwrap for checking wheter the token is correct
+    return response;
+  },
+);
 
-// TODO: Implement other apis for account slice
+export const putAccount = createAsyncThunk<void, PutAccountDto>(
+  "account/putAccount",
+  async ({ lastname, firstname, email }) => {
+    const body : PutAccountDto = {lastname, firstname, email};
+    await axios.put<PutAccountDto>("/api/account/", body)
+  },
+);
 
 export const accountSlice = createSlice({
   name: "account",

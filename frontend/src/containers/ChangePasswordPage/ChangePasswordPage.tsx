@@ -132,7 +132,7 @@ const ChangePasswordPage: React.FC = () => {
               fontWeight: "bold",
             }}
           >
-            비밀반호 변경
+            비밀번호 변경
           </FormStyles.Submit>
         </FormStyles.Form>
       </FormStyles.FormContainer>
