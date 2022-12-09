@@ -79,7 +79,7 @@ describe("<LoginModal/>", () => {
     const loginButton = screen.getByRole("button", { name: /로그인하기/i });
     fireEvent.click(loginButton);
     //we do wait for since we have used usecallback
-    waitFor(() => screen.getByText(LoginModalMessage.LOGIN_FAIL));
+    waitFor(() => screen.getByText(LoginModalMessage.INVALID_LOGIN_INFO));
   });
 
   it("click login success", async () => {

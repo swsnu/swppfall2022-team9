@@ -10,7 +10,13 @@ import WelcomeMessage from "assets/img/welcome-message.png";
 export enum LoginModalMessage {
   NULL = "",
   SESSION_EXPIRED = "세션이 만료되었습니다. 다시 로그인해주세요.",
-  LOGIN_FAIL = "아이디 또는 비밀번호가 올바르지 않습니다.",
+  INVALID_LOGIN_INFO = "아이디 또는 비밀번호가 올바르지 않습니다.",
+  UNVERIFIED_EMAIL = "이메일 인증이 완료되지 않았습니다.",
+}
+
+interface LoginError {
+  status: number;
+  data: { email?: string };
 }
 
 const LoginModal: React.FC = () => {
@@ -28,23 +34,30 @@ const LoginModal: React.FC = () => {
   const onSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault();
-      dispatch(
-        postSignIn({
-          username: loginInfo.username,
-          password: loginInfo.password,
-        }),
-      )
-        .unwrap()
-        .then(() => {})
-        .catch(err => {
-          if (err.status === 401) {
-            alert.open({
-              message:
-                "이미엘 인증이 아직 완료되지 않은 유저입니다. 이메일을 확인해주세요.",
-            });
-          }
-          setLoginMessage(LoginModalMessage.LOGIN_FAIL);
-        });
+      try {
+        alert.open({ message: "로그인 진행 중...", buttons: [] });
+        await dispatch(
+          postSignIn({
+            username: loginInfo.username,
+            password: loginInfo.password,
+          }),
+        ).unwrap();
+        alert.close();
+      } catch (err) {
+        console.log(err);
+        alert.close();
+        const loginError = err as LoginError;
+        if (loginError.status === 403) {
+          alert.open({
+            message:
+              "이메일 인증이 아직 완료되지 않았습니다.\n" +
+              `이메일(${loginError.data.email})을 확인해주세요.`,
+          });
+          setLoginMessage(LoginModalMessage.UNVERIFIED_EMAIL);
+        } else if (loginError.status === 401) {
+          setLoginMessage(LoginModalMessage.INVALID_LOGIN_INFO);
+        }
+      }
     },
     [alert, loginInfo],
   );
@@ -102,7 +115,11 @@ const LoginModal: React.FC = () => {
             />
           </S.Label>
           <S.Message>{loginMessage}</S.Message>
-          <S.Submit type="submit" onSubmit={onSubmit}>
+          <S.Submit
+            type="submit"
+            onSubmit={onSubmit}
+            disabled={loginInfo.username && loginInfo.password ? false : true}
+          >
             로그인하기
           </S.Submit>
         </S.Form>
