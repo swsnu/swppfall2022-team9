@@ -113,4 +113,28 @@ describe("<ProfileFriendItem/>", () => {
     const askFriend = screen.getByRole("button");
     fireEvent.click(askFriend);
   });
+
+  it("tests branching", async () => {
+    renderProfileFriendItem(
+      1,
+      "test",
+      profileUserFriend,
+      null,
+      friendList,
+    );
+    const askFriend = screen.getByRole("button");
+    fireEvent.click(askFriend);
+  });
+
+  it("tests branching 2", async () => {
+    renderProfileFriendItem(
+      1,
+      "test",
+      profileUserFriend,
+      {...usersStub[1], id: 0},
+      friendList,
+    );
+    const askFriend = screen.getByRole("button");
+    fireEvent.click(askFriend);
+  });
 });

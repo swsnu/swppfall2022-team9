@@ -203,34 +203,25 @@ describe("<ProfilePage/>", () => {
     });
   });
 
-  it("tests alert callback", async () => {
-    mockDispatch.mockReturnValue({
-      unwrap: () => Promise.reject({}),
-    });
-    render(
-      <AlertContextProvider>
-        <Provider store={store}>
-          <MemoryRouter>
-            <Routes>
-              <Route path="/:userId" element={<ProfilePage />} />
-              <Route path="*" element={<Navigate to="/1" />} />
-            </Routes>
-          </MemoryRouter>
-        </Provider>
-      </AlertContextProvider>,
-    );
-    await waitFor(() => expect(mockDispatch).toHaveBeenCalled());
-    await screen.findByRole("button", { name: "확인" });
-
-    const modalButton = screen.getByRole("button", { name: "확인" });
-    fireEvent.click(modalButton);
-  });
-
   it("tests null useParam userID", async () => {
     render(
       <Provider store={store}>
         <ProfilePage />
       </Provider>,
     );
+  });
+
+  it("tests click Change Profile", async () => {
+    await act(async () => {
+      renderProfilePage(
+        usersStub[0],
+        friendListStub,
+        currentProfileStub,
+        1,
+        alertProviderProps,
+      );
+    });
+    const profileButton = screen.getByRole("profile");
+    fireEvent.click(profileButton);
   });
 });

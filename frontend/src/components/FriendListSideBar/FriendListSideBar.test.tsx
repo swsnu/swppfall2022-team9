@@ -1,6 +1,14 @@
+import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { renderWithProviders } from "test-utils/mocks";
 import FriendListSideBar from "./FriendListSideBar";
+import {
+  waitFor,
+  screen,
+  fireEvent,
+  render,
+  act,
+} from "@testing-library/react";
 
 const mockNavigate = jest.fn();
 
@@ -9,7 +17,15 @@ jest.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const renderFriendListSideBar = () => {
+const mockDispatch = jest.fn();
+
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: () => mockDispatch,
+}));
+
+const renderFriendListSideBar = (  alertProviderProps?: AlertContextProps,
+  ) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -40,15 +56,39 @@ const renderFriendListSideBar = () => {
         },
       },
     },
+    alertProviderProps,
   );
 };
 
 describe("<FriendListSideBar/>", () => {
+  let alertProviderProps: AlertContextProps;
   beforeEach(() => {
     jest.clearAllMocks();
+    alertProviderProps = {
+      open: jest.fn(),
+      close: jest.fn(),
+    };
   });
 
   it("renders FriendListSideBar", async () => {
-    renderFriendListSideBar();
+    renderFriendListSideBar(alertProviderProps);
+  });
+
+  it("clicks invite button", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => ({}),
+    });
+    renderFriendListSideBar(alertProviderProps);
+    const button = screen.getAllByRole("button")[0]
+    fireEvent.click(button);
+  });
+
+  it("clicks invite button and tests error", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => Promise.reject({}),
+    });
+    renderFriendListSideBar(alertProviderProps);
+    const button = screen.getAllByRole("button")[0]
+    fireEvent.click(button);
   });
 });
