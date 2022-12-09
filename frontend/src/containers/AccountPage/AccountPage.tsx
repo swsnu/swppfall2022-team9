@@ -22,8 +22,6 @@ export enum HelperText {
   REQUIRED = "필수 정보입니다.",
   UNVERIFIED_EMAIL = "이메일 중복 확인을 진행해주세요.",
   INVALID_EMAIL = "잘못된 이메일 형식입니다.",
-  UNVERIFIED_USERNAME = "아이디 중복 확인을 진행해주세요.",
-  DIFFERENT_PASSWORD = "비밀번호가 일치하지 않습니다.",
 }
 
 interface PutAccountInfo {
