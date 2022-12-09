@@ -9,6 +9,7 @@ from linklink.models import ChatRoom, Message, LinkLinkUser
 
 class NotificationConsumer(AsyncJsonWebsocketConsumer):
     """NotificationConsumer class for LinkLink"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
         self.user = None
@@ -17,18 +18,14 @@ class NotificationConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def get_unread(self):
-        unread_count = Message.objects.filter(
-            receiver_id=self.user_id, read=False
-        ).count()
+        unread_count = Message.objects.filter(receiver_id=self.user_id, read=False).count()
         return unread_count
 
     async def connect(self):
         self.user_id = self.scope["url_route"]["kwargs"]["user_id"]
         # private notification group
         self.notification_group_name = self.user_id + "__notifications"
-        await self.channel_layer.group_add(
-            self.notification_group_name, self.channel_name
-        )
+        await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
         await self.accept()
         unread_count = await self.get_unread()
 
@@ -64,31 +61,23 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         self.chat_room_name = chat_room_name
 
         # Join room group
-        await self.channel_layer.group_add(
-            self.chat_room_name, self.channel_name
-        )
+        await self.channel_layer.group_add(self.chat_room_name, self.channel_name)
         await self.accept()
         self.chat_room = await self.get_chatroom()
 
         # Send last 50 messages
         last_50_messages = await self.get_last_50_messages()
-        await self.send_json(
-            {"type": "last_50_messages", "messages": last_50_messages}
-        )
+        await self.send_json({"type": "last_50_messages", "messages": last_50_messages})
 
     async def disconnect(self, code):
         # Leave room group
-        await self.channel_layer.group_discard(
-            self.chat_room_name, self.channel_name
-        )
+        await self.channel_layer.group_discard(self.chat_room_name, self.channel_name)
         return super().disconnect(code)
 
     @database_sync_to_async
     def get_chatroom(self):
         user_ids = self.chat_room_name.split("__")
-        chat_room = ChatRoom.objects.get_or_create(
-            name=f"[{user_ids[0]}]__[{user_ids[1]}]"
-        )[0]
+        chat_room = ChatRoom.objects.get_or_create(name=f"[{user_ids[0]}]__[{user_ids[1]}]")[0]
         return chat_room
 
     @database_sync_to_async
@@ -106,17 +95,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     # pylint:disable=unused-argument
-    def enter_chatroom_get_unread(self, current_user_id, receiver_id):
-        messages = self.chat_room.messages.filter(
-            receiver_id=current_user_id, read=False
+    def enter_chatroom_get_unread(self, current_user_id):
+        messages = Message.objects.filter(
+            chatRoom=self.chat_room, receiver_id=current_user_id, read=False
         )
         # Message.objects.filter(receiver=receiver_id, read=False)
         for message in messages:
             message.read = True
             message.save()
-        unread_count = Message.objects.filter(
-            receiver=current_user_id, read=False
-        ).count()
+
+        unread_count = Message.objects.filter(receiver=current_user_id, read=False).count()
 
         return unread_count
 
@@ -135,11 +123,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         if message_type == "chat_message":
             sender_id = content["senderId"]
             user_ids = list(map(int, self.chat_room_name.split("__")))
-            receiver_id = \
-                user_ids[1] if sender_id == user_ids[0] else user_ids[0]
-            message = await self.create_message(
-                sender_id, receiver_id, content=content["message"]
-            )
+            receiver_id = user_ids[1] if sender_id == user_ids[0] else user_ids[0]
+            message = await self.create_message(sender_id, receiver_id, content=content["message"])
 
             await self.channel_layer.group_send(
                 self.chat_room_name,
@@ -165,11 +150,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             sender_id = content["senderId"]
             current_user_id = sender_id
             user_ids = list(map(int, self.chat_room_name.split("__")))
-            receiver_id = \
-                user_ids[1] if sender_id == user_ids[0] else user_ids[0]
-            unread_count = await self.enter_chatroom_get_unread(
-                current_user_id=current_user_id, receiver_id=receiver_id
-            )
+            receiver_id = user_ids[1] if sender_id == user_ids[0] else user_ids[0]
+            unread_count = await self.enter_chatroom_get_unread(current_user_id=current_user_id)
             # send unread_count to user
             notification_group_name = str(current_user_id) + "__notifications"
             await self.channel_layer.group_send(
