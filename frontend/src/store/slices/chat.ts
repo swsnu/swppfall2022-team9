@@ -61,11 +61,9 @@ export const chatSlice = createSlice({
       const chatRoomWithNewMessage = action.payload.chatRoomInfoList.filter(
         room => !room.isRead,
       );
-      console.log(chatRoomWithNewMessage);
       const chatRoomWithNoNewMessage = action.payload.chatRoomInfoList.filter(
         room => room.isRead,
       );
-      console.log(chatRoomWithNoNewMessage, "no");
       state.chatRoomInfoList = chatRoomWithNewMessage.concat(
         chatRoomWithNoNewMessage,
       );

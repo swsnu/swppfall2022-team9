@@ -4,9 +4,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { friendRequestActions } from "store/slices/friendRequests";
 import { getSignOut } from "store/slices/users";
 import { putAccount } from "store/slices/account";
-import {
-  checkEmailUnique,
-} from "store/slices/users";
+import { checkEmailUnique } from "store/slices/users";
 import * as S from "styles/common.form.styles";
 import * as T from "../SignUpPage/styles";
 import useAlert from "hooks/useAlert";
@@ -14,7 +12,6 @@ import { emailRegex } from "utils/email";
 
 interface LoginError {
   status: number;
-  data: { email?: string };
 }
 
 export enum HelperText {
@@ -76,7 +73,7 @@ const AccountPage: React.FC = () => {
     dispatch(friendRequestActions.resetFriendRequests());
     navigate("/");
   };
-  
+
   const onClickSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsSubmitClicked(true);
@@ -86,13 +83,15 @@ const AccountPage: React.FC = () => {
       alert.open({
         message: "처리 중입니다...",
         buttons: [],
-      })
+      });
       try {
-        await dispatch(putAccount({
-          lastname: accountInfo.lastname,
-          firstname: accountInfo.firstname,
-          email: accountInfo.email,
-        })).unwrap();
+        await dispatch(
+          putAccount({
+            lastname: accountInfo.lastname,
+            firstname: accountInfo.firstname,
+            email: accountInfo.email,
+          }),
+        ).unwrap();
         alert.open({
           message: "계정 정보가 업데이트 되었습니다.",
           buttons: [
@@ -104,18 +103,18 @@ const AccountPage: React.FC = () => {
               },
             },
           ],
-        })
+        });
       } catch (err) {
         alert.close();
         const loginError = err as LoginError;
         if (loginError.status === 400) {
-          alert.open({ message: "이미 사용중인 이메일입니다." })
+          alert.open({ message: "이미 사용중인 이메일입니다." });
         } else {
-          alert.open({ message: "계정 정보 업데이트에 실패하였습니다."})
+          alert.open({ message: "계정 정보 업데이트에 실패하였습니다." });
         }
       }
     }
-  }
+  };
 
   const onClickCheckEmail = async () => {
     setIsEmailClicked(true);
@@ -155,10 +154,7 @@ const AccountPage: React.FC = () => {
         <S.Header>
           <S.HeaderText>개인 정보</S.HeaderText>
         </S.Header>
-        <S.Form
-          role="submit"
-          onSubmit={onClickSubmit}
-        >
+        <S.Form role="submit" onSubmit={onClickSubmit}>
           <S.Label>
             <S.LabelText>성</S.LabelText>
             <S.InputContainer>
