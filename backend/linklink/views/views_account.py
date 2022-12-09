@@ -43,15 +43,21 @@ def account_info(request):
         current_linklinkuser = request.user.linklinkuser
         current_user.last_name = last_name
         current_user.first_name = first_name
-        current_linklinkuser.email_unique = email
-        try:
-            current_linklinkuser.save()
-        except IntegrityError:
-            return JsonResponse(
-                status=400,
-                data={"message": f"email {email} already exists in DB"}
-            )
         current_user.save()
+        # For email, differ behavior depending on whether email is new
+        old_email = current_linklinkuser.unique_email
+        if old_email != email: # pragma: no branch
+            current_linklinkuser.email_unique = email
+            try:
+                current_linklinkuser.save()
+            except IntegrityError:
+                return JsonResponse(
+                    status=400,
+                    data={"message": f"email {email} already exists in DB"}
+                )
+            # set emailValidated to False if new email is set
+            current_linklinkuser.emailValidated = False
+            current_linklinkuser.save()
         return JsonResponse(
             status=200,
             data=req_data
