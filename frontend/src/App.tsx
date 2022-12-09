@@ -18,6 +18,7 @@ import { useAppDispatch } from "store/hooks";
 import { getSessionCookie } from "store/slices/users";
 import ChatRoomListPage from "containers/ChatRoomListPage/ChatRoomListPage";
 import ChatRoomPage from "containers/ChatRoomPage/ChatRoomPage";
+import { NotificationContextProvider } from "containers/Context/NotificationContext/NotificationContext";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -32,41 +33,43 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <AuthWrapper>
-                <HomePage />
-              </AuthWrapper>
-            }
-          />
-          <Route path="/profile/change" element={<ChangeProfilePage />} />
-          <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/evaluate/:userId" element={<EvaluateQualityPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/account">
-            <Route index={true} element={<AccountPage />} />
-            <Route path="forgot" element={<ForgotAccountPage />} />
+        <NotificationContextProvider>
+          <Navbar />
+          <Routes>
             <Route
-              path="password"
-              element={<AuthenticatedChangePasswordPage />}
+              path="/"
+              element={
+                <AuthWrapper>
+                  <HomePage />
+                </AuthWrapper>
+              }
             />
-            <Route path="password/:token" element={<ChangePasswordPage />} />
-          </Route>
-          <Route path="/verify/:token" element={<VerifyRegisterPage />} />
-          <Route path="/chat/" element={<ChatRoomListPage />} />
-          <Route path="/chat/:chatRoomName/" element={<ChatRoomPage />} />
-          <Route
-            path="*"
-            element={
-              <AuthWrapper>
-                <h1>Not Found</h1>
-              </AuthWrapper>
-            }
-          />
-        </Routes>
+            <Route path="/profile/change" element={<ChangeProfilePage />} />
+            <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/evaluate/:userId" element={<EvaluateQualityPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/account">
+              <Route index={true} element={<AccountPage />} />
+              <Route path="forgot" element={<ForgotAccountPage />} />
+              <Route
+                path="password"
+                element={<AuthenticatedChangePasswordPage />}
+              />
+              <Route path="password/:token" element={<ChangePasswordPage />} />
+            </Route>
+            <Route path="/verify/:token" element={<VerifyRegisterPage />} />
+            <Route path="/chat/" element={<ChatRoomListPage />} />
+            <Route path="/chat/:chatRoomName/" element={<ChatRoomPage />} />
+            <Route
+              path="*"
+              element={
+                <AuthWrapper>
+                  <h1>Not Found</h1>
+                </AuthWrapper>
+              }
+            />
+          </Routes>
+        </NotificationContextProvider>
       </BrowserRouter>
     </div>
   );
