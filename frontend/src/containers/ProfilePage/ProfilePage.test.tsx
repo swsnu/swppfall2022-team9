@@ -1,10 +1,5 @@
 import { renderWithProviders } from "test-utils/mocks";
-import {
-  screen,
-  fireEvent,
-  render,
-  act,
-} from "@testing-library/react";
+import { screen, fireEvent, render, act } from "@testing-library/react";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import ProfilePage from "./ProfilePage";
 import { User } from "server/models/users.model";
@@ -13,12 +8,14 @@ import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
 import {
   AlertContextProps,
+  AlertContextProvider,
 } from "containers/Context/AlertContext/AlertContext";
 import { profileStub } from "server/stubs/profiles.stub";
 import { friendListStub, usersStub } from "server/stubs/users.stub";
 import { Provider } from "react-redux";
 import store from "store";
 import { friendRequestsStub } from "server/stubs/friendRequests.stub";
+import { setupStore } from "store/slices";
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({
@@ -221,5 +218,35 @@ describe("<ProfilePage/>", () => {
     });
     const profileButton = screen.getByRole("profile");
     fireEvent.click(profileButton);
+  });
+
+  it("tests non-existing user error", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => Promise.reject({}),
+    });
+    const preloadedState = {
+      users: {
+        currentUser: usersStub[0],
+        friendList: friendListStub,
+      },
+    };
+    await act(async () => {
+      render(
+        <AlertContextProvider>
+          <Provider store={setupStore(preloadedState)}>
+            <MemoryRouter>
+              <Routes>
+                <Route path="/:userId" element={<ProfilePage />} />
+                <Route path="*" element={<Navigate to={`/${8}`} />} />
+              </Routes>
+            </MemoryRouter>
+          </Provider>
+        </AlertContextProvider>,
+      );
+    });
+    const modalButton = await screen.findByText("확인");
+    await act(async () => {
+      fireEvent.click(modalButton);
+    });
   });
 });
