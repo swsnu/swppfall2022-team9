@@ -4,6 +4,8 @@ import reducer, {
   getSessionCookie,
   UserState,
   verifyRegisterToken,
+  checkEmailUnique,
+  checkUsernameUnique
 } from "./users";
 import { ThunkMiddleware } from "redux-thunk";
 import { postSignUp, postSignIn, getSignOut } from "./users";
@@ -108,5 +110,28 @@ describe("users reducer", () => {
     });
     await store.dispatch(getFriendList());
     expect(store.getState().users.friendList.length).toEqual(1);
+  });
+
+  it("tests check email unique", async () => {
+    axios.post = jest
+      .fn()
+      .mockReturnValue({});
+    await store.dispatch(checkEmailUnique("hi"));
+  });
+
+  it("tests check email unique", async () => {
+    axios.post = jest
+      .fn()
+      .mockReturnValue({});
+    await store.dispatch(checkUsernameUnique("hi"));
+  });
+
+  it("tests post sign in error", async () => {
+    axios.post = jest
+      .fn()
+      .mockRejectedValue({});
+    await store.dispatch(postSignIn({
+      username: usersStub[0].username,
+      password: usersStub[0].password,}));
   });
 });

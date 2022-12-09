@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import { chatRoomInfoListStub } from "server/stubs/chat.stub";
 import chatReducer, {
+  chatActions,
   ChatState,
   getChatRoomInfoList,
   getCurrentChatRoomInfo,
@@ -56,5 +57,25 @@ describe("chat reducer", () => {
       },
     });
     await store.dispatch(getCurrentChatRoomInfo({ chatRoomName: "1__2" }));
+  });
+
+  it("tests chatRoomMoveUp", async () => {
+    store.dispatch(chatActions.moveChatRoomToUp({senderId: 1, content: "hi"}));
+  });
+
+  it("tests chatRoomMoveUp", async () => {
+    axios.get = jest.fn().mockResolvedValue({
+      data: {
+        chatRoomName: "1__2",
+        otherUserId: 2,
+        otherUserName: "박신혜",
+        otherUserImgUrl:
+          "https://res.cloudinary.com/duyixodey/image/upload/v1669881484/shinhye_park_qqrin4.jpg",
+        lastMessage: "hello",
+        lastTimeStamp: "2022-12-03T15:57:37.039Z",
+      },
+    });
+    await store.dispatch(getCurrentChatRoomInfo({ chatRoomName: "1__2" }));
+    store.dispatch(chatActions.moveChatRoomToUp({senderId: 2, content: "hi"}));
   });
 });
