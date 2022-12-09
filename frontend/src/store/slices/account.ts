@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   PutPasswordDto,
   PostPasswordUnauthenticatedDto,
@@ -41,9 +41,14 @@ export const putPassword = createAsyncThunk<PutPasswordResDto, PutPasswordDto>(
 
 export const putAccount = createAsyncThunk<void, PutAccountDto>(
   "account/putAccount",
-  async ({ lastname, firstname, email }) => {
+  async ({ lastname, firstname, email }, {rejectWithValue}) => {
     const body : PutAccountDto = {lastname, firstname, email};
-    await axios.put<PutAccountDto>("/api/account/", body)
+    try {
+      await axios.put<PutAccountDto>("/api/account/", body)
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      return rejectWithValue(axiosError.response);
+    }
   },
 );
 

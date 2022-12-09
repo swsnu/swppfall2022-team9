@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+  import { useEffect, useState } from "react";
 import * as FormStyles from "styles/common.form.styles";
 import { FileUpload, useFileUpload } from "use-file-upload";
 import { Profile } from "server/models/profile.model";
