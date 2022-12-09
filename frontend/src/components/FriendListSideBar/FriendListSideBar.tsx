@@ -20,7 +20,6 @@ const FriendListSideBar: React.FC<Props> = () => {
       const friendRequestToken = (
         await dispatch(getFriendRequestToken()).unwrap()
       ).friendRequestToken;
-      //.replaceAll("-", "");
       navigator.clipboard.writeText(
         process.env.REACT_APP_WEBSITE_URL! + `?invite=${friendRequestToken}`,
       );
@@ -41,18 +40,18 @@ const FriendListSideBar: React.FC<Props> = () => {
         친구 초대하기
       </S.InviteFriendButton>
       <S.FriendListContainer>
-      {friendList.length > 0 &&
-        friendList.map(user => (
-          <ChonListItem
-            key={user.id}
-            userId={user.id}
-            firstname={user.firstname}
-            lastname={user.lastname}
-            imgUrl={user.imgUrl}
-            twoChonList={user.chons}
-            isTwoChon={false}
-          ></ChonListItem>
-        ))}
+        {friendList.length > 0 &&
+          friendList.map(user => (
+            <ChonListItem
+              key={user.id}
+              userId={user.id}
+              firstname={user.firstname}
+              lastname={user.lastname}
+              imgUrl={user.imgUrl}
+              twoChonList={user.chons}
+              isTwoChon={false}
+            ></ChonListItem>
+          ))}
       </S.FriendListContainer>
     </S.Container>
   );

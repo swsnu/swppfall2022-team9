@@ -2,10 +2,9 @@ import { AlertContextProps } from "containers/Context/AlertContext/AlertContext"
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { renderWithProviders } from "test-utils/mocks";
 import FriendListSideBar from "./FriendListSideBar";
-import {
-  screen,
-  fireEvent,
-} from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
+import { friendListStub, usersStub } from "server/stubs/users.stub";
+import { act } from "react-dom/test-utils";
 
 const mockNavigate = jest.fn();
 
@@ -21,8 +20,16 @@ jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
-const renderFriendListSideBar = (  alertProviderProps?: AlertContextProps,
-  ) => {
+// Mock navigator.clipboard
+Object.assign(navigator, {
+  clipboard: {
+    writeText: () => {},
+  },
+});
+
+jest.spyOn(navigator.clipboard, "writeText");
+
+const renderFriendListSideBar = (alertProviderProps?: AlertContextProps) => {
   renderWithProviders(
     <MemoryRouter>
       <Routes>
@@ -32,24 +39,8 @@ const renderFriendListSideBar = (  alertProviderProps?: AlertContextProps,
     {
       preloadedState: {
         users: {
-          currentUser: {
-            id: 1,
-            email: "email@email.com",
-            password: "123",
-            username: "jubby",
-            firstname: "iluv",
-            lastname: "swpp",
-            imgUrl: "",
-          },
-          friendList: [
-            {
-              id: 1,
-              firstname: "swpp",
-              lastname: "snu",
-              imgUrl: "spl.snu.ac.kr",
-              chons: [],
-            },
-          ],
+          currentUser: usersStub[0],
+          friendList: friendListStub,
         },
       },
     },
@@ -75,8 +66,11 @@ describe("<FriendListSideBar/>", () => {
     mockDispatch.mockReturnValue({
       unwrap: () => ({}),
     });
-    renderFriendListSideBar(alertProviderProps);
-    const button = screen.getAllByRole("button")[0]
+    await act(async () => {
+      renderFriendListSideBar(alertProviderProps);
+    });
+
+    const button = screen.getAllByRole("button")[0];
     fireEvent.click(button);
   });
 
@@ -85,7 +79,7 @@ describe("<FriendListSideBar/>", () => {
       unwrap: () => Promise.reject({}),
     });
     renderFriendListSideBar(alertProviderProps);
-    const button = screen.getAllByRole("button")[0]
+    const button = screen.getAllByRole("button")[0];
     fireEvent.click(button);
   });
 });
