@@ -5,3 +5,9 @@ export interface PutPasswordDto {
 export interface PostPasswordUnauthenticatedDto extends PutPasswordDto {
   token: string;
 }
+
+export interface PutAccountDto {
+  lastname: string;
+  firstname: string;
+  email: string;
+}
