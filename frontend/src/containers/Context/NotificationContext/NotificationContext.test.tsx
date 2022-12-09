@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import { useContext } from "react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { renderWithProviders } from "test-utils/mocks";
