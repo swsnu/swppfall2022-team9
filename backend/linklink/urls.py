@@ -21,6 +21,16 @@ urlpatterns = [
     path("auth/signout/", views_auth.signout, name="signout"),
     path("auth/verify/<str:token>/", views_auth.verify, name="verify"),
     path("auth/session/", views_auth.auto_signin, name="auto_signin"),
+    path(
+        "auth/email/",
+        views_auth.check_email_unique,
+        name="check_email_unique"
+    ),
+    path(
+        "auth/username/",
+        views_auth.check_username_unique,
+        name="check_username_unique"
+    ),
     path("user/friend/", views_friend.friend, name="friend"),
     path(
         "user/friendRequestToken/",

@@ -411,6 +411,84 @@ class LinkLinkAuthTestCase(TestCase):
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 401)
 
+
+    def test_check_email_unique(self):
+        target_url = "/api/auth/email/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "email": "unique@snu.ac.kr",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 200)
+
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "eamil": "notiona@snu.ac.kr",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 400)
+
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "email": "notiona@snu.ac.kr",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 409)
+
+
+    def test_check_username_unique(self):
+        target_url = "/api/auth/username/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "uniquename",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 200)
+
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "usernaem": "john",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 400)
+
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        # Check response
+        self.assertEqual(response.status_code, 409)
+
 #--------------------------------------------------------------------------
 #   405 Checking Tests
 #--------------------------------------------------------------------------
