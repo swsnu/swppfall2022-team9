@@ -80,6 +80,7 @@ const AccountPage: React.FC = () => {
           <FormStyles.HeaderText>개인 정보</FormStyles.HeaderText>
         </FormStyles.Header>
         <FormStyles.Form
+          role="submit"
           onSubmit={onClickSubmit}
         >
           <FormStyles.Label>

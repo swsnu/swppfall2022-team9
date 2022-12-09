@@ -249,6 +249,7 @@ const ProfilePage: React.FC<Props> = () => {
                 disabled={false}
                 backgroundColor={ThemeColor}
                 onClick={onClickChangeProfile}
+                role="profile"
               >
                 프로필 수정
               </S.ProfileActionButton>

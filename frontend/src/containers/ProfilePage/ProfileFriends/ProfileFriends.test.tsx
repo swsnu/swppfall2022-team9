@@ -38,6 +38,18 @@ describe("<ProfileFriends/>", () => {
     renderProfileFriends(1, "test", undefined);
   });
 
+  it("renders ProfileFriends with img url", async () => {
+    renderProfileFriends(1, "test", [
+      {
+        ...profileStub,
+        imgUrl: "url",
+        name: "name",
+        id: 1,
+        profileImgUrl: "",
+      },
+    ]);
+  });
+
   it("renders ProfileFriends with friend profiles", async () => {
     renderProfileFriends(1, "test", [
       {

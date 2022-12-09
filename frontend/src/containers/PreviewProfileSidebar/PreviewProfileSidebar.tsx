@@ -160,6 +160,7 @@ const PreviewProfileSidebar: React.FC = () => {
               dispatch(profileActions.setPreviewProfile(null));
             }
           }}
+          role="view_profile"
         >
           프로필 보기
         </S.ActionButton>
@@ -167,6 +168,7 @@ const PreviewProfileSidebar: React.FC = () => {
         {friendList.findIndex(element => element.id === profile?.id) !== -1 && (
           <>
             <S.ActionButton
+              role="expand_network"
               disabled={false}
               onClick={() => {
                 if (profile) {
@@ -183,6 +185,7 @@ const PreviewProfileSidebar: React.FC = () => {
                 : "친구 네트워크 보기"}
             </S.ActionButton>
             <S.ActionButton
+              role="delete_friend"
               disabled={false}
               onClick={() => {
                 if (existingFriendRequest) {
@@ -200,6 +203,7 @@ const PreviewProfileSidebar: React.FC = () => {
           profile.id !== currentUser.id && (
             <>
               <S.ActionButton
+                role="add_friend"
                 disabled={
                   existingFriendRequest !== null &&
                   (existingFriendRequest.status ===

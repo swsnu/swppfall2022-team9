@@ -51,11 +51,14 @@ describe("<AccountPage/>", () => {
     };
   });
 
-  // it("renders account page", async () => {
-  //   renderAccountPage(alertProviderProps);
-  //   const birthdateInput = screen.getByRole("birthdate");
-  //   fireEvent.change(birthdateInput, { target: { value: "1998-06-29" } });
-  // });
+  it("clicks submit", async () => {
+    mockDispatch.mockReturnValue({
+      unwrap: () => Promise.reject({}),
+    });
+    renderAccountPage(alertProviderProps);
+    const form = screen.getByRole("submit");
+    fireEvent.submit(form);
+  });
 
   it("on click change password", async () => {
     renderAccountPage(alertProviderProps);

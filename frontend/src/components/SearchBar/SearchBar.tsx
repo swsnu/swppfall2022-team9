@@ -13,6 +13,7 @@ const SearchBar: React.FC<Props> = () => {
   return (
     <S.Container>
       <S.Form
+        role="search"
         onSubmit={async e => {
           e.preventDefault();
           dispatch(searchActions.setSearchWord(searchWord));

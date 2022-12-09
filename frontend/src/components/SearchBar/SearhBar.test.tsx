@@ -9,6 +9,13 @@ jest.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 
+const mockDispatch = jest.fn();
+
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
+  useDispatch: () => mockDispatch,
+}));
+
 describe("<SearchBar/>", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -22,5 +29,13 @@ describe("<SearchBar/>", () => {
     renderWithProviders(<SearchBar />);
     const input = screen.getByRole("textbox");
     fireEvent.change(input, { target: { value: "hi" } });
+  });
+
+  it("tests submit", async () => {
+    renderWithProviders(<SearchBar />);
+    const input = screen.getByRole("textbox");
+    fireEvent.change(input, { target: { value: "hi" } });
+    const search = screen.getByRole("search")
+    fireEvent.submit(search);
   });
 });
