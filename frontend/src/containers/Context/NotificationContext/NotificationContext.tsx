@@ -26,7 +26,7 @@ const NotificationContextProvider = ({ children }: Props): JSX.Element => {
   const currentUser = useAppSelector(state => state.users.currentUser);
   const wsScheme = isDevMode ? "ws" : "wss";
   const serverAddress = isDevMode ? "127.0.0.1:8000" : "hoshiwoobo.shop:8001";
-  const { readyState } = useWebSocket(
+  useWebSocket(
     currentUser
       ? `${wsScheme}://${serverAddress}/ws/notification/${currentUser.id}/`
       : null,

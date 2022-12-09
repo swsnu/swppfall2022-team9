@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import ChatRoomItem from "./ChatRoomItem/ChatRoomItem";
 import * as S from "./styles";
-import { chatActions, chatSlice, getChatRoomInfoList } from "store/slices/chat";
+import { chatActions, getChatRoomInfoList } from "store/slices/chat";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { NotificationContext } from "containers/Context/NotificationContext/NotificationContext";
 
