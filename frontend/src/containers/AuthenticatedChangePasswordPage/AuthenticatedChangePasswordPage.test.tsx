@@ -1,73 +1,159 @@
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, render } from "@testing-library/react";
 import AuthenticatedChangePasswordPage from "./AuthenticatedChangePasswordPage";
-import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
-import { renderWithProviders } from "test-utils/mocks";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import axios from "axios";
-
-const renderAuthenticatedChangePasswordPage = (
-  alertProviderProps?: AlertContextProps,
-) => {
-  renderWithProviders(
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={<AuthenticatedChangePasswordPage />} />
-      </Routes>
-    </MemoryRouter>,
-    { preloadedState: {} },
-    alertProviderProps,
-  );
-};
+import { AlertContextProvider } from "containers/Context/AlertContext/AlertContext";
+import { usersStub } from "server/stubs/users.stub";
+import { Provider } from "react-redux";
+import { setupStore } from "store/slices";
+import { act } from "react-dom/test-utils";
 
 const mockDispatch = jest.fn();
 
 //useDispatch mocking
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
-  //useDispatch만 우리가 mocking
   useDispatch: () => mockDispatch,
 }));
 
 const mockNavigate = jest.fn();
 
 jest.mock("react-router", () => ({
-  // 그래야 NavLink 같은 걸 쓸 수 있다.
   ...jest.requireActual("react-router"),
   useNavigate: () => mockNavigate,
 }));
 
 describe("<AuthenticatedChangePasswordPage/>", () => {
+  const preloadedState = {
+    users: {
+      currentUser: usersStub[0],
+      friendList: [],
+    },
+  };
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it("renders AuthenticatedChangePasswordPage change password", async () => {
-    renderAuthenticatedChangePasswordPage();
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AuthenticatedChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
     const submitButton = screen.getByRole("submit");
-    fireEvent.click(submitButton);
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
     const currentPasswordInput = screen.getByRole("currentPasswordInput");
-    fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+    await act(async () => {
+      fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+    });
     const passwordInput = screen.getByRole("passwordInput");
-    fireEvent.change(passwordInput, { target: { value: "test" } });
+    await act(async () => {
+      fireEvent.change(passwordInput, { target: { value: "test" } });
+    });
     const passwordCheckInput = screen.getByRole("passwordCheckInput");
-    fireEvent.change(passwordCheckInput, { target: { value: "test" } });
-    fireEvent.click(submitButton);
+    await act(async () => {
+      fireEvent.change(passwordCheckInput, { target: { value: "test" } });
+      fireEvent.click(submitButton);
+    });
   });
 
-  it("renders AuthenticatedChangePasswordPage change password", async () => {
-    mockDispatch.mockReturnValue(
-      {unwrap: () => {}}
-    )
-    axios.post = jest.fn().mockResolvedValue({});
-    renderAuthenticatedChangePasswordPage();
+  it("successfully change password", async () => {
+    mockDispatch.mockReturnValue({ unwrap: () => {} });
+
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AuthenticatedChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+
+    const currentPasswordInput = screen.getByRole("currentPasswordInput");
+    const passwordInput = screen.getByRole("passwordInput");
+    const passwordCheckInput = screen.getByRole("passwordCheckInput");
+    const submitButton = screen.getByRole("submit");
+
+    await act(async () => {
+      fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+      fireEvent.change(passwordInput, { target: { value: "test1" } });
+      fireEvent.change(passwordCheckInput, { target: { value: "test1" } });
+      fireEvent.click(submitButton);
+    });
+
+    const confirmButton = await screen.findByText("확인");
+    await act(async () => {
+      fireEvent.click(confirmButton);
+    });
+  });
+
+  it("password !== passwordCheck", async () => {
+    mockDispatch.mockReturnValue({ unwrap: () => {} });
+
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AuthenticatedChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+
     const submitButton = screen.getByRole("submit");
     const currentPasswordInput = screen.getByRole("currentPasswordInput");
-    fireEvent.change(currentPasswordInput, { target: { value: "test" } });
     const passwordInput = screen.getByRole("passwordInput");
-    fireEvent.change(passwordInput, { target: { value: "test" } });
     const passwordCheckInput = screen.getByRole("passwordCheckInput");
-    fireEvent.change(passwordCheckInput, { target: { value: "test1" } });
-    
-    fireEvent.click(submitButton);
+    await act(async () => {
+      fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+      fireEvent.change(passwordInput, { target: { value: "test1" } });
+      fireEvent.change(passwordCheckInput, { target: { value: "test2" } });
+      fireEvent.click(submitButton);
+    });
+  });
+
+  it("server error", async () => {
+    mockDispatch
+      .mockReturnValueOnce({ unwrap: () => {} })
+      .mockResolvedValueOnce({});
+
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AuthenticatedChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+
+    const submitButton = screen.getByRole("submit");
+    const currentPasswordInput = screen.getByRole("currentPasswordInput");
+    const passwordInput = screen.getByRole("passwordInput");
+    const passwordCheckInput = screen.getByRole("passwordCheckInput");
+    await act(async () => {
+      fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+      fireEvent.change(passwordInput, { target: { value: "test1" } });
+      fireEvent.change(passwordCheckInput, { target: { value: "test1" } });
+      fireEvent.click(submitButton);
+    });
+  });
+
+  it("password === currentPassword", async () => {
+    mockDispatch.mockReturnValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AuthenticatedChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const submitButton = screen.getByRole("submit");
+    const currentPasswordInput = screen.getByRole("currentPasswordInput");
+    const passwordInput = screen.getByRole("passwordInput");
+    const passwordCheckInput = screen.getByRole("passwordCheckInput");
+    await act(async () => {
+      fireEvent.change(currentPasswordInput, { target: { value: "test" } });
+      fireEvent.change(passwordInput, { target: { value: "test" } });
+      fireEvent.change(passwordCheckInput, { target: { value: "test" } });
+      fireEvent.click(submitButton);
+    });
   });
 });
