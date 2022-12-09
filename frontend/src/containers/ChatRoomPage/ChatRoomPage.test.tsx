@@ -15,7 +15,7 @@ jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
-const renderChatRoomListPage = (
+const renderChatRoomPage = (
   alertProviderProps?: AlertContextProps,
   currentUser: User | null = null,
   currentChatRoomInfo: ChatRoomInfo | null = null,
@@ -55,15 +55,17 @@ describe("<ChatRoomPage/>", () => {
   });
 
   it("should render without errors", () => {
-    renderChatRoomListPage(alertProviderProps);
+    renderChatRoomPage(alertProviderProps);
   });
 
   it("should render with message log", async () => {
-    const server = new WS("ws://127.0.0.1:8000/1__2/", { jsonProtocol: true });
+    const server = new WS("wss://hoshiwoobo.shop:8001/ws/1__2/", {
+      jsonProtocol: true,
+    });
     const scrollIntoViewMock = jest.fn();
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     await act(async () => {
-      renderChatRoomListPage(
+      renderChatRoomPage(
         alertProviderProps,
         usersStub[0],
         chatRoomInfoListStub[0],
