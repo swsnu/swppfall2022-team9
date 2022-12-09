@@ -60,7 +60,6 @@ const ChatRoomPage: React.FC<Props> = () => {
 
   useEffect(() => {
     if (isConnected && currentUser) {
-      console.log("reading messages");
       sendJsonMessage({
         type: "read_messages",
         senderId: currentUser.id,

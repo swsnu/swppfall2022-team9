@@ -94,7 +94,12 @@ const EvaluateQualityPage: React.FC<Props> = () => {
   }, [friendList, userId]);
 
   const onAddQuality = (qualityToAdd: SelectOption | null) => {
-    if (qualityToAdd && !assignedQualities.find(assignedQuality => assignedQuality.value === qualityToAdd.value)) {
+    if (
+      qualityToAdd &&
+      !assignedQualities.find(
+        assignedQuality => assignedQuality.value === qualityToAdd.value,
+      )
+    ) {
       setAssignedQualities(prev => [...prev, qualityToAdd]);
       setSelectedOption(null);
     }
