@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import ChatRoomItem from "./ChatRoomItem/ChatRoomItem";
 import * as S from "./styles";
-import { getChatRoomInfoList } from "store/slices/chat";
+import { chatActions, chatSlice, getChatRoomInfoList } from "store/slices/chat";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { NotificationContext } from "containers/Context/NotificationContext/NotificationContext";
 
 interface Props {}
 
@@ -10,9 +11,20 @@ const ChatRoomListPage: React.FC<Props> = () => {
   const dispatch = useAppDispatch();
   const chatRoomInfoList = useAppSelector(state => state.chat.chatRoomInfoList);
 
+  const { newMessage } = useContext(NotificationContext);
   useEffect(() => {
     dispatch(getChatRoomInfoList());
   }, []);
+
+  useEffect(() => {
+    if (newMessage)
+      dispatch(
+        chatActions.moveChatRoomToUp({
+          senderId: newMessage.senderId,
+          content: newMessage.message,
+        }),
+      );
+  }, [newMessage]);
 
   return (
     <S.BackgroundContainer>

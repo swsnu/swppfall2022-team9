@@ -26,7 +26,6 @@ class NotificationConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add(self.notification_group_name, self.channel_name)
         await self.accept()
         unread_count = await self.get_unread()
-        print(self.notification_group_name, unread_count)
 
         await self.send_json({"type": "unread_count", "messages": unread_count})
 
@@ -96,16 +95,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     def enter_chatroom_get_unread(self, currentUser_id, receiver_id):
         messages = self.chat_room.messages.filter(receiver_id=currentUser_id, read=False)
         # Message.objects.filter(receiver=receiver_id, read=False)
-        print(messages, "entered chat room")
         for message in messages:
             message.read = True
             message.save()
         unread_count = Message.objects.filter(receiver=currentUser_id, read=False).count()
-        print(
-            unread_count,
-            "entered chat room unread count",
-            LinkLinkUser.objects.get(id=currentUser_id),
-        )
+
         return unread_count
 
     @database_sync_to_async
@@ -141,6 +135,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 notification_group_name,
                 {
                     "type": "new_message_notification",
+                    "senderId": sender_id,
                     "receiverId": receiver_id,
                     "message": message.content,
                 },

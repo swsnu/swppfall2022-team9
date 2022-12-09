@@ -20,7 +20,10 @@ const ChatRoomItem: React.FC<Props> = ({ chatRoomInfo }) => {
     <S.ListItemContainer role="list" onClick={onClickChatRoom}>
       <S.ImageContainer imgUrl={chatRoomInfo.otherUserImgUrl} />
       <S.Name>{chatRoomInfo.otherUserName}</S.Name>
-      <S.LastMessage>{chatRoomInfo.lastMessage}</S.LastMessage>
+      <S.LastMessage>
+        {chatRoomInfo.lastMessage}
+        {!chatRoomInfo.isRead && <S.NotificationRedMark />}
+      </S.LastMessage>
       <S.Time>{timeStampToString(chatRoomInfo.lastTimeStamp)}</S.Time>
     </S.ListItemContainer>
   );

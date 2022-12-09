@@ -9,6 +9,7 @@ export const chatRoomInfoListStub: ChatRoomInfo[] = [
       "https://res.cloudinary.com/duyixodey/image/upload/v1669881484/shinhye_park_qqrin4.jpg",
     lastMessage: "hello",
     lastTimeStamp: "2022-12-03T15:57:37.039Z",
+    isRead: false,
   },
   {
     chatRoomName: "1__3",
@@ -18,6 +19,7 @@ export const chatRoomInfoListStub: ChatRoomInfo[] = [
       "https://res.cloudinary.com/duyixodey/image/upload/v1669881618/hyunjin_seo_o8r96j.jpg",
     lastMessage: "hi",
     lastTimeStamp: "2022-12-03T16:57:37.039Z",
+    isRead: false,
   },
 ];
 
