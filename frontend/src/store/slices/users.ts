@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { GetProfileResDto } from "server/dto/profile/profile.res.dto";
 import { PostSignInDto, PostSignUpDto } from "server/dto/users/users.dto";
 import {
@@ -38,15 +38,20 @@ export const getSessionCookie = createAsyncThunk<PostSignInResDto>(
 
 export const postSignIn = createAsyncThunk<User, PostSignInDto>(
   "users/postSignIn",
-  async body => {
-    const signInResponse = await axios.post<PostSignInResDto>(
-      "/api/auth/signin/",
-      body,
-    );
-    const profileResponse = await axios.get<GetProfileResDto>(
-      `/api/profile/${signInResponse.data.id}/`,
-    );
-    return { ...signInResponse.data, imgUrl: profileResponse.data.imgUrl };
+  async (body, { rejectWithValue }) => {
+    try {
+      const signInResponse = await axios.post<PostSignInResDto>(
+        "/api/auth/signin/",
+        body,
+      );
+      const profileResponse = await axios.get<GetProfileResDto>(
+        `/api/profile/${signInResponse.data.id}/`,
+      );
+      return { ...signInResponse.data, imgUrl: profileResponse.data.imgUrl };
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      return rejectWithValue(axiosError.response);
+    }
   },
 );
 
@@ -76,6 +81,20 @@ export const getFriendList = createAsyncThunk<GetFriendListResDto>(
   async () => {
     const response = await axios.get<GetFriendListResDto>(`/api/user/friend/`);
     return response.data;
+  },
+);
+
+export const checkEmailUnique = createAsyncThunk(
+  "users/checkEmailUnique",
+  async (email: string) => {
+    await axios.post(`/api/auth/email/`, { email });
+  },
+);
+
+export const checkUsernameUnique = createAsyncThunk(
+  "users/checkUsernameUnique",
+  async (username: string) => {
+    await axios.post(`/api/auth/username/`, { username });
   },
 );
 
