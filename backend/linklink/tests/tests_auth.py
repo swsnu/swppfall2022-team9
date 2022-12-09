@@ -274,7 +274,7 @@ class LinkLinkAuthTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         # Check response
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         error_message_dict = {
             "message": ("Account john exists, but is not validated. "
                 "A validation email has been "
@@ -312,7 +312,7 @@ class LinkLinkAuthTestCase(TestCase):
             HTTP_X_CSRFTOKEN=self.csrftoken
         )
         # Check response
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         error_message_dict = {
             "message": ("Account john exists, but is not validated. "
                 "A validation email has been "
