@@ -43,6 +43,14 @@ describe("profile reducer", () => {
     expect(store.getState().search.searchWord).toEqual("");
   });
 
+  it("tests toggle search mode twice", async () => {
+    store.dispatch(searchActions.toggleSearchMode());
+    store.dispatch(searchActions.toggleSearchMode());
+    expect(store.getState().search.filteredFriendList).toEqual([]);
+    expect(store.getState().search.isSearchMode).toEqual(true);
+    expect(store.getState().search.searchWord).toEqual("");
+  });
+
   it("tests SearchModeOff", async () => {
     store.dispatch(searchActions.SearchModeOff());
     expect(store.getState().search.filteredFriendList).toEqual([]);
@@ -50,10 +58,17 @@ describe("profile reducer", () => {
     expect(store.getState().search.searchWord).toEqual("");
   });
 
+  it("tests SearchModeOff", async () => {
+    store.dispatch(searchActions.SearchModeOn());
+    expect(store.getState().search.filteredFriendList).toEqual([]);
+    expect(store.getState().search.isSearchMode).toEqual(true);
+    expect(store.getState().search.searchWord).toEqual("");
+  });
+
   it("tests setSearchWord", async () => {
     store.dispatch(searchActions.setSearchWord("hi"));
     expect(store.getState().search.filteredFriendList).toEqual([]);
-    expect(store.getState().search.isSearchMode).toEqual(false);
+    expect(store.getState().search.isSearchMode).toEqual(true);
     expect(store.getState().search.searchWord).toEqual("hi");
   });
 
@@ -63,7 +78,7 @@ describe("profile reducer", () => {
       getFilteredFriendList("hi")
     )
     expect(store.getState().search.filteredFriendList).toEqual(usersStub);
-    expect(store.getState().search.isSearchMode).toEqual(false);
+    expect(store.getState().search.isSearchMode).toEqual(true);
     expect(store.getState().search.searchWord).toEqual("hi");
   });
 });
