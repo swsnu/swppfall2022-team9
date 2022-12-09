@@ -22,6 +22,7 @@ const Navbar: React.FC<Props> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { unreadMessageCount } = useContext(NotificationContext);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wrapperRef = useRef<any>(null);
   const currentUser = useAppSelector(state => state.users.currentUser);
   const friendRequests = useAppSelector(
