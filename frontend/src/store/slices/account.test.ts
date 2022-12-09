@@ -23,7 +23,7 @@ describe("friend request reducer", () => {
       reducer: { account: accountReducer },
     });
   });
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
@@ -52,7 +52,15 @@ describe("friend request reducer", () => {
 
   it("tests put account", async () => {
     axios.put = jest.fn().mockResolvedValue({});
-    await store.dispatch(putAccount({ lastname: "hi", firstname: "hi", email: "hi" }));
+    await store.dispatch(
+      putAccount({ lastname: "hi", firstname: "hi", email: "hi" }),
+    );
   });
 
+  it("tests put account error", async () => {
+    axios.put = jest.fn().mockRejectedValue({});
+    await store.dispatch(
+      putAccount({ lastname: "hi", firstname: "hi", email: "hi" }),
+    );
+  });
 });

@@ -7,8 +7,6 @@ import {
 } from "server/dto/account/account.dto";
 import { PutPasswordResDto } from "server/dto/account/account.res.dto";
 
-// we do not need anything for account slice
-
 export interface AccountState {}
 const initialState: AccountState = {};
 
@@ -41,10 +39,10 @@ export const putPassword = createAsyncThunk<PutPasswordResDto, PutPasswordDto>(
 
 export const putAccount = createAsyncThunk<void, PutAccountDto>(
   "account/putAccount",
-  async ({ lastname, firstname, email }, {rejectWithValue}) => {
-    const body : PutAccountDto = {lastname, firstname, email};
+  async ({ lastname, firstname, email }, { rejectWithValue }) => {
+    const body: PutAccountDto = { lastname, firstname, email };
     try {
-      await axios.put<PutAccountDto>("/api/account/", body)
+      await axios.put<PutAccountDto>("/api/account/", body);
     } catch (err) {
       const axiosError = err as AxiosError;
       return rejectWithValue(axiosError.response);
