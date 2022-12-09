@@ -159,7 +159,7 @@ def signin(request):
                 f"{user.linklinkuser.email_unique}."
             )
             return JsonResponse(
-                status=401,
+                status=403,
                 data={"message": resent_email_message}
             )
     else: # login failed: incorrect info
