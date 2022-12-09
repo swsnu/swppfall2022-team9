@@ -40,6 +40,12 @@ const ChatRoomPage: React.FC<Props> = () => {
         switch (data.type) {
           case "chat_message_echo":
             setMessageLog(prev => prev.concat(data));
+            if (currentUser) {
+              sendJsonMessage({
+                type: "read_messages",
+                senderId: currentUser.id,
+              });
+            }
             break;
           case "last_50_messages":
             setMessageLog(data.messages);
@@ -51,6 +57,16 @@ const ChatRoomPage: React.FC<Props> = () => {
       },
     },
   );
+
+  useEffect(() => {
+    if (isConnected && currentUser) {
+      console.log("reading messages");
+      sendJsonMessage({
+        type: "read_messages",
+        senderId: currentUser.id,
+      });
+    }
+  }, [sendJsonMessage, isConnected, currentUser]);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();

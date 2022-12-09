@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import * as S from "./styles";
 import logo from "assets/img/logo.png";
 import { IoPersonOutline, IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -15,10 +15,13 @@ import { searchActions } from "store/slices/search";
 import { getFriendList } from "store/slices/users";
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import useAlert from "hooks/useAlert";
+import { NotificationContext } from "containers/Context/NotificationContext/NotificationContext";
 
 interface Props {}
 const Navbar: React.FC<Props> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { unreadMessageCount } = useContext(NotificationContext);
+
   const wrapperRef = useRef<any>(null);
   const currentUser = useAppSelector(state => state.users.currentUser);
   const friendRequests = useAppSelector(
@@ -170,6 +173,7 @@ const Navbar: React.FC<Props> = () => {
           )}
         </S.NavButtons>
         <S.NavButtons>
+          {unreadMessageCount > 0 && <S.NavbarButtonRedMark />}
           <IoChatboxEllipsesOutline
             role="chats"
             onClick={onClickChat}

@@ -4,6 +4,7 @@ import {
   AlertContext,
   AlertContextProps,
 } from "containers/Context/AlertContext/AlertContext";
+import { NotificationContext } from "containers/Context/NotificationContext/NotificationContext";
 import { PropsWithChildren } from "react";
 import { Provider } from "react-redux";
 import { AppStore, RootState } from "store";
@@ -42,7 +43,9 @@ export function renderWithProviders(
             : alertProviderProps
         }
       >
-        {ui}
+        <NotificationContext.Provider value={{ unreadMessageCount: 0 }}>
+          {ui}
+        </NotificationContext.Provider>
       </AlertContext.Provider>,
       { wrapper: Wrapper, ...renderOptions },
     ),
