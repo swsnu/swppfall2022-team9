@@ -91,7 +91,7 @@ urlpatterns = [
         name="search_friends"
     ),
     path(
-        "forgot/username/",
+        "forgot/username/<str:email>",
         views_forgot.forgot_username,
         name="forgot_username"
     ),
