@@ -19,7 +19,7 @@ from ..models import (
     LinkLinkUser,
     Verification,
 )
-from ..utils import send_password_email
+from ..utils import is_expired, send_password_email
 
 #--------------------------------------------------------------------------
 #   Forgot Related APIs
@@ -90,5 +90,36 @@ def forgot_password(request):
         )
         return HttpResponse(status=200)
     elif request.method == "PUT": # pragma: no branch
-        pass
-
+        # Given password reset Verification token and new password,
+        # verity token and reset password
+        try:
+            req_data = json.loads(request.body.decode())
+            token = req_data["token"]
+            new_password = req_data["newPassword"]
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest(e) # implicit status code = 400
+        # Find User for given token
+        try:
+            verification_found = Verification.objects.get(token=token)
+            user_found = verification_found.linklinkuser.user
+        except (
+            Verification.DoesNotExist,
+            LinkLinkUser.DoesNotExist,
+            User.DoesNotExist):
+            return JsonResponse(
+                status=404,
+                data={
+                    "message":
+                    f"user not found for given token {token}"
+                }
+            )
+        # Verify token
+        if is_expired(verification_found.expiresAt): # pragma: no branch
+            return JsonResponse(
+                status=401,
+                data={"message":"Token Expired"}
+            )
+        # Reset Password
+        user_found.set_password(new_password)
+        user_found.save()
+        return HttpResponse(status=200)
