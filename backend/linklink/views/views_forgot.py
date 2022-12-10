@@ -13,6 +13,7 @@ from django.http import (
     HttpResponseBadRequest,
     JsonResponse,
 )
+from django.utils import timezone
 
 from ..decorators import allowed_method_or_405
 from ..models import (
@@ -67,16 +68,17 @@ def forgot_password(request):
             )
         linklinuser_found = user_found.linklinkuser
         email_found = linklinuser_found.email_unique
-        # 2. Get or create Verification with purpose=”Password”
-        verification_password, _ = Verification.objects.get_or_create(
+        # 2. Create Verification with purpose=”Password”
+        kst_tz = timezone.get_default_timezone()
+        verification_password = Verification.objects.create(
             linklinkuser=linklinuser_found,
             purpose="Password",
-            expiresAt=datetime.now(),
+            expiresAt=datetime.now().astimezone(kst_tz),
         )
         # 3. Set its expiresAt to suitable time range
         expire_time = datetime.now() + \
             timedelta(hours=settings.PASSWORD_RESET_EXPIRE_HOURS)
-        verification_password.expiresAt = expire_time
+        verification_password.expiresAt = expire_time.astimezone(kst_tz)
         verification_password.save()
         # 4. Send email to user, including url with token
         send_password_email(
