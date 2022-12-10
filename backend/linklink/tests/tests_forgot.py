@@ -14,14 +14,9 @@ from django.utils import timezone
 
 from ..models import (
     LinkLinkUser,
-    FriendRequest,
     Verification,
     SkillTag,
     QualityTag,
-    Profile,
-    Education,
-    JobExperience,
-    QualityTagRequest,
 )
 
 
@@ -144,7 +139,7 @@ class LinkLinkForgotTestCase(TestCase):
         self.linklink_path = os.path.dirname(os.path.realpath(__file__))
 
 #--------------------------------------------------------------------------
-#   Auth Related Tests
+#   Forgot Related Tests
 #--------------------------------------------------------------------------
 
     def test_get_forgot_username_success(self):
@@ -176,3 +171,199 @@ class LinkLinkForgotTestCase(TestCase):
             error_message_dict
         )
 
+
+    def test_post_forgot_password_new_verification_success(self):
+        target_url = "/api/forgot/password/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check verification.expiresAt is updated into the future
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        self.assertTrue(
+            Verification.objects.filter(
+                linklinkuser=john_linklinkuser,
+                purpose="Password"
+            ).exists()
+        )
+        self.assertEqual(
+            Verification.objects.filter(
+                linklinkuser=john_linklinkuser,
+                purpose="Password"
+            ).count(),
+            1
+        )
+        john_verification = Verification.objects.filter(
+            linklinkuser=john_linklinkuser,
+            purpose="Password"
+        ).latest("expiresAt")
+        self.assertLess(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            john_verification.expiresAt
+        )
+        # Check email sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "비밀번호 재설정"
+        )
+
+
+    def test_post_forgot_password_exist_expired_verification_success(self):
+        target_url = "/api/forgot/password/"
+        # expired Verification for password already exists
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        expired_time = datetime.now() - timedelta(days=5)
+        Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Password",
+            expiresAt=expired_time.astimezone(timezone.get_default_timezone())
+        )
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check verification.expiresAt is updated into the future
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        self.assertTrue(
+            Verification.objects.filter(
+                linklinkuser=john_linklinkuser,
+                purpose="Password"
+            ).exists()
+        )
+        self.assertEqual(
+            Verification.objects.filter(
+                linklinkuser=john_linklinkuser,
+                purpose="Password"
+            ).count(),
+            2
+        )
+        john_verification = Verification.objects.filter(
+            linklinkuser=john_linklinkuser,
+            purpose="Password"
+        ).latest("expiresAt")
+        expired_verification = Verification.objects.filter(
+            linklinkuser=john_linklinkuser,
+            purpose="Password"
+        ).latest("-expiresAt")
+        self.assertLess(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            john_verification.expiresAt
+        )
+        self.assertGreater(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            expired_verification.expiresAt
+        )
+        # Check email sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "비밀번호 재설정"
+        )
+
+
+    def test_post_forgot_password_exist_unexpired_verification_success(self):
+        target_url = "/api/forgot/password/"
+        # unexpired Verification for password already exists
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        expired_time = datetime.now() + timedelta(hours=1)
+        Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Password",
+            expiresAt=expired_time.astimezone(timezone.get_default_timezone())
+        )
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "john",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check verification.expiresAt is updated into the future
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        self.assertTrue(
+            Verification.objects.filter(
+                linklinkuser=john_linklinkuser,
+                purpose="Password"
+            ).exists()
+        )
+        self.assertEqual(
+            Verification.objects.filter(
+                linklinkuser=john_linklinkuser,
+                purpose="Password"
+            ).count(),
+            2
+        )
+        john_verification = Verification.objects.filter(
+            linklinkuser=john_linklinkuser,
+            purpose="Password"
+        ).latest("expiresAt")
+        unexpired_verification = Verification.objects.filter(
+            linklinkuser=john_linklinkuser,
+            purpose="Password"
+        ).latest("-expiresAt")
+        self.assertLess(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            john_verification.expiresAt
+        )
+        self.assertLess(
+            datetime.now().astimezone(timezone.get_default_timezone()),
+            unexpired_verification.expiresAt
+        )
+        # Check email sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "비밀번호 재설정"
+        )
+
+
+    def test_400_post_forgot_password(self):
+        target_url = "/api/forgot/password/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                # "username": "john", # no username
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_404_post_forgot_password(self):
+        target_url = "/api/forgot/password/"
+        # POST
+        response = self.client.post(
+            target_url,
+            {
+                "username": "charles",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        # Check response
+        error_message_dict = {
+            "message": "user not found for given username charles"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
