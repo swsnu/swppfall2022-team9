@@ -26,13 +26,8 @@ from ..utils import is_expired, send_password_email
 #--------------------------------------------------------------------------
 
 @allowed_method_or_405(["GET"])
-def forgot_username(request):
+def forgot_username(request, email):
     if request.method == "GET": # pragma: no branch
-        try:
-            req_data = json.loads(request.body.decode())
-            email = req_data["email"]
-        except (KeyError, JSONDecodeError) as e:
-            return HttpResponseBadRequest(e) # implicit status code = 400
         try:
             linklinkuser_found = LinkLinkUser.objects.get(email_unique=email)
         except LinkLinkUser.DoesNotExist:
