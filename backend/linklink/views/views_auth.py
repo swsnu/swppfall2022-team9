@@ -179,12 +179,12 @@ def verify(request, token):
     When user clicks link from email,
     1. Find Verification object with token=token
     2-1. If Register: check token expire, set user's emailValidated as True
-    2-2. Elif Password: TODO
+    2-2. Elif Password: check token expire, and return 200 if expire is ok
     """
     # Find Verification object with token=token
     verification_found = get_object_or_404(Verification, token=token)
     # Register: check token expire, set user's emailValidated as True
-    if verification_found.purpose == "Register": # pragma: no branch
+    if verification_found.purpose == "Register":
         if is_expired(verification_found.expiresAt):
             return JsonResponse(
                 status=401, # Unauthorized
@@ -193,8 +193,12 @@ def verify(request, token):
         else:
             verification_found.linklinkuser.emailValidated = True
             verification_found.linklinkuser.save()
-    # elif verification_found.purpose == "Password":
-    #     pass
+    elif verification_found.purpose == "Password": # pragma: no branch
+        if is_expired(verification_found.expiresAt): # pragma: no branch
+            return JsonResponse(
+                status=401, # Unauthorized
+                data={"message":"Token Expired"}
+            )
     return JsonResponse({"message":"Successfully verified"})
 
 
