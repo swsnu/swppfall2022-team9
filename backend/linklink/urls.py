@@ -12,6 +12,7 @@ from linklink.views import (
     views_tags,
     views_account,
     views_search,
+    views_forgot,
 )
 
 urlpatterns = [
@@ -88,5 +89,15 @@ urlpatterns = [
         "searchFriends/<str:search_keys>/",
         views_search.search_friends,
         name="search_friends"
+    ),
+    path(
+        "forgot/username/",
+        views_forgot.forgot_username,
+        name="forgot_username"
+    ),
+    path(
+        "forgot/password/",
+        views_forgot.forgot_password,
+        name="forgot_password"
     ),
 ]
