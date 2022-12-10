@@ -61,6 +61,41 @@ def send_register_email(
     )
 
 
+def send_password_email(
+    recipient,
+    token,
+    title="비밀번호 재설정",
+    message="비밀번호를 재설정하려면 다음 링크로 이동해주세요"):
+    """
+    Helper function to send password reset email to recipient
+
+    Args:
+    recipient: str, email address
+    title: str, title
+    message: str, message
+    token: str, password reset verification token
+    Return:
+    None
+    """
+    context = {
+        "subject": title,
+        "message": message,
+        "button_link": os.path.join(
+            HOMEPAGE_URL,
+            "verify",
+            "password",
+            token) + "/",
+    }
+    html_mail = render_to_string("linklink/register_email.html", context)
+    send_mail(
+        subject=title,
+        message=message,
+        from_email=EMAIL_HOST_USER,
+        recipient_list=[recipient],
+        html_message=html_mail
+    )
+
+
 def is_expired(query_time):
     """
     Helper function to determine whether query_time is expired
