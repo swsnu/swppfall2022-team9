@@ -219,6 +219,7 @@ def auto_signin(request):
     else: # not logged in
         return HttpResponse(status=401) # unauthorized
 
+
 @allowed_method_or_405(["POST"])
 def check_email_unique(request):
     try:
@@ -231,6 +232,7 @@ def check_email_unique(request):
     except LinkLinkUser.DoesNotExist:
         return HttpResponse(status=200)
     return HttpResponse(status=409) # conflict
+
 
 @allowed_method_or_405(["POST"])
 def check_username_unique(request):

@@ -341,7 +341,7 @@ class LinkLinkAuthTestCase(TestCase):
         self.assertEqual(response.status_code, 204)
 
 
-    def test_verify_success(self):
+    def test_verify_register_token_success(self):
         john_verification = Verification.objects.get(id=1)
         john_token = str(john_verification.token)
         target_url = f"/api/auth/verify/{john_token}/"
@@ -359,7 +359,30 @@ class LinkLinkAuthTestCase(TestCase):
         self.assertTrue(john_linklinkuser.emailValidated)
 
 
-    def test_verify_expired(self):
+    def test_verify_password_token_success(self):
+        # Create unexpired password Verification
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        unexpired_verification = Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Password",
+            expiresAt=(datetime.now()+timedelta(days=1)).astimezone(
+                timezone.get_default_timezone()
+            )
+        )
+        unexpired_token = str(unexpired_verification.token)
+        target_url = f"/api/auth/verify/{unexpired_token}/"
+        # GET
+        response = self.client.get(target_url)
+        # Check response
+        self.assertEqual(response.status_code, 200)
+        success_message_dict = {"message":"Successfully verified"}
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            success_message_dict
+        )
+
+
+    def test_verify_register_token_expired(self):
         # Deliberately expire Verification.expiresAt
         john_verification = Verification.objects.get(id=1)
         past_time = \
@@ -369,6 +392,29 @@ class LinkLinkAuthTestCase(TestCase):
         john_verification.save()
         john_token = str(john_verification.token)
         target_url = f"/api/auth/verify/{john_token}/"
+        # GET
+        response = self.client.get(target_url)
+        # Check response
+        self.assertEqual(response.status_code, 401)
+        error_message_dict = {"message":"Token Expired"}
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_verify_password_token_expired(self):
+        # Create expired password Verification
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        expired_verification = Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Password",
+            expiresAt=(datetime.now()-timedelta(days=1)).astimezone(
+                timezone.get_default_timezone()
+            )
+        )
+        expired_token = str(expired_verification.token)
+        target_url = f"/api/auth/verify/{expired_token}/"
         # GET
         response = self.client.get(target_url)
         # Check response
