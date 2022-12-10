@@ -22,6 +22,8 @@ from ..models import (
     Education,
     JobExperience,
     QualityTagRequest,
+    ChatRoom,
+    Message,
 )
 
 
@@ -652,4 +654,17 @@ class LinkLinkAuthTestCase(TestCase):
             str(quality_tag_request),
             "CenaJohn->GunnJames, name:성실한, status:True"
         )
-
+        chatroom = ChatRoom.objects.create(
+            name="chatroom1"
+        )
+        chatroom.online.add(linklinkuser)
+        chatroom.online.add(another_linklinkuser)
+        self.assertEqual(str(chatroom), "chatroom1 (2)")
+        message = Message.objects.create(
+            chatRoom=chatroom,
+            sender=linklinkuser,
+            receiver=another_linklinkuser,
+            content="Hi"
+        )
+        self.assertIn("From CenaJohn to GunnJames", str(message))
+        self.assertIn("Hi", str(message))
