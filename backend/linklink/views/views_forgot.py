@@ -8,6 +8,7 @@ from json.decoder import JSONDecodeError
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
@@ -102,7 +103,9 @@ def forgot_password(request):
         except (
             Verification.DoesNotExist,
             LinkLinkUser.DoesNotExist,
-            User.DoesNotExist):
+            User.DoesNotExist,
+            ValidationError, # token is not a valid uuid case
+            ):
             return JsonResponse(
                 status=404,
                 data={

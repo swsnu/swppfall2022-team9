@@ -367,3 +367,104 @@ class LinkLinkForgotTestCase(TestCase):
             json.loads(response.content.decode()),
             error_message_dict
         )
+
+
+    def test_put_forgot_password_success(self):
+        target_url = "/api/forgot/password/"
+        # Create unexpired password token for john
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        unexpired_verification = Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Password",
+            expiresAt=(datetime.now()+timedelta(days=1)).astimezone(
+                timezone.get_default_timezone()
+            )
+        )
+        unexpired_token = unexpired_verification.token
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "token": unexpired_token,
+                "newPassword": "johnpasswordnew",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check password change
+        self.assertFalse(
+            self.client.login(username="john", password="johnpassword")
+        )
+        self.assertTrue(
+            self.client.login(username="john", password="johnpasswordnew")
+        )
+
+
+    def test_401_put_forgot_password_expired_token(self):
+        target_url = "/api/forgot/password/"
+        # Create expired password token for john
+        john_linklinkuser = LinkLinkUser.objects.get(pk=1)
+        expired_verification = Verification.objects.create(
+            linklinkuser=john_linklinkuser,
+            purpose="Password",
+            expiresAt=(datetime.now()-timedelta(days=1)).astimezone(
+                timezone.get_default_timezone()
+            )
+        )
+        expired_token = expired_verification.token
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "token": expired_token,
+                "newPassword": "johnpasswordnew",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 401)
+        error_message_dict = {
+            "message": "Token Expired"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_404_put_forgot_password(self):
+        target_url = "/api/forgot/password/"
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                "token": "nonexistant_token",
+                "newPassword": "johnpasswordnew",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 404)
+        error_message_dict = {
+            "message": "user not found for given token nonexistant_token"
+        }
+        self.assertDictEqual(
+            json.loads(response.content.decode()),
+            error_message_dict
+        )
+
+
+    def test_400_put_forgot_password(self):
+        target_url = "/api/forgot/password/"
+        # PUT
+        response = self.client.put(
+            target_url,
+            {
+                #"token": "nonexistant_token", # no token
+                "newPassword": "johnpasswordnew",
+            },
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self.csrftoken
+        )
+        self.assertEqual(response.status_code, 400)
