@@ -161,6 +161,9 @@ HOMEPAGE_URL = config("HOMEPAGE_URL")
 # Email Verification Expire Days
 EMAIL_EXPIRE_DAYS = 1
 
+# Password Reset Email Verification Expire Hours
+PASSWORD_RESET_EXPIRE_HOURS = 1
+
 # Max Onechon Invariant
 MAX_ONECHON = 10
 
