@@ -44,7 +44,7 @@ export const FormContainer = styled.div`
   width: 100%;
   max-width: ${FormContainerInnerWidth}px;
   padding: ${FormInnerPadding}px;
-  flex: 1 0;
+  height: max-content;
 `;
 
 export const Form = styled.form`
