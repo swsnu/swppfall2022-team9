@@ -248,16 +248,11 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
     linklinkuser_list_copy = linklinkuser_list
     for search_key in search_keys:
         linklinkuser_list_return = []
-        added_ids = []
-
         for linklinkuser in linklinkuser_list_copy:
-            # exact match: Korean name
             if search_key in \
-                linklinkuser.user.last_name + \
-                linklinkuser.user.first_name:
-                if linklinkuser.user.id not in added_ids:
-                    linklinkuser_list_return.append(linklinkuser)
-                    added_ids.append(linklinkuser.user.id)
+                linklinkuser.user.last_name.lower() + \
+                linklinkuser.user.first_name.lower():
+                linklinkuser_list_return.append(linklinkuser)
             else:
                 # get profile of the user for further search
                 profile_found = \
@@ -273,9 +268,7 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                 # exact match: job, school, skillTags
                 if search_key in job_tags or search_key in edu_tags \
                     or search_key in skill_tags:
-                    if linklinkuser.user.id not in added_ids:
-                        linklinkuser_list_return.append(linklinkuser)
-                        added_ids.append(linklinkuser.user.id)
+                    linklinkuser_list_return.append(linklinkuser)
 
                 # searchable keys: skillTags
                 elif search_key in tags.SEARCHABLE_KEYWORDS:
@@ -284,10 +277,8 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                         new_search_key in new_search_keys]
                     for new_search_key in new_search_keys:
                         if new_search_key in skill_tags:
-                            if linklinkuser.user.id not in added_ids:
-                                linklinkuser_list_return.append(linklinkuser)
-                                added_ids.append(linklinkuser.user.id)
-                        break
+                            linklinkuser_list_return.append(linklinkuser)
+                            break
                 # exact match: qualityTags
                 else:
                     quality_tags = QualityTagRequest.objects.filter(
@@ -298,9 +289,7 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                         quality_tag in quality_tags]
                     for quality_tag in quality_tags:
                         if search_key == quality_tag:
-                            if linklinkuser.user.id not in added_ids:
-                                linklinkuser_list_return.append(linklinkuser)
-                                added_ids.append(linklinkuser.user.id)
+                            linklinkuser_list_return.append(linklinkuser)
                             break
         linklinkuser_list_copy = linklinkuser_list_return
 
