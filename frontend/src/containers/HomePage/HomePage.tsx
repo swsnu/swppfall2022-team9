@@ -4,6 +4,7 @@ import useAlert from "hooks/useAlert";
 import React, { useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { canvasActions } from "store/slices/canvas";
 import {
   getFriendRequests,
   putFriendRequestToken,
@@ -49,6 +50,7 @@ const HomePage: React.FC<Props> = () => {
 
   useEffect(() => {
     dispatch(profileActions.setPreviewProfile(null));
+    dispatch(canvasActions.setIsPanZoomed(false));
     if (currentUser) {
       const localStorageFriendInviteToken = localStorage.getItem("inviteToken");
       dispatch(getFriendList());

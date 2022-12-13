@@ -5,9 +5,15 @@ interface Params {
   divRef: RefObject<HTMLDivElement>;
   canvasRef: RefObject<HTMLCanvasElement>;
   onSetViewProfileCallback: (id: number) => void;
+  onSetIsPanZoomedCallBack: () => void;
 }
 
-function useCanvas({ divRef, canvasRef, onSetViewProfileCallback }: Params) {
+function useCanvas({
+  divRef,
+  canvasRef,
+  onSetViewProfileCallback,
+  onSetIsPanZoomedCallBack,
+}: Params) {
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
   useEffect(() => {
@@ -38,12 +44,14 @@ function useCanvas({ divRef, canvasRef, onSetViewProfileCallback }: Params) {
     onResize();
     window.addEventListener("resize", onResize);
     canvas?.addEventListener("setPreviewProfile", onSetViewProfileCallback);
+    canvas?.addEventListener("setIsPanZoomed", onSetIsPanZoomedCallBack);
     return () => {
       window.removeEventListener("resize", onResize);
       canvas?.removeEventListener(
         "setPreviewProfile",
         onSetViewProfileCallback,
       );
+      canvas?.removeEventListener("setIsPanZoomed", onSetIsPanZoomedCallBack);
     };
   }, [canvas, divRef]);
 
