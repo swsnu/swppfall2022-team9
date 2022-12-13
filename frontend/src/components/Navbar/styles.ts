@@ -62,7 +62,7 @@ export const NotificationTitle = styled.div`
 `;
 
 export const NotificationContents = styled.div`
-  overflow-y: scroll;
+  overflow-y: auto;
   flex: 1 0;
 `;
 
