@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FriendRequestStatus } from "server/models/friendRequests.model";
 import useHandleClickOutside from "hooks/useHandleClickOutside";
 import { searchActions } from "store/slices/search";
-import { getFriendList } from "store/slices/users";
+import { getFriendList, userActions } from "store/slices/users";
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import useAlert from "hooks/useAlert";
 import { NotificationContext } from "containers/Context/NotificationContext/NotificationContext";
@@ -86,6 +86,7 @@ const Navbar: React.FC<Props> = () => {
     );
   };
   const onClickLogo = () => {
+    if (location.pathname !== "/") dispatch(userActions.clearFriendList());
     dispatch(searchActions.SearchModeOff());
     dispatch(profileActions.setPreviewProfile(null));
     dispatch(canvasActions.setOneChonIdToExpandNetwork(null));

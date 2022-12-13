@@ -101,7 +101,11 @@ export const checkUsernameUnique = createAsyncThunk(
 export const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    clearFriendList: state => {
+      state.friendList.length = 0;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getSessionCookie.fulfilled, (state, action) => {
       state.sessionError = undefined;

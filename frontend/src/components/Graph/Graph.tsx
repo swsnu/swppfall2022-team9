@@ -51,15 +51,12 @@ const Graph: React.FC<Props> = () => {
     if (canvas) {
       if (currentUser) {
         canvas.setCurrentUser(currentUser);
-        canvas.setFriendList(friendList);
+        if (searchWord) canvas.setFriendList(filteredFriendList);
+        else canvas.setFriendList(friendList);
 
-        if (searchWord !== "") canvas.setFriendList(filteredFriendList);
-
-        if (oneChonIdToExpandNetwork) {
+        if (oneChonIdToExpandNetwork)
           canvas.renderGraph(oneChonIdToExpandNetwork);
-        } else {
-          canvas.renderGraph(currentUser.id);
-        }
+        else canvas.renderGraph(currentUser.id);
       } else {
         canvas.reset();
       }
