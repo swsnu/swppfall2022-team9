@@ -62,18 +62,24 @@ class LinkLinkUserSearchTestCase(TestCase):
             emailValidated=False,
             email_unique="invalid_but_unique2@snu.ac.kr",
         )
-        expire_time = datetime.now() + timedelta(days=settings.EMAIL_EXPIRE_DAYS)
+        expire_time = \
+            datetime.now() + timedelta(days=settings.EMAIL_EXPIRE_DAYS)
         expire_time = expire_time.astimezone(timezone.get_default_timezone())
         Verification.objects.create(
-            linklinkuser=john_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=john_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
         Verification.objects.create(
-            linklinkuser=james_linklinkuser, purpose="Register", expiresAt=expire_time
+            linklinkuser=james_linklinkuser,
+            purpose="Register",
+            expiresAt=expire_time
         )
 
         # Initialize frequently used member variables
         self.client = Client(enforce_csrf_checks=True)
-        self.csrftoken = self.client.get("/api/csrf_token/").cookies["csrftoken"].value
+        self.csrftoken = \
+            self.client.get("/api/csrf_token/").cookies["csrftoken"].value
         self.linklink_path = os.path.dirname(os.path.realpath(__file__))
 
     def test_chat(self):
@@ -110,7 +116,7 @@ class LinkLinkUserSearchTestCase(TestCase):
         self.assertEqual(response_dict, response_answer)
 
         chatroom = ChatRoom.objects.create(name="[1]__[2]")
-        
+
         chatroom.join(john_linklinkuser)
         chatroom.leave(john_linklinkuser)
 
@@ -142,7 +148,8 @@ class LinkLinkUserSearchTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
         response_dict = json.loads(response.content.decode())
         response_answer = {
-            "message": "ChatRoom [1]__[4] not found.Refresh may solve the race issue."
+            "message":
+                "ChatRoom [1]__[4] not found.Refresh may solve the race issue."
         }
         self.assertEqual(response_dict, response_answer)
 
