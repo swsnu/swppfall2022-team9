@@ -24,6 +24,7 @@ describe("canvas reducer", () => {
   it("tests initial state", () => {
     expect(canvasReducer(undefined, { type: "unknown" })).toEqual({
       oneChonIdToExpandNetwork: null,
+      isPanZoomed: false,
     });
   });
 

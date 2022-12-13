@@ -9,10 +9,13 @@ import {
   addPoints,
   convertCartesianToScreen,
   diffPoints,
+  directionPoints,
+  distPoints,
   getEdgeCoords,
   getOneAndTwoChonCoordinates,
   getScreenPoint,
   getWorldPoint,
+  gradientPoints,
 } from "./math";
 import { addEvent, removeEvent, touchy, TouchyEvent } from "./touch";
 import { OneChonInfo } from "types/friend.types";
@@ -37,17 +40,29 @@ export default class Canvas extends EventDispatcher {
 
   private SHADOW_OFFSET_Y = 0.13;
 
+  private RESET_PANZOOM_SPEED_RATIO = 0.06;
+
+  private MIN_RESET_PAN_SPEED = 0.2;
+
+  private MIN_RESET_ZOOM_SPEED = 0.01;
+
+  private PANZOOM_OFFSET_DIFF_THRESHOLD = 0.5;
+
+  private PANZOOM_SCALE_DIFF_THRESHOLD = 0.001;
+
   private element: HTMLCanvasElement;
+
+  private origin = { x: 0, y: 0 };
 
   private pinchZoomPrevDiff = 0;
 
   private panZoom: PanZoom = {
     scale: 1,
-    offset: { x: 0, y: 0 },
+    offset: this.origin,
   };
 
   private panPoint: { lastMousePos: Coord } = {
-    lastMousePos: { x: 0, y: 0 },
+    lastMousePos: this.origin,
   };
 
   private width = 0;
@@ -78,6 +93,10 @@ export default class Canvas extends EventDispatcher {
 
   isOneChonJourneyFinished = false;
 
+  resetPanDirection = 0; // 1 ~ 9
+
+  resetZoomDirection = 0; // -1 or 0 or 1
+
   constructor(canvas: HTMLCanvasElement) {
     super();
     this.element = canvas;
@@ -90,7 +109,7 @@ export default class Canvas extends EventDispatcher {
     this.scale(1, 1);
     this.panZoom = {
       scale: 1,
-      offset: { x: 0, y: 0 },
+      offset: this.origin,
     };
 
     this.centerNode = undefined;
@@ -200,6 +219,7 @@ export default class Canvas extends EventDispatcher {
   }
 
   setPanZoom(param: Partial<PanZoom>) {
+    this.emit("setIsPanZoomed");
     const { scale, offset } = param;
     if (scale) {
       this.panZoom.scale = scale;
@@ -211,6 +231,99 @@ export default class Canvas extends EventDispatcher {
     this.render();
     //reset the offset
     // this.panZoom.offset = [0, 0];
+  }
+
+  async startResetPanZoom() {
+    this.destroy();
+    this.resetPanDirection = directionPoints(this.panZoom.offset, this.origin);
+    this.resetZoomDirection =
+      this.panZoom.scale === 1 ? 0 : this.panZoom.scale > 1 ? -1 : 1;
+    await this.resetPanZoom();
+    this.initialize();
+  }
+
+  async resetPanZoom(): Promise<void> {
+    while (
+      (directionPoints(this.panZoom.offset, this.origin) !== 5 &&
+        this.resetPanDirection ===
+          directionPoints(this.panZoom.offset, this.origin)) ||
+      this.panZoom.scale !== 1
+    ) {
+      let resetPanSpeed = Math.abs(this.panZoom.offset.x)
+        ? (Math.abs(this.panZoom.offset.x) * this.RESET_PANZOOM_SPEED_RATIO) /
+          this.dpr
+        : (Math.abs(this.panZoom.offset.y) * this.RESET_PANZOOM_SPEED_RATIO) /
+          this.dpr;
+      resetPanSpeed =
+        resetPanSpeed < this.MIN_RESET_PAN_SPEED
+          ? this.MIN_RESET_PAN_SPEED
+          : resetPanSpeed;
+      let resetZoomSpeed =
+        (Math.abs(this.panZoom.scale - 1) * this.RESET_PANZOOM_SPEED_RATIO) /
+        this.dpr;
+
+      console.log(resetZoomSpeed);
+      console.log(this.panZoom.scale);
+
+      resetZoomSpeed =
+        resetZoomSpeed < this.MIN_RESET_ZOOM_SPEED
+          ? this.MIN_RESET_ZOOM_SPEED
+          : resetZoomSpeed;
+      const gradient = gradientPoints(this.panZoom.offset, this.origin);
+
+      if (
+        distPoints(this.panZoom.offset, this.origin) <
+          this.PANZOOM_OFFSET_DIFF_THRESHOLD &&
+        Math.abs(this.panZoom.scale - 1) < this.PANZOOM_SCALE_DIFF_THRESHOLD
+      ) {
+        this.panZoom.offset = this.origin;
+        this.panZoom.scale = 1;
+        break;
+      }
+      // Reset Pan
+      switch (this.resetPanDirection) {
+        case 1:
+          this.panZoom.offset.x -= resetPanSpeed;
+          this.panZoom.offset.y -= gradient * resetPanSpeed;
+          break;
+        case 2:
+          this.panZoom.offset.y += resetPanSpeed;
+          break;
+        case 3:
+          this.panZoom.offset.x += resetPanSpeed;
+          this.panZoom.offset.y += gradient * resetPanSpeed;
+          break;
+        case 4:
+          this.panZoom.offset.x -= resetPanSpeed;
+          break;
+        // case 5:
+        //   break;
+        case 6:
+          this.panZoom.offset.x += resetPanSpeed;
+          break;
+        case 7:
+          this.panZoom.offset.x -= resetPanSpeed;
+          this.panZoom.offset.y -= gradient * resetPanSpeed;
+          break;
+        case 8:
+          this.panZoom.offset.y -= resetPanSpeed;
+          break;
+        case 9:
+          this.panZoom.offset.x += resetPanSpeed;
+          this.panZoom.offset.y += gradient * resetPanSpeed;
+          break;
+      }
+      // Reset Zoom
+      if (this.panZoom.scale > 1) {
+        this.panZoom.scale -= resetZoomSpeed;
+        if (this.panZoom.scale < 1) this.panZoom.scale = 1;
+      } else if (this.panZoom.scale < 1) {
+        this.panZoom.scale += resetZoomSpeed;
+        if (this.panZoom.scale > 1) this.panZoom.scale = 1;
+      }
+      this.render();
+      await new Promise(requestAnimationFrame);
+    }
   }
 
   handlePanning = (evt: TouchyEvent) => {
@@ -373,8 +486,8 @@ export default class Canvas extends EventDispatcher {
       targetOneChon
         ? targetOneChon.lastname + targetOneChon.firstname
         : currentUser.lastname + currentUser.firstname,
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
+      this.origin,
+      this.origin,
       this,
       targetOneChon ? targetOneChon.imgUrl : currentUser.imgUrl,
       false,
@@ -406,7 +519,7 @@ export default class Canvas extends EventDispatcher {
         const oneChonNode = new OneChonNode(
           oneChon.id,
           oneChon.lastname + oneChon.firstname,
-          { x: 0, y: 0 },
+          this.origin,
           coords[oneChonIdx].userCoord,
           this,
           [],
@@ -462,7 +575,7 @@ export default class Canvas extends EventDispatcher {
         const oneChonNode = new OneChonNode(
           oneChon.id,
           oneChon.lastname + oneChon.firstname,
-          { x: 0, y: 0 },
+          this.origin,
           coords[oneChonIdx].userCoord,
           this,
           twoChonNodes,
