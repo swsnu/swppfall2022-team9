@@ -39,7 +39,7 @@ const Navbar: React.FC<Props> = () => {
   const location = useLocation();
 
   const onClickBell = () => {
-    setIsClickedOutsideOfNotification(prev => !prev);
+    if (currentUser) setIsClickedOutsideOfNotification(prev => !prev);
   };
 
   const onAcceptFriendRequest = async (friendRequestId: number) => {
@@ -92,19 +92,21 @@ const Navbar: React.FC<Props> = () => {
   };
 
   const onClickAccount = () => {
-    navigate("/account");
+    if (currentUser) navigate("/account");
   };
 
   const onClickChat = () => {
-    navigate("/chat/");
+    if (currentUser) navigate("/chat/");
   };
 
   const onClickSearch = async () => {
-    if (location.pathname === "/") {
-      dispatch(searchActions.toggleSearchMode());
-    } else {
-      navigate("/");
-      dispatch(searchActions.SearchModeOn());
+    if (currentUser) {
+      if (location.pathname === "/") {
+        dispatch(searchActions.toggleSearchMode());
+      } else {
+        navigate("/");
+        dispatch(searchActions.SearchModeOn());
+      }
     }
   };
 
