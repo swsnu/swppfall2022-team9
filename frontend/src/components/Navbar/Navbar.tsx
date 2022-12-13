@@ -140,11 +140,12 @@ const Navbar: React.FC<Props> = () => {
           role="notification"
         >
           <VscBell size={"100%"} style={{ cursor: "pointer" }} />
-          {friendRequests.filter(
-            request =>
-              request.getterId === currentUser?.id &&
-              request.status === FriendRequestStatus.PENDING,
-          ).length > 0 && <S.NavbarButtonRedMark />}
+          {currentUser &&
+            friendRequests.filter(
+              request =>
+                request.getterId === currentUser?.id &&
+                request.status === FriendRequestStatus.PENDING,
+            ).length > 0 && <S.NavbarButtonRedMark />}
           {!isClickedOutsideOfNotification && (
             <S.NotificationListPopupContainer
               onClick={e => {
@@ -188,7 +189,7 @@ const Navbar: React.FC<Props> = () => {
           )}
         </S.NavButtons>
         <S.NavButtons>
-          {unreadMessageCount > 0 && <S.NavbarButtonRedMark />}
+          {currentUser && unreadMessageCount > 0 && <S.NavbarButtonRedMark />}
           <IoChatboxEllipsesOutline
             role="chats"
             onClick={onClickChat}
