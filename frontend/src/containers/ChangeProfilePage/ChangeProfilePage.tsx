@@ -366,6 +366,7 @@ const ChangeProfilePage: React.FC = () => {
             <FormStyles.InputContainer>
               <FormStyles.Input
                 role="website"
+                value={profile.website}
                 onChange={e => {
                   setProfile(prev => ({ ...prev, website: e.target.value }));
                 }}
@@ -378,6 +379,7 @@ const ChangeProfilePage: React.FC = () => {
           <FormStyles.Label>
             <FormStyles.TextArea
               role="introduction"
+              value={profile.introduction}
               onChange={e => {
                 setProfile(prev => ({ ...prev, introduction: e.target.value }));
               }}
