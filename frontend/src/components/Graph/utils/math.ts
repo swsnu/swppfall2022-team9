@@ -82,8 +82,8 @@ export const getOneAndTwoChonCoordinates = (
 
       // check if they have at least two less than the max number of connections
       const isExpandable =
-        twoChonCount[adjacentIndices[0]] < max2Chon - 1 &&
-        twoChonCount[adjacentIndices[1]] < max2Chon - 1;
+        twoChonCount[adjacentIndices[0]] < Math.min(max2Chon - 1, 5) &&
+        twoChonCount[adjacentIndices[1]] < Math.min(max2Chon - 1, 5);
 
       let theta = Math.min(budget / twoChonCount[i], 60);
       theta = Math.max(theta, 22);
@@ -100,8 +100,8 @@ export const getOneAndTwoChonCoordinates = (
         const ratio = (expandRatio * ((theta * spare) / 2)) / budgetTemp;
         const thetaTemp = theta + ratio * theta;
         if (thetaTemp < 60) {
-          theta = thetaTemp;
           budgetTemp += expandRatio * ((theta * spare) / 2);
+          theta = budgetTemp/twoChonCount[i];
         }
       } else {
         // do nothing
