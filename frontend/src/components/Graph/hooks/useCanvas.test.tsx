@@ -8,12 +8,14 @@ import { renderHook } from "@testing-library/react-hooks";
 
 describe("useCanvas hook", () => {
   let onSetViewProfileCallback: (id: number | null) => void;
+  let onSetIsPanZoomedCallBack: () => void;
   beforeEach(() => {
     // const mockCanvasElement = document.createElement("canvas");
     // const fakeCanvas = new Canvas(mockCanvasElement);
     jest.clearAllMocks();
     // (useCanvas as jest.Mock).mockReturnValue({} as Canvas);
     onSetViewProfileCallback = jest.fn();
+    onSetIsPanZoomedCallBack = jest.fn();
   });
 
   afterEach(() => {});
@@ -32,6 +34,7 @@ describe("useCanvas hook", () => {
         divRef: containerRef,
         canvasRef: canvasRef,
         onSetViewProfileCallback,
+        onSetIsPanZoomedCallBack,
       });
     });
     result.current?.setSize(500, 500);
@@ -58,6 +61,7 @@ describe("useCanvas hook", () => {
         divRef: containerRef,
         canvasRef: canvasRef,
         onSetViewProfileCallback,
+        onSetIsPanZoomedCallBack,
       });
     });
     result.current?.setWidth(500);
@@ -79,6 +83,7 @@ describe("useCanvas hook", () => {
         divRef: containerRef,
         canvasRef: canvasRef,
         onSetViewProfileCallback,
+        onSetIsPanZoomedCallBack,
       });
     });
     waitFor(() => expect(result.current).toBe(null));
@@ -99,6 +104,7 @@ describe("useCanvas hook", () => {
         divRef: containerRef,
         canvasRef: canvasRef,
         onSetViewProfileCallback,
+        onSetIsPanZoomedCallBack,
       });
     });
     result.current?.setSize(500, 500);

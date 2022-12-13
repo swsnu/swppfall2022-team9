@@ -10,7 +10,7 @@ export const CanvasContainer = styled.div`
   overflow: hidden;
 `;
 
-export const ResetCanvasButton = styled.button`
+export const GoToMyNetworkButton = styled.button`
   display: flex;
   background: none;
   border: none;
@@ -20,5 +20,19 @@ export const ResetCanvasButton = styled.button`
   cursor: pointer;
   position: absolute;
   font-weight: bold;
+  font-size: 15px;
+`;
+
+export const ResetPanZoomButton = styled.button`
+  display: flex;
+  background: none;
+  border: none;
+  align-items: center;
+  margin-top: 15px;
+  margin-left: 15px;
+  cursor: pointer;
+  position: absolute;
+  font-weight: bold;
+  right: 20px;
   font-size: 15px;
 `;

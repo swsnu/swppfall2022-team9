@@ -89,6 +89,7 @@ const Navbar: React.FC<Props> = () => {
     dispatch(searchActions.SearchModeOff());
     dispatch(profileActions.setPreviewProfile(null));
     dispatch(canvasActions.setOneChonIdToExpandNetwork(null));
+    dispatch(canvasActions.setIsPanZoomed(false));
     navigate("/");
   };
 
