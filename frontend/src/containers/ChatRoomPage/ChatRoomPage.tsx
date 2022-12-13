@@ -4,7 +4,7 @@ import * as S from "./styles";
 import { Message } from "server/models/chat.model";
 import ChatMessage from "./ChatMessage/ChatMessage";
 import { compareTimeStampWtihinDay } from "utils/timeStamp";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getCurrentChatRoomInfo } from "store/slices/chat";
 interface Props {}
@@ -13,6 +13,8 @@ const isDevMode = process.env.NODE_ENV === "development";
 
 const ChatRoomPage: React.FC<Props> = () => {
   const { chatRoomName } = useParams();
+  const [searchParams] = useSearchParams();
+  const coffeeChatName = searchParams.get("name");
   const currentUser = useAppSelector(state => state.users.currentUser);
   const currentChatRoomInfo = useAppSelector(
     state => state.chat.currentChatRoomInfo,
@@ -82,8 +84,17 @@ const ChatRoomPage: React.FC<Props> = () => {
   }, [messageLog]);
 
   useEffect(() => {
-    if (chatRoomName) dispatch(getCurrentChatRoomInfo({ chatRoomName }));
-  }, []);
+    if (currentUser) {
+      if (chatRoomName) dispatch(getCurrentChatRoomInfo({ chatRoomName }));
+      if (coffeeChatName) {
+        sendJsonMessage({
+          type: "chat_message",
+          senderId: currentUser.id,
+          message: `혹시 ${coffeeChatName} 좀 소개해 줄 수 있어?`,
+        });
+      }
+    }
+  }, [currentUser]);
 
   return (
     <S.BackgroundContainer>
