@@ -1,6 +1,6 @@
 import { chatRoomInfoListStub } from "server/stubs/chat.stub";
 import ChatRoomItem from "./ChatRoomItem";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 import { ChatRoomInfo } from "server/models/chat.model";
 import { renderWithProviders } from "test-utils/mocks";
