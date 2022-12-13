@@ -48,4 +48,4 @@ export const FriendListContainer = styled.div`
   flex-direction: column;
   overflow: auto;
   height: 86%;
-`
+`;

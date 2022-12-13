@@ -10,6 +10,7 @@ import profileSlice from "./profile";
 import searchSlice from "./search";
 import canvasSlice from "./canvas";
 import chatSlice from "./chat";
+import accountSlice from "./account";
 
 const rootReducer = combineReducers({
   users: userSlice,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   search: searchSlice,
   canvas: canvasSlice,
   chat: chatSlice,
+  account: accountSlice,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
