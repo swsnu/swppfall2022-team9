@@ -1,13 +1,14 @@
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { renderWithProviders } from "test-utils/mocks";
-import SignUpPage, { HelperText } from "./SignUpPage";
+import SignUpPage from "./SignUpPage";
 import {
   AlertContextProps,
   AlertContextProvider,
 } from "containers/Context/AlertContext/AlertContext";
 import { Provider } from "react-redux";
 import store from "store";
+import { HelperText } from "styles/common.form.styles";
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({
