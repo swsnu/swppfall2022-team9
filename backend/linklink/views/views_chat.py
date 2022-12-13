@@ -15,7 +15,7 @@ from ..models import LinkLinkUser, ChatRoom
 @allowed_method_or_405(["GET"])
 @logged_in_or_401
 def chat_list(request):
-    if request.method == "GET":
+    if request.method == "GET": # pragma no branch
         linklinkuser = request.user.linklinkuser
         chat_room_list = ChatRoom.objects.filter(
             name__contains=f"[{linklinkuser.id}]"
@@ -53,7 +53,7 @@ def chat_list(request):
 @allowed_method_or_405(["GET"])
 @logged_in_or_401
 def chat(request, chat_room_name):
-    if request.method == "GET":
+    if request.method == "GET": # pragma no branch
         linklinkuser = request.user.linklinkuser
         user_id_1, user_id_2 = map(int, chat_room_name.split("__"))
         try:
@@ -65,7 +65,7 @@ def chat(request, chat_room_name):
                 status=404,
                 data={
                     "message": (
-                        f"ChatRoom [{user_id_1}__[{user_id_2}] not found."
+                        f"ChatRoom [{user_id_1}]__[{user_id_2}] not found."
                         "Refresh may solve the race issue."
                     )
                 },
