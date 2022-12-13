@@ -28,7 +28,9 @@ describe("friend request reducer", () => {
   });
 
   it("should handle initial state", () => {
-    expect(accountReducer(undefined, { type: "unknown" })).toEqual({});
+    expect(accountReducer(undefined, { type: "unknown" })).toEqual({
+      currentAccountInfo: null,
+    });
   });
 
   it("tests post password unauthenticated", async () => {
