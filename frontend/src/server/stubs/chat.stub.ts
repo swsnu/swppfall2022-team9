@@ -5,6 +5,7 @@ export const chatRoomInfoListStub: ChatRoomInfo[] = [
     chatRoomName: "1__2",
     otherUserId: 2,
     otherUserName: "박신혜",
+    senderId: 2,
     otherUserImgUrl:
       "https://res.cloudinary.com/duyixodey/image/upload/v1669881484/shinhye_park_qqrin4.jpg",
     lastMessage: "hello",
@@ -14,6 +15,7 @@ export const chatRoomInfoListStub: ChatRoomInfo[] = [
   {
     chatRoomName: "1__3",
     otherUserId: 3,
+    senderId: 3,
     otherUserName: "서현진",
     otherUserImgUrl:
       "https://res.cloudinary.com/duyixodey/image/upload/v1669881618/hyunjin_seo_o8r96j.jpg",

@@ -41,6 +41,7 @@ const NotificationContextProvider = ({ children }: Props): JSX.Element => {
         const data = JSON.parse(e.data);
         switch (data.type) {
           case "new_message_notification":
+            console.log("hihihi", data);
             setNewMessage({ senderId: data.senderId, message: data.message });
             setUnreadMessageCount(count => (count += 1));
             break;

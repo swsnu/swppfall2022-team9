@@ -48,7 +48,11 @@ export const timeStampToString = (timestamp: string): string => {
       return "어제";
     else return `${month}월 ${day}일`;
   }
-  if (currentDay - day === 1) return "어제";
+  if (currentDay - day === 1) {
+    return "어제";
+  } else if (currentDay - day > 1) {
+    return `${month}월 ${day}일`;
+  }
 
   const hour = date.getHours();
   const minutes = date.getMinutes();
