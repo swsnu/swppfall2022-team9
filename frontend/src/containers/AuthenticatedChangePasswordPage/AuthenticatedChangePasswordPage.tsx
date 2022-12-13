@@ -3,43 +3,40 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useNavigate } from "react-router-dom";
 import useAlert from "hooks/useAlert";
 import { putPassword } from "store/slices/account";
-import * as FormStyles from "styles/common.form.styles";
+import * as S from "../SignUpPage/styles";
 import { postSignIn } from "../../store/slices/users";
+import { HelperText } from "styles/common.form.styles";
 
 const AuthenticatedChangePasswordPage: React.FC = () => {
   const [passwordInfo, setPasswordInfo] = useState<{
     currentPassword: string;
     password: string;
-    passwordCheck: string;
-  }>({ currentPassword: "", password: "", passwordCheck: "" });
+    passwordConfirm: string;
+  }>({ currentPassword: "", password: "", passwordConfirm: "" });
   const dispatch = useAppDispatch();
   const alert = useAlert();
   const navigate = useNavigate();
   const users = useAppSelector(state => state.users);
   const currentUser = users.currentUser;
+  const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false);
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsSubmitClicked(true);
     if (
-      !passwordInfo.currentPassword ||
-      !passwordInfo.password ||
-      !passwordInfo.passwordCheck
+      passwordInfo.currentPassword &&
+      passwordInfo.password &&
+      passwordInfo.passwordConfirm &&
+      passwordInfo.password === passwordInfo.passwordConfirm
     ) {
-      return;
-    }
-    try {
-      await dispatch(
-        postSignIn({
-          username: currentUser!.username,
-          password: passwordInfo.currentPassword,
-        }),
-      ).unwrap();
-      if (passwordInfo.currentPassword !== passwordInfo.password) {
-        if (passwordInfo.password !== passwordInfo.passwordCheck) {
-          alert.open({
-            message: "입력하신 새 비밀번호가 서로 일치하지 않습니다.",
-          });
-        } else {
+      try {
+        await dispatch(
+          postSignIn({
+            username: currentUser!.username,
+            password: passwordInfo.currentPassword,
+          }),
+        ).unwrap();
+        if (passwordInfo.currentPassword !== passwordInfo.password) {
           try {
             await dispatch(
               putPassword({
@@ -60,33 +57,33 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
             });
           } catch (err) {
             alert.open({
-              message: "비밀번호 변경에 실패하였습니다.",
+              message: "비밀번호 변경에 실패했습니다.",
             });
           }
+        } else {
+          alert.open({
+            message: "현재 비밀번호와 동일합니다.",
+          });
         }
-      } else {
+      } catch (err) {
         alert.open({
-          message: "현재 비밀번호와 동일합니다.",
+          message: "현재 비밀번호가 올바르지 않습니다.",
         });
       }
-    } catch (err) {
-      alert.open({
-        message: "비밀번호가 틀립니다.",
-      });
     }
   };
 
   return (
-    <FormStyles.Container>
-      <FormStyles.FormContainer>
-        <FormStyles.Header>
-          <FormStyles.HeaderText>비밀번호 변경</FormStyles.HeaderText>
-        </FormStyles.Header>
-        <FormStyles.Form onSubmit={onSubmit}>
-          <FormStyles.Label>
-            <FormStyles.LabelText>현재 비밀번호</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input
+    <S.Container>
+      <S.FormContainer>
+        <S.Header>
+          <S.HeaderText>비밀번호 변경</S.HeaderText>
+        </S.Header>
+        <S.Form onSubmit={onSubmit}>
+          <S.Label>
+            <S.LabelText>현재 비밀번호</S.LabelText>
+            <S.InputContainer>
+              <S.Input
                 type="password"
                 role="currentPasswordInput"
                 placeholder="현재 비밀번호"
@@ -98,15 +95,22 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
                   }));
                 }}
               />
-            </FormStyles.InputContainer>
-          </FormStyles.Label>
-          <FormStyles.Label>
-            <FormStyles.LabelText>새로운 비밀번호</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {passwordInfo.currentPassword
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
+            </S.InputContainer>
+          </S.Label>
+          <S.Label>
+            <S.LabelText>새 비밀번호</S.LabelText>
+            <S.InputContainer>
+              <S.Input
                 type="password"
                 role="passwordInput"
-                placeholder="새로운 비밀번호"
+                placeholder="새 비밀번호"
                 value={passwordInfo.password}
                 onChange={e => {
                   setPasswordInfo(prev => ({
@@ -115,26 +119,42 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
                   }));
                 }}
               />
-            </FormStyles.InputContainer>
-          </FormStyles.Label>
-          <FormStyles.Label>
-            <FormStyles.LabelText>비밀번호 확인</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {passwordInfo.password
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
+            </S.InputContainer>
+          </S.Label>
+          <S.Label>
+            <S.LabelText>비밀번호 확인</S.LabelText>
+            <S.InputContainer>
+              <S.Input
                 type="password"
                 role="passwordCheckInput"
                 placeholder="비밀번호 확인"
-                value={passwordInfo.passwordCheck}
+                value={passwordInfo.passwordConfirm}
                 onChange={e => {
                   setPasswordInfo(prev => ({
                     ...prev,
-                    passwordCheck: e.target.value,
+                    passwordConfirm: e.target.value,
                   }));
                 }}
               />
-            </FormStyles.InputContainer>
-          </FormStyles.Label>
-          <FormStyles.FormInnerButton
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {passwordInfo.password === passwordInfo.passwordConfirm
+                    ? passwordInfo.passwordConfirm
+                      ? HelperText.NO_ERROR
+                      : HelperText.REQUIRED
+                    : HelperText.DIFFERENT_PASSWORD}
+                </S.InputHelper>
+              )}
+            </S.InputContainer>
+          </S.Label>
+          <S.Submit
             role="submit"
             type="submit"
             onClick={onSubmit}
@@ -146,10 +166,10 @@ const AuthenticatedChangePasswordPage: React.FC = () => {
             }}
           >
             비밀번호 변경
-          </FormStyles.FormInnerButton>
-        </FormStyles.Form>
-      </FormStyles.FormContainer>
-    </FormStyles.Container>
+          </S.Submit>
+        </S.Form>
+      </S.FormContainer>
+    </S.Container>
   );
 };
 
