@@ -123,6 +123,8 @@ def signin(request):
         email = user.linklinkuser.email_unique
         # If emailValidated, login
         if user.linklinkuser.emailValidated:
+            # First login
+            is_first_login = user.last_login is None
             login(request, user)
             response_dict = {
                 "id": user.linklinkuser.id,
@@ -130,6 +132,7 @@ def signin(request):
                 "username": user.username,
                 "firstname": user.first_name,
                 "lastname": user.last_name,
+                "isFirstLogin": is_first_login
             }
             return JsonResponse(
                 status=200,

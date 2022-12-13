@@ -231,6 +231,7 @@ class LinkLinkAuthTestCase(TestCase):
             "username": "john",
             "firstname": "John",
             "lastname": "Cena",
+            "isFirstLogin": True
         }
         self.assertDictEqual(
             json.loads(response.content.decode()),

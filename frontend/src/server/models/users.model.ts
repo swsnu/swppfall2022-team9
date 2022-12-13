@@ -6,4 +6,5 @@ export type User = {
   firstname: string;
   lastname: string;
   imgUrl: string;
+  isFirstLogin?: boolean;
 };

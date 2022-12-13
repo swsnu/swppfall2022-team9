@@ -56,7 +56,21 @@ const HomePage: React.FC<Props> = () => {
         dispatch(putFriendRequestToken(localStorageFriendInviteToken));
         dispatch(getFriendRequests());
         localStorage.removeItem("inviteToken");
-        return;
+      }
+      if (currentUser.isFirstLogin) {
+        alert.open({
+          message:
+            "LinkLink에 오신 것을 환영합니다! 서비스를 이용하기에 앞서 본인의 프로필을 작성해보세요.",
+          buttons: [
+            {
+              label: "프로필 작성하러 가기",
+              onClick: () => {
+                navigate(`/profile/change`);
+                alert.close();
+              },
+            },
+          ],
+        });
       }
     } else {
       dispatch(searchActions.SearchModeOff());
