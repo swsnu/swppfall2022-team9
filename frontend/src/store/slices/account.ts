@@ -4,11 +4,19 @@ import {
   PutPasswordDto,
   PostPasswordUnauthenticatedDto,
   PutAccountDto,
+  AccountInfo,
 } from "server/dto/account/account.dto";
-import { PutPasswordResDto } from "server/dto/account/account.res.dto";
+import {
+  GetAccountResDto,
+  PutPasswordResDto,
+} from "server/dto/account/account.res.dto";
 
-export interface AccountState {}
-const initialState: AccountState = {};
+export interface AccountState {
+  currentAccountInfo: AccountInfo | null;
+}
+const initialState: AccountState = {
+  currentAccountInfo: null,
+};
 
 export const postPasswordUnauthenticated = createAsyncThunk<
   PutPasswordResDto,
@@ -37,6 +45,19 @@ export const putPassword = createAsyncThunk<PutPasswordResDto, PutPasswordDto>(
   },
 );
 
+export const getAccount = createAsyncThunk<GetAccountResDto, void>(
+  "account/putAccount",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<GetAccountResDto>("/api/account/");
+      return response.data;
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      return rejectWithValue(axiosError.response);
+    }
+  },
+);
+
 export const putAccount = createAsyncThunk<void, PutAccountDto>(
   "account/putAccount",
   async ({ lastname, firstname, email }, { rejectWithValue }) => {
@@ -54,6 +75,11 @@ export const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getAccount.fulfilled, (state, action) => {
+      state.currentAccountInfo = action.payload;
+    });
+  },
 });
 
 export const accountActions = accountSlice.actions;
