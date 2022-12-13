@@ -3,16 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { friendRequestActions } from "store/slices/friendRequests";
 import { getSignOut } from "store/slices/users";
-import { putAccount } from "store/slices/account";
+import { getAccount, putAccount } from "store/slices/account";
 import { checkEmailUnique } from "store/slices/users";
-import * as Common from "styles/common.form.styles";
-import * as S from "../SignUpPage/styles";
+import * as S from "./styles";
 import useAlert from "hooks/useAlert";
 import { emailRegex } from "utils/email";
-
-interface LoginError {
-  status: number;
-}
 
 export enum HelperText {
   NO_ERROR = "",
@@ -37,7 +32,9 @@ const AccountPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const users = useAppSelector(state => state.users);
+  const account = useAppSelector(state => state.account);
   const currentUser = users.currentUser;
+  const currentAccountInfo = account.currentAccountInfo;
 
   const maxNameLength = 50;
   const maxEmailLength = 50;
@@ -46,8 +43,10 @@ const AccountPage: React.FC = () => {
 
   const [isEmailClicked, setIsEmailClicked] = useState<boolean>(false);
   const [isEmailChanged, setIsEmailChanged] = useState<boolean>(false);
-  const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
-  const [isEmailUnique, setIsEmailUnique] = useState<boolean>(false);
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [isEmailUnique, setIsEmailUnique] = useState<boolean>(true);
+  const [isEmailIdentical, setIsEmailIdentical] = useState<boolean>(true);
+  const [originalEmail, setOriginalEmail] = useState<string>("");
 
   const checkFormValidity = (info: PutAccountInfo): boolean => {
     let isFormValid = true;
@@ -68,6 +67,7 @@ const AccountPage: React.FC = () => {
   const onClickChangePassword = () => {
     navigate("/account/password");
   };
+
   const onClickLogout = async () => {
     await dispatch(getSignOut());
     dispatch(friendRequestActions.resetFriendRequests());
@@ -77,6 +77,7 @@ const AccountPage: React.FC = () => {
   const onClickSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsSubmitClicked(true);
+    setIsEmailValid(checkEmailValidity(accountInfo.email));
     const isFormValid = checkFormValidity(accountInfo);
 
     if (isFormValid) {
@@ -92,26 +93,38 @@ const AccountPage: React.FC = () => {
             email: accountInfo.email,
           }),
         ).unwrap();
-        alert.open({
-          message: "계정 정보가 업데이트 되었습니다.",
-          buttons: [
-            {
-              label: "확인",
-              onClick: () => {
-                alert.close();
-                navigate("/");
+        if (accountInfo.email === originalEmail) {
+          alert.open({
+            message: "개인 정보가 수정되었습니다.",
+            buttons: [
+              {
+                label: "확인",
+                onClick: () => {
+                  alert.close();
+                  navigate("/");
+                },
               },
-            },
-          ],
-        });
+            ],
+          });
+        } else {
+          await dispatch(getSignOut());
+          alert.open({
+            message:
+              "이메일이 변경되었으므로 재인증 후 로그인 해주시기 바랍니다.",
+            buttons: [
+              {
+                label: "확인",
+                onClick: () => {
+                  alert.close();
+                  navigate("/");
+                },
+              },
+            ],
+          });
+        }
       } catch (err) {
         alert.close();
-        const loginError = err as LoginError;
-        if (loginError.status === 400) {
-          alert.open({ message: "이미 사용중인 이메일입니다." });
-        } else {
-          alert.open({ message: "계정 정보 업데이트에 실패하였습니다." });
-        }
+        alert.open({ message: "개인 정보 수정에 실패하였습니다." });
       }
     }
   };
@@ -148,15 +161,41 @@ const AccountPage: React.FC = () => {
   //   });
   // };
 
-  useEffect(() => {
-    if (currentUser) {
-      setAccountInfo({
-        firstname: currentUser.firstname,
-        lastname: currentUser.lastname,
-        email: currentUser.email,
+  const getAccountInfo = async () => {
+    try {
+      await dispatch(getAccount()).unwrap();
+    } catch (err) {
+      alert.open({
+        message: "개인 정보 로딩에 실패했습니다.",
+        buttons: [
+          {
+            label: "확인",
+            onClick: () => {
+              alert.close();
+              navigate("/");
+            },
+          },
+        ],
       });
     }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      getAccountInfo();
+    }
   }, [currentUser]);
+
+  useEffect(() => {
+    if (currentAccountInfo) {
+      setAccountInfo({
+        firstname: currentAccountInfo.firstname,
+        lastname: currentAccountInfo.lastname,
+        email: currentAccountInfo.email,
+      });
+      setOriginalEmail(currentAccountInfo.email);
+    }
+  }, [currentAccountInfo]);
 
   return (
     <S.Container>
@@ -164,7 +203,7 @@ const AccountPage: React.FC = () => {
         <S.Header>
           <S.HeaderText>개인 정보 수정</S.HeaderText>
         </S.Header>
-        <S.Form role="submit" onSubmit={onClickSubmit}>
+        <S.Form role="submit">
           <S.Label>
             <S.LabelText>성</S.LabelText>
             <S.InputContainer>
@@ -224,44 +263,33 @@ const AccountPage: React.FC = () => {
                 onChange={e => {
                   setIsEmailChanged(true);
                   setAccountInfo(prev => ({ ...prev, email: e.target.value }));
-                  setIsEmailUnique(false);
+                  setIsEmailUnique(e.target.value === originalEmail);
                   setIsEmailValid(checkEmailValidity(e.target.value));
+                  setIsEmailIdentical(e.target.value === originalEmail);
                 }}
               />
               {(isSubmitClicked || isEmailClicked || isEmailChanged) && (
                 <S.InputHelper>
-                  {!accountInfo.email
-                    ? HelperText.REQUIRED
-                    : isEmailValid
-                    ? isEmailUnique
-                      ? HelperText.NO_ERROR
-                      : HelperText.UNVERIFIED_EMAIL
-                    : HelperText.INVALID_EMAIL}
+                  {!isEmailIdentical &&
+                    (!accountInfo.email
+                      ? HelperText.REQUIRED
+                      : isEmailValid
+                      ? isEmailUnique
+                        ? HelperText.NO_ERROR
+                        : HelperText.UNVERIFIED_EMAIL
+                      : HelperText.INVALID_EMAIL)}
                 </S.InputHelper>
               )}
             </S.InputContainer>
             <S.UniqueCheckButton
-              disabled={isEmailValid ? false : true}
+              disabled={isEmailIdentical || !isEmailValid ? true : false}
               type="button"
               onClick={onClickCheckEmail}
             >
               중복 확인
             </S.UniqueCheckButton>
           </S.Label>
-          <S.Label>
-            <S.InputContainer>
-              <Common.FormInnerButton
-                role="changePassword"
-                style={{ fontWeight: "bold" }}
-                onClick={onClickChangePassword}
-              >
-                비밀번호 변경하기
-              </Common.FormInnerButton>
-            </S.InputContainer>
-          </S.Label>
-          <S.Submit backgroundColor="#D9D9D9" onClick={onClickLogout}>
-            로그아웃
-          </S.Submit>
+          <S.Submit onClick={onClickSubmit}>수정하기</S.Submit>
           {/* <S.Submit
             backgroundColor="transparent"
             style={{
@@ -274,6 +302,22 @@ const AccountPage: React.FC = () => {
             계정삭제
           </S.Submit> */}
         </S.Form>
+        <S.FormOuterButtonContainer>
+          <S.FormOuterButton
+            role="changePassword"
+            onClick={onClickChangePassword}
+            maxWidth={200}
+          >
+            비밀번호 변경
+          </S.FormOuterButton>
+          <S.FormOuterButton
+            backgroundColor="#D9D9D9"
+            maxWidth={200}
+            onClick={onClickLogout}
+          >
+            로그아웃
+          </S.FormOuterButton>
+        </S.FormOuterButtonContainer>
       </S.FormContainer>
     </S.Container>
   );
