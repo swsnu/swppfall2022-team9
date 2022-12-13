@@ -9,6 +9,9 @@ import * as S from "./styles";
 import useAlert from "hooks/useAlert";
 import { checkEmailValidity } from "utils/email";
 import { HelperText } from "styles/common.form.styles";
+import { searchActions } from "store/slices/search";
+import { profileActions } from "store/slices/profile";
+import { canvasActions } from "store/slices/canvas";
 
 interface PutAccountInfo {
   firstname: string;
@@ -61,6 +64,10 @@ const AccountPage: React.FC = () => {
   const onClickLogout = async () => {
     await dispatch(getSignOut());
     dispatch(friendRequestActions.resetFriendRequests());
+    dispatch(searchActions.SearchModeOff());
+    dispatch(profileActions.setPreviewProfile(null));
+    dispatch(canvasActions.setOneChonIdToExpandNetwork(null));
+    dispatch(canvasActions.setIsPanZoomed(false));
     navigate("/");
   };
 

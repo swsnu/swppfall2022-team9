@@ -49,7 +49,9 @@ const HomePage: React.FC<Props> = () => {
   }, [sessionError, friendInviteToken]);
 
   useEffect(() => {
+    dispatch(searchActions.SearchModeOff());
     dispatch(profileActions.setPreviewProfile(null));
+    dispatch(canvasActions.setOneChonIdToExpandNetwork(null));
     dispatch(canvasActions.setIsPanZoomed(false));
     if (currentUser) {
       const localStorageFriendInviteToken = localStorage.getItem("inviteToken");
@@ -74,8 +76,6 @@ const HomePage: React.FC<Props> = () => {
           ],
         });
       }
-    } else {
-      dispatch(searchActions.SearchModeOff());
     }
   }, [currentUser]);
 

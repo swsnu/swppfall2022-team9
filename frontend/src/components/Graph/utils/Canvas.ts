@@ -262,9 +262,6 @@ export default class Canvas extends EventDispatcher {
         (Math.abs(this.panZoom.scale - 1) * this.RESET_PANZOOM_SPEED_RATIO) /
         this.dpr;
 
-      console.log(resetZoomSpeed);
-      console.log(this.panZoom.scale);
-
       resetZoomSpeed =
         resetZoomSpeed < this.MIN_RESET_ZOOM_SPEED
           ? this.MIN_RESET_ZOOM_SPEED
@@ -655,8 +652,6 @@ export default class Canvas extends EventDispatcher {
           const [edgeFromOneChonNode, edgeToTwoChon] = getEdgeCoords(
             twoChonNode.originCoord,
             twoChonNode.coord,
-            // oneChonNode.radius,
-            // twoChonNode.radius,
             NODE_RADIUS,
             NODE_RADIUS,
           );
