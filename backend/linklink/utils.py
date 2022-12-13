@@ -246,8 +246,9 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
     """
     linklinkuser_list_return = []
     added_ids = []
+    linklinkuser_list_copy = linklinkuser_list
     for search_key in search_keys:
-        for linklinkuser in linklinkuser_list:
+        for linklinkuser in linklinkuser_list_copy:
             # exact match: Korean name
             if search_key in \
                 linklinkuser.user.last_name + \
@@ -299,5 +300,6 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                                 linklinkuser_list_return.append(linklinkuser)
                                 added_ids.append(linklinkuser.user.id)
                             break
+        linklinkuser_list_copy = linklinkuser_list_return
 
     return linklinkuser_list_return
