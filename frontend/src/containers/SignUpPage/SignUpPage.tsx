@@ -10,20 +10,12 @@ import {
 } from "store/slices/users";
 import * as S from "./styles";
 import { emailRegex } from "utils/email";
+import { HelperText } from "styles/common.form.styles";
 
 interface Props {}
 
 interface SignUpInfo extends PostSignUpDto {
   passwordConfirm: string;
-}
-
-export enum HelperText {
-  NO_ERROR = "",
-  REQUIRED = "필수 정보입니다.",
-  UNVERIFIED_EMAIL = "이메일 중복 확인을 진행해주세요.",
-  INVALID_EMAIL = "잘못된 이메일 형식입니다.",
-  UNVERIFIED_USERNAME = "아이디 중복 확인을 진행해주세요.",
-  DIFFERENT_PASSWORD = "비밀번호가 일치하지 않습니다.",
 }
 
 const SignUpPage: React.FC<Props> = () => {
@@ -299,7 +291,7 @@ const SignUpPage: React.FC<Props> = () => {
               />
               {isSubmitClicked && (
                 <S.InputHelper>
-                  {signUpInfo.password == signUpInfo.passwordConfirm
+                  {signUpInfo.password === signUpInfo.passwordConfirm
                     ? signUpInfo.passwordConfirm
                       ? HelperText.NO_ERROR
                       : HelperText.REQUIRED

@@ -7,6 +7,15 @@ import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
 import styled from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
+export enum HelperText {
+  NO_ERROR = "",
+  REQUIRED = "필수 정보입니다.",
+  UNVERIFIED_EMAIL = "이메일 중복 확인을 진행해주세요.",
+  INVALID_EMAIL = "잘못된 이메일 형식입니다.",
+  UNVERIFIED_USERNAME = "아이디 중복 확인을 진행해주세요.",
+  DIFFERENT_PASSWORD = "비밀번호가 일치하지 않습니다.",
+}
+
 export const FormContainerMarginTop = 100;
 export const FormInnerPadding = 40;
 export const Container = styled.div`
