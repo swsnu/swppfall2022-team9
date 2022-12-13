@@ -1,30 +1,62 @@
+import useAlert from "hooks/useAlert";
 import React, { useState } from "react";
+import { useAppDispatch } from "store/hooks";
+import { getForgotUsername, postForgotPassword } from "store/slices/account";
 import * as FormStyles from "styles/common.form.styles";
 
 enum ForgotAccountType {
   USERNAME = "USERNAME",
   PASSWORD = "PASSWORD",
 }
+
 const ForgotAccountPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  // TODO: remove "test" from useState
-  const [usernameResult, setUsernameResult] = useState<string>("test");
+  const [usernameResult, setUsernameResult] = useState<string>("");
   const [forgotAccountType, setForgotAccountType] = useState<ForgotAccountType>(
     ForgotAccountType.USERNAME,
   );
+  const dispatch = useAppDispatch();
+  const alert = useAlert();
 
-  const onSubmit = (e: React.SyntheticEvent) => {
+  const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    //TODO: implement forgot account logic (use redux account reducer)
     switch (forgotAccountType) {
       case ForgotAccountType.USERNAME:
-        //TODO implement this with dispatch
-        // setUsernameResult("TODO");
+        if (!email) return;
+        try {
+          const response = await dispatch(getForgotUsername(email)).unwrap();
+          setUsernameResult(response.username);
+        } catch (err) {
+          setUsernameResult("");
+          const status = err as number;
+          if (status === 404) {
+            alert.open({
+              message: "해당 이메일로 등록된 사용자 정보가 없습니다.",
+            });
+          } else {
+            alert.open({ message: "[서버 오류] 아이디 찾기에 실패했습니다." });
+          }
+        }
         break;
       case ForgotAccountType.PASSWORD:
-        //TODO implement this with dispatch
-        // alert.open({ message: "인증 이메일이 보내졌습니다." });
+        if (!username) return;
+        try {
+          alert.open({ message: "처리 중입니다...", buttons: [] });
+          await dispatch(postForgotPassword(username)).unwrap();
+          alert.open({ message: "등록된 이메일로 링크가 전송되었습니다." });
+        } catch (err) {
+          const status = err as number;
+          if (status === 404) {
+            alert.open({
+              message: "해당 아이디로 등록된 사용자 정보가 없습니다.",
+            });
+          } else {
+            alert.open({
+              message: "[서버 오류] 비밀번호 찾기에 실패했습니다.",
+            });
+          }
+        }
         break;
     }
   };
@@ -67,7 +99,7 @@ const ForgotAccountPage: React.FC = () => {
     <FormStyles.Container>
       <FormStyles.FormContainer>
         <FormStyles.Header>
-          <FormStyles.HeaderText>아아디/비밀번호 찾기</FormStyles.HeaderText>
+          <FormStyles.HeaderText>아이디 / 비밀번호 찾기</FormStyles.HeaderText>
         </FormStyles.Header>
         <FormStyles.Form onSubmit={onSubmit}>
           <FormStyles.Label>
@@ -75,6 +107,7 @@ const ForgotAccountPage: React.FC = () => {
               <FormStyles.Option>
                 <FormStyles.OptionCheckBox
                   role="findIdCheck"
+                  type="checkbox"
                   checked={forgotAccountType === ForgotAccountType.USERNAME}
                   onChange={() => {
                     setForgotAccountType(ForgotAccountType.USERNAME);
@@ -87,6 +120,7 @@ const ForgotAccountPage: React.FC = () => {
               <FormStyles.Option>
                 <FormStyles.OptionCheckBox
                   role="findPasswordCheck"
+                  type="checkbox"
                   checked={forgotAccountType === ForgotAccountType.PASSWORD}
                   onChange={() => {
                     setForgotAccountType(ForgotAccountType.PASSWORD);
@@ -106,7 +140,11 @@ const ForgotAccountPage: React.FC = () => {
                 role="forgotAccountInput"
                 value={inputValue(forgotAccountType)}
                 onChange={handleInputChange}
-                placeholder={'구현 예정 ㅜㅜ'}
+                placeholder={
+                  forgotAccountType === ForgotAccountType.USERNAME
+                    ? "email@snu.ac.kr"
+                    : "User ID"
+                }
               />
             </FormStyles.InputContainer>
           </FormStyles.Label>
@@ -123,7 +161,11 @@ const ForgotAccountPage: React.FC = () => {
             {submitButtonText(forgotAccountType)}
           </FormStyles.Submit>
           {usernameResult && (
-            <FormStyles.ExtraContainer>{`당신의 아이디는 ${usernameResult}입니다`}</FormStyles.ExtraContainer>
+            <FormStyles.UsernameContainer>
+              <FormStyles.UsernameText>당신의 아이디는</FormStyles.UsernameText>
+              <FormStyles.Username>{usernameResult}</FormStyles.Username>
+              <FormStyles.UsernameText>입니다</FormStyles.UsernameText>
+            </FormStyles.UsernameContainer>
           )}
         </FormStyles.Form>
       </FormStyles.FormContainer>
