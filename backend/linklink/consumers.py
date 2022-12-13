@@ -99,7 +99,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def get_last_50_messages(self):
-        messages = self.chat_room.messages.all().order_by("timeStamp")[0:50]
+        messages = reversed(
+            self.chat_room.messages.all().order_by("-timeStamp")[0:50]
+        )
         serialized = [
             {
                 "senderId": message.sender.id,
