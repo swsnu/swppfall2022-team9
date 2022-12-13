@@ -7,5 +7,5 @@ from ..routing import websocket_urlpatterns
 
 class RoutingTestCase(TestCase):
     def test(self):
-        tmp = ""
+        tmp = []
         tmp += websocket_urlpatterns
