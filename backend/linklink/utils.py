@@ -245,10 +245,10 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
     List[LinkLinkUser]
     """
 
-    added_ids = []
     linklinkuser_list_copy = linklinkuser_list
     for search_key in search_keys:
         linklinkuser_list_return = []
+        added_ids = []
 
         for linklinkuser in linklinkuser_list_copy:
             # exact match: Korean name
@@ -304,4 +304,4 @@ def get_filtered_linklinkuser_list(linklinkuser_list, search_keys):
                             break
         linklinkuser_list_copy = linklinkuser_list_return
 
-    return linklinkuser_list_copy
+    return linklinkuser_list_return
