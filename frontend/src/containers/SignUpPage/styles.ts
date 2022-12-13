@@ -3,10 +3,12 @@ import {
   NavbarVerticalPadding,
 } from "components/Navbar/styles";
 import styled from "styled-components";
+import {
+  FormContainerMarginTop,
+  FormInnerPadding,
+} from "styles/common.form.styles";
 import { ThemeColor } from "styles/common.styles";
 
-export const FormContainerMarginTop = 150;
-export const FormInnerPadding = 40;
 export const Container = styled.div`
   /* width: 100%; */
   min-height: calc(
@@ -67,7 +69,6 @@ export const LabelText = styled.div`
   padding-top: 12px;
   font-size: 14px;
   height: 100%;
-  margin-right: 30px;
 `;
 
 export const InputContainerMinHeight = 36;

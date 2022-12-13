@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { friendRequestActions } from "store/slices/friendRequests";
 import { getSignOut } from "store/slices/users";
 import { putAccount } from "store/slices/account";
 import { checkEmailUnique } from "store/slices/users";
-import * as S from "styles/common.form.styles";
-import * as T from "../SignUpPage/styles";
+import * as Common from "styles/common.form.styles";
+import * as S from "../SignUpPage/styles";
 import useAlert from "hooks/useAlert";
 import { emailRegex } from "utils/email";
 
@@ -148,11 +148,21 @@ const AccountPage: React.FC = () => {
   //   });
   // };
 
+  useEffect(() => {
+    if (currentUser) {
+      setAccountInfo({
+        firstname: currentUser.firstname,
+        lastname: currentUser.lastname,
+        email: currentUser.email,
+      });
+    }
+  }, [currentUser]);
+
   return (
     <S.Container>
       <S.FormContainer>
         <S.Header>
-          <S.HeaderText>개인 정보</S.HeaderText>
+          <S.HeaderText>개인 정보 수정</S.HeaderText>
         </S.Header>
         <S.Form role="submit" onSubmit={onClickSubmit}>
           <S.Label>
@@ -161,7 +171,7 @@ const AccountPage: React.FC = () => {
               <S.Input
                 maxLength={maxNameLength}
                 role="lastname"
-                value={currentUser ? currentUser.lastname : ""}
+                value={accountInfo.lastname}
                 onChange={e => {
                   setAccountInfo(prev => ({
                     ...prev,
@@ -184,7 +194,7 @@ const AccountPage: React.FC = () => {
               <S.Input
                 maxLength={maxNameLength}
                 role="firstname"
-                value={currentUser ? currentUser.firstname : ""}
+                value={accountInfo.firstname}
                 onChange={e => {
                   setAccountInfo(prev => ({
                     ...prev,
@@ -209,6 +219,7 @@ const AccountPage: React.FC = () => {
                 name="email"
                 role="email"
                 autoComplete="on"
+                value={accountInfo.email}
                 maxLength={maxEmailLength}
                 onChange={e => {
                   setIsEmailChanged(true);
@@ -229,24 +240,23 @@ const AccountPage: React.FC = () => {
                 </S.InputHelper>
               )}
             </S.InputContainer>
-            <T.UniqueCheckButton
+            <S.UniqueCheckButton
               disabled={isEmailValid ? false : true}
               type="button"
               onClick={onClickCheckEmail}
             >
               중복 확인
-            </T.UniqueCheckButton>
+            </S.UniqueCheckButton>
           </S.Label>
           <S.Label>
-            <S.LabelText>비밀번호</S.LabelText>
             <S.InputContainer>
-              <S.FormInnerButton
+              <Common.FormInnerButton
                 role="changePassword"
                 style={{ fontWeight: "bold" }}
                 onClick={onClickChangePassword}
               >
                 비밀번호 변경하기
-              </S.FormInnerButton>
+              </Common.FormInnerButton>
             </S.InputContainer>
           </S.Label>
           <S.Submit backgroundColor="#D9D9D9" onClick={onClickLogout}>
