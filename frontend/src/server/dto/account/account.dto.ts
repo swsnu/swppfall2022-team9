@@ -13,3 +13,8 @@ export interface AccountInfo {
 }
 
 export interface PutAccountDto extends AccountInfo {}
+
+export interface PutForgotPasswordDto {
+  token: string;
+  newPassword: string;
+}

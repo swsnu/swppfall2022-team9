@@ -4,7 +4,7 @@ import {
 } from "components/Navbar/styles";
 import { IoCloseOutline } from "react-icons/io5";
 import { DEFAULT_IMAGE_URL } from "server/models/profile.model";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { ThemeColor } from "styles/common.styles";
 
 export enum HelperText {
@@ -87,13 +87,14 @@ export const OptionsContainer = styled.div`
 export const Option = styled.div`
   display: flex;
   flex: 1 0;
+  align-items: center;
 `;
 
-export const OptionText = styled.div`
+export const OptionText = styled.label`
   padding: 0 5px;
 `;
 
-export const OptionCheckBox = styled.input.attrs({ type: "checkbox" })`
+export const OptionCheckBox = styled.input<{ checked: boolean }>`
   appearance: none;
   width: 16px;
   height: 16px;
@@ -101,12 +102,31 @@ export const OptionCheckBox = styled.input.attrs({ type: "checkbox" })`
   cursor: pointer;
   text-align: center;
   color: white;
-  &:checked {
-    background: black 50% 50% no-repeat;
-  }
-  &:after {
-    content: "✔︎";
-  }
+
+  ${props =>
+    props.checked &&
+    css`
+      &::after {
+        content: "✔︎";
+      }
+    `}
+`;
+
+export const UsernameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+export const Username = styled.div`
+  font-weight: bold;
+  font-size: 20px;
+`;
+
+export const UsernameText = styled.div`
+  padding: 10px 0;
+  opacity: 0.5;
 `;
 
 export const InputContainerMinHeight = 36;

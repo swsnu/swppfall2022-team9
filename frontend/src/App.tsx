@@ -55,8 +55,11 @@ const App = () => {
                 path="password"
                 element={<AuthenticatedChangePasswordPage />}
               />
-              <Route path="password/:token" element={<ChangePasswordPage />} />
             </Route>
+            <Route
+              path="/verify/password/:token"
+              element={<ChangePasswordPage />}
+            />
             <Route path="/verify/:token" element={<VerifyRegisterPage />} />
             <Route path="/chat/" element={<ChatRoomListPage />} />
             <Route path="/chat/:chatRoomName/" element={<ChatRoomPage />} />

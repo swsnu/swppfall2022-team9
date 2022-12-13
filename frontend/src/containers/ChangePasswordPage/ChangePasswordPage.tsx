@@ -1,58 +1,43 @@
-import SingleMessagePage from "components/SingleMessagePage/SingleMessagePage";
 import useAlert from "hooks/useAlert";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "store/hooks";
-import { putPassword } from "store/slices/account";
-import { verifyRegisterToken } from "store/slices/users";
-import * as FormStyles from "styles/common.form.styles";
+import { putForgotPassword } from "store/slices/account";
+
+import { HelperText } from "styles/common.form.styles";
+import * as S from "../SignUpPage/styles";
 
 const ChangePasswordPage: React.FC = () => {
   const { token } = useParams();
-  const [isTokenVerified, setIsTokenVerified] = useState<boolean>(false);
   const [passwordInfo, setPasswordInfo] = useState<{
     password: string;
-    passwordCheck: string;
-  }>({ password: "", passwordCheck: "" });
+    passwordConfirm: string;
+  }>({ password: "", passwordConfirm: "" });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const [isSubmitClicked, setIsSubmitClicked] = useState<boolean>(false);
   const alert = useAlert();
-
-  // TODO check if the token is verified!
-  const verifyPasswordToken = async (tokenToVerify: string) => {
-    try {
-      await dispatch(verifyRegisterToken(tokenToVerify)).unwrap();
-      setIsTokenVerified(true);
-    } catch (err) {
-      setIsTokenVerified(false);
-    }
-  };
-  useEffect(() => {
-    // TODO check if the token is verified!
-    if (token) {
-      verifyPasswordToken(token);
-    }
-  }, [token]);
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (passwordInfo.password !== passwordInfo.passwordCheck) {
-      alert.open({
-        message: "입력하신 새 비밀번호가 서로 일치하지 않습니다.",
-      });
-    } else {
+    setIsSubmitClicked(true);
+    if (
+      passwordInfo.password &&
+      passwordInfo.passwordConfirm &&
+      passwordInfo.password === passwordInfo.passwordConfirm
+    ) {
       try {
         await dispatch(
-          putPassword({
+          putForgotPassword({
+            token: token!,
             newPassword: passwordInfo.password,
           }),
-        );
+        ).unwrap();
         alert.open({
-          message: `비밀번호가 변경되었습니다.`,
+          message: `비밀번호가 재설정되었습니다.`,
           buttons: [
             {
-              label: "확인",
+              label: "홈페이지로 이동",
               onClick: () => {
                 alert.close();
                 navigate("/");
@@ -61,40 +46,48 @@ const ChangePasswordPage: React.FC = () => {
           ],
         });
       } catch (err) {
-        alert.open({
-          message: "비밀번호 변경에 실패하였습니다.",
-        });
+        const status = err as number;
+        if (status === 401) {
+          alert.open({
+            message:
+              "비밀번호 재설정 유효시간이 만료되었습니다. 비밀번호 찾기를 다시 진행해주세요",
+            buttons: [
+              {
+                label: "아이디/비밀번호 찾기 페이지로 이동",
+                onClick: () => {
+                  alert.close();
+                  navigate("/account/forgot");
+                },
+              },
+            ],
+          });
+        } else if (status === 404) {
+          alert.open({
+            message: "유효하지 않은 토큰입니다.",
+          });
+        } else {
+          alert.open({
+            message: "[서버 오류] 비밀번호 재설정에 실패했습니다.",
+          });
+        }
       }
     }
   };
 
-  const goToForgotAccount = () => {
-    navigate("/account/forgot");
-  };
-
-  if (!isTokenVerified) {
-    return (
-      <SingleMessagePage
-        message="비밀번호 변경 유효시간이 만료되었습니다. 다시 비밀번호 찾기를 진행해주세요"
-        isButtonVisible={true}
-        buttonText="아이디/비밀번호 찾기 페이지로 이동"
-        onClickButton={goToForgotAccount}
-      />
-    );
-  }
   return (
-    <FormStyles.Container>
-      <FormStyles.FormContainer>
-        <FormStyles.Header>
-          <FormStyles.HeaderText>비밀번호 변경</FormStyles.HeaderText>
-        </FormStyles.Header>
-        <FormStyles.Form onSubmit={onSubmit}>
-          <FormStyles.Label>
-            <FormStyles.LabelText>새로운 비밀번호</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input
+    <S.Container>
+      <S.FormContainer>
+        <S.Header>
+          <S.HeaderText>비밀번호 재설정</S.HeaderText>
+        </S.Header>
+        <S.Form onSubmit={onSubmit}>
+          <S.Label>
+            <S.LabelText>새 비밀번호</S.LabelText>
+            <S.InputContainer>
+              <S.Input
+                type="password"
                 role="passwordInput"
-                placeholder="새로운 비밀번호"
+                placeholder="새 비밀번호"
                 value={passwordInfo.password}
                 onChange={e => {
                   setPasswordInfo(prev => ({
@@ -103,40 +96,54 @@ const ChangePasswordPage: React.FC = () => {
                   }));
                 }}
               />
-            </FormStyles.InputContainer>
-          </FormStyles.Label>
-          <FormStyles.Label>
-            <FormStyles.LabelText>비밀번호 확인</FormStyles.LabelText>
-            <FormStyles.InputContainer>
-              <FormStyles.Input
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {passwordInfo.password
+                    ? HelperText.NO_ERROR
+                    : HelperText.REQUIRED}
+                </S.InputHelper>
+              )}
+            </S.InputContainer>
+          </S.Label>
+          <S.Label>
+            <S.LabelText>비밀번호 확인</S.LabelText>
+            <S.InputContainer>
+              <S.Input
+                type="password"
                 role="passwordCheckInput"
                 placeholder="비밀번호 확인"
-                value={passwordInfo.passwordCheck}
+                value={passwordInfo.passwordConfirm}
                 onChange={e => {
                   setPasswordInfo(prev => ({
                     ...prev,
-                    passwordCheck: e.target.value,
+                    passwordConfirm: e.target.value,
                   }));
                 }}
               />
-            </FormStyles.InputContainer>
-          </FormStyles.Label>
-          <FormStyles.Submit
+              {isSubmitClicked && (
+                <S.InputHelper>
+                  {passwordInfo.password === passwordInfo.passwordConfirm
+                    ? passwordInfo.passwordConfirm
+                      ? HelperText.NO_ERROR
+                      : HelperText.REQUIRED
+                    : HelperText.DIFFERENT_PASSWORD}
+                </S.InputHelper>
+              )}
+            </S.InputContainer>
+          </S.Label>
+          <S.Submit
             type="submit"
             role="submit"
             onClick={onSubmit}
             style={{
-              marginTop: 20,
-              width: "100%",
-              maxWidth: 340,
-              fontWeight: "bold",
+              marginTop: 0,
             }}
           >
-            비밀번호 변경
-          </FormStyles.Submit>
-        </FormStyles.Form>
-      </FormStyles.FormContainer>
-    </FormStyles.Container>
+            비밀번호 재설정하기
+          </S.Submit>
+        </S.Form>
+      </S.FormContainer>
+    </S.Container>
   );
 };
 
