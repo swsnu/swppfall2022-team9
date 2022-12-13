@@ -47,6 +47,10 @@ def chat_list(request):
                 chat_room_dict["lastTimeStamp"] = last_message.timeStamp
 
                 response_dict["chatRoomInfoList"].append(chat_room_dict)
+        response_dict["chatRoomInfoList"].sort(
+            key=lambda x: x["lastTimeStamp"],
+            reverse=True
+        )
         return JsonResponse(status=200, data=response_dict)
 
 
