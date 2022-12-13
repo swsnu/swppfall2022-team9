@@ -9,7 +9,7 @@ import {
   postSignUp,
 } from "store/slices/users";
 import * as S from "./styles";
-import { emailRegex } from "utils/email";
+import { checkEmailValidity } from "utils/email";
 import { HelperText } from "styles/common.form.styles";
 
 interface Props {}
@@ -59,10 +59,6 @@ const SignUpPage: React.FC<Props> = () => {
       }
     });
     return isFormValid && isEmailUnique && isUsernameUnique;
-  };
-
-  const checkEmailValidity = (email: string) => {
-    return emailRegex.test(email);
   };
 
   const onSubmit = useCallback(

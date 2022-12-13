@@ -7,14 +7,8 @@ import { getAccount, putAccount } from "store/slices/account";
 import { checkEmailUnique } from "store/slices/users";
 import * as S from "./styles";
 import useAlert from "hooks/useAlert";
-import { emailRegex } from "utils/email";
-
-export enum HelperText {
-  NO_ERROR = "",
-  REQUIRED = "필수 정보입니다.",
-  UNVERIFIED_EMAIL = "이메일 중복 확인을 진행해주세요.",
-  INVALID_EMAIL = "잘못된 이메일 형식입니다.",
-}
+import { checkEmailValidity } from "utils/email";
+import { HelperText } from "styles/common.form.styles";
 
 interface PutAccountInfo {
   firstname: string;
@@ -58,10 +52,6 @@ const AccountPage: React.FC = () => {
       }
     });
     return isFormValid && isEmailUnique;
-  };
-
-  const checkEmailValidity = (email: string) => {
-    return emailRegex.test(email);
   };
 
   const onClickChangePassword = () => {
