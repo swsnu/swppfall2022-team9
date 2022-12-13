@@ -9,19 +9,31 @@ export const BackgroundContainer = styled.div`
   background-color: #f8f8f8;
   display: flex;
   justify-content: center;
-
   min-height: calc(100vh - ${NavbarHeight}px);
 `;
+
+export const GoToChatRoomListPageButton = styled.button`
+  display: flex;
+  background: none;
+  border: none;
+  align-items: center;
+  margin-top: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  font-size: 15px;
+  align-self: baseline;
+`;
+
 export const Container = styled.div`
   width: 100%;
   margin-top: 20px;
   max-width: 700px;
-  /* min-height: calc(100vh - ${NavbarHeight +
-  ChatRoomListPagePaddingTop}px); */
   padding: ${ChatRoomListPagePaddingTop / 2}px 20px;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
 `;
 
 export const Title = styled.div`
@@ -37,7 +49,7 @@ export const ListContainer = styled.div`
     rgba(121, 154, 237, 0.116) 100%
   ); */
   background-color: white;
-  height: 75vh;
+  height: 70vh;
   padding: 10px 15px;
   margin-bottom: 10px;
   overflow: auto;

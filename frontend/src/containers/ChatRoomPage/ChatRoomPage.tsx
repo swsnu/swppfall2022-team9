@@ -4,7 +4,8 @@ import * as S from "./styles";
 import { Message } from "server/models/chat.model";
 import ChatMessage from "./ChatMessage/ChatMessage";
 import { compareTimeStampWtihinDay } from "utils/timeStamp";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { BiLeftArrowAlt } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getCurrentChatRoomInfo } from "store/slices/chat";
 interface Props {}
@@ -24,6 +25,7 @@ const ChatRoomPage: React.FC<Props> = () => {
   const [messageInput, setMessageInput] = useState<string>("");
   const messageRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const wsScheme = isDevMode ? "ws" : "wss";
   const serverAddress = isDevMode ? "127.0.0.1:8000" : "hoshiwoobo.shop:8001";
   const { sendJsonMessage } = useWebSocket(
@@ -160,6 +162,14 @@ const ChatRoomPage: React.FC<Props> = () => {
           </S.Submit>
         </S.Form>
       </S.Container>
+      <S.GoToChatRoomListPageButton
+        onClick={() => {
+          navigate("/chat/");
+        }}
+      >
+        <BiLeftArrowAlt size={22} />
+        채팅 목록으로 돌아가기
+      </S.GoToChatRoomListPageButton>
     </S.BackgroundContainer>
   );
 };
