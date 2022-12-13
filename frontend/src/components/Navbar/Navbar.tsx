@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as S from "./styles";
 import logo from "assets/img/logo.png";
-import { IoPersonOutline, IoChatboxEllipsesOutline } from "react-icons/io5";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { RiUserSettingsLine } from "react-icons/ri";
 import { VscBell, VscSearch } from "react-icons/vsc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
@@ -127,7 +128,7 @@ const Navbar: React.FC<Props> = () => {
       </S.LogoContainer>
       <S.NavButtonsContainer>
         <S.NavButtons>
-          <IoPersonOutline
+          <RiUserSettingsLine
             role="account"
             size={"100%"}
             style={{ cursor: "pointer" }}
