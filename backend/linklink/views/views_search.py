@@ -53,6 +53,7 @@ def search_friends(request, search_keys):
             onechon_dict["isTwoChon"] = False
             onechon_dict["chons"] = []
             onechon_dict["isNotSearched"] = False
+
             if onechon_linklinkuser not in filtered_onechon_list:
                 onechon_dict["isNotSearched"] = True
 
