@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "test-utils/mocks";
 import ChangePasswordPage from "./ChangePasswordPage";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
@@ -54,16 +54,6 @@ describe("<ChangePasswordPage/>", () => {
       open: jest.fn(),
       close: jest.fn(),
     };
-  });
-
-  it("renders Change Password no token", async () => {
-    render(<ChangePasswordPage />);
-    waitFor(() => expect(mockNavigate).toHaveBeenCalled());
-    const simpleMessageButton = await waitFor(() =>
-      screen.getByRole("simpleMessageButton"),
-    );
-    fireEvent.click(simpleMessageButton);
-    expect(mockNavigate).toHaveBeenCalled();
   });
 
   it("renders change password with token", async () => {
