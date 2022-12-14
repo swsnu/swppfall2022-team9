@@ -1,78 +1,110 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { renderWithProviders } from "test-utils/mocks";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import axios from "axios";
+import { AlertContextProvider } from "containers/Context/AlertContext/AlertContext";
+import { Provider } from "react-redux";
+import store from "store";
 import ForgotAccountPage from "./ForgotAccountPage";
-import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
 
-const renderForgotAccountPage = (alertProviderProps?: AlertContextProps) => {
-  renderWithProviders(
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={<ForgotAccountPage />} />
-      </Routes>
-    </MemoryRouter>,
-    { preloadedState: {} },
-    alertProviderProps,
+const renderForgotAccountPage = () => {
+  render(
+    <AlertContextProvider>
+      <Provider store={store}>
+        <ForgotAccountPage />
+      </Provider>
+    </AlertContextProvider>,
   );
 };
 
 describe("<ForgotAccountPage/>", () => {
-  let alertProviderProps: AlertContextProps;
   beforeEach(() => {
     jest.clearAllMocks();
-    alertProviderProps = {
-      open: jest.fn(),
-      close: jest.fn(),
-    };
   });
 
-  it("checks id check", async () => {
-    renderForgotAccountPage(alertProviderProps);
-    // await waitFor(() => screen.getByText("아이디 찾기"));
+  it("tests id and password check", async () => {
+    axios.get = jest.fn().mockResolvedValueOnce({ data: { username: "재승" } });
+    renderForgotAccountPage();
     const idCheckInput = screen.getByRole("findIdCheck");
-    fireEvent.click(idCheckInput);
-    const emailInput = await waitFor(() =>
-      screen.getByRole("forgotAccountInput"),
-    );
-    fireEvent.change(emailInput, { target: { value: "swpp@snu.ac.kr" } });
-    // await waitFor(() => screen.getByText("swpp@snu.ac.kr"));
-    const submitButton = await waitFor(() =>
-      screen.getByRole("button", {
-        name: "아이디 조회",
-      }),
-    );
-    fireEvent.click(submitButton);
     const passwordCheckInput = screen.getByRole("findPasswordCheck");
+    const submitButton = screen.getByRole("button");
+    fireEvent.click(idCheckInput);
 
-    fireEvent.click(passwordCheckInput);
-    await waitFor(() => screen.getByText("인증 이메일 보내기"));
-    fireEvent.click(idCheckInput, {
-      target: { checked: false },
+    const emailInput = await screen.findByLabelText("이메일 입력");
+    fireEvent.click(submitButton);
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: "swpp@snu.ac.kr" } });
     });
+    fireEvent.click(submitButton);
+    await screen.findByText("재승");
+
+    axios.get = jest.fn().mockResolvedValueOnce({ data: {} });
+    axios.post = jest.fn().mockResolvedValueOnce({});
+    fireEvent.click(passwordCheckInput);
+    const usernameInput = await screen.findByLabelText("아이디 입력");
+    fireEvent.click(submitButton);
+    await act(async () => {
+      fireEvent.change(usernameInput, { target: { value: "wotmd" } });
+    });
+    fireEvent.click(submitButton);
+    await screen.findByText("등록된 이메일로 링크가 전송되었습니다.");
   });
 
-  it("checks password check", async () => {
-    renderForgotAccountPage(alertProviderProps);
-    const passwordCheckInput = screen.getByRole("findPasswordCheck");
-    fireEvent.click(passwordCheckInput);
-    const submitButton = await waitFor(() =>
-      screen.getByRole("button", {
-        name: "인증 이메일 보내기",
-      }),
-    );
-    const usernameInput = await waitFor(() =>
-      screen.getByRole("forgotAccountInput"),
-    );
-    fireEvent.change(usernameInput, { target: { value: "swpp" } });
-    // await waitFor(() => screen.getByText("swpp"));
-    fireEvent.click(submitButton);
+  it("tests id 404 error", async () => {
+    axios.get = jest.fn().mockRejectedValueOnce({ response: { status: 404 } });
+    renderForgotAccountPage();
     const idCheckInput = screen.getByRole("findIdCheck");
+    const submitButton = screen.getByRole("button");
     fireEvent.click(idCheckInput);
-    await waitFor(() => screen.getByText("아이디 조회"));
-    fireEvent.click(passwordCheckInput, {
-      target: { checked: false },
+
+    const emailInput = await screen.findByLabelText("이메일 입력");
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: "swpp@snu.ac.kr" } });
     });
+    fireEvent.click(submitButton);
+    await screen.findByText("해당 이메일로 등록된 사용자 정보가 없습니다.");
   });
 
-  // TODO add tests for dispatch
+  it("tests id server error", async () => {
+    axios.get = jest.fn().mockRejectedValueOnce({ response: { status: 500 } });
+    renderForgotAccountPage();
+    const idCheckInput = screen.getByRole("findIdCheck");
+    const submitButton = screen.getByRole("button");
+    fireEvent.click(idCheckInput);
+
+    const emailInput = await screen.findByLabelText("이메일 입력");
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: "swpp@snu.ac.kr" } });
+    });
+    fireEvent.click(submitButton);
+    await screen.findByText("[서버 오류] 아이디 찾기에 실패했습니다.");
+  });
+
+  it("tests password 404 error", async () => {
+    axios.post = jest.fn().mockRejectedValueOnce({ response: { status: 404 } });
+    renderForgotAccountPage();
+    const passwordCheckInput = screen.getByRole("findPasswordCheck");
+    const submitButton = screen.getByRole("button");
+    fireEvent.click(passwordCheckInput);
+
+    const usernameInput = await screen.findByLabelText("아이디 입력");
+    await act(async () => {
+      fireEvent.change(usernameInput, { target: { value: "wotmd" } });
+    });
+    fireEvent.click(submitButton);
+    await screen.findByText("해당 아이디로 등록된 사용자 정보가 없습니다.");
+  });
+
+  it("tests password server error", async () => {
+    axios.post = jest.fn().mockRejectedValueOnce({ response: { status: 500 } });
+    renderForgotAccountPage();
+    const passwordCheckInput = screen.getByRole("findPasswordCheck");
+    const submitButton = screen.getByRole("button");
+    fireEvent.click(passwordCheckInput);
+
+    const usernameInput = await screen.findByLabelText("아이디 입력");
+    await act(async () => {
+      fireEvent.change(usernameInput, { target: { value: "wotmd" } });
+    });
+    fireEvent.click(submitButton);
+    await screen.findByText("[서버 오류] 비밀번호 찾기에 실패했습니다.");
+  });
 });
