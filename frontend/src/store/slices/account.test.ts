@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import accountReducer, {
   AccountState,
+  getAccount,
   postPasswordUnauthenticated,
   putAccount,
   putPassword,
@@ -50,6 +51,16 @@ describe("friend request reducer", () => {
   it("tests put password", async () => {
     axios.put = jest.fn().mockResolvedValue({});
     await store.dispatch(putPassword({ newPassword: "test" }));
+  });
+
+  it("tests get account", async () => {
+    axios.get = jest.fn().mockResolvedValue({});
+    await store.dispatch(getAccount());
+  });
+
+  it("tests get account error", async () => {
+    axios.get = jest.fn().mockRejectedValue({});
+    await store.dispatch(getAccount());
   });
 
   it("tests put account", async () => {
