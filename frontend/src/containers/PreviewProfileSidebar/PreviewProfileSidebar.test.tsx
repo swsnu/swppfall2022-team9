@@ -1,13 +1,8 @@
-import { renderWithProviders } from "test-utils/mocks";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { User } from "server/models/users.model";
 import { OneChonInfo } from "types/friend.types";
 import { Profile } from "server/models/profile.model";
 import { QualityTags } from "server/models/qualityTags.model";
-import {
-  AlertContextProps,
-  AlertContextProvider,
-} from "containers/Context/AlertContext/AlertContext";
+import { AlertContextProvider } from "containers/Context/AlertContext/AlertContext";
 import { profileStub, profileStub2 } from "server/stubs/profiles.stub";
 import { friendListStub, usersStub } from "server/stubs/users.stub";
 import { screen, fireEvent, act, render } from "@testing-library/react";
