@@ -303,15 +303,10 @@ const AccountPage: React.FC = () => {
           <S.FormOuterButton
             role="changePassword"
             onClick={onClickChangePassword}
-            maxWidth={200}
           >
             비밀번호 변경
           </S.FormOuterButton>
-          <S.FormOuterButton
-            backgroundColor="#D9D9D9"
-            maxWidth={200}
-            onClick={onClickLogout}
-          >
+          <S.FormOuterButton backgroundColor="#D9D9D9" onClick={onClickLogout}>
             로그아웃
           </S.FormOuterButton>
         </S.FormOuterButtonContainer>
