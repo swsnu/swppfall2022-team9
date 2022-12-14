@@ -5,7 +5,8 @@ import reducer, {
   UserState,
   verifyRegisterToken,
   checkEmailUnique,
-  checkUsernameUnique
+  checkUsernameUnique,
+  userActions,
 } from "./users";
 import { ThunkMiddleware } from "redux-thunk";
 import { postSignUp, postSignIn, getSignOut } from "./users";
@@ -79,9 +80,7 @@ describe("users reducer", () => {
   });
 
   it("tests verify get Session Cookie rejected", async () => {
-    axios.get = jest
-      .fn()
-      .mockRejectedValue({});
+    axios.get = jest.fn().mockRejectedValue({});
     await store.dispatch(getSessionCookie());
   });
 
@@ -113,25 +112,27 @@ describe("users reducer", () => {
   });
 
   it("tests check email unique", async () => {
-    axios.post = jest
-      .fn()
-      .mockReturnValue({});
+    axios.post = jest.fn().mockReturnValue({});
     await store.dispatch(checkEmailUnique("hi"));
   });
 
   it("tests check email unique", async () => {
-    axios.post = jest
-      .fn()
-      .mockReturnValue({});
+    axios.post = jest.fn().mockReturnValue({});
     await store.dispatch(checkUsernameUnique("hi"));
   });
 
   it("tests post sign in error", async () => {
-    axios.post = jest
-      .fn()
-      .mockRejectedValue({});
-    await store.dispatch(postSignIn({
-      username: usersStub[0].username,
-      password: usersStub[0].password,}));
+    axios.post = jest.fn().mockRejectedValue({});
+    await store.dispatch(
+      postSignIn({
+        username: usersStub[0].username,
+        password: usersStub[0].password,
+      }),
+    );
+  });
+
+  it("tests clearFriendList", async () => {
+    store.dispatch(userActions.clearFriendList());
+    expect(store.getState().users.friendList).toEqual([]);
   });
 });
