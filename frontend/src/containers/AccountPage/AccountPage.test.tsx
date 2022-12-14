@@ -1,9 +1,15 @@
-import { screen, fireEvent } from "@testing-library/react";
-import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
+import { screen, fireEvent, render, act } from "@testing-library/react";
+import {
+  AlertContextProps,
+  AlertContextProvider,
+} from "containers/Context/AlertContext/AlertContext";
+import { Provider } from "react-redux";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { usersStub } from "server/stubs/users.stub";
 import { renderWithProviders } from "test-utils/mocks";
 import AccountPage from "./AccountPage";
+import { setupStore } from "store/slices";
+import store from "store";
 
 const renderAccountPage = (alertProviderProps?: AlertContextProps) => {
   renderWithProviders(
@@ -42,6 +48,19 @@ jest.mock("react-router", () => ({
 
 describe("<AccountPage/>", () => {
   let alertProviderProps: AlertContextProps;
+  const preloadedState = {
+    users: {
+      currentUser: usersStub[0],
+      friendList: [],
+    },
+    account: {
+      currentAccountInfo: {
+        lastname: usersStub[0].lastname,
+        firstname: usersStub[0].firstname,
+        email: usersStub[0].email,
+      },
+    },
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -79,12 +98,180 @@ describe("<AccountPage/>", () => {
   it("tests value change", async () => {
     renderAccountPage(alertProviderProps);
     const lastname = screen.getByRole("lastname");
-    fireEvent.change(lastname, {target: {value: "hi"}});
+    fireEvent.change(lastname, { target: { value: "hi" } });
     const firstname = screen.getByRole("firstname");
-    fireEvent.change(firstname, {target: {value: "hi"}});
+    fireEvent.change(firstname, { target: { value: "hi" } });
     const email = screen.getByRole("email");
-    fireEvent.change(email, {target: {value: "hi"}});
-  
-  
+    fireEvent.change(email, { target: { value: "hi" } });
+  });
+
+  it("should change account with valid form", async () => {
+    mockDispatch.mockReturnValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AccountPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputLastName = screen.getByLabelText("성");
+    const inputFirstName = screen.getByLabelText("이름");
+    const inputEmail = screen.getByLabelText("이메일");
+
+    const emailButton = screen.getAllByRole("button")[0];
+    const submitButton = screen.getByRole("button", { name: "수정하기" });
+
+    await act(async () => {
+      fireEvent.change(inputLastName, { target: { value: "" } });
+      fireEvent.change(inputFirstName, { target: { value: "" } });
+      fireEvent.change(inputEmail, { target: { value: "" } });
+    });
+
+    fireEvent.click(submitButton);
+
+    await act(async () => {
+      fireEvent.change(inputLastName, { target: { value: "권" } });
+      fireEvent.change(inputFirstName, { target: { value: "나라" } });
+      fireEvent.change(inputEmail, { target: { value: "ddd" } });
+      fireEvent.change(inputEmail, { target: { value: "swpptest@snu.ac.kr" } });
+    });
+
+    screen.getByDisplayValue("권");
+    screen.getByDisplayValue("나라");
+    screen.getByDisplayValue("swpptest@snu.ac.kr");
+
+    await act(async () => {
+      fireEvent.click(emailButton);
+    });
+
+    const emailConfirmButton = await screen.findByText("확인");
+
+    await act(async () => {
+      fireEvent.click(emailConfirmButton);
+      fireEvent.click(submitButton);
+    });
+
+    const modalButton = await screen.findByRole("button", { name: "확인" });
+    fireEvent.click(modalButton);
+  });
+
+  it("not changing email", async () => {
+    mockDispatch.mockReturnValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AccountPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputLastName = screen.getByLabelText("성");
+    const inputFirstName = screen.getByLabelText("이름");
+    const submitButton = screen.getByRole("button", { name: "수정하기" });
+
+    await act(async () => {
+      fireEvent.change(inputLastName, { target: { value: "권" } });
+      fireEvent.change(inputFirstName, { target: { value: "나라" } });
+    });
+
+    screen.getByDisplayValue("권");
+    screen.getByDisplayValue("나라");
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+
+    const modalButton = await screen.findByRole("button", { name: "확인" });
+    fireEvent.click(modalButton);
+  });
+
+  it("tests server error for submission", async () => {
+    mockDispatch.mockResolvedValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AccountPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+
+    const inputLastName = screen.getByLabelText("성");
+    const inputFirstName = screen.getByLabelText("이름");
+    const submitButton = screen.getByRole("button", { name: "수정하기" });
+
+    await act(async () => {
+      fireEvent.change(inputLastName, { target: { value: "권" } });
+      fireEvent.change(inputFirstName, { target: { value: "나라" } });
+    });
+
+    screen.getByDisplayValue("권");
+    screen.getByDisplayValue("나라");
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
+  });
+
+  it("tests duplicated email", async () => {
+    mockDispatch.mockResolvedValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AccountPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputLastName = screen.getByLabelText("성");
+    const inputFirstName = screen.getByLabelText("이름");
+    const inputEmail = screen.getByLabelText("이메일");
+
+    const emailButton = screen.getAllByRole("button")[0];
+
+    await act(async () => {
+      fireEvent.change(inputLastName, { target: { value: "권" } });
+      fireEvent.change(inputFirstName, { target: { value: "나라" } });
+      fireEvent.change(inputEmail, { target: { value: "swpptest@snu.ac.kr" } });
+    });
+
+    screen.getByDisplayValue("권");
+    screen.getByDisplayValue("나라");
+    screen.getByDisplayValue("swpptest@snu.ac.kr");
+
+    await act(async () => {
+      fireEvent.click(emailButton);
+    });
+
+    const emailConfirmButton = await screen.findByText("확인");
+
+    await act(async () => {
+      fireEvent.click(emailConfirmButton);
+    });
+  });
+
+  it("tests server error for fetchgin account info", async () => {
+    mockDispatch.mockResolvedValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={setupStore(preloadedState)}>
+          <AccountPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+
+    const confirmButton = await screen.findByText("확인");
+
+    await act(async () => {
+      fireEvent.click(confirmButton);
+    });
+  });
+
+  it("no current user", async () => {
+    mockDispatch.mockResolvedValue({ unwrap: () => {} });
+    render(
+      <AlertContextProvider>
+        <Provider store={store}>
+          <AccountPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
   });
 });

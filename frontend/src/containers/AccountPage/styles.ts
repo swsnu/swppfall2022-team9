@@ -130,14 +130,13 @@ export const FormOuterButtonContainer = styled.div`
 
 export const FormOuterButton = styled.button<{
   backgroundColor?: string;
-  maxWidth?: number;
 }>`
   background: none;
   cursor: pointer;
   background-color: ${props => props.backgroundColor || ThemeColor};
   border: none;
   width: 100%;
-  max-width: ${props => `${props.maxWidth}px` || 100};
+  max-width: 200px;
   border-radius: 10px;
   padding: 10px 0;
   color: black;
