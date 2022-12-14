@@ -23,12 +23,12 @@ const PreviewProfileSidebar: React.FC = () => {
   const previewProfile = useAppSelector(state => state.profile.previewProfile);
   const friendList = useAppSelector(state => state.users.friendList);
   const currentUser = useAppSelector(state => state.users.currentUser);
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const alert = useAlert();
   const oneChonIdToExpandNetwork = useAppSelector(
     state => state.canvas.oneChonIdToExpandNetwork,
   );
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const alert = useAlert();
 
   const [existingFriendRequest, setExistingFriendRequest] =
     useState<FriendRequest | null>(null);
@@ -45,6 +45,8 @@ const PreviewProfileSidebar: React.FC = () => {
         }),
       ).unwrap();
       setExistingFriendRequest(friendRequest);
+      console.log(existingFriendRequest);
+      console.log(friendRequest);
     } catch (err) {
       setExistingFriendRequest(null);
     }
@@ -171,12 +173,10 @@ const PreviewProfileSidebar: React.FC = () => {
               role="expand_network"
               disabled={false}
               onClick={() => {
-                if (profile) {
-                  if (!oneChonIdToExpandNetwork) {
-                    expandNetworkOnUser(profile.id);
-                  } else {
-                    expandNetworkOnUser(null);
-                  }
+                if (!oneChonIdToExpandNetwork) {
+                  expandNetworkOnUser(profile!.id);
+                } else {
+                  expandNetworkOnUser(null);
                 }
               }}
             >

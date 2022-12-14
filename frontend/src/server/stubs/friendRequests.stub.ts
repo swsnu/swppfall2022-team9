@@ -60,4 +60,28 @@ export const friendRequestsStub: Array<FriendRequest> = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
+  {
+    id: 8,
+    senderId: 8,
+    getterId: 1,
+    status: FriendRequestStatus.ACCEPTED,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 9,
+    senderId: 1,
+    getterId: 17,
+    status: FriendRequestStatus.PENDING,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 10,
+    senderId: 1,
+    getterId: 19,
+    status: FriendRequestStatus.REJECTED,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
 ];
