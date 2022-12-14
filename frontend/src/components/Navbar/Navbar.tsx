@@ -107,8 +107,12 @@ const Navbar: React.FC<Props> = () => {
       if (location.pathname === "/") {
         dispatch(searchActions.toggleSearchMode());
       } else {
-        navigate("/");
+        dispatch(userActions.clearFriendList());
+        dispatch(profileActions.setPreviewProfile(null));
+        dispatch(canvasActions.setOneChonIdToExpandNetwork(null));
+        dispatch(canvasActions.setIsPanZoomed(false));
         dispatch(searchActions.SearchModeOn());
+        navigate("/");
       }
     }
   };
