@@ -147,18 +147,19 @@ export const InputModifyButton = styled.button`
   margin-left: 5px;
   border-radius: 5px;
   color: black;
+  font-weight: bold;
 `;
 
-export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
-  background: none;
-  cursor: pointer;
-  background-color: ${props => props.backgroundColor || ThemeColor};
-  border: none;
-  width: 100%;
-  border-radius: 10px;
-  padding: 10px 0;
-  color: black;
-`;
+// export const FormInnerButton = styled.button<{ backgroundColor?: string }>`
+//   background: none;
+//   cursor: pointer;
+//   background-color: ${props => props.backgroundColor || ThemeColor};
+//   border: none;
+//   width: 100%;
+//   border-radius: 10px;
+//   padding: 10px 0;
+//   color: black;
+// `;
 
 export const ExtraContainer = styled.div`
   padding: 30px 0;
