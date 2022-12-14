@@ -105,12 +105,6 @@ const ExperienceInput: React.FC<Props> = ({
               setBubbleInfo({ ...bubbleInfo, name: e.target.value });
             }}
           />
-          <FormStyles.InputModifyButton
-            type="button"
-            onClick={onAddBubbleClick}
-          >
-            추가
-          </FormStyles.InputModifyButton>
         </FormStyles.InputContainer>
       </CreateProfileLabel>
       <CreateProfileLabel style={{ margin: "10px 0" }}>
@@ -163,6 +157,9 @@ const ExperienceInput: React.FC<Props> = ({
           />
         </FormStyles.InputContainer>
       </CreateProfileLabel>
+      <FormStyles.Submit type="button" onClick={onAddBubbleClick}>
+        추가
+      </FormStyles.Submit>
     </>
   );
 };
