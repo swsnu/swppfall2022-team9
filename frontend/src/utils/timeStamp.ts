@@ -15,13 +15,12 @@ export const compareTimeStampWtihinDay = (
 const monthWith31Days = [1, 3, 5, 7, 8, 10, 12];
 const monthWith30Days = [4, 6, 9, 11];
 
-export const timeStampToString = (timestamp: string): string => {
+export const timeStampToString = (timestamp: string, now: Date): string => {
   const date = new Date(timestamp);
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // January is 0
   const day = date.getDate();
 
-  const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1; // January is 0
   const currentDay = now.getDate();
@@ -58,7 +57,13 @@ export const timeStampToString = (timestamp: string): string => {
   const minutes = date.getMinutes();
   const isAM = hour < 12;
   const prefix = isAM ? "오전" : "오후";
-  const displayedHour = isAM ? (hour === 0 ? 12 : hour) : hour - 12;
+  const displayedHour = isAM
+    ? hour === 0
+      ? 12
+      : hour
+    : hour === 12
+    ? 12
+    : hour - 12;
   const displayedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
   return `${prefix} ${displayedHour}:${displayedMinutes}`;
 };

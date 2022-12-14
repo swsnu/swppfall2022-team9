@@ -29,7 +29,9 @@ const ChatRoomItem: React.FC<Props> = ({ chatRoomInfo }) => {
           <S.NotificationRedMark />
         )}
       </S.LastMessage>
-      <S.Time>{timeStampToString(chatRoomInfo.lastTimeStamp)}</S.Time>
+      <S.Time>
+        {timeStampToString(chatRoomInfo.lastTimeStamp, new Date())}
+      </S.Time>
     </S.ListItemContainer>
   );
 };

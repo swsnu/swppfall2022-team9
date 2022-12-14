@@ -39,13 +39,15 @@ const ChatMessage = forwardRef<HTMLDivElement, Props>(
           {!isConsecutive && <S.Name>{name}</S.Name>}
           <S.MessageContainer>
             <S.MessageContent from="otherUser">{content}</S.MessageContent>
-            <S.TimeStamp>{timeStampToString(timeStamp)}</S.TimeStamp>
+            <S.TimeStamp>
+              {timeStampToString(timeStamp, new Date())}
+            </S.TimeStamp>
           </S.MessageContainer>
         </S.NameMessageContainer>
       </S.ListItemContainer>
     ) : (
       <S.ListItemContainer ref={ref} from="me" isConsecutive={isConsecutive}>
-        <S.TimeStamp>{timeStampToString(timeStamp)}</S.TimeStamp>
+        <S.TimeStamp>{timeStampToString(timeStamp, new Date())}</S.TimeStamp>
         <S.MessageContent from="me">{content}</S.MessageContent>
       </S.ListItemContainer>
     );
