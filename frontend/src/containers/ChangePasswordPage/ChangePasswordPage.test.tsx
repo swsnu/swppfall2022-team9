@@ -1,18 +1,10 @@
-import { screen, fireEvent, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "test-utils/mocks";
+import { screen, fireEvent, render } from "@testing-library/react";
 import ChangePasswordPage from "./ChangePasswordPage";
-import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
-import { AlertContextProps } from "containers/Context/AlertContext/AlertContext";
-import { usersStub } from "server/stubs/users.stub";
-
-const mockDispatch = jest.fn();
-
-//useDispatch mocking
-jest.mock("react-redux", () => ({
-  ...jest.requireActual("react-redux"),
-  //useDispatch만 우리가 mocking
-  useDispatch: () => mockDispatch,
-}));
+import { AlertContextProvider } from "containers/Context/AlertContext/AlertContext";
+import { Provider } from "react-redux";
+import { act } from "@testing-library/react-hooks";
+import axios from "axios";
+import store from "store";
 
 const mockNavigate = jest.fn();
 
@@ -22,67 +14,112 @@ jest.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const renderChangePasswordPageWithToken = (
-  alertProviderProps?: AlertContextProps,
-) => {
-  renderWithProviders(
-    <MemoryRouter>
-      <Routes>
-        <Route
-          path="/account/password/:token"
-          element={<ChangePasswordPage />}
-        />
-        <Route path="*" element={<Navigate to={"/account/password/1"} />} />
-      </Routes>
-    </MemoryRouter>,
-    {
-      preloadedState: {
-        users: {
-          currentUser: usersStub[0],
-          friendList: [],
-        },
-      },
-    },
-    alertProviderProps,
-  );
-};
 describe("<ChangePasswordPage/>", () => {
-  let alertProviderProps: AlertContextProps;
   beforeEach(() => {
     jest.clearAllMocks();
-    alertProviderProps = {
-      open: jest.fn(),
-      close: jest.fn(),
-    };
   });
 
-  it("renders change password with token", async () => {
-    mockDispatch.mockReturnValueOnce({
-      unwrap: () => Promise.resolve({}),
+  it("should change password with valid form", async () => {
+    // mockDispatch.mockReturnValue({ unwrap: () => {} });
+    axios.put = jest.fn().mockResolvedValueOnce({});
+    render(
+      <AlertContextProvider>
+        <Provider store={store}>
+          <ChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputNewPassword = screen.getByLabelText("새 비밀번호");
+    const inputNewPasswordConfirm = screen.getByLabelText("비밀번호 확인");
+    const submitButton = screen.getByRole("submit");
+
+    fireEvent.click(submitButton);
+
+    await act(async () => {
+      fireEvent.change(inputNewPassword, { target: { value: "123" } });
+      fireEvent.change(inputNewPasswordConfirm, { target: { value: "123" } });
+      fireEvent.click(submitButton);
     });
-    renderChangePasswordPageWithToken(alertProviderProps);
-    const submitButton = await waitFor(() => screen.getByRole("submit"));
-    fireEvent.click(submitButton);
-    const passwordInput = screen.getByRole("passwordInput");
-    fireEvent.change(passwordInput, { target: { value: "test" } });
-    const passwordCheckInput = screen.getByRole("passwordCheckInput");
-    fireEvent.change(passwordCheckInput, { target: { value: "different" } });
-    fireEvent.click(submitButton);
-    waitFor(() => screen.getByText("입력한 비밀번호가 서로 다릅니다!"));
-    fireEvent.change(passwordCheckInput, { target: { value: "test" } });
-    fireEvent.click(submitButton);
+
+    const confirmButton = await screen.findByText("홈페이지로 이동");
+
+    await act(async () => {
+      fireEvent.click(confirmButton);
+    });
   });
 
-  // it("renders Change Password with wrong token", async () => {
-  //   mockDispatch.mockReturnValueOnce({
-  //     // for checking error set return value as reject
-  //     unwrap: () => Promise.reject(new Error()),
-  //   });
-  //   renderChangePasswordPageWithToken(alertProviderProps);
-  //   waitFor(() => expect(mockNavigate).toHaveBeenCalled());
-  //   const simpleMessageButton = await waitFor(() =>
-  //     screen.getByRole("simpleMessageButton"),
-  //   );
-  //   fireEvent.click(simpleMessageButton);
-  // });
+  it("tests 401 error", async () => {
+    axios.put = jest.fn().mockRejectedValueOnce({ response: { status: 401 } });
+    render(
+      <AlertContextProvider>
+        <Provider store={store}>
+          <ChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputNewPassword = screen.getByLabelText("새 비밀번호");
+    const inputNewPasswordConfirm = screen.getByLabelText("비밀번호 확인");
+    const submitButton = screen.getByRole("submit");
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+      fireEvent.change(inputNewPassword, { target: { value: "123" } });
+      fireEvent.change(inputNewPasswordConfirm, { target: { value: "123" } });
+      fireEvent.click(submitButton);
+    });
+
+    const confirmButton = await screen.findByText(
+      "아이디/비밀번호 찾기 페이지로 이동",
+    );
+
+    await act(async () => {
+      fireEvent.click(confirmButton);
+    });
+  });
+
+  it("tests 404 error", async () => {
+    axios.put = jest.fn().mockRejectedValueOnce({ response: { status: 404 } });
+    render(
+      <AlertContextProvider>
+        <Provider store={store}>
+          <ChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputNewPassword = screen.getByLabelText("새 비밀번호");
+    const inputNewPasswordConfirm = screen.getByLabelText("비밀번호 확인");
+    const submitButton = screen.getByRole("submit");
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+      fireEvent.change(inputNewPassword, { target: { value: "123" } });
+      fireEvent.change(inputNewPasswordConfirm, { target: { value: "123" } });
+      fireEvent.click(submitButton);
+    });
+
+    await screen.findByText("유효하지 않은 토큰입니다.");
+  });
+
+  it("tests server error", async () => {
+    axios.put = jest.fn().mockRejectedValueOnce({ response: { status: 500 } });
+    render(
+      <AlertContextProvider>
+        <Provider store={store}>
+          <ChangePasswordPage />
+        </Provider>
+      </AlertContextProvider>,
+    );
+    const inputNewPassword = screen.getByLabelText("새 비밀번호");
+    const inputNewPasswordConfirm = screen.getByLabelText("비밀번호 확인");
+    const submitButton = screen.getByRole("submit");
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+      fireEvent.change(inputNewPassword, { target: { value: "123" } });
+      fireEvent.change(inputNewPasswordConfirm, { target: { value: "123" } });
+      fireEvent.click(submitButton);
+    });
+
+    await screen.findByText("[서버 오류] 비밀번호 재설정에 실패했습니다.");
+  });
 });
